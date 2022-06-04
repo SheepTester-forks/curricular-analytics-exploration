@@ -1,0 +1,41 @@
+= TH is the problematic one for MU27 =
+== RE ==
+[RE] {('UD Elective (major)', 4.0), ('MATH GE (see note) or 10C', 4.0), ('MATH 20B or 10B', 4.0), ('MATH 20A or 10A', 4.0)}
+[TH] {('UD Major Elective', 4.0), ('MATH 20B', 4.0), ('MATH 20A', 4.0)}
+== MU ==
+[MU] {('UD Elective', 4.0)}
+[TH] {('UD Major Elective', 4.0)}
+== WA ==
+[WA] {('GE/DEI', 4.0), ('UD Elective', 4.0)}
+[TH] {('UD Major Elective', 4.0)}
+== FI ==
+[FI] {('UD Elective', 4.0)}
+[TH] {('UD Major Elective', 4.0)}
+== SI ==
+[SI] {('UD Elective', 4.0)}
+[TH] {('UD Major Elective', 4.0)}
+== SN ==
+[SN] {('UD Elective', 4.0)}
+[TH] {('UD Major Elective', 4.0)}
+
+= TH is the problematic one for SE27 =
+== RE ==
+[RE] {('Technical Elect', 4.0), ('^^^AHI', 4.0)}
+[TH] 🗿
+== MU ==
+[MU] {('Technical Elect', 4.0), ('DEI', 4.0), ('GE', 4.0)}
+[TH] 🗿
+== WA ==
+[WA] {('Technical Elect', 4.0), ('GE', 4.0), ('GE/DEI', 4.0), ('POLI/PHIL 27', 4.0), ('PHIL/POLI 28', 4.0), ('WCWP10A', 4.0), ('WCWP10B', 4.0)}
+[TH] 🗿
+== FI ==
+[FI] {('Technical Elect', 4.0), ('MMW 14/GE', 4.0), ('GE', 4.0)}
+[TH] 🗿
+== SI ==
+[SI] {('Technical Elect', 4.0), ('GE/DEI', 4.0), ('GE', 4.0), ('Technical Elective/Practicum', 4.0)}
+[TH] 🗿
+== SN ==
+[SN] {('Technical Elect', 4.0), ('SYN 2', 4.0), ('DEI', 4.0), ('GE', 4.0), ('SYN 100', 4.0), ('Alternative', 4.0), ('High-Impact', 4.0), ('SYN 1', 4.0)}
+[TH] 🗿
+
+Have a nice day.
