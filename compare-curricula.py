@@ -1,8 +1,9 @@
 import itertools
+import re
 from parse import major_plans
 
 colleges = ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
-ignored = ["GE/DEI", "DEI/GE"]
+ignored = ["GE/DEI", "DEI/GE", "DEI"]
 
 oddity_scores = {college: 0 for college in colleges}
 deviation_scores = {college: 0 for college in colleges}
@@ -10,7 +11,11 @@ for major_plan in major_plans.values():
     try:
         curricula = {
             college: {
-                course.course_code.lower()
+                re.sub(
+                    r"( ?/ ?(awp|dei|sixth practicum)| \(dei approved\)|\*\* ?/elective)$",
+                    "",
+                    course.course_code.strip(" *^").lower(),
+                )
                 for course in major_plan.curriculum(college)
                 if course.course_code not in ignored
             }
@@ -18,7 +23,7 @@ for major_plan in major_plans.values():
         }
     except KeyError as e:
         print(f"= <!> Error for {major_plan.major_code} =")
-        print(f"Missing academic plan for {e.args}")
+        print(f"Missing academic plan for {e.args[0]} (and possibly others too)")
         print()
         continue
 

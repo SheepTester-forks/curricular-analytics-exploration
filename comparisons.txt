@@ -19,216 +19,6 @@
 [SN] {'math 11 or psyc 60'}
 Deviations: ['RE']
 
-= Discrepancies for BE28 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
-
-= Discrepancies for BE29 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
-
-= Discrepancies for BI30 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
-
-= Discrepancies for BI31 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
-
-= Discrepancies for BI32 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
-
-= Discrepancies for BI34 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
-
-= Discrepancies for BI37 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
-
-= Discrepancies for BI38 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
-
-= Discrepancies for CE25 =
-== RE vs FI ==
-[RE] {'math 20a'}
-[FI] {'math 20a /awp'}
-== MU vs FI ==
-[MU] {'math 20a'}
-[FI] {'math 20a /awp'}
-== TH vs FI ==
-[TH] {'math 20a'}
-[FI] {'math 20a /awp'}
-== WA vs FI ==
-[WA] {'math 20a'}
-[FI] {'math 20a /awp'}
-== FI vs SI ==
-[FI] {'math 20a /awp'}
-[SI] {'math 20a'}
-== FI vs SN ==
-[FI] {'math 20a /awp'}
-[SN] {'math 20a'}
-Deviations: ['FI']
-
-= Discrepancies for CR25 =
-== RE vs MU ==
-[RE] {'^^cgs 2a'}
-[MU] {'cgs 2a'}
-== RE vs TH ==
-[RE] {'^^cgs 2a'}
-[TH] {'cgs 2a'}
-== RE vs WA ==
-[RE] {'^^cgs 2a'}
-[WA] {'cgs 2a'}
-== RE vs FI ==
-[RE] {'^^cgs 2a'}
-[FI] {'cgs 2a'}
-== RE vs SI ==
-[RE] {'^^cgs 2a'}
-[SI] {'cgs 2a'}
-== RE vs SN ==
-[RE] {'^^cgs 2a'}
-[SN] {'cgs 2a'}
-Deviations: ['RE']
-
 = Discrepancies for CH34 =
 == RE vs MU ==
 [RE] {'bild 1'}
@@ -252,39 +42,24 @@ Deviations: ['RE']
 
 = Discrepancies for CH35 =
 == RE vs MU ==
-[RE] {'math 10a/20a', 'phys 1c/1cl', 'math 10c/20c', 'phys 1b/1bl', 'phys 1a/al', 'math 10b/20b'}
-[MU] {'phys 1bl', 'phys 1cl', 'phys 1c', 'phys 1al', 'phys 1a', 'math 10b', 'math 10c', 'phys 1b', 'math 10a'}
+[RE] {'phys 1c/1cl', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b', 'phys 1a/al', 'math 10a/20a'}
+[MU] {'phys 1al', 'phys 1c', 'phys 1a', 'math 10c', 'phys 1bl', 'math 10b', 'phys 1b', 'math 10a', 'phys 1cl'}
 == RE vs TH ==
-[RE] {'math 10a/20a', 'phys 1c/1cl', 'math 10c/20c', 'phys 1b/1bl', 'phys 1a/al', 'math 10b/20b'}
-[TH] {'phys 1bl', 'phys 1cl', 'phys 1c', 'phys 1al', 'phys 1a', 'math 10b', 'math 10c', 'phys 1b', 'math 10a'}
+[RE] {'phys 1c/1cl', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b', 'phys 1a/al', 'math 10a/20a'}
+[TH] {'phys 1al', 'phys 1c', 'phys 1a', 'math 10c', 'phys 1bl', 'math 10b', 'phys 1b', 'math 10a', 'phys 1cl'}
 == RE vs WA ==
-[RE] {'math 10a/20a', 'phys 1c/1cl', 'math 10c/20c', 'phys 1b/1bl', 'phys 1a/al', 'math 10b/20b'}
-[WA] {'phys 1bl', 'phys 1cl', 'phys 1c', 'phys 1al', 'phys 1a', 'math 10b', 'math 10c', 'phys 1b', 'math 10a'}
+[RE] {'phys 1c/1cl', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b', 'phys 1a/al', 'math 10a/20a'}
+[WA] {'phys 1al', 'phys 1c', 'phys 1a', 'math 10c', 'phys 1bl', 'math 10b', 'phys 1b', 'math 10a', 'phys 1cl'}
 == RE vs FI ==
-[RE] {'math 10a/20a', 'bild 1', 'phys 1c/1cl', 'phys 1b/1bl', 'phys 1a/al', 'math 10c/20c', 'math 10b/20b'}
-[FI] {'phys 1bl', 'phys 1cl', 'phys 1c', 'phys 1al', 'phys 1a', 'math 10b', 'bild 1/awp', 'math 10c', 'phys 1b', 'math 10a'}
+[RE] {'phys 1c/1cl', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b', 'phys 1a/al', 'math 10a/20a'}
+[FI] {'phys 1al', 'phys 1c', 'phys 1a', 'math 10c', 'phys 1bl', 'math 10b', 'phys 1b', 'math 10a', 'phys 1cl'}
 == RE vs SI ==
-[RE] {'math 10a/20a', 'phys 1c/1cl', 'math 10c/20c', 'phys 1b/1bl', 'phys 1a/al', 'math 10b/20b'}
-[SI] {'phys 1bl', 'phys 1cl', 'phys 1c', 'phys 1al', 'phys 1a', 'math 10b', 'math 10c', 'phys 1b', 'math 10a'}
+[RE] {'phys 1c/1cl', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b', 'phys 1a/al', 'math 10a/20a'}
+[SI] {'phys 1al', 'phys 1c', 'phys 1a', 'math 10c', 'phys 1bl', 'math 10b', 'phys 1b', 'math 10a', 'phys 1cl'}
 == RE vs SN ==
-[RE] {'math 10a/20a', 'phys 1c/1cl', 'math 10c/20c', 'phys 1b/1bl', 'phys 1a/al', 'math 10b/20b'}
-[SN] {'phys 1bl', 'phys 1cl', 'phys 1c', 'phys 1al', 'phys 1a', 'math 10b', 'math 10c', 'phys 1b', 'math 10a'}
-== MU vs FI ==
-[MU] {'bild 1'}
-[FI] {'bild 1/awp'}
-== TH vs FI ==
-[TH] {'bild 1'}
-[FI] {'bild 1/awp'}
-== WA vs FI ==
-[WA] {'bild 1'}
-[FI] {'bild 1/awp'}
-== FI vs SI ==
-[FI] {'bild 1/awp'}
-[SI] {'bild 1'}
-== FI vs SN ==
-[FI] {'bild 1/awp'}
-[SN] {'bild 1'}
-Deviations: ['RE', 'FI']
+[RE] {'phys 1c/1cl', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b', 'phys 1a/al', 'math 10a/20a'}
+[SN] {'phys 1al', 'phys 1c', 'phys 1a', 'math 10c', 'phys 1bl', 'math 10b', 'phys 1b', 'math 10a', 'phys 1cl'}
+Deviations: ['RE']
 
 = Discrepancies for CH36 =
 == RE vs MU ==
@@ -295,7 +70,7 @@ Deviations: ['RE', 'FI']
 [TH] set()
 == RE vs WA ==
 [RE] {'bild 1'}
-[WA] {'wcwp 10a*', 'wcwp 10b*'}
+[WA] {'wcwp 10a', 'wcwp 10b'}
 == RE vs FI ==
 [RE] {'bild 1'}
 [FI] set()
@@ -307,76 +82,61 @@ Deviations: ['RE', 'FI']
 [SN] set()
 == MU vs WA ==
 [MU] set()
-[WA] {'wcwp 10a*', 'wcwp 10b*'}
+[WA] {'wcwp 10a', 'wcwp 10b'}
 == TH vs WA ==
 [TH] set()
-[WA] {'wcwp 10a*', 'wcwp 10b*'}
+[WA] {'wcwp 10a', 'wcwp 10b'}
 == WA vs FI ==
-[WA] {'wcwp 10a*', 'wcwp 10b*'}
+[WA] {'wcwp 10a', 'wcwp 10b'}
 [FI] set()
 == WA vs SI ==
-[WA] {'wcwp 10a*', 'wcwp 10b*'}
+[WA] {'wcwp 10a', 'wcwp 10b'}
 [SI] set()
 == WA vs SN ==
-[WA] {'wcwp 10a*', 'wcwp 10b*'}
+[WA] {'wcwp 10a', 'wcwp 10b'}
 [SN] set()
 Deviations: ['RE', 'WA']
 
 = Discrepancies for CH38 =
 == RE vs MU ==
-[RE] {'math 10a/20a', 'phys 1c/1cl', 'phys 1a/1al', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b'}
-[MU] {'phys 1bl', 'phys 1cl', 'phys 1c', 'phys 1al', 'phys 1a', 'math 10b', 'math 10c', 'phys 1b', 'math 10a'}
+[RE] {'phys 1c/1cl', 'math 10a/20a', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b', 'phys 1a/1al'}
+[MU] {'phys 1al', 'phys 1c', 'phys 1a', 'math 10c', 'phys 1bl', 'math 10b', 'phys 1b', 'math 10a', 'phys 1cl'}
 == RE vs TH ==
-[RE] {'math 10a/20a', 'phys 1c/1cl', 'phys 1a/1al', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b'}
-[TH] {'phys 1bl', 'phys 1cl', 'phys 1c', 'phys 1al', 'phys 1a', 'math 10b', 'math 10c', 'phys 1b', 'math 10a'}
+[RE] {'phys 1c/1cl', 'math 10a/20a', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b', 'phys 1a/1al'}
+[TH] {'phys 1al', 'phys 1c', 'phys 1a', 'math 10c', 'phys 1bl', 'math 10b', 'phys 1b', 'math 10a', 'phys 1cl'}
 == RE vs WA ==
-[RE] {'math 10a/20a', 'phys 1c/1cl', 'phys 1a/1al', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b'}
-[WA] {'phys 1bl', 'phys 1cl', 'phys 1c', 'phys 1al', 'phys 1a', 'math 10b', 'math 10c', 'phys 1b', 'math 10a'}
+[RE] {'phys 1c/1cl', 'math 10a/20a', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b', 'phys 1a/1al'}
+[WA] {'phys 1al', 'phys 1c', 'phys 1a', 'math 10c', 'phys 1bl', 'math 10b', 'phys 1b', 'math 10a', 'phys 1cl'}
 == RE vs FI ==
-[RE] {'math 10a/20a', 'phys 1c/1cl', 'phys 1a/1al', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b'}
-[FI] {'phys 1bl', 'phys 1cl', 'phys 1c', 'phys 1al', 'phys 1a', 'math 10b', 'math 10c', 'phys 1b', 'math 10a'}
+[RE] {'phys 1c/1cl', 'math 10a/20a', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b', 'phys 1a/1al'}
+[FI] {'phys 1al', 'phys 1c', 'phys 1a', 'math 10c', 'phys 1bl', 'math 10b', 'phys 1b', 'math 10a', 'phys 1cl'}
 == RE vs SI ==
-[RE] {'math 10a/20a', 'phys 1c/1cl', 'phys 1a/1al', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b'}
-[SI] {'phys 1bl', 'phys 1cl', 'phys 1c', 'phys 1al', 'phys 1a', 'math 10b', 'math 10c', 'phys 1b', 'math 10a'}
+[RE] {'phys 1c/1cl', 'math 10a/20a', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b', 'phys 1a/1al'}
+[SI] {'phys 1al', 'phys 1c', 'phys 1a', 'math 10c', 'phys 1bl', 'math 10b', 'phys 1b', 'math 10a', 'phys 1cl'}
 == RE vs SN ==
-[RE] {'math 10a/20a', 'phys 1c/1cl', 'phys 1a/1al', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b'}
-[SN] {'phys 1bl', 'phys 1cl', 'dei', 'phys 1c', 'phys 1al', 'phys 1a', 'math 10b', 'math 10c', 'phys 1b', 'math 10a'}
-== MU vs SN ==
-[MU] set()
-[SN] {'dei'}
-== TH vs SN ==
-[TH] set()
-[SN] {'dei'}
-== WA vs SN ==
-[WA] set()
-[SN] {'dei'}
-== FI vs SN ==
-[FI] set()
-[SN] {'dei'}
-== SI vs SN ==
-[SI] set()
-[SN] {'dei'}
-Deviations: ['RE', 'SN']
+[RE] {'phys 1c/1cl', 'math 10a/20a', 'math 10c/20c', 'phys 1b/1bl', 'math 10b/20b', 'phys 1a/1al'}
+[SN] {'phys 1al', 'phys 1c', 'phys 1a', 'math 10c', 'phys 1bl', 'math 10b', 'phys 1b', 'math 10a', 'phys 1cl'}
+Deviations: ['RE']
 
 = Discrepancies for CL25 =
 == RE vs MU ==
 [RE] {'hum 2', 'hum 1'}
-[MU] {'ltwl 19b or hum 1 or mmw 12', 'ltwl 19c or hum 2'}
+[MU] {'ltwl 19c or hum 2', 'ltwl 19b or hum 1 or mmw 12'}
 == RE vs TH ==
 [RE] {'hum 2', 'hum 1'}
-[TH] {'ltwl 19b or hum 1 or mmw 12', 'ltwl 19c or hum 2'}
+[TH] {'ltwl 19c or hum 2', 'ltwl 19b or hum 1 or mmw 12'}
 == RE vs WA ==
 [RE] {'hum 2', 'hum 1'}
-[WA] {'ltwl 19b or hum 1 or mmw 12', 'ltwl 19c or hum 2'}
+[WA] {'ltwl 19c or hum 2', 'ltwl 19b or hum 1 or mmw 12'}
 == RE vs FI ==
-[RE] {'ltwl 19a or mmw 11', 'hum 2', 'hum 1'}
-[FI] {'mmw 11', 'ltwl 19c or hum 2', 'mmw 12'}
+[RE] {'hum 2', 'ltwl 19a or mmw 11', 'hum 1'}
+[FI] {'ltwl 19c or hum 2', 'mmw 11', 'mmw 12'}
 == RE vs SI ==
 [RE] {'hum 2', 'hum 1'}
-[SI] {'ltwl 19b or hum 1 or mmw 12', 'ltwl 19c or hum 2'}
+[SI] {'ltwl 19c or hum 2', 'ltwl 19b or hum 1 or mmw 12'}
 == RE vs SN ==
 [RE] {'hum 2', 'hum 1'}
-[SN] {'ltwl 19b or hum 1 or mmw 12', 'ltwl 19c or hum 2'}
+[SN] {'ltwl 19c or hum 2', 'ltwl 19b or hum 1 or mmw 12'}
 == MU vs FI ==
 [MU] {'ltwl 19b or hum 1 or mmw 12', 'ltwl 19a or mmw 11'}
 [FI] {'mmw 11', 'mmw 12'}
@@ -458,166 +218,103 @@ Deviations: ['SN']
 Deviations: ['MU']
 
 = Discrepancies for CM26 =
-== RE vs MU ==
-[RE] {'^^comm 10'}
-[MU] {'comm 10'}
-== RE vs TH ==
-[RE] {'^^comm 10'}
-[TH] {'comm 10'}
 == RE vs WA ==
-[RE] {'^^comm 10'}
-[WA] {'elective', 'comm 10'}
+[RE] set()
+[WA] {'elective'}
 == RE vs FI ==
-[RE] {'^^comm 10'}
+[RE] {'comm 10'}
 [FI] {'comm 10 (dei)'}
-== RE vs SI ==
-[RE] {'^^comm 10'}
-[SI] {'comm 10/dei'}
-== RE vs SN ==
-[RE] {'^^comm 10'}
-[SN] {'comm 10'}
 == MU vs WA ==
 [MU] set()
 [WA] {'elective'}
 == MU vs FI ==
 [MU] {'comm 10'}
 [FI] {'comm 10 (dei)'}
-== MU vs SI ==
-[MU] {'comm 10'}
-[SI] {'comm 10/dei'}
 == TH vs WA ==
 [TH] set()
 [WA] {'elective'}
 == TH vs FI ==
 [TH] {'comm 10'}
 [FI] {'comm 10 (dei)'}
-== TH vs SI ==
-[TH] {'comm 10'}
-[SI] {'comm 10/dei'}
 == WA vs FI ==
-[WA] {'elective', 'comm 10'}
+[WA] {'comm 10', 'elective'}
 [FI] {'comm 10 (dei)'}
 == WA vs SI ==
-[WA] {'elective', 'comm 10'}
-[SI] {'comm 10/dei'}
+[WA] {'elective'}
+[SI] set()
 == WA vs SN ==
 [WA] {'elective'}
 [SN] set()
 == FI vs SI ==
 [FI] {'comm 10 (dei)'}
-[SI] {'comm 10/dei'}
+[SI] {'comm 10'}
 == FI vs SN ==
 [FI] {'comm 10 (dei)'}
 [SN] {'comm 10'}
-== SI vs SN ==
-[SI] {'comm 10/dei'}
-[SN] {'comm 10'}
-Deviations: ['RE', 'WA', 'FI', 'SI']
+Deviations: ['WA', 'FI']
 
 = Discrepancies for CS26 =
 == RE vs MU ==
-[RE] {'security/cryptography', 'learning/vision/graphics'}
+[RE] {'learning/vision/graphics', 'security/cryptography'}
 [MU] {'learning vision graphics', 'security cryptography'}
 == MU vs TH ==
 [MU] {'learning vision graphics', 'security cryptography'}
-[TH] {'security/cryptography', 'learning/vision/graphics'}
+[TH] {'learning/vision/graphics', 'security/cryptography'}
 == MU vs WA ==
 [MU] {'learning vision graphics', 'security cryptography'}
-[WA] {'security/cryptography', 'learning/vision/graphics'}
+[WA] {'learning/vision/graphics', 'security/cryptography'}
 == MU vs FI ==
 [MU] {'learning vision graphics', 'security cryptography'}
-[FI] {'security/cryptography', 'learning/vision/graphics'}
+[FI] {'learning/vision/graphics', 'security/cryptography'}
 == MU vs SI ==
 [MU] {'learning vision graphics', 'security cryptography'}
-[SI] {'security/cryptography', 'learning/vision/graphics'}
+[SI] {'learning/vision/graphics', 'security/cryptography'}
 == MU vs SN ==
 [MU] {'learning vision graphics', 'security cryptography'}
-[SN] {'security/cryptography', 'learning/vision/graphics'}
+[SN] {'learning/vision/graphics', 'security/cryptography'}
 Deviations: ['MU']
 
 = Discrepancies for DS25 =
 == RE vs MU ==
-[RE] {'biology ge (see note)', 'natural science ge (see note)'}
+[RE] {'natural science ge (see note)', 'biology ge (see note)'}
 [MU] set()
 == RE vs TH ==
-[RE] {'biology ge (see note)', 'natural science ge (see note)'}
+[RE] {'natural science ge (see note)', 'biology ge (see note)'}
 [TH] set()
 == RE vs WA ==
-[RE] {'biology ge (see note)', 'natural science ge (see note)'}
+[RE] {'natural science ge (see note)', 'biology ge (see note)'}
 [WA] set()
 == RE vs FI ==
-[RE] {'biology ge (see note)', 'natural science ge (see note)'}
+[RE] {'natural science ge (see note)', 'biology ge (see note)'}
 [FI] set()
 == RE vs SI ==
-[RE] {'biology ge (see note)', 'natural science ge (see note)'}
+[RE] {'natural science ge (see note)', 'biology ge (see note)'}
 [SI] set()
 == RE vs SN ==
-[RE] {'biology ge (see note)', 'natural science ge (see note)'}
+[RE] {'natural science ge (see note)', 'biology ge (see note)'}
 [SN] set()
 Deviations: ['RE']
-
-= Discrepancies for EC26 =
-== RE vs SI ==
-[RE] {'cse 110'}
-[SI] {'cse 110/sixth practicum'}
-== MU vs SI ==
-[MU] {'cse 110'}
-[SI] {'cse 110/sixth practicum'}
-== TH vs SI ==
-[TH] {'cse 110'}
-[SI] {'cse 110/sixth practicum'}
-== WA vs SI ==
-[WA] {'cse 110'}
-[SI] {'cse 110/sixth practicum'}
-== FI vs SI ==
-[FI] {'cse 110'}
-[SI] {'cse 110/sixth practicum'}
-== SI vs SN ==
-[SI] {'cse 110/sixth practicum'}
-[SN] {'cse 110'}
-Deviations: ['SI']
 
 = Discrepancies for ED25 =
 == RE vs MU ==
-[RE] {'^^social science/dei'}
+[RE] {'social science'}
 [MU] set()
 == RE vs TH ==
-[RE] {'^^social science/dei'}
+[RE] {'social science'}
 [TH] set()
 == RE vs WA ==
-[RE] {'^^social science/dei'}
+[RE] {'social science'}
 [WA] set()
 == RE vs FI ==
-[RE] {'^^social science/dei'}
+[RE] {'social science'}
 [FI] set()
 == RE vs SI ==
-[RE] {'^^social science/dei'}
+[RE] {'social science'}
 [SI] set()
 == RE vs SN ==
-[RE] {'^^social science/dei'}
+[RE] {'social science'}
 [SN] set()
 Deviations: ['RE']
-
-= Discrepancies for ES25 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a / awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a / awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a / awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a / awp'}
-== FI vs SI ==
-[FI] {'chem 6a / awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a / awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
 
 = Discrepancies for ES26 =
 == RE vs MU ==
@@ -630,51 +327,15 @@ Deviations: ['FI']
 [RE] {'math 10a or 20a', 'math 10b or 20b'}
 [WA] {'math 10b', 'math 10a'}
 == RE vs FI ==
-[RE] {'math 10a or 20a', 'chem 6a', 'math 10b or 20b'}
-[FI] {'math 10a', 'math 10b', 'chem 6a/awp'}
+[RE] {'math 10a or 20a', 'math 10b or 20b'}
+[FI] {'math 10b', 'math 10a'}
 == RE vs SI ==
 [RE] {'math 10a or 20a', 'math 10b or 20b'}
 [SI] {'math 10b', 'math 10a'}
 == RE vs SN ==
 [RE] {'math 10a or 20a', 'math 10b or 20b'}
 [SN] {'math 10b', 'math 10a'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['RE', 'FI']
-
-= Discrepancies for ES27 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
+Deviations: ['RE']
 
 = Discrepancies for ES28 =
 == RE vs MU ==
@@ -698,45 +359,30 @@ Deviations: ['FI']
 Deviations: ['RE']
 
 = Discrepancies for ET25 =
-== RE vs MU ==
-[RE] {'^^ethn 1 *'}
-[MU] {'ethn 1 *'}
-== RE vs TH ==
-[RE] {'^^ethn 1 *'}
-[TH] {'ethn 1 *'}
-== RE vs WA ==
-[RE] {'^^ethn 1 *'}
-[WA] {'ethn 1 *'}
 == RE vs FI ==
-[RE] {'^^ethn 1 *'}
-[FI] {'ethn 1 (dei)*'}
-== RE vs SI ==
-[RE] {'^^ethn 1 *'}
-[SI] {'ethn 1 *'}
-== RE vs SN ==
-[RE] {'^^ethn 1 *'}
-[SN] {'ethn 1 *'}
+[RE] {'ethn 1'}
+[FI] {'ethn 1 (dei)'}
 == MU vs FI ==
-[MU] {'ethn 1 *'}
-[FI] {'ethn 1 (dei)*'}
+[MU] {'ethn 1'}
+[FI] {'ethn 1 (dei)'}
 == TH vs FI ==
-[TH] {'ethn 1 *'}
-[FI] {'ethn 1 (dei)*'}
+[TH] {'ethn 1'}
+[FI] {'ethn 1 (dei)'}
 == WA vs FI ==
-[WA] {'ethn 1 *'}
-[FI] {'ethn 1 (dei)*'}
+[WA] {'ethn 1'}
+[FI] {'ethn 1 (dei)'}
 == FI vs SI ==
-[FI] {'ethn 1 (dei)*'}
-[SI] {'ethn 1 *'}
+[FI] {'ethn 1 (dei)'}
+[SI] {'ethn 1'}
 == FI vs SN ==
-[FI] {'ethn 1 (dei)*'}
-[SN] {'ethn 1 *'}
-Deviations: ['RE', 'FI']
+[FI] {'ethn 1 (dei)'}
+[SN] {'ethn 1'}
+Deviations: ['FI']
 
 = Discrepancies for GH25 =
 == RE vs MU ==
-[RE] {'ld intro course (e.g. soci 30)', 'ld intro course (e.g. glbh 20)', 'statistics course (math 11 for ge)'}
-[MU] {'statistics course', 'ld intro course (glbh 20)', 'ld intro course (soci 30)'}
+[RE] {'ld intro course (e.g. soci 30)', 'statistics course (math 11 for ge)', 'ld intro course (e.g. glbh 20)'}
+[MU] {'ld intro course (soci 30)', 'ld intro course (glbh 20)', 'statistics course'}
 == RE vs TH ==
 [RE] {'statistics course (math 11 for ge)'}
 [TH] {'statistics course'}
@@ -753,61 +399,61 @@ Deviations: ['RE', 'FI']
 [RE] {'statistics course (math 11 for ge)'}
 [SN] {'statistics course'}
 == MU vs TH ==
-[MU] {'ld intro course (glbh 20)', 'ld intro course (soci 30)'}
+[MU] {'ld intro course (soci 30)', 'ld intro course (glbh 20)'}
 [TH] {'ld intro course (e.g. soci 30)', 'ld intro course (e.g. glbh 20)'}
 == MU vs WA ==
-[MU] {'ld intro course (glbh 20)', 'ld intro course (soci 30)'}
+[MU] {'ld intro course (soci 30)', 'ld intro course (glbh 20)'}
 [WA] {'ld intro course (e.g. soci 30)', 'ld intro course (e.g. glbh 20)'}
 == MU vs FI ==
-[MU] {'ld intro course (glbh 20)', 'ld intro course (soci 30)'}
+[MU] {'ld intro course (soci 30)', 'ld intro course (glbh 20)'}
 [FI] {'ld intro course (e.g. soci 30)', 'ld intro course (e.g. glbh 20)'}
 == MU vs SI ==
-[MU] {'ld intro course (glbh 20)', 'ld intro course (soci 30)'}
+[MU] {'ld intro course (soci 30)', 'ld intro course (glbh 20)'}
 [SI] {'ld intro course (e.g. soci 30)', 'ld intro course (e.g. glbh 20)'}
 == MU vs SN ==
-[MU] {'ld intro course (glbh 20)', 'ld intro course (soci 30)'}
+[MU] {'ld intro course (soci 30)', 'ld intro course (glbh 20)'}
 [SN] {'ld intro course (e.g. soci 30)', 'ld intro course (e.g. glbh 20)'}
 Deviations: ['RE', 'MU']
 
 = Discrepancies for GH26 =
 == RE vs MU ==
-[RE] {'math 10b or 20b', 'math 10a or 20a', 'statistics course (math 11 for ge)'}
-[MU] {'math 10a', 'statistics course', 'math 10b'}
+[RE] {'statistics course (math 11 for ge)', 'math 10a or 20a', 'math 10b or 20b'}
+[MU] {'math 10b', 'math 10a', 'statistics course'}
 == RE vs TH ==
-[RE] {'math 10b or 20b', 'math 10a or 20a', 'statistics course (math 11 for ge)'}
-[TH] {'math 10a', 'statistics course', 'math 10b'}
+[RE] {'statistics course (math 11 for ge)', 'math 10a or 20a', 'math 10b or 20b'}
+[TH] {'math 10b', 'math 10a', 'statistics course'}
 == RE vs WA ==
-[RE] {'math 10b or 20b', 'math 10a or 20a', 'statistics course (math 11 for ge)'}
-[WA] {'math 10a', 'statistics course', 'math 10b'}
+[RE] {'statistics course (math 11 for ge)', 'math 10a or 20a', 'math 10b or 20b'}
+[WA] {'math 10b', 'math 10a', 'statistics course'}
 == RE vs FI ==
-[RE] {'math 10b or 20b', 'math 10a or 20a', 'statistics course (math 11 for ge)'}
-[FI] {'math 10a', 'statistics course', 'math 10b'}
+[RE] {'statistics course (math 11 for ge)', 'math 10a or 20a', 'math 10b or 20b'}
+[FI] {'math 10b', 'math 10a', 'statistics course'}
 == RE vs SI ==
-[RE] {'math 10b or 20b', 'math 10a or 20a', 'statistics course (math 11 for ge)'}
-[SI] {'math 10a', 'statistics course', 'math 10b'}
+[RE] {'statistics course (math 11 for ge)', 'math 10a or 20a', 'math 10b or 20b'}
+[SI] {'math 10b', 'math 10a', 'statistics course'}
 == RE vs SN ==
-[RE] {'math 10b or 20b', 'math 10a or 20a', 'statistics course (math 11 for ge)'}
-[SN] {'math 10a', 'statistics course', 'math 10b'}
+[RE] {'statistics course (math 11 for ge)', 'math 10a or 20a', 'math 10b or 20b'}
+[SN] {'math 10b', 'math 10a', 'statistics course'}
 Deviations: ['RE']
 
 = Discrepancies for HS25 =
 == RE vs MU ==
-[RE] {'math 10a or 20a', 'math 11', '^^social science/dei', 'biology ge (see note)'}
+[RE] {'math 11', 'biology ge (see note)', 'social science', 'math 10a or 20a'}
 [MU] set()
 == RE vs TH ==
-[RE] {'math 10a or 20a', 'math 11', '^^social science/dei', 'biology ge (see note)'}
+[RE] {'math 11', 'biology ge (see note)', 'social science', 'math 10a or 20a'}
 [TH] set()
 == RE vs WA ==
-[RE] {'math 10a or 20a', 'math 11', '^^social science/dei', 'biology ge (see note)'}
+[RE] {'math 11', 'biology ge (see note)', 'social science', 'math 10a or 20a'}
 [WA] set()
 == RE vs FI ==
-[RE] {'math 10a or 20a', 'math 11', '^^social science/dei', 'biology ge (see note)'}
+[RE] {'math 11', 'biology ge (see note)', 'social science', 'math 10a or 20a'}
 [FI] {'mmw 11', 'mmw 12'}
 == RE vs SI ==
-[RE] {'math 10a or 20a', 'math 11', '^^social science/dei', 'biology ge (see note)'}
+[RE] {'math 11', 'biology ge (see note)', 'social science', 'math 10a or 20a'}
 [SI] set()
 == RE vs SN ==
-[RE] {'math 10a or 20a', 'math 11', '^^social science/dei', 'biology ge (see note)'}
+[RE] {'math 11', 'biology ge (see note)', 'social science', 'math 10a or 20a'}
 [SN] set()
 == MU vs FI ==
 [MU] set()
@@ -828,22 +474,22 @@ Deviations: ['RE', 'FI']
 
 = Discrepancies for HS26 =
 == RE vs MU ==
-[RE] {'math 10a or 20a', '^^social science/dei', 'biology ge (see note)', 'math 11', 'math 10b or 20b'}
+[RE] {'math 11', 'social science', 'math 10a or 20a', 'math 10b or 20b', 'biology ge (see note)'}
 [MU] {'ld hds statistics'}
 == RE vs TH ==
-[RE] {'math 10a or 20a', '^^social science/dei', 'biology ge (see note)', 'math 11', 'math 10b or 20b'}
+[RE] {'math 11', 'social science', 'math 10a or 20a', 'math 10b or 20b', 'biology ge (see note)'}
 [TH] {'ld hds statistics'}
 == RE vs WA ==
-[RE] {'math 10a or 20a', '^^social science/dei', 'biology ge (see note)', 'math 11', 'math 10b or 20b'}
+[RE] {'math 11', 'social science', 'math 10a or 20a', 'math 10b or 20b', 'biology ge (see note)'}
 [WA] {'ld hds statistics'}
 == RE vs FI ==
-[RE] {'math 10a or 20a', '^^social science/dei', 'biology ge (see note)', 'math 11', 'math 10b or 20b'}
-[FI] {'mmw 11', 'mmw 12', 'ld hds statistics'}
+[RE] {'math 11', 'social science', 'math 10a or 20a', 'math 10b or 20b', 'biology ge (see note)'}
+[FI] {'ld hds statistics', 'mmw 11', 'mmw 12'}
 == RE vs SI ==
-[RE] {'math 10a or 20a', '^^social science/dei', 'biology ge (see note)', 'math 11', 'math 10b or 20b'}
+[RE] {'math 11', 'social science', 'math 10a or 20a', 'math 10b or 20b', 'biology ge (see note)'}
 [SI] {'ld hds statistics'}
 == RE vs SN ==
-[RE] {'math 10a or 20a', '^^social science/dei', 'biology ge (see note)', 'math 11', 'math 10b or 20b'}
+[RE] {'math 11', 'social science', 'math 10a or 20a', 'math 10b or 20b', 'biology ge (see note)'}
 [SN] {'ld hds statistics'}
 == MU vs FI ==
 [MU] set()
@@ -864,22 +510,22 @@ Deviations: ['RE', 'FI']
 
 = Discrepancies for HS27 =
 == RE vs MU ==
-[RE] {'math 10b or 20a', 'math 10a or 20a', '^^social science/dei', 'natural science ge (see note)', 'biology ge (see note)', 'math 11'}
+[RE] {'math 11', 'natural science ge (see note)', 'social science', 'math 10a or 20a', 'biology ge (see note)', 'math 10b or 20a'}
 [MU] {'ld hds statistics'}
 == RE vs TH ==
-[RE] {'math 10b or 20a', 'math 10a or 20a', '^^social science/dei', 'natural science ge (see note)', 'biology ge (see note)', 'math 11'}
+[RE] {'math 11', 'natural science ge (see note)', 'social science', 'math 10a or 20a', 'biology ge (see note)', 'math 10b or 20a'}
 [TH] {'ld hds statistics'}
 == RE vs WA ==
-[RE] {'math 10b or 20a', 'math 10a or 20a', '^^social science/dei', 'natural science ge (see note)', 'biology ge (see note)', 'math 11'}
-[WA] {'elective', 'ld hds statistics'}
+[RE] {'math 11', 'natural science ge (see note)', 'social science', 'math 10a or 20a', 'biology ge (see note)', 'math 10b or 20a'}
+[WA] {'ld hds statistics', 'elective'}
 == RE vs FI ==
-[RE] {'math 10b or 20a', 'math 10a or 20a', '^^social science/dei', 'natural science ge (see note)', 'biology ge (see note)', 'math 11'}
-[FI] {'mmw 11', 'mmw 12', 'ld hds statistics'}
+[RE] {'math 11', 'natural science ge (see note)', 'social science', 'math 10a or 20a', 'biology ge (see note)', 'math 10b or 20a'}
+[FI] {'ld hds statistics', 'mmw 11', 'mmw 12'}
 == RE vs SI ==
-[RE] {'math 10b or 20a', 'math 10a or 20a', '^^social science/dei', 'natural science ge (see note)', 'biology ge (see note)', 'math 11'}
+[RE] {'math 11', 'natural science ge (see note)', 'social science', 'math 10a or 20a', 'biology ge (see note)', 'math 10b or 20a'}
 [SI] {'ld hds statistics'}
 == RE vs SN ==
-[RE] {'math 10b or 20a', 'math 10a or 20a', '^^social science/dei', 'natural science ge (see note)', 'biology ge (see note)', 'math 11'}
+[RE] {'math 11', 'natural science ge (see note)', 'social science', 'math 10a or 20a', 'biology ge (see note)', 'math 10b or 20a'}
 [SN] {'ld hds statistics'}
 == MU vs WA ==
 [MU] set()
@@ -912,22 +558,22 @@ Deviations: ['RE', 'WA', 'FI']
 
 = Discrepancies for HS28 =
 == RE vs MU ==
-[RE] {'math 10b or 20a', 'math 10a or 20a', '^^social science/dei', 'natural science ge (see note)', 'biology ge (see note)', 'math 11'}
+[RE] {'math 11', 'natural science ge (see note)', 'social science', 'math 10a or 20a', 'biology ge (see note)', 'math 10b or 20a'}
 [MU] {'ld hds statistics'}
 == RE vs TH ==
-[RE] {'math 10b or 20a', 'math 10a or 20a', '^^social science/dei', 'natural science ge (see note)', 'biology ge (see note)', 'math 11'}
+[RE] {'math 11', 'natural science ge (see note)', 'social science', 'math 10a or 20a', 'biology ge (see note)', 'math 10b or 20a'}
 [TH] {'ld hds statistics'}
 == RE vs WA ==
-[RE] {'math 10b or 20a', 'math 10a or 20a', '^^social science/dei', 'natural science ge (see note)', 'biology ge (see note)', 'math 11'}
-[WA] {'elective', 'ld hds statistics'}
+[RE] {'math 11', 'natural science ge (see note)', 'social science', 'math 10a or 20a', 'biology ge (see note)', 'math 10b or 20a'}
+[WA] {'ld hds statistics', 'elective'}
 == RE vs FI ==
-[RE] {'math 10b or 20a', 'math 10a or 20a', '^^social science/dei', 'natural science ge (see note)', 'biology ge (see note)', 'math 11'}
-[FI] {'mmw 11', 'mmw 12', 'ld hds statistics'}
+[RE] {'math 11', 'natural science ge (see note)', 'social science', 'math 10a or 20a', 'biology ge (see note)', 'math 10b or 20a'}
+[FI] {'mmw 11', 'ld hds statistics', 'mmw 12'}
 == RE vs SI ==
-[RE] {'math 10b or 20a', 'math 10a or 20a', '^^social science/dei', 'natural science ge (see note)', 'biology ge (see note)', 'math 11'}
+[RE] {'math 11', 'natural science ge (see note)', 'social science', 'math 10a or 20a', 'biology ge (see note)', 'math 10b or 20a'}
 [SI] {'ld hds statistics'}
 == RE vs SN ==
-[RE] {'math 10b or 20a', 'math 10a or 20a', '^^social science/dei', 'natural science ge (see note)', 'biology ge (see note)', 'math 11'}
+[RE] {'math 11', 'natural science ge (see note)', 'social science', 'math 10a or 20a', 'biology ge (see note)', 'math 10b or 20a'}
 [SN] {'ld hds statistics'}
 == MU vs WA ==
 [MU] set()
@@ -960,22 +606,22 @@ Deviations: ['RE', 'WA', 'FI']
 
 = Discrepancies for HI25 =
 == RE vs MU ==
-[RE] {'hum 3', 'hum 2', 'hum 1'}
+[RE] {'hum 2', 'hum 3', 'hum 1'}
 [MU] set()
 == RE vs TH ==
-[RE] {'hum 3', 'hum 2', 'hum 1'}
+[RE] {'hum 2', 'hum 3', 'hum 1'}
 [TH] set()
 == RE vs WA ==
-[RE] {'hum 3', 'hum 2', 'hum 1'}
+[RE] {'hum 2', 'hum 3', 'hum 1'}
 [WA] set()
 == RE vs FI ==
-[RE] {'hum 3', 'hum 2', 'hum 1', 'hild'}
+[RE] {'hild', 'hum 3', 'hum 2', 'hum 1'}
 [FI] {'mmw 11', 'elective', 'mmw 12', 'mmw 13'}
 == RE vs SI ==
-[RE] {'hum 3', 'hum 2', 'hum 1'}
+[RE] {'hum 2', 'hum 3', 'hum 1'}
 [SI] set()
 == RE vs SN ==
-[RE] {'hum 3', 'hum 2', 'hum 1'}
+[RE] {'hum 2', 'hum 3', 'hum 1'}
 [SN] set()
 == MU vs FI ==
 [MU] {'hild'}
@@ -994,397 +640,82 @@ Deviations: ['RE', 'WA', 'FI']
 [SN] {'hild'}
 Deviations: ['RE', 'FI']
 
-= Discrepancies for IS25 =
-== RE vs MU ==
-[RE] {'^ language'}
-[MU] set()
-== RE vs TH ==
-[RE] {'^ language'}
-[TH] set()
-== RE vs WA ==
-[RE] {'^ language'}
-[WA] set()
-== RE vs FI ==
-[RE] {'^ language'}
-[FI] set()
-== RE vs SI ==
-[RE] {'^ language'}
-[SI] set()
-== RE vs SN ==
-[RE] {'^ language'}
-[SN] set()
-Deviations: ['RE']
-
-= Discrepancies for IS26 =
-== RE vs MU ==
-[RE] {'^ language'}
-[MU] set()
-== RE vs TH ==
-[RE] {'^ language'}
-[TH] set()
-== RE vs WA ==
-[RE] {'^ language'}
-[WA] set()
-== RE vs FI ==
-[RE] {'^ language'}
-[FI] set()
-== RE vs SI ==
-[RE] {'^ language'}
-[SI] set()
-== RE vs SN ==
-[RE] {'^ language'}
-[SN] set()
-Deviations: ['RE']
-
-= Discrepancies for IS27 =
-== RE vs MU ==
-[RE] {'^ language'}
-[MU] set()
-== RE vs TH ==
-[RE] {'^ language'}
-[TH] set()
-== RE vs WA ==
-[RE] {'^ language'}
-[WA] set()
-== RE vs FI ==
-[RE] {'^ language'}
-[FI] set()
-== RE vs SI ==
-[RE] {'^ language'}
-[SI] set()
-== RE vs SN ==
-[RE] {'^ language'}
-[SN] set()
-Deviations: ['RE']
-
-= Discrepancies for IS28 =
-== RE vs MU ==
-[RE] {'^ language'}
-[MU] set()
-== RE vs TH ==
-[RE] {'^ language'}
-[TH] set()
-== RE vs WA ==
-[RE] {'^ language'}
-[WA] set()
-== RE vs FI ==
-[RE] {'^ language'}
-[FI] set()
-== RE vs SI ==
-[RE] {'^ language'}
-[SI] set()
-== RE vs SN ==
-[RE] {'^ language'}
-[SN] set()
-Deviations: ['RE']
-
-= Discrepancies for IS29 =
-== RE vs MU ==
-[RE] {'^ language'}
-[MU] set()
-== RE vs TH ==
-[RE] {'^ language'}
-[TH] set()
-== RE vs WA ==
-[RE] {'^ language'}
-[WA] set()
-== RE vs FI ==
-[RE] {'^ language'}
-[FI] set()
-== RE vs SI ==
-[RE] {'^ language'}
-[SI] set()
-== RE vs SN ==
-[RE] {'^ language'}
-[SN] set()
-Deviations: ['RE']
-
-= Discrepancies for IS30 =
-== RE vs MU ==
-[RE] {'^ language'}
-[MU] set()
-== RE vs TH ==
-[RE] {'^ language'}
-[TH] set()
-== RE vs WA ==
-[RE] {'^ language'}
-[WA] set()
-== RE vs FI ==
-[RE] {'^ language'}
-[FI] set()
-== RE vs SI ==
-[RE] {'^ language'}
-[SI] set()
-== RE vs SN ==
-[RE] {'^ language'}
-[SN] set()
-Deviations: ['RE']
-
-= Discrepancies for IS31 =
-== RE vs MU ==
-[RE] {'^ language'}
-[MU] set()
-== RE vs TH ==
-[RE] {'^ language'}
-[TH] set()
-== RE vs WA ==
-[RE] {'^ language'}
-[WA] set()
-== RE vs FI ==
-[RE] {'^ language'}
-[FI] set()
-== RE vs SI ==
-[RE] {'^ language'}
-[SI] set()
-== RE vs SN ==
-[RE] {'^ language'}
-[SN] set()
-Deviations: ['RE']
-
-= Discrepancies for IS34 =
-== RE vs MU ==
-[RE] {'^ language'}
-[MU] set()
-== RE vs TH ==
-[RE] {'^ language'}
-[TH] set()
-== RE vs WA ==
-[RE] {'^ language'}
-[WA] set()
-== RE vs FI ==
-[RE] {'^ language'}
-[FI] set()
-== RE vs SI ==
-[RE] {'^ language'}
-[SI] set()
-== RE vs SN ==
-[RE] {'^ language'}
-[SN] set()
-Deviations: ['RE']
-
-= Discrepancies for IS36 =
-== RE vs MU ==
-[RE] {'^language'}
-[MU] set()
-== RE vs TH ==
-[RE] {'^language'}
-[TH] set()
-== RE vs WA ==
-[RE] {'^language'}
-[WA] set()
-== RE vs FI ==
-[RE] {'^language'}
-[FI] set()
-== RE vs SI ==
-[RE] {'^language'}
-[SI] set()
-== RE vs SN ==
-[RE] {'^language'}
-[SN] set()
-Deviations: ['RE']
-
 = Discrepancies for JS25 =
 == RE vs MU ==
-[RE] {'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a (see notes)', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c (see notes)', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b (see notes)'}
-[MU] {'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c'}
+[RE] {'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c (see notes)', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a (see notes)', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b (see notes)'}
+[MU] {'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a'}
 == RE vs TH ==
-[RE] {'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a (see notes)', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c (see notes)', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b (see notes)'}
-[TH] {'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c'}
+[RE] {'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c (see notes)', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a (see notes)', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b (see notes)'}
+[TH] {'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a'}
 == RE vs WA ==
-[RE] {'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a (see notes)', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c (see notes)', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b (see notes)'}
-[WA] {'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c'}
+[RE] {'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c (see notes)', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a (see notes)', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b (see notes)'}
+[WA] {'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a'}
 == RE vs FI ==
-[RE] {'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a (see notes)', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c (see notes)', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b (see notes)'}
-[FI] {'ge/elective**', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c'}
+[RE] {'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c (see notes)', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a (see notes)', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b (see notes)'}
+[FI] {'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b', 'ge/elective', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a'}
 == RE vs SI ==
-[RE] {'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a (see notes)', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c (see notes)', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b (see notes)'}
-[SI] {'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c'}
+[RE] {'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c (see notes)', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a (see notes)', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b (see notes)'}
+[SI] {'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a'}
 == RE vs SN ==
-[RE] {'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a (see notes)', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c (see notes)', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b (see notes)'}
-[SN] {'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c'}
+[RE] {'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c (see notes)', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a (see notes)', 'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b (see notes)'}
+[SN] {'jwsp 102 or liab 1b/bx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1b', 'jwsp 103 or liab 1c/cx, lifr 1b/bx, ligm 1b/bx, liit 1b/bx, ltru 1c', 'jwsp 101 or jwsp 104 or liab 1a/ax, lifr 1a/ax, ligm 1a/ax, liit 1a/ax, ltru 1a'}
 == MU vs FI ==
 [MU] set()
-[FI] {'ge/elective**'}
+[FI] {'ge/elective'}
 == TH vs FI ==
 [TH] set()
-[FI] {'ge/elective**'}
+[FI] {'ge/elective'}
 == WA vs FI ==
 [WA] set()
-[FI] {'ge/elective**'}
+[FI] {'ge/elective'}
 == FI vs SI ==
-[FI] {'ge/elective**'}
+[FI] {'ge/elective'}
 [SI] set()
 == FI vs SN ==
-[FI] {'ge/elective**'}
+[FI] {'ge/elective'}
 [SN] set()
 Deviations: ['RE', 'FI']
 
-= Discrepancies for LA25 =
-== RE vs MU ==
-[RE] {'^ltsp 2a'}
-[MU] {'ltsp 2a'}
-== RE vs TH ==
-[RE] {'^ltsp 2a'}
-[TH] {'ltsp 2a'}
-== RE vs WA ==
-[RE] {'^ltsp 2a'}
-[WA] {'ltsp 2a'}
-== RE vs FI ==
-[RE] {'^ltsp 2a'}
-[FI] {'ltsp 2a'}
-== RE vs SI ==
-[RE] {'^ltsp 2a'}
-[SI] {'ltsp 2a'}
-== RE vs SN ==
-[RE] {'^ltsp 2a'}
-[SN] {'ltsp 2a'}
-Deviations: ['RE']
-
-= Discrepancies for LA26 =
-== RE vs MU ==
-[RE] {'^ltsp 2a'}
-[MU] {'ltsp 2a'}
-== RE vs TH ==
-[RE] {'^ltsp 2a'}
-[TH] {'ltsp 2a'}
-== RE vs WA ==
-[RE] {'^ltsp 2a'}
-[WA] {'ltsp 2a'}
-== RE vs FI ==
-[RE] {'^ltsp 2a'}
-[FI] {'ltsp 2a'}
-== RE vs SI ==
-[RE] {'^ltsp 2a'}
-[SI] {'ltsp 2a'}
-== RE vs SN ==
-[RE] {'^ltsp 2a'}
-[SN] {'ltsp 2a'}
-Deviations: ['RE']
-
-= Discrepancies for LN25 =
-== RE vs MU ==
-[RE] {'^language requirement'}
-[MU] set()
-== RE vs TH ==
-[RE] {'^language requirement'}
-[TH] set()
-== RE vs WA ==
-[RE] {'^language requirement'}
-[WA] set()
-== RE vs FI ==
-[RE] {'^language requirement'}
-[FI] set()
-== RE vs SI ==
-[RE] {'^language requirement'}
-[SI] set()
-== RE vs SN ==
-[RE] {'^language requirement'}
-[SN] set()
-Deviations: ['RE']
-
-= Discrepancies for LN32 =
-== RE vs MU ==
-[RE] {'^language requirement'}
-[MU] set()
-== RE vs TH ==
-[RE] {'^language requirement'}
-[TH] set()
-== RE vs WA ==
-[RE] {'^language requirement'}
-[WA] set()
-== RE vs FI ==
-[RE] {'^language requirement'}
-[FI] set()
-== RE vs SI ==
-[RE] {'^language requirement'}
-[SI] set()
-== RE vs SN ==
-[RE] {'^language requirement'}
-[SN] set()
-Deviations: ['RE']
-
-= Discrepancies for LN33 =
-== RE vs MU ==
-[RE] {'^language requirement'}
-[MU] set()
-== RE vs TH ==
-[RE] {'^language requirement'}
-[TH] set()
-== RE vs WA ==
-[RE] {'^language requirement'}
-[WA] set()
-== RE vs FI ==
-[RE] {'^language requirement'}
-[FI] set()
-== RE vs SI ==
-[RE] {'^language requirement'}
-[SI] set()
-== RE vs SN ==
-[RE] {'^language requirement'}
-[SN] set()
-Deviations: ['RE']
-
 = Discrepancies for LT41 =
 == RE vs MU ==
-[RE] {'hum 3', 'hum 2', 'hum 1'}
+[RE] {'hum 2', 'hum 3', 'hum 1'}
 [MU] set()
 == RE vs TH ==
-[RE] {'hum 3', 'hum 2', 'hum 1'}
+[RE] {'hum 2', 'hum 3', 'hum 1'}
 [TH] set()
 == RE vs WA ==
-[RE] {'hum 3', 'hum 2', 'hum 1'}
+[RE] {'hum 2', 'hum 3', 'hum 1'}
 [WA] set()
 == RE vs FI ==
-[RE] {'hum 3', 'hum 2', 'hum 1'}
+[RE] {'hum 2', 'hum 3', 'hum 1'}
 [FI] set()
 == RE vs SI ==
-[RE] {'hum 3', 'hum 2', 'hum 1'}
+[RE] {'hum 2', 'hum 3', 'hum 1'}
 [SI] set()
 == RE vs SN ==
-[RE] {'hum 3', 'hum 2', 'hum 1'}
+[RE] {'hum 2', 'hum 3', 'hum 1'}
 [SN] set()
 Deviations: ['RE']
-
-= Discrepancies for MC25 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
 
 = Discrepancies for MU27 =
 == RE vs MU ==
-[RE] {'ud elective (major)', 'math 20b or 10b', 'math 20a or 10a', 'math ge (see note) or 10c'}
-[MU] {'ud elective', 'math 20b', 'math 20a'}
+[RE] {'math 20b or 10b', 'math 20a or 10a', 'ud elective (major)', 'math ge (see note) or 10c'}
+[MU] {'math 20b', 'ud elective', 'math 20a'}
 == RE vs TH ==
-[RE] {'ud elective (major)', 'math 20b or 10b', 'math 20a or 10a', 'math ge (see note) or 10c'}
-[TH] {'ud major elective', 'math 20a', 'math 20b'}
+[RE] {'math 20b or 10b', 'math 20a or 10a', 'ud elective (major)', 'math ge (see note) or 10c'}
+[TH] {'ud major elective', 'math 20b', 'math 20a'}
 == RE vs WA ==
-[RE] {'ud elective (major)', 'math 20b or 10b', 'math 20a or 10a', 'math ge (see note) or 10c'}
-[WA] {'ud elective', 'math 20b', 'math 20a'}
+[RE] {'math 20b or 10b', 'math 20a or 10a', 'ud elective (major)', 'math ge (see note) or 10c'}
+[WA] {'math 20b', 'ud elective', 'math 20a'}
 == RE vs FI ==
-[RE] {'ud elective (major)', 'math 20b or 10b', 'math 20a or 10a', 'math ge (see note) or 10c'}
-[FI] {'ud elective', 'math 20b', 'math 20a'}
+[RE] {'math 20b or 10b', 'math 20a or 10a', 'ud elective (major)', 'math ge (see note) or 10c'}
+[FI] {'math 20b', 'ud elective', 'math 20a'}
 == RE vs SI ==
-[RE] {'ud elective (major)', 'math 20b or 10b', 'math 20a or 10a', 'math ge (see note) or 10c'}
-[SI] {'ud elective', 'math 20b', 'math 20a'}
+[RE] {'math 20b or 10b', 'math 20a or 10a', 'ud elective (major)', 'math ge (see note) or 10c'}
+[SI] {'math 20b', 'ud elective', 'math 20a'}
 == RE vs SN ==
-[RE] {'ud elective (major)', 'math 20b or 10b', 'math 20a or 10a', 'math ge (see note) or 10c'}
-[SN] {'ud elective', 'math 20b', 'math 20a'}
+[RE] {'math 20b or 10b', 'math 20a or 10a', 'ud elective (major)', 'math ge (see note) or 10c'}
+[SN] {'math 20b', 'ud elective', 'math 20a'}
 == MU vs TH ==
 [MU] {'ud elective'}
 [TH] {'ud major elective'}
@@ -1401,174 +732,6 @@ Deviations: ['FI']
 [TH] {'ud major elective'}
 [SN] {'ud elective'}
 Deviations: ['RE', 'TH']
-
-= Discrepancies for NA25 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
-
-= Discrepancies for PY26 =
-== RE vs FI ==
-[RE] {'math 18'}
-[FI] {'math 18/awp'}
-== MU vs FI ==
-[MU] {'math 18'}
-[FI] {'math 18/awp'}
-== TH vs FI ==
-[TH] {'math 18'}
-[FI] {'math 18/awp'}
-== WA vs FI ==
-[WA] {'math 18'}
-[FI] {'math 18/awp'}
-== FI vs SI ==
-[FI] {'math 18/awp'}
-[SI] {'math 18'}
-== FI vs SN ==
-[FI] {'math 18/awp'}
-[SN] {'math 18'}
-Deviations: ['FI']
-
-= Discrepancies for PY28 =
-== RE vs FI ==
-[RE] {'math 18'}
-[FI] {'math 18/awp'}
-== MU vs FI ==
-[MU] {'math 18'}
-[FI] {'math 18/awp'}
-== TH vs FI ==
-[TH] {'math 18'}
-[FI] {'math 18/awp'}
-== WA vs FI ==
-[WA] {'math 18'}
-[FI] {'math 18/awp'}
-== FI vs SI ==
-[FI] {'math 18/awp'}
-[SI] {'math 18'}
-== FI vs SN ==
-[FI] {'math 18/awp'}
-[SN] {'math 18'}
-Deviations: ['FI']
-
-= Discrepancies for PY29 =
-== RE vs FI ==
-[RE] {'math 18'}
-[FI] {'math 18/awp'}
-== MU vs FI ==
-[MU] {'math 18'}
-[FI] {'math 18/awp'}
-== TH vs FI ==
-[TH] {'math 18'}
-[FI] {'math 18/awp'}
-== WA vs FI ==
-[WA] {'math 18'}
-[FI] {'math 18/awp'}
-== FI vs SI ==
-[FI] {'math 18/awp'}
-[SI] {'math 18'}
-== FI vs SN ==
-[FI] {'math 18/awp'}
-[SN] {'math 18'}
-Deviations: ['FI']
-
-= Discrepancies for PY30 =
-== RE vs FI ==
-[RE] {'math 18'}
-[FI] {'math 18/awp'}
-== MU vs FI ==
-[MU] {'math 18'}
-[FI] {'math 18/awp'}
-== TH vs FI ==
-[TH] {'math 18'}
-[FI] {'math 18/awp'}
-== WA vs FI ==
-[WA] {'math 18'}
-[FI] {'math 18/awp'}
-== FI vs SI ==
-[FI] {'math 18/awp'}
-[SI] {'math 18'}
-== FI vs SN ==
-[FI] {'math 18/awp'}
-[SN] {'math 18'}
-Deviations: ['FI']
-
-= Discrepancies for PY31 =
-== RE vs FI ==
-[RE] {'math 18'}
-[FI] {'math 18/awp'}
-== MU vs FI ==
-[MU] {'math 18'}
-[FI] {'math 18/awp'}
-== TH vs FI ==
-[TH] {'math 18'}
-[FI] {'math 18/awp'}
-== WA vs FI ==
-[WA] {'math 18'}
-[FI] {'math 18/awp'}
-== FI vs SI ==
-[FI] {'math 18/awp'}
-[SI] {'math 18'}
-== FI vs SN ==
-[FI] {'math 18/awp'}
-[SN] {'math 18'}
-Deviations: ['FI']
-
-= Discrepancies for PY32 =
-== RE vs FI ==
-[RE] {'math 18'}
-[FI] {'math 18/awp'}
-== MU vs FI ==
-[MU] {'math 18'}
-[FI] {'math 18/awp'}
-== TH vs FI ==
-[TH] {'math 18'}
-[FI] {'math 18/awp'}
-== WA vs FI ==
-[WA] {'math 18'}
-[FI] {'math 18/awp'}
-== FI vs SI ==
-[FI] {'math 18/awp'}
-[SI] {'math 18'}
-== FI vs SN ==
-[FI] {'math 18/awp'}
-[SN] {'math 18'}
-Deviations: ['FI']
-
-= Discrepancies for PY33 =
-== RE vs FI ==
-[RE] {'math 18'}
-[FI] {'math 18/awp'}
-== MU vs FI ==
-[MU] {'math 18'}
-[FI] {'math 18/awp'}
-== TH vs FI ==
-[TH] {'math 18'}
-[FI] {'math 18/awp'}
-== WA vs FI ==
-[WA] {'math 18'}
-[FI] {'math 18/awp'}
-== FI vs SI ==
-[FI] {'math 18/awp'}
-[SI] {'math 18'}
-== FI vs SN ==
-[FI] {'math 18/awp'}
-[SN] {'math 18'}
-Deviations: ['FI']
 
 = Discrepancies for PY34 =
 == RE vs FI ==
@@ -1613,571 +776,283 @@ Deviations: ['FI']
 Deviations: ['MU']
 
 = <!> Error for PS33 =
-Missing academic plan for ('SI',)
+Missing academic plan for SI (and possibly others too)
 
 = Discrepancies for PC25 =
 == RE vs MU ==
-[RE] {'math ge (see note)', 'math 10a'}
+[RE] {'math 10a', 'math ge (see note)'}
 [MU] {'1 formal skills'}
 == RE vs TH ==
-[RE] {'math ge (see note)', 'math 10a'}
+[RE] {'math 10a', 'math ge (see note)'}
 [TH] {'1 formal skills'}
 == RE vs WA ==
-[RE] {'math ge (see note)', 'math 10a'}
+[RE] {'math 10a', 'math ge (see note)'}
 [WA] {'1 formal skills'}
 == RE vs FI ==
-[RE] {'math ge (see note)', 'math 10a'}
+[RE] {'math 10a', 'math ge (see note)'}
 [FI] {'1 formal skills'}
 == RE vs SI ==
-[RE] {'math ge (see note)', 'math 10a'}
+[RE] {'math 10a', 'math ge (see note)'}
 [SI] {'1 formal skills'}
 == RE vs SN ==
-[RE] {'math ge (see note)', 'math 10a'}
+[RE] {'math 10a', 'math ge (see note)'}
 [SN] {'1 formal skills'}
 Deviations: ['RE']
 
-= Discrepancies for PC35 =
-== RE vs MU ==
-[RE] {'^^mgt 18 (dei approved)'}
-[MU] {'mgt 18'}
-== RE vs TH ==
-[RE] {'^^mgt 18 (dei approved)'}
-[TH] {'mgt 18'}
-== RE vs WA ==
-[RE] {'^^mgt 18 (dei approved)'}
-[WA] {'mgt 18'}
-== RE vs FI ==
-[RE] {'^^mgt 18 (dei approved)'}
-[FI] {'mgt 18'}
-== RE vs SI ==
-[RE] {'^^mgt 18 (dei approved)'}
-[SI] {'mgt 18/dei'}
-== RE vs SN ==
-[RE] {'^^mgt 18 (dei approved)'}
-[SN] {'mgt 18'}
-== MU vs SI ==
-[MU] {'mgt 18'}
-[SI] {'mgt 18/dei'}
-== TH vs SI ==
-[TH] {'mgt 18'}
-[SI] {'mgt 18/dei'}
-== WA vs SI ==
-[WA] {'mgt 18'}
-[SI] {'mgt 18/dei'}
-== FI vs SI ==
-[FI] {'mgt 18'}
-[SI] {'mgt 18/dei'}
-== SI vs SN ==
-[SI] {'mgt 18/dei'}
-[SN] {'mgt 18'}
-Deviations: ['RE', 'SI']
-
 = Discrepancies for SE27 =
 == RE vs MU ==
-[RE] {'^^^ahi'}
-[MU] {'dei', 'ge'}
+[RE] {'ahi'}
+[MU] {'ge'}
 == RE vs TH ==
-[RE] {'^^^ahi', 'technical elect'}
+[RE] {'technical elect', 'ahi'}
 [TH] set()
 == RE vs WA ==
-[RE] {'^^^ahi'}
-[WA] {'ge', 'wcwp10a', 'wcwp10b', 'poli/phil 27', 'phil/poli 28'}
+[RE] {'ahi'}
+[WA] {'phil/poli 28', 'wcwp10b', 'ge', 'poli/phil 27', 'wcwp10a'}
 == RE vs FI ==
-[RE] {'^^^ahi'}
-[FI] {'mmw 14/ge', 'ge'}
+[RE] {'ahi'}
+[FI] {'ge', 'mmw 14/ge'}
 == RE vs SI ==
-[RE] {'^^^ahi'}
+[RE] {'ahi'}
 [SI] {'technical elective/practicum', 'ge'}
 == RE vs SN ==
-[RE] {'^^^ahi'}
-[SN] {'syn 1', 'alternative', 'ge', 'dei', 'syn 2', 'high-impact', 'syn 100'}
+[RE] {'ahi'}
+[SN] {'syn 1', 'alternative', 'syn 100', 'syn 2', 'ge', 'high-impact'}
 == MU vs TH ==
-[MU] {'dei', 'technical elect', 'ge'}
+[MU] {'ge', 'technical elect'}
 [TH] set()
 == MU vs WA ==
-[MU] {'dei'}
-[WA] {'wcwp10a', 'wcwp10b', 'poli/phil 27', 'phil/poli 28'}
+[MU] set()
+[WA] {'poli/phil 27', 'wcwp10a', 'wcwp10b', 'phil/poli 28'}
 == MU vs FI ==
-[MU] {'dei'}
+[MU] set()
 [FI] {'mmw 14/ge'}
 == MU vs SI ==
-[MU] {'dei'}
+[MU] set()
 [SI] {'technical elective/practicum'}
 == MU vs SN ==
 [MU] set()
-[SN] {'syn 1', 'alternative', 'syn 2', 'high-impact', 'syn 100'}
+[SN] {'syn 1', 'alternative', 'syn 100', 'syn 2', 'high-impact'}
 == TH vs WA ==
 [TH] set()
-[WA] {'ge', 'technical elect', 'wcwp10a', 'wcwp10b', 'poli/phil 27', 'phil/poli 28'}
+[WA] {'phil/poli 28', 'wcwp10b', 'ge', 'technical elect', 'poli/phil 27', 'wcwp10a'}
 == TH vs FI ==
 [TH] set()
-[FI] {'mmw 14/ge', 'technical elect', 'ge'}
+[FI] {'ge', 'mmw 14/ge', 'technical elect'}
 == TH vs SI ==
 [TH] set()
-[SI] {'technical elective/practicum', 'technical elect', 'ge'}
+[SI] {'technical elective/practicum', 'ge', 'technical elect'}
 == TH vs SN ==
 [TH] set()
-[SN] {'syn 1', 'alternative', 'ge', 'dei', 'technical elect', 'syn 2', 'high-impact', 'syn 100'}
+[SN] {'syn 1', 'alternative', 'syn 100', 'syn 2', 'ge', 'high-impact', 'technical elect'}
 == WA vs FI ==
-[WA] {'wcwp10a', 'wcwp10b', 'poli/phil 27', 'phil/poli 28'}
+[WA] {'poli/phil 27', 'wcwp10a', 'wcwp10b', 'phil/poli 28'}
 [FI] {'mmw 14/ge'}
 == WA vs SI ==
-[WA] {'wcwp10a', 'wcwp10b', 'poli/phil 27', 'phil/poli 28'}
+[WA] {'poli/phil 27', 'wcwp10a', 'wcwp10b', 'phil/poli 28'}
 [SI] {'technical elective/practicum'}
 == WA vs SN ==
-[WA] {'wcwp10a', 'wcwp10b', 'poli/phil 27', 'phil/poli 28'}
-[SN] {'syn 1', 'alternative', 'dei', 'syn 2', 'high-impact', 'syn 100'}
+[WA] {'poli/phil 27', 'wcwp10a', 'wcwp10b', 'phil/poli 28'}
+[SN] {'syn 1', 'alternative', 'syn 100', 'syn 2', 'high-impact'}
 == FI vs SI ==
 [FI] {'mmw 14/ge'}
 [SI] {'technical elective/practicum'}
 == FI vs SN ==
 [FI] {'mmw 14/ge'}
-[SN] {'syn 1', 'alternative', 'dei', 'syn 2', 'high-impact', 'syn 100'}
+[SN] {'syn 1', 'alternative', 'syn 100', 'syn 2', 'high-impact'}
 == SI vs SN ==
 [SI] {'technical elective/practicum'}
-[SN] {'syn 1', 'alternative', 'dei', 'syn 2', 'high-impact', 'syn 100'}
+[SN] {'syn 1', 'alternative', 'syn 100', 'syn 2', 'high-impact'}
 Deviations: ['RE', 'MU', 'TH', 'WA', 'FI', 'SI', 'SN']
 
 = Discrepancies for SI29 =
 == RE vs MU ==
-[RE] {'math 10a or 20a', 'math 10b or 20b', 'math 10c or 20c'}
-[MU] {'math 10a/20a', 'math 10b/20b', 'math 10c/20c'}
+[RE] {'math 10c or 20c', 'math 10a or 20a', 'math 10b or 20b'}
+[MU] {'math 10b/20b', 'math 10c/20c', 'math 10a/20a'}
 == RE vs TH ==
-[RE] {'math 10a or 20a', 'math 10b or 20b', 'math 10c or 20c'}
-[TH] {'math 10a/20a', 'math 10b/20b', 'math 10c/20c'}
+[RE] {'math 10c or 20c', 'math 10a or 20a', 'math 10b or 20b'}
+[TH] {'math 10b/20b', 'math 10c/20c', 'math 10a/20a'}
 == RE vs WA ==
-[RE] {'math 10a or 20a', 'math 10b or 20b', 'math 10c or 20c'}
-[WA] {'math 10a/20a', 'math 10b/20b', 'math 10c/20c'}
+[RE] {'math 10c or 20c', 'math 10a or 20a', 'math 10b or 20b'}
+[WA] {'math 10b/20b', 'math 10c/20c', 'math 10a/20a'}
 == RE vs FI ==
-[RE] {'math 10a or 20a', 'chem 6a', 'math 10b or 20b', 'math 10c or 20c'}
-[FI] {'math 10a/20a', 'math 10b/20b', 'math 10c/20c', 'chem 6a/awp'}
+[RE] {'math 10c or 20c', 'math 10a or 20a', 'math 10b or 20b'}
+[FI] {'math 10b/20b', 'math 10c/20c', 'math 10a/20a'}
 == RE vs SI ==
-[RE] {'math 10a or 20a', 'math 10b or 20b', 'math 10c or 20c'}
-[SI] {'math 10a/20a', 'math 10b/20b', 'math 10c/20c'}
+[RE] {'math 10c or 20c', 'math 10a or 20a', 'math 10b or 20b'}
+[SI] {'math 10b/20b', 'math 10c/20c', 'math 10a/20a'}
 == RE vs SN ==
-[RE] {'math 10a or 20a', 'math 10b or 20b', 'math 10c or 20c'}
-[SN] {'math 10a/20a', 'math 10b/20b', 'math 10c/20c'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['RE', 'FI']
-
-= Discrepancies for SI30 =
-== RE vs FI ==
-[RE] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== MU vs FI ==
-[MU] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== TH vs FI ==
-[TH] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== WA vs FI ==
-[WA] {'chem 6a'}
-[FI] {'chem 6a/awp'}
-== FI vs SI ==
-[FI] {'chem 6a/awp'}
-[SI] {'chem 6a'}
-== FI vs SN ==
-[FI] {'chem 6a/awp'}
-[SN] {'chem 6a'}
-Deviations: ['FI']
+[RE] {'math 10c or 20c', 'math 10a or 20a', 'math 10b or 20b'}
+[SN] {'math 10b/20b', 'math 10c/20c', 'math 10a/20a'}
+Deviations: ['RE']
 
 = Discrepancies for SO25 =
-== RE vs MU ==
-[RE] {'^^soci 2 (dei approved)'}
-[MU] {'soci 2'}
-== RE vs TH ==
-[RE] {'^^soci 2 (dei approved)'}
-[TH] {'soci 2'}
-== RE vs WA ==
-[RE] {'^^soci 2 (dei approved)'}
-[WA] {'soci 2'}
 == RE vs FI ==
-[RE] {'^^soci 2 (dei approved)', 'soci 10, 20, 30, 40, or 50**'}
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50**/elective', 'soci 2'}
-== RE vs SI ==
-[RE] {'^^soci 2 (dei approved)'}
-[SI] {'soci 2/dei'}
-== RE vs SN ==
-[RE] {'^^soci 2 (dei approved)'}
-[SN] {'soci 2'}
+[RE] set()
+[FI] {'mmw 14/ge'}
 == MU vs FI ==
-[MU] {'soci 10, 20, 30, 40, or 50**'}
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50**/elective'}
-== MU vs SI ==
-[MU] {'soci 2'}
-[SI] {'soci 2/dei'}
+[MU] set()
+[FI] {'mmw 14/ge'}
 == TH vs FI ==
-[TH] {'soci 10, 20, 30, 40, or 50**'}
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50**/elective'}
-== TH vs SI ==
-[TH] {'soci 2'}
-[SI] {'soci 2/dei'}
+[TH] set()
+[FI] {'mmw 14/ge'}
 == WA vs FI ==
-[WA] {'soci 10, 20, 30, 40, or 50**'}
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50**/elective'}
-== WA vs SI ==
-[WA] {'soci 2'}
-[SI] {'soci 2/dei'}
+[WA] set()
+[FI] {'mmw 14/ge'}
 == FI vs SI ==
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50**/elective', 'soci 2'}
-[SI] {'soci 2/dei', 'soci 10, 20, 30, 40, or 50**'}
+[FI] {'mmw 14/ge'}
+[SI] set()
 == FI vs SN ==
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50**/elective'}
-[SN] {'soci 10, 20, 30, 40, or 50**'}
-== SI vs SN ==
-[SI] {'soci 2/dei'}
-[SN] {'soci 2'}
-Deviations: ['RE', 'FI', 'SI']
+[FI] {'mmw 14/ge'}
+[SN] set()
+Deviations: ['FI']
 
 = Discrepancies for SO27 =
-== RE vs MU ==
-[RE] {'^^soci 2 (dei approved)'}
-[MU] {'soci 2'}
-== RE vs TH ==
-[RE] {'^^soci 2 (dei approved)'}
-[TH] {'soci 2'}
-== RE vs WA ==
-[RE] {'^^soci 2 (dei approved)'}
-[WA] {'soci 2'}
 == RE vs FI ==
-[RE] {'^^soci 2 (dei approved)', 'soci 10, 20, 30, 40, or 50**'}
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50**/elective', 'soci 2'}
-== RE vs SI ==
-[RE] {'^^soci 2 (dei approved)'}
-[SI] {'soci 2/dei'}
-== RE vs SN ==
-[RE] {'^^soci 2 (dei approved)'}
-[SN] {'soci 2'}
+[RE] set()
+[FI] {'mmw 14/ge'}
 == MU vs FI ==
-[MU] {'soci 10, 20, 30, 40, or 50**'}
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50**/elective'}
-== MU vs SI ==
-[MU] {'soci 2'}
-[SI] {'soci 2/dei'}
+[MU] set()
+[FI] {'mmw 14/ge'}
 == TH vs FI ==
-[TH] {'soci 10, 20, 30, 40, or 50**'}
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50**/elective'}
-== TH vs SI ==
-[TH] {'soci 2'}
-[SI] {'soci 2/dei'}
+[TH] set()
+[FI] {'mmw 14/ge'}
 == WA vs FI ==
-[WA] {'soci 10, 20, 30, 40, or 50**'}
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50**/elective'}
-== WA vs SI ==
-[WA] {'soci 2'}
-[SI] {'soci 2/dei'}
+[WA] set()
+[FI] {'mmw 14/ge'}
 == FI vs SI ==
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50**/elective', 'soci 2'}
-[SI] {'soci 2/dei', 'soci 10, 20, 30, 40, or 50**'}
+[FI] {'mmw 14/ge'}
+[SI] set()
 == FI vs SN ==
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50**/elective'}
-[SN] {'soci 10, 20, 30, 40, or 50**'}
-== SI vs SN ==
-[SI] {'soci 2/dei'}
-[SN] {'soci 2'}
-Deviations: ['RE', 'FI', 'SI']
+[FI] {'mmw 14/ge'}
+[SN] set()
+Deviations: ['FI']
 
 = Discrepancies for SO28 =
-== RE vs MU ==
-[RE] {'^^soci 2 (dei approved)'}
-[MU] {'soci 2'}
-== RE vs TH ==
-[RE] {'^^soci 2 (dei approved)'}
-[TH] {'soci 2'}
-== RE vs WA ==
-[RE] {'^^soci 2 (dei approved)'}
-[WA] {'soci 2'}
 == RE vs FI ==
-[RE] {'^^soci 2 (dei approved)', 'soci 10, 20, 30, 40, or 50**'}
-[FI] {'mmw 14/ge', 'soci 2', 'soci 10, 20, 30, 40, or 50** /elective'}
-== RE vs SI ==
-[RE] {'^^soci 2 (dei approved)'}
-[SI] {'soci 2 /dei'}
-== RE vs SN ==
-[RE] {'^^soci 2 (dei approved)'}
-[SN] {'soci 2'}
+[RE] set()
+[FI] {'mmw 14/ge'}
 == MU vs FI ==
-[MU] {'soci 10, 20, 30, 40, or 50**'}
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50** /elective'}
-== MU vs SI ==
-[MU] {'soci 2'}
-[SI] {'soci 2 /dei'}
+[MU] set()
+[FI] {'mmw 14/ge'}
 == TH vs FI ==
-[TH] {'soci 10, 20, 30, 40, or 50**'}
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50** /elective'}
-== TH vs SI ==
-[TH] {'soci 2'}
-[SI] {'soci 2 /dei'}
+[TH] set()
+[FI] {'mmw 14/ge'}
 == WA vs FI ==
-[WA] {'soci 10, 20, 30, 40, or 50**'}
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50** /elective'}
-== WA vs SI ==
-[WA] {'soci 2'}
-[SI] {'soci 2 /dei'}
+[WA] set()
+[FI] {'mmw 14/ge'}
 == FI vs SI ==
-[FI] {'mmw 14/ge', 'soci 2', 'soci 10, 20, 30, 40, or 50** /elective'}
-[SI] {'soci 10, 20, 30, 40, or 50**', 'soci 2 /dei'}
+[FI] {'mmw 14/ge'}
+[SI] set()
 == FI vs SN ==
-[FI] {'mmw 14/ge', 'soci 10, 20, 30, 40, or 50** /elective'}
-[SN] {'soci 10, 20, 30, 40, or 50**'}
-== SI vs SN ==
-[SI] {'soci 2 /dei'}
-[SN] {'soci 2'}
-Deviations: ['RE', 'FI', 'SI']
+[FI] {'mmw 14/ge'}
+[SN] set()
+Deviations: ['FI']
 
 = Discrepancies for SO29 =
-== RE vs MU ==
-[RE] {'^^soci 2 (dei approved)'}
-[MU] {'soci 2'}
-== RE vs TH ==
-[RE] {'^^soci 2 (dei approved)'}
-[TH] {'soci 2'}
-== RE vs WA ==
-[RE] {'^^soci 2 (dei approved)'}
-[WA] {'soci 2'}
 == RE vs FI ==
-[RE] {'^^soci 2 (dei approved)'}
-[FI] {'mmw 14/ge', 'soci 2'}
-== RE vs SI ==
-[RE] {'^^soci 2 (dei approved)'}
-[SI] {'soci 2/dei'}
-== RE vs SN ==
-[RE] {'^^soci 2 (dei approved)'}
-[SN] {'soci 2'}
+[RE] set()
+[FI] {'mmw 14/ge'}
 == MU vs FI ==
 [MU] set()
 [FI] {'mmw 14/ge'}
-== MU vs SI ==
-[MU] {'soci 2'}
-[SI] {'soci 2/dei'}
 == TH vs FI ==
 [TH] set()
 [FI] {'mmw 14/ge'}
-== TH vs SI ==
-[TH] {'soci 2'}
-[SI] {'soci 2/dei'}
 == WA vs FI ==
 [WA] set()
 [FI] {'mmw 14/ge'}
-== WA vs SI ==
-[WA] {'soci 2'}
-[SI] {'soci 2/dei'}
 == FI vs SI ==
-[FI] {'mmw 14/ge', 'soci 2'}
-[SI] {'soci 2/dei'}
+[FI] {'mmw 14/ge'}
+[SI] set()
 == FI vs SN ==
 [FI] {'mmw 14/ge'}
 [SN] set()
-== SI vs SN ==
-[SI] {'soci 2/dei'}
-[SN] {'soci 2'}
-Deviations: ['RE', 'FI', 'SI']
+Deviations: ['FI']
 
 = Discrepancies for SO30 =
-== RE vs MU ==
-[RE] {'^^soci 2 (dei approved)'}
-[MU] {'soci 2'}
-== RE vs TH ==
-[RE] {'^^soci 2 (dei approved)'}
-[TH] {'soci 2'}
-== RE vs WA ==
-[RE] {'^^soci 2 (dei approved)'}
-[WA] {'soci 2'}
 == RE vs FI ==
-[RE] {'^^soci 2 (dei approved)'}
-[FI] {'mmw 14/ge', 'soci 2'}
-== RE vs SI ==
-[RE] {'^^soci 2 (dei approved)'}
-[SI] {'soci 2 /dei'}
-== RE vs SN ==
-[RE] {'^^soci 2 (dei approved)'}
-[SN] {'soci 2'}
+[RE] set()
+[FI] {'mmw 14/ge'}
 == MU vs FI ==
 [MU] set()
 [FI] {'mmw 14/ge'}
-== MU vs SI ==
-[MU] {'soci 2'}
-[SI] {'soci 2 /dei'}
 == TH vs FI ==
 [TH] set()
 [FI] {'mmw 14/ge'}
-== TH vs SI ==
-[TH] {'soci 2'}
-[SI] {'soci 2 /dei'}
 == WA vs FI ==
 [WA] set()
 [FI] {'mmw 14/ge'}
-== WA vs SI ==
-[WA] {'soci 2'}
-[SI] {'soci 2 /dei'}
 == FI vs SI ==
-[FI] {'mmw 14/ge', 'soci 2'}
-[SI] {'soci 2 /dei'}
+[FI] {'mmw 14/ge'}
+[SI] set()
 == FI vs SN ==
 [FI] {'mmw 14/ge'}
 [SN] set()
-== SI vs SN ==
-[SI] {'soci 2 /dei'}
-[SN] {'soci 2'}
-Deviations: ['RE', 'FI', 'SI']
+Deviations: ['FI']
 
 = Discrepancies for SO31 =
-== RE vs MU ==
-[RE] {'^^soci 2 (dei approved)'}
-[MU] {'soci 2'}
-== RE vs TH ==
-[RE] {'^^soci 2 (dei approved)'}
-[TH] {'soci 2'}
-== RE vs WA ==
-[RE] {'^^soci 2 (dei approved)'}
-[WA] {'soci 2'}
 == RE vs FI ==
-[RE] {'^^soci 2 (dei approved)'}
-[FI] {'mmw 14/ge', 'soci 2'}
-== RE vs SI ==
-[RE] {'^^soci 2 (dei approved)'}
-[SI] {'soci 2/dei'}
-== RE vs SN ==
-[RE] {'^^soci 2 (dei approved)'}
-[SN] {'soci 2'}
+[RE] set()
+[FI] {'mmw 14/ge'}
 == MU vs FI ==
 [MU] set()
 [FI] {'mmw 14/ge'}
-== MU vs SI ==
-[MU] {'soci 2'}
-[SI] {'soci 2/dei'}
 == TH vs FI ==
 [TH] set()
 [FI] {'mmw 14/ge'}
-== TH vs SI ==
-[TH] {'soci 2'}
-[SI] {'soci 2/dei'}
 == WA vs FI ==
 [WA] set()
 [FI] {'mmw 14/ge'}
-== WA vs SI ==
-[WA] {'soci 2'}
-[SI] {'soci 2/dei'}
 == FI vs SI ==
-[FI] {'mmw 14/ge', 'soci 2'}
-[SI] {'soci 2/dei'}
+[FI] {'mmw 14/ge'}
+[SI] set()
 == FI vs SN ==
 [FI] {'mmw 14/ge'}
 [SN] set()
-== SI vs SN ==
-[SI] {'soci 2/dei'}
-[SN] {'soci 2'}
-Deviations: ['RE', 'FI', 'SI']
+Deviations: ['FI']
 
 = Discrepancies for SO32 =
-== RE vs MU ==
-[RE] {'^^soci 2 (dei approved)'}
-[MU] {'soci 2'}
-== RE vs TH ==
-[RE] {'^^soci 2 (dei approved)'}
-[TH] {'soci 2'}
-== RE vs WA ==
-[RE] {'^^soci 2 (dei approved)'}
-[WA] {'soci 2'}
 == RE vs FI ==
-[RE] {'^^soci 2 (dei approved)'}
-[FI] {'mmw 14/ge', 'soci 2'}
-== RE vs SI ==
-[RE] {'^^soci 2 (dei approved)'}
-[SI] {'soci 2 /dei'}
-== RE vs SN ==
-[RE] {'^^soci 2 (dei approved)'}
-[SN] {'soci 2'}
+[RE] set()
+[FI] {'mmw 14/ge'}
 == MU vs FI ==
 [MU] set()
 [FI] {'mmw 14/ge'}
-== MU vs SI ==
-[MU] {'soci 2'}
-[SI] {'soci 2 /dei'}
 == TH vs FI ==
 [TH] set()
 [FI] {'mmw 14/ge'}
-== TH vs SI ==
-[TH] {'soci 2'}
-[SI] {'soci 2 /dei'}
 == WA vs FI ==
 [WA] set()
 [FI] {'mmw 14/ge'}
-== WA vs SI ==
-[WA] {'soci 2'}
-[SI] {'soci 2 /dei'}
 == FI vs SI ==
-[FI] {'mmw 14/ge', 'soci 2'}
-[SI] {'soci 2 /dei'}
+[FI] {'mmw 14/ge'}
+[SI] set()
 == FI vs SN ==
 [FI] {'mmw 14/ge'}
 [SN] set()
-== SI vs SN ==
-[SI] {'soci 2 /dei'}
-[SN] {'soci 2'}
-Deviations: ['RE', 'FI', 'SI']
+Deviations: ['FI']
 
 = Discrepancies for SO33 =
-== RE vs MU ==
-[RE] {'^^soci 2 (dei approved)'}
-[MU] {'soci 2'}
-== RE vs TH ==
-[RE] {'^^soci 2 (dei approved)'}
-[TH] {'soci 2'}
-== RE vs WA ==
-[RE] {'^^soci 2 (dei approved)'}
-[WA] {'soci 2'}
 == RE vs FI ==
-[RE] {'^^soci 2 (dei approved)'}
-[FI] {'mmw 14/ge', 'soci 2'}
-== RE vs SI ==
-[RE] {'^^soci 2 (dei approved)'}
-[SI] {'soci 2 /dei'}
-== RE vs SN ==
-[RE] {'^^soci 2 (dei approved)'}
-[SN] {'soci 2'}
+[RE] set()
+[FI] {'mmw 14/ge'}
 == MU vs FI ==
 [MU] set()
 [FI] {'mmw 14/ge'}
-== MU vs SI ==
-[MU] {'soci 2'}
-[SI] {'soci 2 /dei'}
 == TH vs FI ==
 [TH] set()
 [FI] {'mmw 14/ge'}
-== TH vs SI ==
-[TH] {'soci 2'}
-[SI] {'soci 2 /dei'}
 == WA vs FI ==
 [WA] set()
 [FI] {'mmw 14/ge'}
-== WA vs SI ==
-[WA] {'soci 2'}
-[SI] {'soci 2 /dei'}
 == FI vs SI ==
-[FI] {'mmw 14/ge', 'soci 2'}
-[SI] {'soci 2 /dei'}
+[FI] {'mmw 14/ge'}
+[SI] set()
 == FI vs SN ==
 [FI] {'mmw 14/ge'}
 [SN] set()
-== SI vs SN ==
-[SI] {'soci 2 /dei'}
-[SN] {'soci 2'}
-Deviations: ['RE', 'FI', 'SI']
+Deviations: ['FI']
 
 = Discrepancies for PB25 =
 == RE vs MU ==
@@ -2203,22 +1078,22 @@ Deviations: ['RE']
 = Discrepancies for PB27 =
 == RE vs MU ==
 [RE] {'math 10a or 20a', 'math 10b or 20b'}
-[MU] {'math 10a/20a', 'math 10b/20b'}
+[MU] {'math 10b/20b', 'math 10a/20a'}
 == RE vs TH ==
 [RE] {'math 10a or 20a', 'math 10b or 20b'}
-[TH] {'math 10a/20a', 'math 10b/20b'}
+[TH] {'math 10b/20b', 'math 10a/20a'}
 == RE vs WA ==
 [RE] {'math 10a or 20a', 'math 10b or 20b'}
-[WA] {'math 10a/20a', 'math 10b/20b'}
+[WA] {'math 10b/20b', 'math 10a/20a'}
 == RE vs FI ==
 [RE] {'math 10a or 20a', 'math 10b or 20b'}
-[FI] {'math 10a/20a', 'math 10b/20b'}
+[FI] {'math 10b/20b', 'math 10a/20a'}
 == RE vs SI ==
 [RE] {'math 10a or 20a', 'math 10b or 20b'}
-[SI] {'math 10a/20a', 'math 10b/20b'}
+[SI] {'math 10b/20b', 'math 10a/20a'}
 == RE vs SN ==
 [RE] {'math 10a or 20a', 'math 10b or 20b'}
-[SN] {'math 10a/20a', 'math 10b/20b'}
+[SN] {'math 10b/20b', 'math 10a/20a'}
 Deviations: ['RE']
 
 = Discrepancies for PB28 =
@@ -2327,72 +1202,57 @@ Deviations: ['RE']
 Deviations: ['MU']
 
 = <!> Error for UN27 =
-Missing academic plan for ('MU',)
+Missing academic plan for MU (and possibly others too)
 
 = <!> Error for UNHA =
-Missing academic plan for ('MU',)
+Missing academic plan for MU (and possibly others too)
 
 = <!> Error for UNPS =
-Missing academic plan for ('MU',)
+Missing academic plan for MU (and possibly others too)
 
 = <!> Error for UNSS =
-Missing academic plan for ('MU',)
+Missing academic plan for MU (and possibly others too)
 
 = Discrepancies for US26 =
 == RE vs FI ==
 [RE] {'usp 3'}
 [FI] {'usp 3 (dei)'}
-== RE vs SI ==
-[RE] {'usp 186', 'usp 1'}
-[SI] {'usp 1/dei', 'usp 186/ sixth practicum'}
 == MU vs FI ==
 [MU] {'usp 3'}
 [FI] {'usp 3 (dei)'}
-== MU vs SI ==
-[MU] {'usp 186', 'usp 1'}
-[SI] {'usp 1/dei', 'usp 186/ sixth practicum'}
 == TH vs FI ==
 [TH] {'usp 3'}
 [FI] {'usp 3 (dei)'}
-== TH vs SI ==
-[TH] {'usp 186', 'usp 1'}
-[SI] {'usp 1/dei', 'usp 186/ sixth practicum'}
 == WA vs FI ==
 [WA] {'usp 3'}
 [FI] {'usp 3 (dei)'}
-== WA vs SI ==
-[WA] {'usp 186', 'usp 1'}
-[SI] {'usp 1/dei', 'usp 186/ sixth practicum'}
 == FI vs SI ==
-[FI] {'usp 186', 'usp 1', 'usp 3 (dei)'}
-[SI] {'usp 1/dei', 'usp 186/ sixth practicum', 'usp 3'}
+[FI] {'usp 3 (dei)'}
+[SI] {'usp 3'}
 == FI vs SN ==
 [FI] {'usp 3 (dei)'}
 [SN] {'usp 3'}
-== SI vs SN ==
-[SI] {'usp 1/dei', 'usp 186/ sixth practicum'}
-[SN] {'usp 186', 'usp 1'}
-Deviations: ['FI', 'SI']
+Deviations: ['FI']
 
 = Discrepancies for US27 =
 == RE vs MU ==
-[RE] {'math 10a or 20a', 'usp 1 (or elective, if usp 2 in winter)', 'usp 2 (or elective, if usp 1 in fall)'}
-[MU] {'usp 2 (or usp 1 in fall)', 'math 10a or 20a or mgt 3', 'usp 1 (or usp 2 in winter)'}
+[RE] {'usp 1 (or elective, if usp 2 in winter)', 'math 10a or 20a', 'usp 2 (or elective, if usp 1 in fall)'}
+[MU] {'usp 1 (or usp 2 in winter)', 'math 10a or 20a or mgt 3', 'usp 2 (or usp 1 in fall)'}
 == RE vs TH ==
-[RE] {'math 10a or 20a', 'usp 1 (or elective, if usp 2 in winter)', 'usp 2 (or elective, if usp 1 in fall)'}
-[TH] {'usp 2 (or usp 1 in fall)', 'math 10a or 20a or mgt 3', 'usp 1 (or usp 2 in winter)'}
+[RE] {'usp 1 (or elective, if usp 2 in winter)', 'math 10a or 20a', 'usp 2 (or elective, if usp 1 in fall)'}
+[TH] {'usp 1 (or usp 2 in winter)', 'math 10a or 20a or mgt 3', 'usp 2 (or usp 1 in fall)'}
 == RE vs WA ==
-[RE] {'math 10a or 20a', 'usp 1 (or elective, if usp 2 in winter)', 'usp 2 (or elective, if usp 1 in fall)'}
-[WA] {'usp 2 (or usp 1 in fall)', 'math 10a or 20a or mgt 3', 'usp 1 (or usp 2 in winter)'}
+[RE] {'usp 1 (or elective, if usp 2 in winter)', 'math 10a or 20a', 'usp 2 (or elective, if usp 1 in fall)'}
+[WA] {'usp 1 (or usp 2 in winter)', 'math 10a or 20a or mgt 3', 'usp 2 (or usp 1 in fall)'}
 == RE vs FI ==
-[RE] {'math 10a or 20a', 'usp 1 (or elective, if usp 2 in winter)', 'usp 2 (or elective, if usp 1 in fall)'}
-[FI] {'usp 2 (or usp 1 in fall)', 'math 10a or 20a or mgt 3', 'usp 1 (or usp 2 in winter)'}
+[RE] {'usp 1 (or elective, if usp 2 in winter)', 'math 10a or 20a', 'usp 2 (or elective, if usp 1 in fall)'}
+[FI] {'usp 1 (or usp 2 in winter)', 'math 10a or 20a or mgt 3', 'usp 2 (or usp 1 in fall)'}
 == RE vs SI ==
-[RE] {'math 10a or 20a', 'usp 1 (or elective, if usp 2 in winter)', 'usp 2 (or elective, if usp 1 in fall)'}
-[SI] {'usp 2 (or usp 1 in fall)', 'usp 1/dei (or usp 2 in winter)', 'math 10a or 20a or mgt 3'}
+[RE] {'usp 1 (or elective, if usp 2 in winter)', 'math 10a or 20a', 'usp 2 (or elective, if usp 1 in fall)'}
+[SI] {'math 10a or 20a or mgt 3', 'usp 1/dei (or usp 2 in winter)', 'usp 2 (or usp 1 in fall)'}
 == RE vs SN ==
-[RE] {'math 10a or 20a', 'usp 1 (or elective, if usp 2 in winter)', 'usp 2 (or elective, if usp 1 in fall)'}
-[SN] {'usp 2 (or usp 1 in fall)', 'math 10a or 20a or mgt 3', 'usp 1 (or usp 2 in winter)'}
+[RE] {'usp 1 (or elective, if usp 2 in winter)', 'math 10a or 20a', 'usp 2 (or elective, if usp 1 in fall)'}
+[SN] {'usp 1 (or usp 2 in winter)', 'math 10a or 20a or mgt 3', 'usp 2 (or usp 1 in fall)'}
 == MU vs SI ==
 [MU] {'usp 1 (or usp 2 in winter)'}
 [SI] {'usp 1/dei (or usp 2 in winter)'}
@@ -2412,101 +1272,71 @@ Deviations: ['RE', 'SI']
 
 = Discrepancies for VA26 =
 == RE vs MU ==
-[RE] {'advanced seminar (vis)', 'advanced elective (vis)', 'advanced theory (vis)', 'intermediate lecture (vis)'}
-[MU] {'ud intermediate lecture (vis)', 'ud advanced elective (vis)', 'ud advanced seminar (vis)', 'ud advanced theory (vis)', 'elective'}
+[RE] {'advanced elective (vis)', 'advanced seminar (vis)', 'advanced theory (vis)', 'intermediate lecture (vis)'}
+[MU] {'ud advanced elective (vis)', 'ud advanced seminar (vis)', 'ud advanced theory (vis)', 'elective', 'ud intermediate lecture (vis)'}
 == MU vs TH ==
-[MU] {'ud intermediate lecture (vis)', 'ud advanced elective (vis)', 'ud advanced seminar (vis)', 'ud advanced theory (vis)', 'elective'}
-[TH] {'advanced seminar (vis)', 'advanced elective (vis)', 'advanced theory (vis)', 'intermediate lecture (vis)'}
+[MU] {'ud advanced elective (vis)', 'ud advanced seminar (vis)', 'ud advanced theory (vis)', 'elective', 'ud intermediate lecture (vis)'}
+[TH] {'advanced elective (vis)', 'advanced seminar (vis)', 'advanced theory (vis)', 'intermediate lecture (vis)'}
 == MU vs WA ==
-[MU] {'ud intermediate lecture (vis)', 'ud advanced elective (vis)', 'ud advanced seminar (vis)', 'ud advanced theory (vis)', 'elective'}
-[WA] {'advanced seminar (vis)', 'advanced elective (vis)', 'advanced theory (vis)', 'intermediate lecture (vis)'}
+[MU] {'ud advanced elective (vis)', 'ud advanced seminar (vis)', 'ud advanced theory (vis)', 'elective', 'ud intermediate lecture (vis)'}
+[WA] {'advanced elective (vis)', 'advanced seminar (vis)', 'advanced theory (vis)', 'intermediate lecture (vis)'}
 == MU vs FI ==
-[MU] {'ud intermediate lecture (vis)', 'ud advanced elective (vis)', 'ud advanced seminar (vis)', 'ud advanced theory (vis)', 'elective'}
-[FI] {'advanced seminar (vis)', 'advanced elective (vis)', 'advanced theory (vis)', 'intermediate lecture (vis)'}
+[MU] {'ud advanced elective (vis)', 'ud advanced seminar (vis)', 'ud advanced theory (vis)', 'elective', 'ud intermediate lecture (vis)'}
+[FI] {'advanced elective (vis)', 'advanced seminar (vis)', 'advanced theory (vis)', 'intermediate lecture (vis)'}
 == MU vs SI ==
-[MU] {'ud intermediate lecture (vis)', 'ud advanced elective (vis)', 'ud advanced seminar (vis)', 'ud advanced theory (vis)', 'elective'}
-[SI] {'advanced seminar (vis)', 'advanced elective (vis)', 'advanced theory (vis)', 'intermediate lecture (vis)'}
+[MU] {'ud advanced elective (vis)', 'ud advanced seminar (vis)', 'ud advanced theory (vis)', 'elective', 'ud intermediate lecture (vis)'}
+[SI] {'advanced elective (vis)', 'advanced seminar (vis)', 'advanced theory (vis)', 'intermediate lecture (vis)'}
 == MU vs SN ==
-[MU] {'ud intermediate lecture (vis)', 'ud advanced elective (vis)', 'ud advanced seminar (vis)', 'ud advanced theory (vis)', 'elective'}
-[SN] {'advanced seminar (vis)', 'advanced elective (vis)', 'advanced theory (vis)', 'intermediate lecture (vis)'}
+[MU] {'ud advanced elective (vis)', 'ud advanced seminar (vis)', 'ud advanced theory (vis)', 'elective', 'ud intermediate lecture (vis)'}
+[SN] {'advanced elective (vis)', 'advanced seminar (vis)', 'advanced theory (vis)', 'intermediate lecture (vis)'}
 Deviations: ['MU']
 
 = Discrepancies for VA27 =
 == RE vs MU ==
-[RE] {'senior interdisciplinary (vis)', 'advanced media practice (vis)', 'senior media practice (vis)', 'intermediate media studies (vis)', 'intermediate media practice (vis)', 'intermediate interdisciplinary (vis)'}
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud senior media practice (vis)', 'ud advanced media practice (vis)', 'ud senior interdisciplinary (vis)', 'ud intermediate media practice (vis)', 'ud intermediate media studies (vis)'}
-== RE vs SI ==
-[RE] {'senior interdisciplinary (vis)'}
-[SI] {'senior interdisciplinary (vis)/ sixth practicum'}
+[RE] {'intermediate interdisciplinary (vis)', 'advanced media practice (vis)', 'intermediate media studies (vis)', 'senior interdisciplinary (vis)', 'senior media practice (vis)', 'intermediate media practice (vis)'}
+[MU] {'ud advanced media practice (vis)', 'ud intermediate media practice (vis)', 'ud intermediate media studies (vis)', 'ud intermediate interdisciplinary (vis)', 'ud senior media practice (vis)', 'ud senior interdisciplinary (vis)'}
 == MU vs TH ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud senior media practice (vis)', 'ud advanced media practice (vis)', 'ud senior interdisciplinary (vis)', 'ud intermediate media practice (vis)', 'ud intermediate media studies (vis)'}
-[TH] {'senior interdisciplinary (vis)', 'advanced media practice (vis)', 'senior media practice (vis)', 'intermediate media studies (vis)', 'intermediate media practice (vis)', 'intermediate interdisciplinary (vis)'}
+[MU] {'ud advanced media practice (vis)', 'ud intermediate media practice (vis)', 'ud intermediate media studies (vis)', 'ud intermediate interdisciplinary (vis)', 'ud senior media practice (vis)', 'ud senior interdisciplinary (vis)'}
+[TH] {'intermediate interdisciplinary (vis)', 'advanced media practice (vis)', 'intermediate media studies (vis)', 'senior interdisciplinary (vis)', 'senior media practice (vis)', 'intermediate media practice (vis)'}
 == MU vs WA ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud senior media practice (vis)', 'ud advanced media practice (vis)', 'ud senior interdisciplinary (vis)', 'ud intermediate media practice (vis)', 'ud intermediate media studies (vis)'}
-[WA] {'senior interdisciplinary (vis)', 'advanced media practice (vis)', 'senior media practice (vis)', 'intermediate media studies (vis)', 'intermediate media practice (vis)', 'intermediate interdisciplinary (vis)'}
+[MU] {'ud advanced media practice (vis)', 'ud intermediate media practice (vis)', 'ud intermediate media studies (vis)', 'ud intermediate interdisciplinary (vis)', 'ud senior media practice (vis)', 'ud senior interdisciplinary (vis)'}
+[WA] {'intermediate interdisciplinary (vis)', 'advanced media practice (vis)', 'intermediate media studies (vis)', 'senior interdisciplinary (vis)', 'senior media practice (vis)', 'intermediate media practice (vis)'}
 == MU vs FI ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud senior media practice (vis)', 'ud advanced media practice (vis)', 'ud senior interdisciplinary (vis)', 'ud intermediate media practice (vis)', 'ud intermediate media studies (vis)'}
-[FI] {'senior interdisciplinary (vis)', 'advanced media practice (vis)', 'senior media practice (vis)', 'intermediate media studies (vis)', 'intermediate media practice (vis)', 'intermediate interdisciplinary (vis)'}
+[MU] {'ud advanced media practice (vis)', 'ud intermediate media practice (vis)', 'ud intermediate media studies (vis)', 'ud intermediate interdisciplinary (vis)', 'ud senior media practice (vis)', 'ud senior interdisciplinary (vis)'}
+[FI] {'intermediate interdisciplinary (vis)', 'advanced media practice (vis)', 'intermediate media studies (vis)', 'senior interdisciplinary (vis)', 'senior media practice (vis)', 'intermediate media practice (vis)'}
 == MU vs SI ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud senior media practice (vis)', 'ud advanced media practice (vis)', 'ud senior interdisciplinary (vis)', 'ud intermediate media practice (vis)', 'ud intermediate media studies (vis)'}
-[SI] {'advanced media practice (vis)', 'senior media practice (vis)', 'intermediate media studies (vis)', 'intermediate media practice (vis)', 'intermediate interdisciplinary (vis)', 'senior interdisciplinary (vis)/ sixth practicum'}
+[MU] {'ud advanced media practice (vis)', 'ud intermediate media practice (vis)', 'ud intermediate media studies (vis)', 'ud intermediate interdisciplinary (vis)', 'ud senior media practice (vis)', 'ud senior interdisciplinary (vis)'}
+[SI] {'intermediate interdisciplinary (vis)', 'advanced media practice (vis)', 'intermediate media studies (vis)', 'senior interdisciplinary (vis)', 'senior media practice (vis)', 'intermediate media practice (vis)'}
 == MU vs SN ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud senior media practice (vis)', 'ud advanced media practice (vis)', 'ud senior interdisciplinary (vis)', 'ud intermediate media practice (vis)', 'ud intermediate media studies (vis)'}
-[SN] {'senior interdisciplinary (vis)', 'advanced media practice (vis)', 'senior media practice (vis)', 'intermediate media studies (vis)', 'intermediate media practice (vis)', 'intermediate interdisciplinary (vis)'}
-== TH vs SI ==
-[TH] {'senior interdisciplinary (vis)'}
-[SI] {'senior interdisciplinary (vis)/ sixth practicum'}
-== WA vs SI ==
-[WA] {'senior interdisciplinary (vis)'}
-[SI] {'senior interdisciplinary (vis)/ sixth practicum'}
-== FI vs SI ==
-[FI] {'senior interdisciplinary (vis)'}
-[SI] {'senior interdisciplinary (vis)/ sixth practicum'}
-== SI vs SN ==
-[SI] {'senior interdisciplinary (vis)/ sixth practicum'}
-[SN] {'senior interdisciplinary (vis)'}
-Deviations: ['MU', 'SI']
+[MU] {'ud advanced media practice (vis)', 'ud intermediate media practice (vis)', 'ud intermediate media studies (vis)', 'ud intermediate interdisciplinary (vis)', 'ud senior media practice (vis)', 'ud senior interdisciplinary (vis)'}
+[SN] {'intermediate interdisciplinary (vis)', 'advanced media practice (vis)', 'intermediate media studies (vis)', 'senior interdisciplinary (vis)', 'senior media practice (vis)', 'intermediate media practice (vis)'}
+Deviations: ['MU']
 
 = Discrepancies for VA28 =
 == RE vs MU ==
-[RE] {'history & theory (vis)', 'advanced interdisciplinary (vis)', 'intermediate group a (vis)', 'intermediate group b (vis)', 'advanced art making (vis)', 'intermediate interdisciplinary (vis)'}
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate group a (vis)', 'ud intermediate group b (vis)', 'ud history & theory (vis)', 'ud advanced art making (vis)'}
-== RE vs SI ==
-[RE] set()
-[SI] {'advanced interdisciplinary (vis)/ sixth practicum'}
+[RE] {'advanced interdisciplinary (vis)', 'intermediate interdisciplinary (vis)', 'intermediate group b (vis)', 'history & theory (vis)', 'advanced art making (vis)', 'intermediate group a (vis)'}
+[MU] {'ud intermediate group b (vis)', 'ud intermediate group a (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate interdisciplinary (vis)', 'ud advanced art making (vis)', 'ud history & theory (vis)'}
 == MU vs TH ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate group a (vis)', 'ud intermediate group b (vis)', 'ud history & theory (vis)', 'ud advanced art making (vis)'}
-[TH] {'history & theory (vis)', 'advanced interdisciplinary (vis)', 'intermediate group a (vis)', 'intermediate group b (vis)', 'advanced art making (vis)', 'intermediate interdisciplinary (vis)'}
+[MU] {'ud intermediate group b (vis)', 'ud intermediate group a (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate interdisciplinary (vis)', 'ud advanced art making (vis)', 'ud history & theory (vis)'}
+[TH] {'advanced interdisciplinary (vis)', 'intermediate interdisciplinary (vis)', 'intermediate group b (vis)', 'history & theory (vis)', 'advanced art making (vis)', 'intermediate group a (vis)'}
 == MU vs WA ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate group a (vis)', 'ud intermediate group b (vis)', 'ud history & theory (vis)', 'ud advanced art making (vis)'}
-[WA] {'history & theory (vis)', 'advanced interdisciplinary (vis)', 'intermediate group a (vis)', 'intermediate group b (vis)', 'advanced art making (vis)', 'intermediate interdisciplinary (vis)'}
+[MU] {'ud intermediate group b (vis)', 'ud intermediate group a (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate interdisciplinary (vis)', 'ud advanced art making (vis)', 'ud history & theory (vis)'}
+[WA] {'advanced interdisciplinary (vis)', 'intermediate interdisciplinary (vis)', 'intermediate group b (vis)', 'history & theory (vis)', 'advanced art making (vis)', 'intermediate group a (vis)'}
 == MU vs FI ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate group a (vis)', 'ud intermediate group b (vis)', 'ud history & theory (vis)', 'ud advanced art making (vis)'}
-[FI] {'history & theory (vis)', 'advanced interdisciplinary (vis)', 'intermediate group a (vis)', 'intermediate group b (vis)', 'advanced art making (vis)', 'intermediate interdisciplinary (vis)'}
+[MU] {'ud intermediate group b (vis)', 'ud intermediate group a (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate interdisciplinary (vis)', 'ud advanced art making (vis)', 'ud history & theory (vis)'}
+[FI] {'advanced interdisciplinary (vis)', 'intermediate interdisciplinary (vis)', 'intermediate group b (vis)', 'history & theory (vis)', 'advanced art making (vis)', 'intermediate group a (vis)'}
 == MU vs SI ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate group a (vis)', 'ud intermediate group b (vis)', 'ud history & theory (vis)', 'ud advanced art making (vis)'}
-[SI] {'history & theory (vis)', 'advanced interdisciplinary (vis)', 'intermediate group a (vis)', 'intermediate group b (vis)', 'advanced art making (vis)', 'intermediate interdisciplinary (vis)', 'advanced interdisciplinary (vis)/ sixth practicum'}
+[MU] {'ud intermediate group b (vis)', 'ud intermediate group a (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate interdisciplinary (vis)', 'ud advanced art making (vis)', 'ud history & theory (vis)'}
+[SI] {'advanced interdisciplinary (vis)', 'intermediate interdisciplinary (vis)', 'intermediate group b (vis)', 'history & theory (vis)', 'advanced art making (vis)', 'intermediate group a (vis)'}
 == MU vs SN ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate group a (vis)', 'ud intermediate group b (vis)', 'ud history & theory (vis)', 'ud advanced art making (vis)'}
-[SN] {'history & theory (vis)', 'advanced interdisciplinary (vis)', 'intermediate group a (vis)', 'intermediate group b (vis)', 'advanced art making (vis)', 'intermediate interdisciplinary (vis)'}
-== TH vs SI ==
-[TH] set()
-[SI] {'advanced interdisciplinary (vis)/ sixth practicum'}
-== WA vs SI ==
-[WA] set()
-[SI] {'advanced interdisciplinary (vis)/ sixth practicum'}
-== FI vs SI ==
-[FI] set()
-[SI] {'advanced interdisciplinary (vis)/ sixth practicum'}
-== SI vs SN ==
-[SI] {'advanced interdisciplinary (vis)/ sixth practicum'}
-[SN] set()
-Deviations: ['MU', 'SI']
+[MU] {'ud intermediate group b (vis)', 'ud intermediate group a (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate interdisciplinary (vis)', 'ud advanced art making (vis)', 'ud history & theory (vis)'}
+[SN] {'advanced interdisciplinary (vis)', 'intermediate interdisciplinary (vis)', 'intermediate group b (vis)', 'history & theory (vis)', 'advanced art making (vis)', 'intermediate group a (vis)'}
+Deviations: ['MU']
 
 = Discrepancies for VA29 =
 == RE vs MU ==
-[RE] {'history & theory (vis)', 'math 10a or 20a', 'advanced interdisciplinary (vis)', 'advanced computing (vis)', 'intermediate interdisciplinary (vis)', 'intermediate art making (vis)', 'intermediate computing (vis)'}
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud advanced interdisciplinary (vis)', 'ud advanced computing (vis)', 'ud intermediate computing (vis)', 'ud history & theory (vis)', 'foundation math (vis)', 'ud intermediate art making (vis)'}
+[RE] {'advanced computing (vis)', 'advanced interdisciplinary (vis)', 'intermediate art making (vis)', 'intermediate interdisciplinary (vis)', 'intermediate computing (vis)', 'history & theory (vis)', 'math 10a or 20a'}
+[MU] {'foundation math (vis)', 'ud advanced computing (vis)', 'ud intermediate computing (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate interdisciplinary (vis)', 'ud intermediate art making (vis)', 'ud history & theory (vis)'}
 == RE vs TH ==
 [RE] {'math 10a or 20a'}
 [TH] {'foundation math (vis)'}
@@ -2517,60 +1347,48 @@ Deviations: ['MU', 'SI']
 [RE] {'math 10a or 20a'}
 [FI] {'foundation math (vis)'}
 == RE vs SI ==
-[RE] {'advanced interdisciplinary (vis)', 'math 10a or 20a'}
-[SI] {'advanced interdisciplinary (vis)/sixth practicum', 'foundation math (vis)'}
+[RE] {'math 10a or 20a'}
+[SI] {'foundation math (vis)'}
 == RE vs SN ==
 [RE] {'math 10a or 20a'}
 [SN] {'foundation math (vis)'}
 == MU vs TH ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud advanced interdisciplinary (vis)', 'ud advanced computing (vis)', 'ud intermediate computing (vis)', 'ud history & theory (vis)', 'ud intermediate art making (vis)'}
-[TH] {'history & theory (vis)', 'advanced interdisciplinary (vis)', 'advanced computing (vis)', 'intermediate interdisciplinary (vis)', 'intermediate art making (vis)', 'intermediate computing (vis)'}
+[MU] {'ud advanced computing (vis)', 'ud intermediate computing (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate interdisciplinary (vis)', 'ud intermediate art making (vis)', 'ud history & theory (vis)'}
+[TH] {'advanced computing (vis)', 'advanced interdisciplinary (vis)', 'intermediate interdisciplinary (vis)', 'intermediate art making (vis)', 'intermediate computing (vis)', 'history & theory (vis)'}
 == MU vs WA ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud advanced interdisciplinary (vis)', 'ud advanced computing (vis)', 'ud intermediate computing (vis)', 'ud history & theory (vis)', 'ud intermediate art making (vis)'}
-[WA] {'history & theory (vis)', 'advanced interdisciplinary (vis)', 'advanced computing (vis)', 'intermediate interdisciplinary (vis)', 'intermediate art making (vis)', 'intermediate computing (vis)'}
+[MU] {'ud advanced computing (vis)', 'ud intermediate computing (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate interdisciplinary (vis)', 'ud intermediate art making (vis)', 'ud history & theory (vis)'}
+[WA] {'advanced computing (vis)', 'advanced interdisciplinary (vis)', 'intermediate interdisciplinary (vis)', 'intermediate art making (vis)', 'intermediate computing (vis)', 'history & theory (vis)'}
 == MU vs FI ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud advanced interdisciplinary (vis)', 'ud advanced computing (vis)', 'ud intermediate computing (vis)', 'ud history & theory (vis)', 'ud intermediate art making (vis)'}
-[FI] {'history & theory (vis)', 'advanced interdisciplinary (vis)', 'advanced computing (vis)', 'intermediate interdisciplinary (vis)', 'intermediate art making (vis)', 'intermediate computing (vis)'}
+[MU] {'ud advanced computing (vis)', 'ud intermediate computing (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate interdisciplinary (vis)', 'ud intermediate art making (vis)', 'ud history & theory (vis)'}
+[FI] {'advanced computing (vis)', 'advanced interdisciplinary (vis)', 'intermediate interdisciplinary (vis)', 'intermediate art making (vis)', 'intermediate computing (vis)', 'history & theory (vis)'}
 == MU vs SI ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud advanced interdisciplinary (vis)', 'ud advanced computing (vis)', 'ud intermediate computing (vis)', 'ud history & theory (vis)', 'ud intermediate art making (vis)'}
-[SI] {'history & theory (vis)', 'advanced computing (vis)', 'advanced interdisciplinary (vis)/sixth practicum', 'intermediate interdisciplinary (vis)', 'intermediate art making (vis)', 'intermediate computing (vis)'}
+[MU] {'ud advanced computing (vis)', 'ud intermediate computing (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate interdisciplinary (vis)', 'ud intermediate art making (vis)', 'ud history & theory (vis)'}
+[SI] {'advanced computing (vis)', 'advanced interdisciplinary (vis)', 'intermediate interdisciplinary (vis)', 'intermediate art making (vis)', 'intermediate computing (vis)', 'history & theory (vis)'}
 == MU vs SN ==
-[MU] {'ud intermediate interdisciplinary (vis)', 'ud advanced interdisciplinary (vis)', 'ud advanced computing (vis)', 'ud intermediate computing (vis)', 'ud history & theory (vis)', 'ud intermediate art making (vis)'}
-[SN] {'history & theory (vis)', 'advanced interdisciplinary (vis)', 'advanced computing (vis)', 'intermediate interdisciplinary (vis)', 'intermediate art making (vis)', 'intermediate computing (vis)'}
-== TH vs SI ==
-[TH] {'advanced interdisciplinary (vis)'}
-[SI] {'advanced interdisciplinary (vis)/sixth practicum'}
-== WA vs SI ==
-[WA] {'advanced interdisciplinary (vis)'}
-[SI] {'advanced interdisciplinary (vis)/sixth practicum'}
-== FI vs SI ==
-[FI] {'advanced interdisciplinary (vis)'}
-[SI] {'advanced interdisciplinary (vis)/sixth practicum'}
-== SI vs SN ==
-[SI] {'advanced interdisciplinary (vis)/sixth practicum'}
-[SN] {'advanced interdisciplinary (vis)'}
-Deviations: ['RE', 'MU', 'SI']
+[MU] {'ud advanced computing (vis)', 'ud intermediate computing (vis)', 'ud advanced interdisciplinary (vis)', 'ud intermediate interdisciplinary (vis)', 'ud intermediate art making (vis)', 'ud history & theory (vis)'}
+[SN] {'advanced computing (vis)', 'advanced interdisciplinary (vis)', 'intermediate interdisciplinary (vis)', 'intermediate art making (vis)', 'intermediate computing (vis)', 'history & theory (vis)'}
+Deviations: ['RE', 'MU']
 
 = Discrepancies for VA30 =
 == RE vs MU ==
-[RE] {'history & theory (vis)', 'intermediate studio (vis)', 'advanced elective (vis)', 'intermediate lecture (vis)'}
-[MU] {'ud advanced elective (vis)', 'ud intermediate lecture (vis)', 'ud intermediate studio (vis)', 'ud history & theory (vis)'}
+[RE] {'intermediate studio (vis)', 'advanced elective (vis)', 'history & theory (vis)', 'intermediate lecture (vis)'}
+[MU] {'ud intermediate lecture (vis)', 'ud intermediate studio (vis)', 'ud history & theory (vis)', 'ud advanced elective (vis)'}
 == MU vs TH ==
-[MU] {'ud advanced elective (vis)', 'ud intermediate lecture (vis)', 'ud intermediate studio (vis)', 'ud history & theory (vis)'}
-[TH] {'history & theory (vis)', 'intermediate studio (vis)', 'advanced elective (vis)', 'intermediate lecture (vis)'}
+[MU] {'ud intermediate lecture (vis)', 'ud intermediate studio (vis)', 'ud history & theory (vis)', 'ud advanced elective (vis)'}
+[TH] {'intermediate studio (vis)', 'advanced elective (vis)', 'history & theory (vis)', 'intermediate lecture (vis)'}
 == MU vs WA ==
-[MU] {'ud advanced elective (vis)', 'ud intermediate lecture (vis)', 'ud intermediate studio (vis)', 'ud history & theory (vis)'}
-[WA] {'history & theory (vis)', 'intermediate studio (vis)', 'advanced elective (vis)', 'intermediate lecture (vis)'}
+[MU] {'ud intermediate lecture (vis)', 'ud intermediate studio (vis)', 'ud history & theory (vis)', 'ud advanced elective (vis)'}
+[WA] {'intermediate studio (vis)', 'advanced elective (vis)', 'history & theory (vis)', 'intermediate lecture (vis)'}
 == MU vs FI ==
-[MU] {'ud advanced elective (vis)', 'ud intermediate lecture (vis)', 'ud intermediate studio (vis)', 'ud history & theory (vis)'}
-[FI] {'history & theory (vis)', 'intermediate studio (vis)', 'advanced elective (vis)', 'intermediate lecture (vis)'}
+[MU] {'ud intermediate lecture (vis)', 'ud intermediate studio (vis)', 'ud history & theory (vis)', 'ud advanced elective (vis)'}
+[FI] {'intermediate studio (vis)', 'advanced elective (vis)', 'history & theory (vis)', 'intermediate lecture (vis)'}
 == MU vs SI ==
-[MU] {'ud advanced elective (vis)', 'ud intermediate lecture (vis)', 'ud intermediate studio (vis)', 'ud history & theory (vis)'}
-[SI] {'history & theory (vis)', 'intermediate studio (vis)', 'advanced elective (vis)', 'intermediate lecture (vis)'}
+[MU] {'ud intermediate lecture (vis)', 'ud intermediate studio (vis)', 'ud history & theory (vis)', 'ud advanced elective (vis)'}
+[SI] {'intermediate studio (vis)', 'advanced elective (vis)', 'history & theory (vis)', 'intermediate lecture (vis)'}
 == MU vs SN ==
-[MU] {'ud advanced elective (vis)', 'ud intermediate lecture (vis)', 'ud intermediate studio (vis)', 'ud history & theory (vis)'}
-[SN] {'history & theory (vis)', 'intermediate studio (vis)', 'advanced elective (vis)', 'intermediate lecture (vis)'}
+[MU] {'ud intermediate lecture (vis)', 'ud intermediate studio (vis)', 'ud history & theory (vis)', 'ud advanced elective (vis)'}
+[SN] {'intermediate studio (vis)', 'advanced elective (vis)', 'history & theory (vis)', 'intermediate lecture (vis)'}
 Deviations: ['MU']
 
-College oddity scores: {'RE': 379, 'MU': 184, 'TH': 143, 'WA': 151, 'FI': 321, 'SI': 193, 'SN': 153}
-College deviation scores: {'RE': 57, 'MU': 11, 'TH': 2, 'WA': 5, 'FI': 44, 'SI': 17, 'SN': 4}
+College oddity scores: {'RE': 209, 'MU': 121, 'TH': 77, 'WA': 87, 'FI': 158, 'SI': 77, 'SN': 83}
+College deviation scores: {'RE': 31, 'MU': 11, 'TH': 2, 'WA': 5, 'FI': 20, 'SI': 2, 'SN': 3}
