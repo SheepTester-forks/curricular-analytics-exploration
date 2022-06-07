@@ -11,13 +11,18 @@ course_names = {
 
 
 def get_course_code(name: str) -> str:
-    match = re.search(r"\b([A-Z]{2,4}) *(\d+[A-Z]{0,2})(?: *& *(\d+[A-Z]{0,2}))?", name)
+    # Remove International Studies' Disciplinary Focus prefix
+    name = re.sub(r"DF-?\d - ", "", name)
+
+    match = re.search(r"\b([A-Z]{2,4}) *(\d+[A-Z]{0,2})", name)
     if match:
-        subject, number1, number2 = match.group(1, 2, 3)
-        if number2:
-            return f"{subject} {number1}, {subject} {number2}"
-        else:
-            return f"{subject} {number1}"
+        subject, number = match.group(1, 2)
+        if subject in ["IE", "RR"]:
+            # International Studies' "Interdisciplinary Elective/Regional
+            # Requirement" is not a course name, but it might be worth still
+            # returning a prefix/department for these
+            return ""
+        return f"{subject} {number}"
     return ""
 
 
