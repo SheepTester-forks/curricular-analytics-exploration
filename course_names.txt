@@ -16,9 +16,9 @@
 [PC33 WA] 1 PSYC UD ELECTIVE                                                    
 [PC33 WA] 1 PSYC UD SPECIALIZATION                                              
 [PC35 WA] 1 UD PSYC ELECTIVE                                                    
-[CE25 WA] ADV. CHEM 1                                                           CHEM 1
-[CE25 WA] ADV. CHEM 2                                                           CHEM 2
-[CE25 WA] ADV. CHEM 3                                                           CHEM 3
+[CE25 WA] ADV. CHEM 1                                                           
+[CE25 WA] ADV. CHEM 2                                                           
+[CE25 WA] ADV. CHEM 3                                                           
 [UNSS RE] AHI                                                                   
 [VA30 RE] AHI or ELECTIVE                                                       
 [AN27 WA] ANAR CONC. ELECTIVE                                                   
