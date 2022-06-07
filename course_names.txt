@@ -480,20 +480,20 @@
 [VA30 WA] PHIL/POLI 27                                                          POLI 27
 [VA30 WA] PHIL/POLI 28                                                          POLI 28
 [EC28 WA] PHYS 130A¹                                                            PHYS 130A
-[BI38 WA] PHYS 1A&1AL                                                           PHYS 1A
-[CH38 RE] PHYS 1A/1AL                                                           PHYS 1A
-[CH35 RE] PHYS 1A/AL                                                            PHYS 1A
+[BI38 WA] PHYS 1A&1AL                                                           PHYS 1A, PHYS 1AL
+[CH38 RE] PHYS 1A/1AL                                                           PHYS 1A, PHYS 1AL
+[CH35 RE] PHYS 1A/AL                                                            PHYS 1A, PHYS 1AL
 [SI29 WA] PHYS 1AL                                                              PHYS 1AL
-[BI38 WA] PHYS 1B&1BL                                                           PHYS 1B
-[CH38 RE] PHYS 1B/1BL                                                           PHYS 1B
+[BI38 WA] PHYS 1B&1BL                                                           PHYS 1B, PHYS 1BL
+[CH38 RE] PHYS 1B/1BL                                                           PHYS 1B, PHYS 1BL
 [SI29 WA] PHYS 1BL                                                              PHYS 1BL
-[BI38 WA] PHYS 1C&1CL                                                           PHYS 1C
-[CH38 RE] PHYS 1C/1CL                                                           PHYS 1C
+[BI38 WA] PHYS 1C&1CL                                                           PHYS 1C, PHYS 1CL
+[CH38 RE] PHYS 1C/1CL                                                           PHYS 1C, PHYS 1CL
 [SI29 WA] PHYS 1CL                                                              PHYS 1CL
 [UNPS RE] PHYS 2A (see note)                                                    PHYS 2A
 [SI30 WA] PHYS 2BL                                                              PHYS 2BL
 [CH36 WA] PHYS 2BL or 2CL or 2DL                                                PHYS 2BL
-[MC25 WA] PHYS 2C & 2CL                                                         PHYS 2C
+[MC25 WA] PHYS 2C & 2CL                                                         PHYS 2C, PHYS 2CL
 [BI34 WA] PHYS 2C (*SEE NOTE*)                                                  PHYS 2C
 [CH36 WA] PHYS 2C or 2D                                                         PHYS 2C
 [SI30 WA] PHYS 2CL                                                              PHYS 2CL

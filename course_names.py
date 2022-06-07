@@ -14,14 +14,18 @@ def get_course_code(name: str) -> str:
     # Remove International Studies' Disciplinary Focus prefix
     name = re.sub(r"DF-?\d - ", "", name)
 
-    match = re.search(r"\b([A-Z]{2,4}) *(\d+[A-Z]{0,2})", name)
+    # Special case for physics labs, which are often merged with its
+    # corresponding course, eg "PHYS 2C & 2CL"
+    match = re.search(r"\b([A-Z]{2,4}) *(\d+[A-Z]{0,2})( *[&/] *\d?[A-Z]L)?", name)
     if match:
-        subject, number = match.group(1, 2)
+        subject, number, has_lab = match.group(1, 2, 3)
         if subject in ["IE", "RR"]:
             # International Studies' "Interdisciplinary Elective/Regional
             # Requirement" is not a course name, but it might be worth still
             # returning a prefix/department for these
             return ""
+        if has_lab:
+            return f"{subject} {number}, {subject} {number}L"
         return f"{subject} {number}"
     return ""
 
