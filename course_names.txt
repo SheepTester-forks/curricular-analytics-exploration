@@ -59,7 +59,7 @@
 [VA30 SI] CAT 125 or PRACTICUM                                                  CAT 125
 [PS32 SI] CAT 125 or Practicum                                                  CAT 125
 [AN30 SI] CAT 125 or Sixth College Practicum                                    CAT 125
-[SO30 SI] CAT125 or PRACTICUM                                                   
+[SO30 SI] CAT125 or PRACTICUM                                                   CAT 125
 [CG32 WA] CBN CORE                                                              
 [CG32 WA] CBN Elective                                                          
 [CG32 WA] CBN Research                                                          
@@ -155,75 +155,75 @@
 [IS36 WA] DF-6 - PHILOSOPHY                                                     
 [IS36 WA] DF-7 - PHILOSOPHY                                                     
 [IS36 WA] DF-8 - PHILOSOPHY                                                     
-[IS25 WA] DF1 - ANTHROPOLOGY                                                    
-[IS26 WA] DF1 - ECONOMICS                                                       
-[IS27 WA] DF1 - HISTORY                                                         
-[IS28 WA] DF1 - LINGUISTICS (LIGN 101)                                          LIGN 101
-[IS29 WA] DF1 - LITERATURE                                                      
-[IS34 WA] DF1 - MGT 103                                                         MGT 103
-[IS30 WA] DF1 - POLI SCI                                                        
-[IS31 WA] DF1 - SOCIOLOGY                                                       
-[IS25 WA] DF2 - ANTHROPOLOGY                                                    
-[IS26 WA] DF2 - ECONOMICS                                                       
-[IS27 WA] DF2 - HISTORY                                                         
-[IS28 WA] DF2 - LINGUISTICS                                                     
-[IS29 WA] DF2 - LITERATURE                                                      
-[IS34 WA] DF2 - MGT 164                                                         MGT 164
-[IS30 WA] DF2 - POLI SCI                                                        
-[IS31 WA] DF2 - SOCIOLOGY                                                       
-[IS25 WA] DF3 - ANTHROPOLOGY (RR2)                                              
-[IS26 WA] DF3 - ECONOMICS                                                       
-[IS27 WA] DF3 - HISTORY (RR2)                                                   
-[IS28 WA] DF3 - LINGUISTICS (RR2)                                               
-[IS29 WA] DF3 - LITERATURE                                                      
-[IS34 WA] DF3 - MGT 181 OR 187                                                  MGT 181
-[IS30 WA] DF3 - POLI SCI                                                        
-[IS31 WA] DF3 - SOCIOLOGY (RR2)                                                 
-[IS25 WA] DF4 - ANTHROPOLOGY                                                    
-[IS26 WA] DF4 - ECONOMICS                                                       
-[IS27 WA] DF4 - HISTORY                                                         
-[IS28 WA] DF4 - LINGUISTICS                                                     
-[IS29 WA] DF4 - LITERATURE (RR2)                                                
-[IS34 WA] DF4 - MGT ELECTIVE                                                    
-[IS30 WA] DF4 - POLI SCI (RR2)                                                  
-[IS31 WA] DF4 - SOCIOLOGY                                                       
-[IS25 WA] DF5 - ANTHROPOLOGY (RR3)                                              
-[IS26 WA] DF5 - ECONOMICS                                                       
-[IS27 WA] DF5 - HISTORY (RR3)                                                   
-[IS28 WA] DF5 - LINGUISTICS (RR3)                                               
-[IS29 WA] DF5 - LITERATURE (RR3)                                                
-[IS34 WA] DF5 - MGT 112                                                         MGT 112
-[IS30 WA] DF5 - POLI SCI (RR3)                                                  
-[IS31 WA] DF5 - SOCIOLOGY (RR3)                                                 
-[IS25 WA] DF6 - ANTHROPOLOGY                                                    
-[IS26 WA] DF6 - ECONOMICS                                                       
-[IS27 WA] DF6 - HISTORY                                                         
-[IS28 WA] DF6 - LINGUISTICS                                                     
-[IS29 WA] DF6 - LITERATURE                                                      
-[IS34 WA] DF6 - MGT 166                                                         MGT 166
-[IS30 WA] DF6 - POLI SCI                                                        
-[IS31 WA] DF6 - SOCIOLOGY                                                       
-[IS25 WA] DF7 - ANTHROPOLOGY                                                    
-[IS26 WA] DF7 - ECONOMICS                                                       
-[IS27 WA] DF7 - HISTORY                                                         
-[IS28 WA] DF7 - LINGUISTICS                                                     
-[IS29 WA] DF7 - LITERATURE                                                      
-[IS34 WA] DF7 - MGT ELECTIVE                                                    
-[IS30 WA] DF7 - POLI SCI                                                        
-[IS31 WA] DF7 - SOCIOLOGY                                                       
-[IS25 WA] DF8 - ANTHROPOLOGY                                                    
-[IS26 WA] DF8 - ECONOMICS                                                       
-[IS27 WA] DF8 - HISTORY                                                         
-[IS28 WA] DF8 - LINGUISTICS                                                     
-[IS29 WA] DF8 - LITERATURE                                                      
-[IS34 WA] DF8 - MGT ELECTIVE                                                    
-[IS30 WA] DF8 - POLI SCI                                                        
-[IS31 WA] DF8 - SOCIOLOGY                                                       
-[PS26 TH] DOC  1/ DEI                                                           
-[TH26 TH] DOC  2                                                                
-[TH26 TH] DOC  3                                                                
+[IS25 WA] DF1 - ANTHROPOLOGY                                                    DF 1
+[IS26 WA] DF1 - ECONOMICS                                                       DF 1
+[IS27 WA] DF1 - HISTORY                                                         DF 1
+[IS28 WA] DF1 - LINGUISTICS (LIGN 101)                                          DF 1
+[IS29 WA] DF1 - LITERATURE                                                      DF 1
+[IS34 WA] DF1 - MGT 103                                                         DF 1
+[IS30 WA] DF1 - POLI SCI                                                        DF 1
+[IS31 WA] DF1 - SOCIOLOGY                                                       DF 1
+[IS25 WA] DF2 - ANTHROPOLOGY                                                    DF 2
+[IS26 WA] DF2 - ECONOMICS                                                       DF 2
+[IS27 WA] DF2 - HISTORY                                                         DF 2
+[IS28 WA] DF2 - LINGUISTICS                                                     DF 2
+[IS29 WA] DF2 - LITERATURE                                                      DF 2
+[IS34 WA] DF2 - MGT 164                                                         DF 2
+[IS30 WA] DF2 - POLI SCI                                                        DF 2
+[IS31 WA] DF2 - SOCIOLOGY                                                       DF 2
+[IS25 WA] DF3 - ANTHROPOLOGY (RR2)                                              DF 3
+[IS26 WA] DF3 - ECONOMICS                                                       DF 3
+[IS27 WA] DF3 - HISTORY (RR2)                                                   DF 3
+[IS28 WA] DF3 - LINGUISTICS (RR2)                                               DF 3
+[IS29 WA] DF3 - LITERATURE                                                      DF 3
+[IS34 WA] DF3 - MGT 181 OR 187                                                  DF 3
+[IS30 WA] DF3 - POLI SCI                                                        DF 3
+[IS31 WA] DF3 - SOCIOLOGY (RR2)                                                 DF 3
+[IS25 WA] DF4 - ANTHROPOLOGY                                                    DF 4
+[IS26 WA] DF4 - ECONOMICS                                                       DF 4
+[IS27 WA] DF4 - HISTORY                                                         DF 4
+[IS28 WA] DF4 - LINGUISTICS                                                     DF 4
+[IS29 WA] DF4 - LITERATURE (RR2)                                                DF 4
+[IS34 WA] DF4 - MGT ELECTIVE                                                    DF 4
+[IS30 WA] DF4 - POLI SCI (RR2)                                                  DF 4
+[IS31 WA] DF4 - SOCIOLOGY                                                       DF 4
+[IS25 WA] DF5 - ANTHROPOLOGY (RR3)                                              DF 5
+[IS26 WA] DF5 - ECONOMICS                                                       DF 5
+[IS27 WA] DF5 - HISTORY (RR3)                                                   DF 5
+[IS28 WA] DF5 - LINGUISTICS (RR3)                                               DF 5
+[IS29 WA] DF5 - LITERATURE (RR3)                                                DF 5
+[IS34 WA] DF5 - MGT 112                                                         DF 5
+[IS30 WA] DF5 - POLI SCI (RR3)                                                  DF 5
+[IS31 WA] DF5 - SOCIOLOGY (RR3)                                                 DF 5
+[IS25 WA] DF6 - ANTHROPOLOGY                                                    DF 6
+[IS26 WA] DF6 - ECONOMICS                                                       DF 6
+[IS27 WA] DF6 - HISTORY                                                         DF 6
+[IS28 WA] DF6 - LINGUISTICS                                                     DF 6
+[IS29 WA] DF6 - LITERATURE                                                      DF 6
+[IS34 WA] DF6 - MGT 166                                                         DF 6
+[IS30 WA] DF6 - POLI SCI                                                        DF 6
+[IS31 WA] DF6 - SOCIOLOGY                                                       DF 6
+[IS25 WA] DF7 - ANTHROPOLOGY                                                    DF 7
+[IS26 WA] DF7 - ECONOMICS                                                       DF 7
+[IS27 WA] DF7 - HISTORY                                                         DF 7
+[IS28 WA] DF7 - LINGUISTICS                                                     DF 7
+[IS29 WA] DF7 - LITERATURE                                                      DF 7
+[IS34 WA] DF7 - MGT ELECTIVE                                                    DF 7
+[IS30 WA] DF7 - POLI SCI                                                        DF 7
+[IS31 WA] DF7 - SOCIOLOGY                                                       DF 7
+[IS25 WA] DF8 - ANTHROPOLOGY                                                    DF 8
+[IS26 WA] DF8 - ECONOMICS                                                       DF 8
+[IS27 WA] DF8 - HISTORY                                                         DF 8
+[IS28 WA] DF8 - LINGUISTICS                                                     DF 8
+[IS29 WA] DF8 - LITERATURE                                                      DF 8
+[IS34 WA] DF8 - MGT ELECTIVE                                                    DF 8
+[IS30 WA] DF8 - POLI SCI                                                        DF 8
+[IS31 WA] DF8 - SOCIOLOGY                                                       DF 8
+[PS26 TH] DOC  1/ DEI                                                           DOC 1
+[TH26 TH] DOC  2                                                                DOC 2
+[TH26 TH] DOC  3                                                                DOC 3
 [VA30 TH] DOC 1/DEI                                                             DOC 1
-[LN34 TH] DOC1/DEI                                                              
+[LN34 TH] DOC1/DEI                                                              DOC 1
 [DS25 WA] DSC 140A/CSE 150A                                                     DSC 140A
 [EC28 WA] Depth 1                                                               
 [EC28 WA] Depth 2                                                               
@@ -294,15 +294,15 @@
 [VA30 SN] High-Impact                                                           
 [VA30 WA] History & Theory (VIS)                                                
 [GS25 WA] History Elective                                                      
-[IS36 WA] IE/RR1 - Interdisciplinary Elective/Regional Requirement              
-[IS36 WA] IE/RR2 - Interdisciplinary Elective/Regional Requirement              
-[IS36 WA] IE/RR3 - Interdisciplinary Elective/Regional Requirement              
-[IS34 WA] IE/RR3- Interdisciplinary Elective/Regional Requirement               
-[IS31 WA] IE1 - INTERDISC ELECT (RR1)                                           
-[IS31 WA] IE2 - INTERDISC ELECT                                                 
-[IS26 WA] IE2 - INTERDISC ELECT  (RR2)                                          
-[IS31 WA] IE3 - INTERDISC ELECT                                                 
-[IS26 WA] IE3 - INTERDISC ELECT  (RR3)                                          
+[IS36 WA] IE/RR1 - Interdisciplinary Elective/Regional Requirement              RR 1
+[IS36 WA] IE/RR2 - Interdisciplinary Elective/Regional Requirement              RR 2
+[IS36 WA] IE/RR3 - Interdisciplinary Elective/Regional Requirement              RR 3
+[IS34 WA] IE/RR3- Interdisciplinary Elective/Regional Requirement               RR 3
+[IS31 WA] IE1 - INTERDISC ELECT (RR1)                                           IE 1
+[IS31 WA] IE2 - INTERDISC ELECT                                                 IE 2
+[IS26 WA] IE2 - INTERDISC ELECT  (RR2)                                          IE 2
+[IS31 WA] IE3 - INTERDISC ELECT                                                 IE 3
+[IS26 WA] IE3 - INTERDISC ELECT  (RR3)                                          IE 3
 [IS34 WA] INTL 101 OR 102                                                       INTL 101
 [IS36 WA] INTL 101 or 102                                                       INTL 101
 [IT25 WA] IS Dept 1                                                             
@@ -442,14 +442,14 @@
 [EN30 WA] MGT 162/162R                                                          MGT 162
 [PC35 RE] MGT 18 (DEI approved)                                                 MGT 18
 [PC35 SI] MGT 18/DEI                                                            MGT 18
-[LN34 FI] MMW   15                                                              
-[LN34 FI] MMW  13                                                               
-[LN34 FI] MMW  14/GE                                                            
+[LN34 FI] MMW   15                                                              MMW 15
+[LN34 FI] MMW  13                                                               MMW 13
+[LN34 FI] MMW  14/GE                                                            MMW 14
 [EC37 FI] MMW 14 /GE                                                            MMW 14
 [BE28 FI] MMW 14/ GE                                                            MMW 14
 [VA30 FI] MMW 14/GE                                                             MMW 14
-[SI30 FI] MMW14/GE                                                              
-[SI30 FI] MMW15                                                                 
+[SI30 FI] MMW14/GE                                                              MMW 14
+[SI30 FI] MMW15                                                                 MMW 15
 [US27 MU] MUIR UD ELECTIVE                                                      
 [VA30 MU] MUIR UD Elective                                                      
 [PC35 MU] MUIR Upper Div Elective                                               
@@ -546,7 +546,7 @@
 [SO33 WA] SOCI UD ELECTIVE                                                      
 [SO33 WA] SOCI- UD METHODOLOGY                                                  
 [SO28 WA] SOCI-UD CONCENTRATION                                                 
-[SO29 TH] SOCI10,20,30,40,OR50                                                  
+[SO29 TH] SOCI10,20,30,40,OR50                                                  SOCI 10
 [VA30 RE] SOCIAL SCIENCE                                                        
 [SI30 RE] SOCIAL SCIENCE GE                                                     
 [TH27 RE] SOCIAL SCIENCE/DEI                                                    
@@ -700,6 +700,6 @@
 [GL25 FI] Upper Division Elective                                               
 [AN29 WA] Upper Division Elective (ANTH, ANSC, ANBI, ANAR)                      
 [AN29 WA] Upper Division Methods Course (ANBI)                                  
-[SE27 WA] WCWP10A                                                               
-[SE27 WA] WCWP10B                                                               
+[SE27 WA] WCWP10A                                                               WCWP 10A
+[SE27 WA] WCWP10B                                                               WCWP 10B
 [LN34 WA] language requirement                                                  

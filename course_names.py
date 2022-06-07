@@ -11,7 +11,7 @@ course_names = {
 
 
 def get_course_code(name: str) -> str:
-    match = re.search(r"\b([A-Z]{2,4}) (\d+[A-Z]{0,2})(?: *& *(\d+[A-Z]{0,2}))?", name)
+    match = re.search(r"\b([A-Z]{2,4}) *(\d+[A-Z]{0,2})(?: *& *(\d+[A-Z]{0,2}))?", name)
     if match:
         subject, number1, number2 = match.group(1, 2, 3)
         if number2:
