@@ -1,7 +1,7 @@
 from parse import major_plans
 
 course_names = {
-    course.course_code
+    course.course_code.strip("^* ")
     for major_plan in major_plans.values()
     for plan in major_plan.plans.values()
     for quarter in plan.quarters
