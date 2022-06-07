@@ -1,3 +1,4 @@
+import re
 from parse import major_plans
 
 course_names = {
@@ -9,4 +10,5 @@ course_names = {
 }
 
 for name in sorted(course_names):
-    print(name)
+    if not re.match(r"^[A-Z]{2,4} \d{1,3}[A-Z]?$", name):
+        print(name)
