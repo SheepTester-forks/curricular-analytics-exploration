@@ -1,705 +1,705 @@
-1 BUS MGT
-1 BUS PSYC ELECTIVE
-1 BUS PSYC RESEARCH
-1 CBN CORE
-1 CBN ELECTIVE
-1 CBN RESEARCH
-1 COGS/PSYC UD ELECTIVE
-1 COMPUTER PROGRAMMING
-1 Computer Programming
-1 FORMAL SKILLS
-1 NATURAL SCIENCE
-1 Natural Science
-1 PSYC CORE
-1 PSYC Core
-1 PSYC RESEARCH
-1 PSYC UD ELECTIVE
-1 PSYC UD SPECIALIZATION
-1 UD PSYC ELECTIVE
-ADV. CHEM 1
-ADV. CHEM 2
-ADV. CHEM 3
-AHI
-AHI or ELECTIVE
-ANAR CONC. ELECTIVE
-ANBI CORE
-ANBI Concentration Course
-ANSC CONC. ELECTIVE
-ANSC REGIONAL
-ANTH 101: FOUNDATIONS OF SOCIAL COMPLEXITY
-ANTH 102: HUMAN ARE CULTURAL ANIMALS
-ANTH 103: SOCIOCULTURAL ANTHRO
-ANTH 5 OR ANTH 42 OR ANTH 43 OR SOCI 70 OR PSYC 1
-ANTH UD ELECTIVE
-ANTH UD Elective
-Additional Elective
-Advanced Art Making (VIS)
-Advanced Computing (VIS)
-Advanced Elective (VIS)
-Advanced Interdisciplinary (VIS)
-Advanced Interdisciplinary (VIS)/ Sixth Practicum
-Advanced Interdisciplinary (VIS)/Sixth Practicum
-Advanced Media Practice (VIS)
-Advanced Seminar (VIS)
-Advanced Theory (VIS)
-Alternative
-BENG DE
-BENG DE Course (assigned)
-BIBC 100/102 (*SEE NOTE*)
-BIBC 100/CHEM 114A
-BIBC 102/CHEM 114B
-BIBC 103/BIMM 101
-BILD 1 (see note)
-BILD 1/AWP
-BILD 4 (*SEE NOTE*)
-BIOCHEM Restricted Elective
-BIOLOGY GE
-BIOLOGY GE (see note)
-CAT 125 OR PRACTICUM
-CAT 125 or PRACTICUM
-CAT 125 or Practicum
-CAT 125 or Sixth College Practicum
-CAT125 or PRACTICUM
-CBN CORE
-CBN Elective
-CBN Research
-CGS ADV. COURSE
-CGS INTER. COURSE
-CGS UD ELECTIVE
-CHEM 100A.
-CHEM 108 or 109 or 143C
-CHEM 123 or 143C or 143D
-CHEM 125 OR 157
-CHEM 154 or 156
-CHEM 43AM or 43A
-CHEM 6A (see note)
-CHEM 6A / AWP
-CHEM 6A/AWP
-CHEM 6B (see note)
-CHEM 6C (see note)
-CHEM 7L or 7LM
-CHEM 7LM  or 7L
-CHEM 7LM or 7L
-CHEM ELECTIVE
-CHEM ELECTIVE LAB
-CHEM Elective
-CHEMISTRY GE  (see note)
-CHEMISTRY GE (see note)
-CHIN 10A (M/D/N)
-CHIN 10B (M/D/N)
-CHIN 10C (M/D/N)
-CHIN 20A (M/D/N)
-CHIN 20B (M/D/N)
-CHIN 20C (M/D/N)
-CHINESE STUDIES COLLOQUIUM
-CHINESE STUDIES UD ELECTIVE
-CLAS UD Elective
-COGS 10 or DSGN 1
-COGS 101A or 101B or 101C
-COGS 14A or PSYC 70
-COGS 14B (BS)
-COGS 14B or PSYC 60
-COGS 14B or PSYC 60 (stats requirement)
-COGS 18 or CSE (8A or 11)
-COGS CORE
-COGS CORE (BA) or COGS 100 (BS)
-COGS CORE (BA) or COGS 108 (BS)
-COGS UD Elective
-COMM 10 (DEI)
-COMM 10/DEI
-COMM Intermediate Elective
-COMM Intermediate/Advanced Elective
-CSE 100 (*SEE NOTE*)
-CSE 103 (or MATH 183/ECON 120A/ECE 109)
-CSE 110/Sixth Practicum
-CSE 12 (*SEE NOTE*)
-CSE 141  (or CSE 142)
-CSE 141 (or CSE 142)
-CSE 141L  (or CSE 142L)
-CSE 141L (or CSE 142L)
-CSE 21 (*SEE NOTE*)
-CSE 8A (*SEE NOTE*)
-CSE 8B (*SEE NOTE*)
-CSE ELECTIVE
-CSE ELECTIVE (CSE 197)
-CSE ELECTIVE (Or Technical Elective)
-CSE GENERAL SCIENCE
-CSE LD ELECTIVE
-CSE Technical Elective
-CSE/ECE ELECTIVE
-CSE/ECE Elective
-Colloquium course numbered 160-190
-Computer Programming
-Concentration UDE
-Core Movement
-DEI
-DEI / SOCIAL SCIENCE GE
-DEI/GE
-DEI/SOCIAL SCIENCE
-DEI/Social Science
-DEPTH #1
-DEPTH #2
-DEPTH #3
-DEPTH #4
-DEPTH #5
-DEPTH #6
-DEPTH 1
-DEPTH 2
-DEPTH 3
-DESIGN
-DF-1 - PHILOSOPHY
-DF-2 - PHILOSOPHY
-DF-3 - PHILOSOPHY
-DF-4 - PHILOSOPHY
-DF-5 - PHILOSOPHY
-DF-6 - PHILOSOPHY
-DF-7 - PHILOSOPHY
-DF-8 - PHILOSOPHY
-DF1 - ANTHROPOLOGY
-DF1 - ECONOMICS
-DF1 - HISTORY
-DF1 - LINGUISTICS (LIGN 101)
-DF1 - LITERATURE
-DF1 - MGT 103
-DF1 - POLI SCI
-DF1 - SOCIOLOGY
-DF2 - ANTHROPOLOGY
-DF2 - ECONOMICS
-DF2 - HISTORY
-DF2 - LINGUISTICS
-DF2 - LITERATURE
-DF2 - MGT 164
-DF2 - POLI SCI
-DF2 - SOCIOLOGY
-DF3 - ANTHROPOLOGY (RR2)
-DF3 - ECONOMICS
-DF3 - HISTORY (RR2)
-DF3 - LINGUISTICS (RR2)
-DF3 - LITERATURE
-DF3 - MGT 181 OR 187
-DF3 - POLI SCI
-DF3 - SOCIOLOGY (RR2)
-DF4 - ANTHROPOLOGY
-DF4 - ECONOMICS
-DF4 - HISTORY
-DF4 - LINGUISTICS
-DF4 - LITERATURE (RR2)
-DF4 - MGT ELECTIVE
-DF4 - POLI SCI (RR2)
-DF4 - SOCIOLOGY
-DF5 - ANTHROPOLOGY (RR3)
-DF5 - ECONOMICS
-DF5 - HISTORY (RR3)
-DF5 - LINGUISTICS (RR3)
-DF5 - LITERATURE (RR3)
-DF5 - MGT 112
-DF5 - POLI SCI (RR3)
-DF5 - SOCIOLOGY (RR3)
-DF6 - ANTHROPOLOGY
-DF6 - ECONOMICS
-DF6 - HISTORY
-DF6 - LINGUISTICS
-DF6 - LITERATURE
-DF6 - MGT 166
-DF6 - POLI SCI
-DF6 - SOCIOLOGY
-DF7 - ANTHROPOLOGY
-DF7 - ECONOMICS
-DF7 - HISTORY
-DF7 - LINGUISTICS
-DF7 - LITERATURE
-DF7 - MGT ELECTIVE
-DF7 - POLI SCI
-DF7 - SOCIOLOGY
-DF8 - ANTHROPOLOGY
-DF8 - ECONOMICS
-DF8 - HISTORY
-DF8 - LINGUISTICS
-DF8 - LITERATURE
-DF8 - MGT ELECTIVE
-DF8 - POLI SCI
-DF8 - SOCIOLOGY
-DOC  1/ DEI
-DOC  2
-DOC  3
-DOC 1/DEI
-DOC1/DEI
-DSC 140A/CSE 150A
-Depth 1
-Depth 2
-EAP/OAP (RECOMMENDED)
-ECE 108 (Replace with a CSE/ECE Elective)
-ECE 111 (or ECE 140B)
-ECON UD Elective
-ECON/MGT 4
-ECON/POLI 5
-EDS Capstone
-EDS LD
-EDS UD
-EDS UD Elective
-EDS UD: Intro to Learning Contexts
-ELECTIVE
-ENVIRONMENTAL CHEM ELECTIVE
-ESYS MAJOR ELECTIVE
-ESYS MAJOR LAB ELECTIVE
-ETHN 1 (DEI)
-ETHN UD
-Elective
-Engineering Design
-Ensemble
-FINE ARTS
-FINE ARTS GE
-FMPH 101 or FMPH 102
-FMPH 120 or FMPH 130
-FMPH 50 or FMPH 110
-FMPH UDE
-Focus Sequence
-Focus Sequence Capstone
-Foundation Art Making (VIS)
-Foundation CSE (VIS)
-Foundation Elective (VIS)
-Foundation History (VIS)
-Foundation Interdisciplinary (VIS)
-Foundation MATH (VIS)
-Foundation Media Studies (VIS)
-GE
-GE - POLI SCI
-GE - USP 3
-GE / AWP
-GE /DEI
-GE/ DEI
-GE/ Muir Writing
-GE/AWP
-GE/DEI
-GE/ELECTIVE
-GE/MCWP 40
-GE/MCWP 50
-GE/Muir Writing
-GE/WRITING
-GE/Writing
-GS UD Elective
-General Elective
-Graduate Coursework
-HDS Aging Practicum
-HDS Aging Specialization
-HDS CORE COURSE
-HDS Core Course
-HDS Development Course
-HDS E&D Practicum
-HDS E&D Specialization
-HDS Methods Elective
-HIEU UD ELECTIVE
-HILD
-HIUD
-High-Impact
-History & Theory (VIS)
-History Elective
-IE/RR1 - Interdisciplinary Elective/Regional Requirement
-IE/RR2 - Interdisciplinary Elective/Regional Requirement
-IE/RR3 - Interdisciplinary Elective/Regional Requirement
-IE/RR3- Interdisciplinary Elective/Regional Requirement
-IE1 - INTERDISC ELECT (RR1)
-IE2 - INTERDISC ELECT
-IE2 - INTERDISC ELECT  (RR2)
-IE3 - INTERDISC ELECT
-IE3 - INTERDISC ELECT  (RR3)
-INTL 101 OR 102
-INTL 101 or 102
-IS Dept 1
-IS Dept 2
-IS Dept 3
-IS UD Elective
-Intermediate Art Making (VIS)
-Intermediate Computing (VIS)
-Intermediate Group A (VIS)
-Intermediate Group B (VIS)
-Intermediate Interdisciplinary (VIS)
-Intermediate Lecture (VIS)
-Intermediate Media Practice (VIS)
-Intermediate Media Studies (VIS)
-Intermediate Studio (VIS)
-JWSP 101 or JWSP 104 or LIAB 1A/AX, LIFR 1A/AX, LIGM 1A/AX, LIIT 1A/AX, LTRU 1A
-JWSP 101 or JWSP 104 or LIAB 1A/AX, LIFR 1A/AX, LIGM 1A/AX, LIIT 1A/AX, LTRU 1A (See Notes)
-JWSP 102 or LIAB 1B/BX, LIFR 1B/BX, LIGM 1B/BX, LIIT 1B/BX, LTRU 1B
-JWSP 102 or LIAB 1B/BX, LIFR 1B/BX, LIGM 1B/BX, LIIT 1B/BX, LTRU 1B (See Notes)
-JWSP 103 or LIAB 1C/CX, LIFR 1B/BX, LIGM 1B/BX, LIIT 1B/BX, LTRU 1C
-JWSP 103 or LIAB 1C/CX, LIFR 1B/BX, LIGM 1B/BX, LIIT 1B/BX, LTRU 1C (See Notes)
-LANG/DATABASES
-LANGUAGE
-LANGUAGE GE
-LATI Core
-LATI Core Course
-LATI Method
-LATI UD Elective
-LATI UG Elective
-LATI UG Elective (Con in Mexico)
-LATI UG Elective (Con in Mig&Border)
-LD  POLI
-LD Beginning Practice
-LD Biology
-LD GSS 21-26
-LD HDS Statistics
-LD Intro Course (GLBH 20)
-LD Intro Course (SOCI 30)
-LD Intro Course (e.g. GLBH 20)
-LD Intro Course (e.g. SOCI 30)
-LD LIT SEQUENCE
-LD LTEN
-LD LTEN OR TWS
-LD Language
-LD Major Prep
-LD PHIL
-LD POLI
-LD Restricted Elective
-LD Restrictive Elective
-LD Theory and History
-LEARNING VISION GRAPHICS
-LEARNING/VISION/GRAPHICS
-LIGM 1AX
-LIGM 1BX
-LIGM 1CX
-LIGN ""STRUCTURE OF""
-LIGN 112 or 113
-LIGN 174, 175, OR 177
-LIGN CORE COURSE
-LIGN ELECTIVE
-LIGN ELECTIVE FROM LIST
-LIGN Elective
-LIGN Elective or other
-LIIT 1AX
-LIIT 1BX
-LIIT 1CX
-LISP 1A/1AX
-LISP 1B/1BX
-LISP 1C/1CX
-LTCS 100, LTTH 110, OR LTTH 115
-LTEN 27, 28, OR 29
-LTGM Elective
-LTRU UD ELECTIVE
-LTSP 100A or 100B
-LTWL 19A OR MMW 11
-LTWL 19B OR HUM 1 OR MMW 12
-LTWL 19C OR HUM 2
-LTWR 8A OR LTWR 8B OR LTWR 8C
-Language Development elective
-Language Requirement
-Ling elective
-Lower Division Core
-MAE 160 or MAE 131B
-MATH 109 or MATH 20D
-MATH 10A OR 20A
-MATH 10A or 20A
-MATH 10A or 20A or MGT 3
-MATH 10A or MATH 20A
-MATH 10A/20A
-MATH 10B OR 20B
-MATH 10B or 20A
-MATH 10B or 20B
-MATH 10B or MATH 20B
-MATH 10B/20B
-MATH 10C OR 20C
-MATH 10C OR 20C OR 11
-MATH 10C if choosing Math 10 series
-MATH 10C if choosing the 10 series
-MATH 10C or 20C
-MATH 10C/20C
-MATH 11 OR PSYC 60
-MATH 154 or 184
-MATH 18 (BS or BA Math 20 series)
-MATH 18 (BS or BA-Math 20 series)
-MATH 18 / AWP
-MATH 18 or 31AH
-MATH 18/AWP
-MATH 183 or MATH 180A or ECON 120A
-MATH 183 or UD Major
-MATH 189 (if not yet completed)
-MATH 189 or MATH 181A
-MATH 20A (OR 10A)
-MATH 20A (or 10A)
-MATH 20A /AWP
-MATH 20A or 10A
-MATH 20B (OR 10B)
-MATH 20B (or 10B)
-MATH 20B or 10B
-MATH 20C (OR 10C)
-MATH 20C (or 10C)
-MATH 20C or 31BH
-MATH 20C or MATH GE (see note)
-MATH 20D or MATH 109
-MATH 20E or 31CH
-MATH GE (SEE NOTE)
-MATH GE (see note)
-MATH GE (see note) or 10C
-MATH GE (see notes)
-MCWP 40 or Elective
-MCWP 40 or GE
-MCWP 40/ GE
-MCWP 40/GE
-MCWP 50 or Elective
-MCWP 50 or GE
-MCWP 50/ GE
-MCWP 50/GE
-MGT 162/162R
-MGT 18 (DEI approved)
-MGT 18/DEI
-MMW   15
-MMW  13
-MMW  14/GE
-MMW 14 /GE
-MMW 14/ GE
-MMW 14/GE
-MMW14/GE
-MMW15
-MUIR UD ELECTIVE
-MUIR UD Elective
-MUIR Upper Div Elective
-MUS 1A or 2A
-MUS 1B or 2B
-MUS 1C or 2C
-MUS 2AK
-MUS 2BK
-MUS 2CK
-MUS UD Elective
-MUS UD Emphasis
-Major Classes and Electives (varies)
-Major Classes or Electives (varies)
-Molecular Synthesis Elective
-Muir UD ELECTIVE
-Muir UD Elective
-Muir Upper Div Elective
-NATURAL SCIENCE (see note)
-NATURAL SCIENCE GE (see note)
-NE ELECTIVE (1)
-NE ELECTIVE (2)
-NE ELECTIVE (3)
-NE ELECTIVE (4)
-NE ELECTIVE (5)
-Natural Science
-Neuro ling elective
-PHARM Restricted Elective
-PHIL/POLI 27
-PHIL/POLI 28
-PHYS 130A¹
-PHYS 1A&1AL
-PHYS 1A/1AL
-PHYS 1A/AL
-PHYS 1AL
-PHYS 1B&1BL
-PHYS 1B/1BL
-PHYS 1BL
-PHYS 1C&1CL
-PHYS 1C/1CL
-PHYS 1CL
-PHYS 2A (see note)
-PHYS 2BL
-PHYS 2BL or 2CL or 2DL
-PHYS 2C & 2CL
-PHYS 2C (*SEE NOTE*)
-PHYS 2C or 2D
-PHYS 2CL
-PHYS 2DL
-PHYS 2DL¹
-PHYS RE
-PHYS UD DEPTH
-PHYS UD LAB
-PHYS UD RE
-PHYSICS GE (see note)
-POLI 160AA
-POLI 30(D)
-POLI 30D or PSYC 60 or SOCI 60
-POLI 5(D)
-POLI/PHIL 27
-PRACTICUM OR CAT 125
-PRACTICUM or CAT 125
-PROFESSIONAL ELECTIVE 1
-PROFESSIONAL ELECTIVE 2
-PSYC 60 or COGS 14B #
-PSYC 70 or COGS 14A #
-PSYC CORE
-PSYC UD ELECTIVE
-Professional Elective 1
-Professional Elective 2
-Professional Elective 3
-Programming
-RED Technical Elective
-RED Upper Division Elective
-REEES UD ELECTIVE
-RELI 101 TOOLS & METHODS
-RELI 189 SEMINAR IN RELIGION
-Restricted Elective
-S/H ELECTIVE
-SBE
-SECURITY CRYPTOGRAPHY
-SECURITY/CRYPTOGRAPHY
-SOC UD ELECTIVE
-SOC-UD CONCENTRATION
-SOCI
-SOCI 10, 20, 30, 40, OR 50
-SOCI 10, 20, 30, 40, OR 50** /elective
-SOCI 10, 20, 30, 40, OR 50**/Elective
-SOCI 10,20,30,40OR50
-SOCI 2 (DEI APPROVED)
-SOCI 2 (DEI approved)
-SOCI 2 /DEI
-SOCI 2/DEI
-SOCI UD CONCENTRATION
-SOCI UD ELECTIVE
-SOCI- UD METHODOLOGY
-SOCI-UD CONCENTRATION
-SOCI10,20,30,40,OR50
-SOCIAL SCIENCE
-SOCIAL SCIENCE GE
-SOCIAL SCIENCE/DEI
-SUBJECT DOMAIN 1
-SUBJECT DOMAIN 2
-SYSTEMS/NETWORKS
-Senior Interdisciplinary (VIS)
-Senior Interdisciplinary (VIS)/ Sixth Practicum
-Senior Media Practice (VIS)
-Statistics (Quantitative Methods)
-Statistics Course
-Statistics Course (MATH 11 FOR GE)
-Statistics Course (MATH 11 for GE)
-TDDE XXX
-TDHD XXX
-TDHT XXX
-TE
-TECHNICAL ELECTIVE 1
-TECHNICAL ELECTIVE 2
-TECHNICAL ELECTIVE 3
-TECHNICAL ELECTIVE 4
-TECHNICAL ELECTIVE 5
-Technical Elect
-Technical Elective
-Technical Elective 1
-Technical Elective 2
-Technical Elective 3
-Technical Elective 4
-Technical Elective/Practicum
-UD AHI or UD ELECTIVE
-UD ANTH Elective Course
-UD AREA STUDIES OR UD LIGN ELECTIVE
-UD AREA STUDIES, UD LIT, OR UD LIGN ELECTIVE
-UD Advanced Art Making (VIS)
-UD Advanced Computing (VIS)
-UD Advanced Elective (VIS)
-UD Advanced Interdisciplinary (VIS)
-UD Advanced Media Practice (VIS)
-UD Advanced Practice
-UD Advanced Seminar (VIS)
-UD Advanced Theory (VIS)
-UD BIO ELECT (*SEE NOTE*)
-UD BIO ELECTIVE
-UD BIO ELECTIVE (*SEE NOTE)
-UD BIO ELECTIVE (*SEE NOTE*)
-UD BIO LAB
-UD BIO LAB (*SEE NOTE)
-UD BIO LAB (*SEE NOTE*)
-UD Concentration Course
-UD Core Movement
-UD DEI
-UD Domain Elective 1 (if MATH 180A not taken)
-UD Domain Elective 2
-UD Domain Elective 3
-UD Domain Elective 4
-UD Domain Elective 5
-UD EBE
-UD EBE CORE
-UD EBE LAB
-UD ELECTIVE
-UD ELECTIVE FROM APPROVED LIST
-UD ELECTIVE or GRAD COURSE
-UD Elective
-UD Elective (major)
-UD Elective Movement
-UD Focus Course
-UD Foundation
-UD GE
-UD GE/DEI
-UD GH Core Course
-UD GH Core Course (e.g. GLBH 148)
-UD Global Health Elective
-UD HB CORE
-UD HB CORE (DISEASE)
-UD HB CORE (PHYSIOLOGY)
-UD History
-UD History & Theory (VIS)
-UD Intermediate Art Making (VIS)
-UD Intermediate Computing (VIS)
-UD Intermediate Group A (VIS)
-UD Intermediate Group B (VIS)
-UD Intermediate Interdisciplinary (VIS)
-UD Intermediate Lecture (VIS)
-UD Intermediate Media Practice (VIS)
-UD Intermediate Media Studies (VIS)
-UD Intermediate Studio (VIS)
-UD JS NON-LANG. ELECTIVE
-UD JWSP Elective
-UD LIT COURSE (CONCENTRATION)
-UD LIT ELECTIVE
-UD LTAF or UD LTAM or UD LTEA or UD LTEU or UD LTWL
-UD LTAM
-UD LTEN
-UD LTEN (A, B, C, OR D)
-UD LTEU
-UD LTGK  or UD LTLA
-UD LTGK OR UD LTLA
-UD LTGK or UD LTLA
-UD LTSP
-UD LTSP - PRE-1900
-UD LTWR
-UD Literature Elective
-UD MAJOR ELECTIVE
-UD MAJOR LAB ELECTIVE
-UD MCB CORE
-UD MICRO CORE
-UD Major
-UD Major - Elective
-UD Major Elective
-UD NEURO CORE
-UD PHIL
-UD POLI
-UD POLI - American Politics
-UD POLI - International Political Economy
-UD POLI - International Relations or Comparative Politics
-UD POLI/American Politics
-UD POLI/Comparative Politics
-UD POLI/Data Analytics
-UD POLI/International Relations
-UD POLI/Public Law
-UD POLI/Public Policy
-UD POLI/Race, Ethnicity, and Politics
-UD Political Theory
-UD Practice
-UD SOCIAL SCIENCE or UD ELECTIVE
-UD SOCIAL SCIENCE/DEI
-UD Senior Interdisciplinary (VIS)
-UD Senior Media Practice (VIS)
-UD Significant Writing Course
-UD Survey Course: 1648 to present
-UD Survey Course: Elective
-UD Survey Course: pre-1648
-UD THEATRE ELECTIVE
-UD Theory & History
-UD/Political Theory
-UDE
-UPPER DIV ELECTIVE
-USP 1 (or Elective, if USP 2 in Winter)
-USP 1 (or USP 2 in Winter)
-USP 1/DEI
-USP 1/DEI (or USP 2 in Winter)
-USP 186/ Sixth Practicum
-USP 2 (or Elective, if USP 1 in Fall)
-USP 2 (or USP 1 in Fall)
-USP 3 (DEI)
-USP Foundation Course
-USP Research Methods Course
-USP Technical Elective Course
-USP Upper Division Elective
-Upper Division ELECTIVE
-Upper Division Elective
-Upper Division Elective (ANTH, ANSC, ANBI, ANAR)
-Upper Division Methods Course (ANBI)
-WCWP10A
-WCWP10B
-language requirement
+[PC35 WA] 1 BUS MGT                                                             
+[PC35 WA] 1 BUS PSYC ELECTIVE                                                   
+[PC35 WA] 1 BUS PSYC RESEARCH                                                   
+[PC34 WA] 1 CBN CORE                                                            
+[PC34 WA] 1 CBN ELECTIVE                                                        
+[PC34 WA] 1 CBN RESEARCH                                                        
+[PC34 WA] 1 COGS/PSYC UD ELECTIVE                                               
+[PC35 WA] 1 COMPUTER PROGRAMMING                                                
+[CG32 WA] 1 Computer Programming                                                
+[PC25 WA] 1 FORMAL SKILLS                                                       
+[PC35 WA] 1 NATURAL SCIENCE                                                     
+[CG32 WA] 1 Natural Science                                                     
+[PC35 WA] 1 PSYC CORE                                                           
+[PC35 WA] 1 PSYC Core                                                           
+[PC33 WA] 1 PSYC RESEARCH                                                       
+[PC33 WA] 1 PSYC UD ELECTIVE                                                    
+[PC33 WA] 1 PSYC UD SPECIALIZATION                                              
+[PC35 WA] 1 UD PSYC ELECTIVE                                                    
+[CE25 WA] ADV. CHEM 1                                                           CHEM 1
+[CE25 WA] ADV. CHEM 2                                                           CHEM 2
+[CE25 WA] ADV. CHEM 3                                                           CHEM 3
+[UNSS RE] AHI                                                                   
+[VA30 RE] AHI or ELECTIVE                                                       
+[AN27 WA] ANAR CONC. ELECTIVE                                                   
+[AN26 WA] ANBI CORE                                                             
+[AN29 WA] ANBI Concentration Course                                             
+[AN28 WA] ANSC CONC. ELECTIVE                                                   
+[AN28 WA] ANSC REGIONAL                                                         
+[AN28 WA] ANTH 101: FOUNDATIONS OF SOCIAL COMPLEXITY                            ANTH 101
+[AN28 WA] ANTH 102: HUMAN ARE CULTURAL ANIMALS                                  ANTH 102
+[AN28 WA] ANTH 103: SOCIOCULTURAL ANTHRO                                        ANTH 103
+[AN29 WA] ANTH 5 OR ANTH 42 OR ANTH 43 OR SOCI 70 OR PSYC 1                     ANTH 5
+[AN28 WA] ANTH UD ELECTIVE                                                      
+[AN26 WA] ANTH UD Elective                                                      
+[CG32 WA] Additional Elective                                                   
+[VA28 WA] Advanced Art Making (VIS)                                             
+[VA29 WA] Advanced Computing (VIS)                                              
+[VA30 WA] Advanced Elective (VIS)                                               
+[VA29 WA] Advanced Interdisciplinary (VIS)                                      
+[VA28 SI] Advanced Interdisciplinary (VIS)/ Sixth Practicum                     
+[VA29 SI] Advanced Interdisciplinary (VIS)/Sixth Practicum                      
+[VA27 WA] Advanced Media Practice (VIS)                                         
+[VA26 WA] Advanced Seminar (VIS)                                                
+[VA26 WA] Advanced Theory (VIS)                                                 
+[VA30 SN] Alternative                                                           
+[BE25 WA] BENG DE                                                               
+[BE29 WA] BENG DE Course (assigned)                                             
+[BI34 WA] BIBC 100/102 (*SEE NOTE*)                                             BIBC 100
+[BI37 WA] BIBC 100/CHEM 114A                                                    BIBC 100
+[BI38 WA] BIBC 102/CHEM 114B                                                    BIBC 102
+[BI37 WA] BIBC 103/BIMM 101                                                     BIBC 103
+[UNPS RE] BILD 1 (see note)                                                     BILD 1
+[CH35 FI] BILD 1/AWP                                                            BILD 1
+[BI38 WA] BILD 4 (*SEE NOTE*)                                                   BILD 4
+[CH38 WA] BIOCHEM Restricted Elective                                           
+[CH25 RE] BIOLOGY GE                                                            
+[VA30 RE] BIOLOGY GE (see note)                                                 
+[PS25 SI] CAT 125 OR PRACTICUM                                                  CAT 125
+[VA30 SI] CAT 125 or PRACTICUM                                                  CAT 125
+[PS32 SI] CAT 125 or Practicum                                                  CAT 125
+[AN30 SI] CAT 125 or Sixth College Practicum                                    CAT 125
+[SO30 SI] CAT125 or PRACTICUM                                                   
+[CG32 WA] CBN CORE                                                              
+[CG32 WA] CBN Elective                                                          
+[CG32 WA] CBN Research                                                          
+[CR25 WA] CGS ADV. COURSE                                                       
+[CR25 WA] CGS INTER. COURSE                                                     
+[CR25 WA] CGS UD ELECTIVE                                                       
+[ES27 WA] CHEM 100A.                                                            CHEM 100A
+[CH35 WA] CHEM 108 or 109 or 143C                                               CHEM 108
+[CH36 WA] CHEM 123 or 143C or 143D                                              CHEM 123
+[CH36 WA] CHEM 125 OR 157                                                       CHEM 125
+[CH36 WA] CHEM 154 or 156                                                       CHEM 154
+[CH36 WA] CHEM 43AM or 43A                                                      CHEM 43AM
+[UNPS RE] CHEM 6A (see note)                                                    CHEM 6A
+[ES25 FI] CHEM 6A / AWP                                                         CHEM 6A
+[SI30 FI] CHEM 6A/AWP                                                           CHEM 6A
+[UNPS RE] CHEM 6B (see note)                                                    CHEM 6B
+[UNPS RE] CHEM 6C (see note)                                                    CHEM 6C
+[CH38 WA] CHEM 7L or 7LM                                                        CHEM 7L
+[CH36 WA] CHEM 7LM  or 7L                                                       CHEM 7LM
+[CH25 WA] CHEM 7LM or 7L                                                        CHEM 7LM
+[CH25 WA] CHEM ELECTIVE                                                         
+[CH25 WA] CHEM ELECTIVE LAB                                                     
+[CH38 WA] CHEM Elective                                                         
+[US26 RE] CHEMISTRY GE  (see note)                                              
+[VA30 RE] CHEMISTRY GE (see note)                                               
+[CN25 WA] CHIN 10A (M/D/N)                                                      CHIN 10A
+[CN25 WA] CHIN 10B (M/D/N)                                                      CHIN 10B
+[CN25 WA] CHIN 10C (M/D/N)                                                      CHIN 10C
+[CN25 WA] CHIN 20A (M/D/N)                                                      CHIN 20A
+[CN25 WA] CHIN 20B (M/D/N)                                                      CHIN 20B
+[CN25 WA] CHIN 20C (M/D/N)                                                      CHIN 20C
+[CN25 WA] CHINESE STUDIES COLLOQUIUM                                            
+[CN25 WA] CHINESE STUDIES UD ELECTIVE                                           
+[CL25 WA] CLAS UD Elective                                                      
+[CG35 WA] COGS 10 or DSGN 1                                                     COGS 10
+[CG35 WA] COGS 101A or 101B or 101C                                             COGS 101A
+[CG32 WA] COGS 14A or PSYC 70                                                   COGS 14A
+[CG25 WA] COGS 14B (BS)                                                         COGS 14B
+[CG32 WA] COGS 14B or PSYC 60                                                   COGS 14B
+[LN34 WA] COGS 14B or PSYC 60 (stats requirement)                               COGS 14B
+[CG35 WA] COGS 18 or CSE (8A or 11)                                             COGS 18
+[CG25 WA] COGS CORE                                                             
+[CG25 WA] COGS CORE (BA) or COGS 100 (BS)                                       COGS 100
+[CG25 WA] COGS CORE (BA) or COGS 108 (BS)                                       COGS 108
+[CG35 WA] COGS UD Elective                                                      
+[CM26 FI] COMM 10 (DEI)                                                         COMM 10
+[CM26 SI] COMM 10/DEI                                                           COMM 10
+[CM26 WA] COMM Intermediate Elective                                            
+[CM26 WA] COMM Intermediate/Advanced Elective                                   
+[BI34 WA] CSE 100 (*SEE NOTE*)                                                  CSE 100
+[CS26 WA] CSE 103 (or MATH 183/ECON 120A/ECE 109)                               CSE 103
+[EC26 SI] CSE 110/Sixth Practicum                                               CSE 110
+[BI34 WA] CSE 12 (*SEE NOTE*)                                                   CSE 12
+[CS26 WA] CSE 141  (or CSE 142)                                                 CSE 141
+[CS25 WA] CSE 141 (or CSE 142)                                                  CSE 141
+[CS26 WA] CSE 141L  (or CSE 142L)                                               CSE 141L
+[CS25 WA] CSE 141L (or CSE 142L)                                                CSE 141L
+[BI34 WA] CSE 21 (*SEE NOTE*)                                                   CSE 21
+[BI34 WA] CSE 8A (*SEE NOTE*)                                                   CSE 8A
+[BI34 WA] CSE 8B (*SEE NOTE*)                                                   CSE 8B
+[CS27 WA] CSE ELECTIVE                                                          
+[CS26 WA] CSE ELECTIVE (CSE 197)                                                CSE 197
+[CS26 WA] CSE ELECTIVE (Or Technical Elective)                                  
+[CS26 WA] CSE GENERAL SCIENCE                                                   
+[EC26 WA] CSE LD ELECTIVE                                                       
+[EC26 WA] CSE Technical Elective                                                
+[CS25 WA] CSE/ECE ELECTIVE                                                      
+[EC26 WA] CSE/ECE Elective                                                      
+[HI25 WA] Colloquium course numbered 160-190                                    
+[PB26 WA] Computer Programming                                                  
+[PB31 WA] Concentration UDE                                                     
+[TH27 WA] Core Movement                                                         
+[VA30 SN] DEI                                                                   
+[ES27 RE] DEI / SOCIAL SCIENCE GE                                               
+[PY26 MU] DEI/GE                                                                
+[VA30 RE] DEI/SOCIAL SCIENCE                                                    
+[MC25 RE] DEI/Social Science                                                    
+[EC37 WA] DEPTH #1                                                              
+[EC37 WA] DEPTH #2                                                              
+[EC37 WA] DEPTH #3                                                              
+[EC37 WA] DEPTH #4                                                              
+[EC37 WA] DEPTH #5                                                              
+[EC37 WA] DEPTH #6                                                              
+[EC27 WA] DEPTH 1                                                               
+[EC27 WA] DEPTH 2                                                               
+[EC27 WA] DEPTH 3                                                               
+[EC27 WA] DESIGN                                                                
+[IS36 WA] DF-1 - PHILOSOPHY                                                     
+[IS36 WA] DF-2 - PHILOSOPHY                                                     
+[IS36 WA] DF-3 - PHILOSOPHY                                                     
+[IS36 WA] DF-4 - PHILOSOPHY                                                     
+[IS36 WA] DF-5 - PHILOSOPHY                                                     
+[IS36 WA] DF-6 - PHILOSOPHY                                                     
+[IS36 WA] DF-7 - PHILOSOPHY                                                     
+[IS36 WA] DF-8 - PHILOSOPHY                                                     
+[IS25 WA] DF1 - ANTHROPOLOGY                                                    
+[IS26 WA] DF1 - ECONOMICS                                                       
+[IS27 WA] DF1 - HISTORY                                                         
+[IS28 WA] DF1 - LINGUISTICS (LIGN 101)                                          LIGN 101
+[IS29 WA] DF1 - LITERATURE                                                      
+[IS34 WA] DF1 - MGT 103                                                         MGT 103
+[IS30 WA] DF1 - POLI SCI                                                        
+[IS31 WA] DF1 - SOCIOLOGY                                                       
+[IS25 WA] DF2 - ANTHROPOLOGY                                                    
+[IS26 WA] DF2 - ECONOMICS                                                       
+[IS27 WA] DF2 - HISTORY                                                         
+[IS28 WA] DF2 - LINGUISTICS                                                     
+[IS29 WA] DF2 - LITERATURE                                                      
+[IS34 WA] DF2 - MGT 164                                                         MGT 164
+[IS30 WA] DF2 - POLI SCI                                                        
+[IS31 WA] DF2 - SOCIOLOGY                                                       
+[IS25 WA] DF3 - ANTHROPOLOGY (RR2)                                              
+[IS26 WA] DF3 - ECONOMICS                                                       
+[IS27 WA] DF3 - HISTORY (RR2)                                                   
+[IS28 WA] DF3 - LINGUISTICS (RR2)                                               
+[IS29 WA] DF3 - LITERATURE                                                      
+[IS34 WA] DF3 - MGT 181 OR 187                                                  MGT 181
+[IS30 WA] DF3 - POLI SCI                                                        
+[IS31 WA] DF3 - SOCIOLOGY (RR2)                                                 
+[IS25 WA] DF4 - ANTHROPOLOGY                                                    
+[IS26 WA] DF4 - ECONOMICS                                                       
+[IS27 WA] DF4 - HISTORY                                                         
+[IS28 WA] DF4 - LINGUISTICS                                                     
+[IS29 WA] DF4 - LITERATURE (RR2)                                                
+[IS34 WA] DF4 - MGT ELECTIVE                                                    
+[IS30 WA] DF4 - POLI SCI (RR2)                                                  
+[IS31 WA] DF4 - SOCIOLOGY                                                       
+[IS25 WA] DF5 - ANTHROPOLOGY (RR3)                                              
+[IS26 WA] DF5 - ECONOMICS                                                       
+[IS27 WA] DF5 - HISTORY (RR3)                                                   
+[IS28 WA] DF5 - LINGUISTICS (RR3)                                               
+[IS29 WA] DF5 - LITERATURE (RR3)                                                
+[IS34 WA] DF5 - MGT 112                                                         MGT 112
+[IS30 WA] DF5 - POLI SCI (RR3)                                                  
+[IS31 WA] DF5 - SOCIOLOGY (RR3)                                                 
+[IS25 WA] DF6 - ANTHROPOLOGY                                                    
+[IS26 WA] DF6 - ECONOMICS                                                       
+[IS27 WA] DF6 - HISTORY                                                         
+[IS28 WA] DF6 - LINGUISTICS                                                     
+[IS29 WA] DF6 - LITERATURE                                                      
+[IS34 WA] DF6 - MGT 166                                                         MGT 166
+[IS30 WA] DF6 - POLI SCI                                                        
+[IS31 WA] DF6 - SOCIOLOGY                                                       
+[IS25 WA] DF7 - ANTHROPOLOGY                                                    
+[IS26 WA] DF7 - ECONOMICS                                                       
+[IS27 WA] DF7 - HISTORY                                                         
+[IS28 WA] DF7 - LINGUISTICS                                                     
+[IS29 WA] DF7 - LITERATURE                                                      
+[IS34 WA] DF7 - MGT ELECTIVE                                                    
+[IS30 WA] DF7 - POLI SCI                                                        
+[IS31 WA] DF7 - SOCIOLOGY                                                       
+[IS25 WA] DF8 - ANTHROPOLOGY                                                    
+[IS26 WA] DF8 - ECONOMICS                                                       
+[IS27 WA] DF8 - HISTORY                                                         
+[IS28 WA] DF8 - LINGUISTICS                                                     
+[IS29 WA] DF8 - LITERATURE                                                      
+[IS34 WA] DF8 - MGT ELECTIVE                                                    
+[IS30 WA] DF8 - POLI SCI                                                        
+[IS31 WA] DF8 - SOCIOLOGY                                                       
+[PS26 TH] DOC  1/ DEI                                                           
+[TH26 TH] DOC  2                                                                
+[TH26 TH] DOC  3                                                                
+[VA30 TH] DOC 1/DEI                                                             DOC 1
+[LN34 TH] DOC1/DEI                                                              
+[DS25 WA] DSC 140A/CSE 150A                                                     DSC 140A
+[EC28 WA] Depth 1                                                               
+[EC28 WA] Depth 2                                                               
+[IS36 WA] EAP/OAP (RECOMMENDED)                                                 
+[EC26 WA] ECE 108 (Replace with a CSE/ECE Elective)                             ECE 108
+[CS25 WA] ECE 111 (or ECE 140B)                                                 ECE 111
+[EN26 WA] ECON UD Elective                                                      
+[US27 WA] ECON/MGT 4                                                            MGT 4
+[EN30 WA] ECON/POLI 5                                                           POLI 5
+[ED25 WA] EDS Capstone                                                          
+[ED25 WA] EDS LD                                                                
+[ED25 WA] EDS UD                                                                
+[ED25 WA] EDS UD Elective                                                       
+[ED25 WA] EDS UD: Intro to Learning Contexts                                    
+[VA30 WA] ELECTIVE                                                              
+[CH34 WA] ENVIRONMENTAL CHEM ELECTIVE                                           
+[ES28 WA] ESYS MAJOR ELECTIVE                                                   
+[ES26 WA] ESYS MAJOR LAB ELECTIVE                                               
+[ET25 FI] ETHN 1 (DEI)                                                          ETHN 1
+[ET25 WA] ETHN UD                                                               
+[VA30 SN] Elective                                                              
+[EC37 WA] Engineering Design                                                    
+[MU26 WA] Ensemble                                                              
+[US27 RE] FINE ARTS                                                             
+[PB31 RE] FINE ARTS GE                                                          
+[PB31 WA] FMPH 101 or FMPH 102                                                  FMPH 101
+[PB31 WA] FMPH 120 or FMPH 130                                                  FMPH 120
+[PB31 WA] FMPH 50 or FMPH 110                                                   FMPH 50
+[PB31 WA] FMPH UDE                                                              
+[SE27 WA] Focus Sequence                                                        
+[SE27 WA] Focus Sequence Capstone                                               
+[VA29 WA] Foundation Art Making (VIS)                                           
+[VA29 WA] Foundation CSE (VIS)                                                  
+[VA30 WA] Foundation Elective (VIS)                                             
+[VA30 WA] Foundation History (VIS)                                              
+[VA29 WA] Foundation Interdisciplinary (VIS)                                    
+[VA29 WA] Foundation MATH (VIS)                                                 
+[VA27 WA] Foundation Media Studies (VIS)                                        
+[VA30 WA] GE                                                                    
+[PS32 MU] GE - POLI SCI                                                         
+[US27 MU] GE - USP 3                                                            USP 3
+[IS25 FI] GE / AWP                                                              
+[CH35 SI] GE /DEI                                                               
+[LN33 SI] GE/ DEI                                                               
+[GH26 MU] GE/ Muir Writing                                                      
+[VA30 FI] GE/AWP                                                                
+[VA30 WA] GE/DEI                                                                
+[JS25 FI] GE/ELECTIVE                                                           
+[RE26 MU] GE/MCWP 40                                                            MCWP 40
+[RE26 MU] GE/MCWP 50                                                            MCWP 50
+[GS25 MU] GE/Muir Writing                                                       
+[EN26 MU] GE/WRITING                                                            
+[ES28 MU] GE/Writing                                                            
+[GS25 WA] GS UD Elective                                                        
+[GH26 RE] General Elective                                                      
+[PS33 SN] Graduate Coursework                                                   
+[HS28 WA] HDS Aging Practicum                                                   
+[HS28 WA] HDS Aging Specialization                                              
+[HS28 WA] HDS CORE COURSE                                                       
+[HS25 WA] HDS Core Course                                                       
+[HS28 WA] HDS Development Course                                                
+[HS27 WA] HDS E&D Practicum                                                     
+[HS27 WA] HDS E&D Specialization                                                
+[HS26 WA] HDS Methods Elective                                                  
+[RU26 WA] HIEU UD ELECTIVE                                                      
+[HI25 WA] HILD                                                                  
+[HI25 WA] HIUD                                                                  
+[VA30 SN] High-Impact                                                           
+[VA30 WA] History & Theory (VIS)                                                
+[GS25 WA] History Elective                                                      
+[IS36 WA] IE/RR1 - Interdisciplinary Elective/Regional Requirement              
+[IS36 WA] IE/RR2 - Interdisciplinary Elective/Regional Requirement              
+[IS36 WA] IE/RR3 - Interdisciplinary Elective/Regional Requirement              
+[IS34 WA] IE/RR3- Interdisciplinary Elective/Regional Requirement               
+[IS31 WA] IE1 - INTERDISC ELECT (RR1)                                           
+[IS31 WA] IE2 - INTERDISC ELECT                                                 
+[IS26 WA] IE2 - INTERDISC ELECT  (RR2)                                          
+[IS31 WA] IE3 - INTERDISC ELECT                                                 
+[IS26 WA] IE3 - INTERDISC ELECT  (RR3)                                          
+[IS34 WA] INTL 101 OR 102                                                       INTL 101
+[IS36 WA] INTL 101 or 102                                                       INTL 101
+[IT25 WA] IS Dept 1                                                             
+[IT25 WA] IS Dept 2                                                             
+[IT25 WA] IS Dept 3                                                             
+[IT25 WA] IS UD Elective                                                        
+[VA29 WA] Intermediate Art Making (VIS)                                         
+[VA29 WA] Intermediate Computing (VIS)                                          
+[VA28 WA] Intermediate Group A (VIS)                                            
+[VA28 WA] Intermediate Group B (VIS)                                            
+[VA29 WA] Intermediate Interdisciplinary (VIS)                                  
+[VA30 WA] Intermediate Lecture (VIS)                                            
+[VA27 WA] Intermediate Media Practice (VIS)                                     
+[VA27 WA] Intermediate Media Studies (VIS)                                      
+[VA30 WA] Intermediate Studio (VIS)                                             
+[JS25 WA] JWSP 101 or JWSP 104 or LIAB 1A/AX, LIFR 1A/AX, LIGM 1A/AX, LIIT 1A/AX, LTRU 1AJWSP 101
+[JS25 RE] JWSP 101 or JWSP 104 or LIAB 1A/AX, LIFR 1A/AX, LIGM 1A/AX, LIIT 1A/AX, LTRU 1A (See Notes)JWSP 101
+[JS25 WA] JWSP 102 or LIAB 1B/BX, LIFR 1B/BX, LIGM 1B/BX, LIIT 1B/BX, LTRU 1B   JWSP 102
+[JS25 RE] JWSP 102 or LIAB 1B/BX, LIFR 1B/BX, LIGM 1B/BX, LIIT 1B/BX, LTRU 1B (See Notes)JWSP 102
+[JS25 WA] JWSP 103 or LIAB 1C/CX, LIFR 1B/BX, LIGM 1B/BX, LIIT 1B/BX, LTRU 1C   JWSP 103
+[JS25 RE] JWSP 103 or LIAB 1C/CX, LIFR 1B/BX, LIGM 1B/BX, LIIT 1B/BX, LTRU 1C (See Notes)JWSP 103
+[CS26 WA] LANG/DATABASES                                                        
+[VA30 RE] LANGUAGE                                                              
+[PB26 RE] LANGUAGE GE                                                           
+[LA27 WA] LATI Core                                                             
+[LA25 WA] LATI Core Course                                                      
+[LA27 WA] LATI Method                                                           
+[LA25 WA] LATI UD Elective                                                      
+[LA27 WA] LATI UG Elective                                                      
+[LA26 WA] LATI UG Elective (Con in Mexico)                                      
+[LA27 WA] LATI UG Elective (Con in Mig&Border)                                  
+[PS25 WA] LD  POLI                                                              
+[MU27 WA] LD Beginning Practice                                                 
+[PB30 WA] LD Biology                                                            
+[GL25 WA] LD GSS 21-26                                                          GSS 21
+[HS28 WA] LD HDS Statistics                                                     
+[GH25 MU] LD Intro Course (GLBH 20)                                             GLBH 20
+[GH25 MU] LD Intro Course (SOCI 30)                                             SOCI 30
+[GH25 WA] LD Intro Course (e.g. GLBH 20)                                        GLBH 20
+[GH25 WA] LD Intro Course (e.g. SOCI 30)                                        SOCI 30
+[LT41 WA] LD LIT SEQUENCE                                                       
+[LT33 WA] LD LTEN                                                               
+[LT34 WA] LD LTEN OR TWS                                                        
+[LT41 WA] LD Language                                                           
+[HS28 WA] LD Major Prep                                                         
+[PL25 WA] LD PHIL                                                               
+[PS34 WA] LD POLI                                                               
+[MU27 WA] LD Restricted Elective                                                
+[MU27 WA] LD Restrictive Elective                                               
+[MU27 WA] LD Theory and History                                                 
+[CS26 MU] LEARNING VISION GRAPHICS                                              
+[CS26 WA] LEARNING/VISION/GRAPHICS                                              
+[GS25 WA] LIGM 1AX                                                              LIGM 1AX
+[GS25 WA] LIGM 1BX                                                              LIGM 1BX
+[GS25 WA] LIGM 1CX                                                              LIGM 1CX
+[LN33 WA] LIGN ""STRUCTURE OF""                                                 
+[LN34 WA] LIGN 112 or 113                                                       LIGN 112
+[LN29 WA] LIGN 174, 175, OR 177                                                 LIGN 174
+[LN33 WA] LIGN CORE COURSE                                                      
+[LN32 WA] LIGN ELECTIVE                                                         
+[LN32 WA] LIGN ELECTIVE FROM LIST                                               
+[LN33 WA] LIGN Elective                                                         
+[LN25 WA] LIGN Elective or other                                                
+[IT25 WA] LIIT 1AX                                                              LIIT 1AX
+[IT25 WA] LIIT 1BX                                                              LIIT 1BX
+[IT25 WA] LIIT 1CX                                                              LIIT 1CX
+[LT33 WA] LISP 1A/1AX                                                           LISP 1A
+[LT33 WA] LISP 1B/1BX                                                           LISP 1B
+[LT33 WA] LISP 1C/1CX                                                           LISP 1C
+[LT36 WA] LTCS 100, LTTH 110, OR LTTH 115                                       LTCS 100
+[LT36 WA] LTEN 27, 28, OR 29                                                    LTEN 27
+[GS25 WA] LTGM Elective                                                         
+[RU26 WA] LTRU UD ELECTIVE                                                      
+[LT33 WA] LTSP 100A or 100B                                                     LTSP 100A
+[CL25 WA] LTWL 19A OR MMW 11                                                    LTWL 19A
+[CL25 WA] LTWL 19B OR HUM 1 OR MMW 12                                           LTWL 19B
+[CL25 WA] LTWL 19C OR HUM 2                                                     LTWL 19C
+[LT34 WA] LTWR 8A OR LTWR 8B OR LTWR 8C                                         LTWR 8A
+[LN34 WA] Language Development elective                                         
+[LN34 SI] Language Requirement                                                  
+[LN34 WA] Ling elective                                                         
+[GH26 WA] Lower Division Core                                                   
+[MC27 WA] MAE 160 or MAE 131B                                                   MAE 160
+[MA35 WA] MATH 109 or MATH 20D                                                  MATH 109
+[PC33 WA] MATH 10A OR 20A                                                       MATH 10A
+[VA30 RE] MATH 10A or 20A                                                       MATH 10A
+[US27 WA] MATH 10A or 20A or MGT 3                                              MATH 10A
+[SO33 RE] MATH 10A or MATH 20A                                                  MATH 10A
+[UNSS RE] MATH 10A/20A                                                          MATH 10A
+[PC33 WA] MATH 10B OR 20B                                                       MATH 10B
+[HS28 RE] MATH 10B or 20A                                                       MATH 10B
+[VA30 RE] MATH 10B or 20B                                                       MATH 10B
+[SO33 RE] MATH 10B or MATH 20B                                                  MATH 10B
+[UNSS RE] MATH 10B/20B                                                          MATH 10B
+[IS34 WA] MATH 10C OR 20C                                                       MATH 10C
+[AN29 RE] MATH 10C OR 20C OR 11                                                 MATH 10C
+[CG25 WA] MATH 10C if choosing Math 10 series                                   MATH 10C
+[CG35 WA] MATH 10C if choosing the 10 series                                    MATH 10C
+[SI29 RE] MATH 10C or 20C                                                       MATH 10C
+[SI29 WA] MATH 10C/20C                                                          MATH 10C
+[AN29 WA] MATH 11 OR PSYC 60                                                    MATH 11
+[MA30 WA] MATH 154 or 184                                                       MATH 154
+[CG25 WA] MATH 18 (BS or BA Math 20 series)                                     MATH 18
+[CG25 SN] MATH 18 (BS or BA-Math 20 series)                                     MATH 18
+[PY34 FI] MATH 18 / AWP                                                         MATH 18
+[BE29 WA] MATH 18 or 31AH                                                       MATH 18
+[PY33 FI] MATH 18/AWP                                                           MATH 18
+[DS25 WA] MATH 183 or MATH 180A or ECON 120A                                    MATH 183
+[MA30 WA] MATH 183 or UD Major                                                  MATH 183
+[DS25 WA] MATH 189 (if not yet completed)                                       MATH 189
+[DS25 WA] MATH 189 or MATH 181A                                                 MATH 189
+[EN25 WA] MATH 20A (OR 10A)                                                     MATH 20A
+[EN30 WA] MATH 20A (or 10A)                                                     MATH 20A
+[CE25 FI] MATH 20A /AWP                                                         MATH 20A
+[MU27 RE] MATH 20A or 10A                                                       MATH 20A
+[EN25 WA] MATH 20B (OR 10B)                                                     MATH 20B
+[EN30 WA] MATH 20B (or 10B)                                                     MATH 20B
+[MU27 RE] MATH 20B or 10B                                                       MATH 20B
+[EN25 WA] MATH 20C (OR 10C)                                                     MATH 20C
+[EN30 WA] MATH 20C (or 10C)                                                     MATH 20C
+[BE29 WA] MATH 20C or 31BH                                                      MATH 20C
+[UNPS RE] MATH 20C or MATH GE (see note)                                        MATH 20C
+[MA35 WA] MATH 20D or MATH 109                                                  MATH 20D
+[BE29 WA] MATH 20E or 31CH                                                      MATH 20E
+[UNHA RE] MATH GE (SEE NOTE)                                                    
+[VA30 RE] MATH GE (see note)                                                    
+[MU27 RE] MATH GE (see note) or 10C                                             
+[PC32 RE] MATH GE (see notes)                                                   
+[PB31 MU] MCWP 40 or Elective                                                   MCWP 40
+[PC35 MU] MCWP 40 or GE                                                         MCWP 40
+[CH36 MU] MCWP 40/ GE                                                           MCWP 40
+[VA30 MU] MCWP 40/GE                                                            MCWP 40
+[PB31 MU] MCWP 50 or Elective                                                   MCWP 50
+[PC35 MU] MCWP 50 or GE                                                         MCWP 50
+[AN27 MU] MCWP 50/ GE                                                           MCWP 50
+[VA30 MU] MCWP 50/GE                                                            MCWP 50
+[EN30 WA] MGT 162/162R                                                          MGT 162
+[PC35 RE] MGT 18 (DEI approved)                                                 MGT 18
+[PC35 SI] MGT 18/DEI                                                            MGT 18
+[LN34 FI] MMW   15                                                              
+[LN34 FI] MMW  13                                                               
+[LN34 FI] MMW  14/GE                                                            
+[EC37 FI] MMW 14 /GE                                                            MMW 14
+[BE28 FI] MMW 14/ GE                                                            MMW 14
+[VA30 FI] MMW 14/GE                                                             MMW 14
+[SI30 FI] MMW14/GE                                                              
+[SI30 FI] MMW15                                                                 
+[US27 MU] MUIR UD ELECTIVE                                                      
+[VA30 MU] MUIR UD Elective                                                      
+[PC35 MU] MUIR Upper Div Elective                                               
+[MU26 WA] MUS 1A or 2A                                                          MUS 1A
+[MU26 WA] MUS 1B or 2B                                                          MUS 1B
+[MU26 WA] MUS 1C or 2C                                                          MUS 1C
+[MU25 WA] MUS 2AK                                                               MUS 2AK
+[MU25 WA] MUS 2BK                                                               MUS 2BK
+[MU25 WA] MUS 2CK                                                               MUS 2CK
+[MU26 WA] MUS UD Elective                                                       
+[MU25 WA] MUS UD Emphasis                                                       
+[UN27 RE] Major Classes and Electives (varies)                                  
+[UNSS RE] Major Classes or Electives (varies)                                   
+[CH36 WA] Molecular Synthesis Elective                                          
+[JS25 MU] Muir UD ELECTIVE                                                      
+[VA30 MU] Muir UD Elective                                                      
+[PB31 MU] Muir Upper Div Elective                                               
+[GS25 RE] NATURAL SCIENCE (see note)                                            
+[VA30 RE] NATURAL SCIENCE GE (see note)                                         
+[NA25 WA] NE ELECTIVE (1)                                                       
+[NA25 WA] NE ELECTIVE (2)                                                       
+[NA25 WA] NE ELECTIVE (3)                                                       
+[NA25 WA] NE ELECTIVE (4)                                                       
+[NA25 WA] NE ELECTIVE (5)                                                       
+[PB31 WA] Natural Science                                                       
+[LN34 WA] Neuro ling elective                                                   
+[CH35 WA] PHARM Restricted Elective                                             
+[VA30 WA] PHIL/POLI 27                                                          POLI 27
+[VA30 WA] PHIL/POLI 28                                                          POLI 28
+[EC28 WA] PHYS 130A¹                                                            PHYS 130A
+[BI38 WA] PHYS 1A&1AL                                                           PHYS 1A, PHYS 1AL
+[CH38 RE] PHYS 1A/1AL                                                           PHYS 1A
+[CH35 RE] PHYS 1A/AL                                                            PHYS 1A
+[SI29 WA] PHYS 1AL                                                              PHYS 1AL
+[BI38 WA] PHYS 1B&1BL                                                           PHYS 1B, PHYS 1BL
+[CH38 RE] PHYS 1B/1BL                                                           PHYS 1B
+[SI29 WA] PHYS 1BL                                                              PHYS 1BL
+[BI38 WA] PHYS 1C&1CL                                                           PHYS 1C, PHYS 1CL
+[CH38 RE] PHYS 1C/1CL                                                           PHYS 1C
+[SI29 WA] PHYS 1CL                                                              PHYS 1CL
+[UNPS RE] PHYS 2A (see note)                                                    PHYS 2A
+[SI30 WA] PHYS 2BL                                                              PHYS 2BL
+[CH36 WA] PHYS 2BL or 2CL or 2DL                                                PHYS 2BL
+[MC25 WA] PHYS 2C & 2CL                                                         PHYS 2C, PHYS 2CL
+[BI34 WA] PHYS 2C (*SEE NOTE*)                                                  PHYS 2C
+[CH36 WA] PHYS 2C or 2D                                                         PHYS 2C
+[SI30 WA] PHYS 2CL                                                              PHYS 2CL
+[PY34 WA] PHYS 2DL                                                              PHYS 2DL
+[EC28 WA] PHYS 2DL¹                                                             PHYS 2DL
+[PY32 MU] PHYS RE                                                               
+[PY34 WA] PHYS UD DEPTH                                                         
+[PY34 WA] PHYS UD LAB                                                           
+[PY34 WA] PHYS UD RE                                                            
+[VA30 RE] PHYSICS GE (see note)                                                 
+[PS31 WA] POLI 160AA                                                            POLI 160AA
+[PS32 WA] POLI 30(D)                                                            POLI 30
+[US26 WA] POLI 30D or PSYC 60 or SOCI 60                                        POLI 30D
+[PS32 WA] POLI 5(D)                                                             POLI 5
+[SE27 WA] POLI/PHIL 27                                                          PHIL 27
+[TH27 SI] PRACTICUM OR CAT 125                                                  CAT 125
+[VA26 SI] PRACTICUM or CAT 125                                                  CAT 125
+[EC27 WA] PROFESSIONAL ELECTIVE 1                                               
+[EC27 WA] PROFESSIONAL ELECTIVE 2                                               
+[PC34 WA] PSYC 60 or COGS 14B #                                                 PSYC 60
+[PC34 WA] PSYC 70 or COGS 14A #                                                 PSYC 70
+[PC25 WA] PSYC CORE                                                             
+[PC25 WA] PSYC UD ELECTIVE                                                      
+[EC28 WA] Professional Elective 1                                               
+[EC28 WA] Professional Elective 2                                               
+[EC28 WA] Professional Elective 3                                               
+[PY34 WA] Programming                                                           
+[US27 WA] RED Technical Elective                                                
+[US27 WA] RED Upper Division Elective                                           
+[RU26 WA] REEES UD ELECTIVE                                                     
+[RE26 WA] RELI 101 TOOLS & METHODS                                              RELI 101
+[RE26 WA] RELI 189 SEMINAR IN RELIGION                                          RELI 189
+[CH35 WA] Restricted Elective                                                   
+[EC37 WA] S/H ELECTIVE                                                          
+[PB31 WA] SBE                                                                   
+[CS26 MU] SECURITY CRYPTOGRAPHY                                                 
+[CS26 WA] SECURITY/CRYPTOGRAPHY                                                 
+[SO28 WA] SOC UD ELECTIVE                                                       
+[SO28 WA] SOC-UD CONCENTRATION                                                  
+[SO33 TH] SOCI                                                                  
+[SO33 WA] SOCI 10, 20, 30, 40, OR 50                                            SOCI 10
+[SO28 FI] SOCI 10, 20, 30, 40, OR 50** /elective                                SOCI 10
+[SO27 FI] SOCI 10, 20, 30, 40, OR 50**/Elective                                 SOCI 10
+[SO28 TH] SOCI 10,20,30,40OR50                                                  SOCI 10
+[SO33 RE] SOCI 2 (DEI APPROVED)                                                 SOCI 2
+[SO25 RE] SOCI 2 (DEI approved)                                                 SOCI 2
+[SO33 SI] SOCI 2 /DEI                                                           SOCI 2
+[SO31 SI] SOCI 2/DEI                                                            SOCI 2
+[SO33 WA] SOCI UD CONCENTRATION                                                 
+[SO33 WA] SOCI UD ELECTIVE                                                      
+[SO33 WA] SOCI- UD METHODOLOGY                                                  
+[SO28 WA] SOCI-UD CONCENTRATION                                                 
+[SO29 TH] SOCI10,20,30,40,OR50                                                  
+[VA30 RE] SOCIAL SCIENCE                                                        
+[SI30 RE] SOCIAL SCIENCE GE                                                     
+[TH27 RE] SOCIAL SCIENCE/DEI                                                    
+[DS25 WA] SUBJECT DOMAIN 1                                                      
+[DS25 WA] SUBJECT DOMAIN 2                                                      
+[CS26 WA] SYSTEMS/NETWORKS                                                      
+[VA27 WA] Senior Interdisciplinary (VIS)                                        
+[VA27 SI] Senior Interdisciplinary (VIS)/ Sixth Practicum                       
+[VA27 WA] Senior Media Practice (VIS)                                           
+[PB31 WA] Statistics (Quantitative Methods)                                     
+[GH26 WA] Statistics Course                                                     
+[GH25 RE] Statistics Course (MATH 11 FOR GE)                                    MATH 11
+[GH26 RE] Statistics Course (MATH 11 for GE)                                    MATH 11
+[TH26 WA] TDDE XXX                                                              
+[TH27 WA] TDHD XXX                                                              
+[TH26 WA] TDHT XXX                                                              
+[MC27 WA] TE                                                                    
+[EC27 WA] TECHNICAL ELECTIVE 1                                                  
+[EC27 WA] TECHNICAL ELECTIVE 2                                                  
+[EC27 WA] TECHNICAL ELECTIVE 3                                                  
+[EC27 WA] TECHNICAL ELECTIVE 4                                                  
+[EC27 WA] TECHNICAL ELECTIVE 5                                                  
+[SE27 WA] Technical Elect                                                       
+[SE27 WA] Technical Elective                                                    
+[EC37 WA] Technical Elective 1                                                  
+[EC37 WA] Technical Elective 2                                                  
+[EC37 WA] Technical Elective 3                                                  
+[EC37 WA] Technical Elective 4                                                  
+[SE27 SI] Technical Elective/Practicum                                          
+[VA29 RE] UD AHI or UD ELECTIVE                                                 
+[AN30 WA] UD ANTH Elective Course                                               
+[LN33 WA] UD AREA STUDIES OR UD LIGN ELECTIVE                                   
+[LN33 WA] UD AREA STUDIES, UD LIT, OR UD LIGN ELECTIVE                          
+[VA28 MU] UD Advanced Art Making (VIS)                                          
+[VA29 MU] UD Advanced Computing (VIS)                                           
+[VA30 MU] UD Advanced Elective (VIS)                                            
+[VA29 MU] UD Advanced Interdisciplinary (VIS)                                   
+[VA27 MU] UD Advanced Media Practice (VIS)                                      
+[MU27 WA] UD Advanced Practice                                                  
+[VA26 MU] UD Advanced Seminar (VIS)                                             
+[VA26 MU] UD Advanced Theory (VIS)                                              
+[BI38 WA] UD BIO ELECT (*SEE NOTE*)                                             
+[BI38 WA] UD BIO ELECTIVE                                                       
+[BI32 WA] UD BIO ELECTIVE (*SEE NOTE)                                           
+[BI35 WA] UD BIO ELECTIVE (*SEE NOTE*)                                          
+[BI30 WA] UD BIO LAB                                                            
+[BI32 WA] UD BIO LAB (*SEE NOTE)                                                
+[BI38 WA] UD BIO LAB (*SEE NOTE*)                                               
+[AN30 WA] UD Concentration Course                                               
+[TH27 MU] UD Core Movement                                                      
+[PB31 RE] UD DEI                                                                
+[DS25 WA] UD Domain Elective 1 (if MATH 180A not taken)                         MATH 180A
+[DS25 WA] UD Domain Elective 2                                                  
+[DS25 WA] UD Domain Elective 3                                                  
+[DS25 WA] UD Domain Elective 4                                                  
+[DS25 WA] UD Domain Elective 5                                                  
+[BI31 WA] UD EBE                                                                
+[BI30 WA] UD EBE CORE                                                           
+[BI30 WA] UD EBE LAB                                                            
+[VA30 RE] UD ELECTIVE                                                           
+[LN29 WA] UD ELECTIVE FROM APPROVED LIST                                        
+[PS33 WA] UD ELECTIVE or GRAD COURSE                                            
+[PB28 SI] UD Elective                                                           
+[MU27 RE] UD Elective (major)                                                   
+[TH27 WA] UD Elective Movement                                                  
+[MU26 WA] UD Focus Course                                                       
+[MU27 WA] UD Foundation                                                         
+[VA30 TH] UD GE                                                                 
+[PY30 FI] UD GE/DEI                                                             
+[GH26 WA] UD GH Core Course                                                     
+[GH26 WA] UD GH Core Course (e.g. GLBH 148)                                     GLBH 148
+[GH26 WA] UD Global Health Elective                                             
+[BI35 WA] UD HB CORE                                                            
+[BI35 WA] UD HB CORE (DISEASE)                                                  
+[BI35 WA] UD HB CORE (PHYSIOLOGY)                                               
+[MU27 WA] UD History                                                            
+[VA30 MU] UD History & Theory (VIS)                                             
+[VA29 MU] UD Intermediate Art Making (VIS)                                      
+[VA29 MU] UD Intermediate Computing (VIS)                                       
+[VA28 MU] UD Intermediate Group A (VIS)                                         
+[VA28 MU] UD Intermediate Group B (VIS)                                         
+[VA29 MU] UD Intermediate Interdisciplinary (VIS)                               
+[VA30 MU] UD Intermediate Lecture (VIS)                                         
+[VA27 MU] UD Intermediate Media Practice (VIS)                                  
+[VA27 MU] UD Intermediate Media Studies (VIS)                                   
+[VA30 MU] UD Intermediate Studio (VIS)                                          
+[JA25 WA] UD JS NON-LANG. ELECTIVE                                              
+[JS25 WA] UD JWSP Elective                                                      
+[LT41 WA] UD LIT COURSE (CONCENTRATION)                                         
+[LT41 WA] UD LIT ELECTIVE                                                       
+[LT41 WA] UD LTAF or UD LTAM or UD LTEA or UD LTEU or UD LTWL                   
+[LT41 WA] UD LTAM                                                               
+[LT36 WA] UD LTEN                                                               
+[LT36 WA] UD LTEN (A, B, C, OR D)                                               
+[LT41 WA] UD LTEU                                                               
+[CL25 WA] UD LTGK  or UD LTLA                                                   
+[CL25 WA] UD LTGK OR UD LTLA                                                    
+[CL25 WA] UD LTGK or UD LTLA                                                    
+[LT33 WA] UD LTSP                                                               
+[LT33 WA] UD LTSP - PRE-1900                                                    
+[LT34 WA] UD LTWR                                                               
+[LT33 WA] UD Literature Elective                                                
+[SI30 WA] UD MAJOR ELECTIVE                                                     
+[SI29 WA] UD MAJOR LAB ELECTIVE                                                 
+[BI37 WA] UD MCB CORE                                                           
+[BI32 WA] UD MICRO CORE                                                         
+[MA35 WA] UD Major                                                              
+[GL25 WA] UD Major - Elective                                                   
+[MU27 TH] UD Major Elective                                                     
+[BI38 WA] UD NEURO CORE                                                         
+[PL25 WA] UD PHIL                                                               
+[PS34 WA] UD POLI                                                               
+[PS33 WA] UD POLI - American Politics                                           
+[PS33 WA] UD POLI - International Political Economy                             
+[PS33 WA] UD POLI - International Relations or Comparative Politics             
+[PS26 WA] UD POLI/American Politics                                             
+[PS27 WA] UD POLI/Comparative Politics                                          
+[PS32 WA] UD POLI/Data Analytics                                                
+[PS28 WA] UD POLI/International Relations                                       
+[PS30 WA] UD POLI/Public Law                                                    
+[PS31 WA] UD POLI/Public Policy                                                 
+[PS34 WA] UD POLI/Race, Ethnicity, and Politics                                 
+[PS29 WA] UD Political Theory                                                   
+[MU27 WA] UD Practice                                                           
+[TH26 RE] UD SOCIAL SCIENCE or UD ELECTIVE                                      
+[PY26 RE] UD SOCIAL SCIENCE/DEI                                                 
+[VA27 MU] UD Senior Interdisciplinary (VIS)                                     
+[VA27 MU] UD Senior Media Practice (VIS)                                        
+[GH25 WA] UD Significant Writing Course                                         
+[JS25 WA] UD Survey Course: 1648 to present                                     
+[JS25 WA] UD Survey Course: Elective                                            
+[JS25 WA] UD Survey Course: pre-1648                                            
+[TH26 WA] UD THEATRE ELECTIVE                                                   
+[MU27 WA] UD Theory & History                                                   
+[PS29 WA] UD/Political Theory                                                   
+[PB31 WA] UDE                                                                   
+[ES27 SI] UPPER DIV ELECTIVE                                                    
+[US27 RE] USP 1 (or Elective, if USP 2 in Winter)                               USP 1
+[US27 WA] USP 1 (or USP 2 in Winter)                                            USP 1
+[US26 SI] USP 1/DEI                                                             USP 1
+[US27 SI] USP 1/DEI (or USP 2 in Winter)                                        USP 1
+[US26 SI] USP 186/ Sixth Practicum                                              USP 186
+[US27 RE] USP 2 (or Elective, if USP 1 in Fall)                                 USP 2
+[US27 WA] USP 2 (or USP 1 in Fall)                                              USP 2
+[US26 FI] USP 3 (DEI)                                                           USP 3
+[US26 WA] USP Foundation Course                                                 
+[US26 WA] USP Research Methods Course                                           
+[US26 WA] USP Technical Elective Course                                         
+[US26 WA] USP Upper Division Elective                                           
+[AN26 SI] Upper Division ELECTIVE                                               
+[GL25 FI] Upper Division Elective                                               
+[AN29 WA] Upper Division Elective (ANTH, ANSC, ANBI, ANAR)                      
+[AN29 WA] Upper Division Methods Course (ANBI)                                  
+[SE27 WA] WCWP10A                                                               
+[SE27 WA] WCWP10B                                                               
+[LN34 WA] language requirement                                                  
