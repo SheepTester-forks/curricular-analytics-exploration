@@ -11,6 +11,11 @@ course_names = {
 
 
 def get_course_code(name: str) -> str:
+    if name.startswith("ADV. CHEM"):
+        # ADV. CHEM 1-3 are not CHEM 1-3 but rather an elective category, so
+        # don't treat them like courses
+        return ""
+
     # Remove International Studies' Disciplinary Focus prefix
     name = re.sub(r"DF-?\d - ", "", name)
 
