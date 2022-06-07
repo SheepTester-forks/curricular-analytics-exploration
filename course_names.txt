@@ -369,9 +369,9 @@
 [IT25 WA] LIIT 1AX                                                              LIIT 1AX
 [IT25 WA] LIIT 1BX                                                              LIIT 1BX
 [IT25 WA] LIIT 1CX                                                              LIIT 1CX
-[LT33 WA] LISP 1A/1AX                                                           LISP 1A
-[LT33 WA] LISP 1B/1BX                                                           LISP 1B
-[LT33 WA] LISP 1C/1CX                                                           LISP 1C
+[LT33 WA] LISP 1A/1AX                                                           LISP 1A, LISP 1AX
+[LT33 WA] LISP 1B/1BX                                                           LISP 1B, LISP 1BX
+[LT33 WA] LISP 1C/1CX                                                           LISP 1C, LISP 1CX
 [LT36 WA] LTCS 100, LTTH 110, OR LTTH 115                                       LTCS 100
 [LT36 WA] LTEN 27, 28, OR 29                                                    LTEN 27
 [GS25 WA] LTGM Elective                                                         
