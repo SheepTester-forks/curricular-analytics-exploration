@@ -28,3 +28,5 @@ for dept in from_codes[j:]:
 # Seems that isis_major_code_list.xlsx has more departments than
 # academic_plans.csv, which makes sense
 print(from_plans)
+
+print(sorted(set(major.major_code[0:2] for major in major_plans.values())))
