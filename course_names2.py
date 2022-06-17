@@ -26,5 +26,9 @@ course_titles = {
 
 for title in sorted(course_titles):
     # Currently excludes practicum
-    if any(char in title for char in "*^(/-¹") or title.startswith("1"):
+    if (
+        any(char in title for char in "*^(/-¹")
+        or title.startswith("1")
+        or "practicum" in title.lower()
+    ):
         print(f"[{course_titles[title]}] {title}".ljust(80) + simplify(title))

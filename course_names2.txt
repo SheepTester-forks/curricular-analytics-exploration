@@ -40,6 +40,11 @@
 [CH35 FI] BILD 1/AWP                                                            BILD 1
 [BI38 WA] BILD 4 (*SEE NOTE*)                                                   BILD 4
 [VA30 RE] BIOLOGY GE (see note)                                                 BIOLOGY GE
+[PS25 SI] CAT 125 OR PRACTICUM                                                  CAT 125 OR PRACTICUM
+[VA30 SI] CAT 125 or PRACTICUM                                                  CAT 125 or PRACTICUM
+[PS32 SI] CAT 125 or Practicum                                                  CAT 125 or Practicum
+[AN30 SI] CAT 125 or Sixth College Practicum                                    CAT 125 or Sixth College Practicum
+[SO30 SI] CAT125 or PRACTICUM                                                   CAT125 or PRACTICUM
 [CE25 WA] CENG 15*                                                              CENG 15
 [UNPS RE] CHEM 6A (see note)                                                    CHEM 6A
 [ES25 FI] CHEM 6A / AWP                                                         CHEM 6A
@@ -195,6 +200,8 @@
 [GS25 MU] GE/Muir Writing                                                       GE/Muir Writing
 [EN26 MU] GE/WRITING                                                            GE/WRITING
 [ES28 MU] GE/Writing                                                            GE/Writing
+[HS28 WA] HDS Aging Practicum                                                   HDS Aging Practicum
+[HS27 WA] HDS E&D Practicum                                                     HDS E&D Practicum
 [VA30 SN] High-Impact                                                           High-Impact
 [VA30 WA] History & Theory (VIS)                                                History & Theory (VIS)
 [IS36 WA] IE/RR1 - Interdisciplinary Elective/Regional Requirement              IE/RR1 - Interdisciplinary Elective/Regional Requirement
@@ -299,6 +306,8 @@
 [PS32 WA] POLI 30(D)                                                            POLI 30(D)
 [PS32 WA] POLI 5(D)                                                             POLI 5(D)
 [SE27 WA] POLI/PHIL 27                                                          POLI/PHIL 27
+[TH27 SI] PRACTICUM OR CAT 125                                                  PRACTICUM OR CAT 125
+[VA26 SI] PRACTICUM or CAT 125                                                  PRACTICUM or CAT 125
 [EC37 WA] S/H ELECTIVE                                                          S/H ELECTIVE
 [CS26 WA] SECURITY/CRYPTOGRAPHY                                                 SECURITY/CRYPTOGRAPHY
 [SO28 WA] SOC-UD CONCENTRATION                                                  SOC-UD CONCENTRATION
