@@ -5,9 +5,9 @@ from parse import major_plans
 def simplify(title: str) -> str:
     # This doesn't have to be perfect. Better to keep than remove
     # Keep DF/IEn
-    title = title.strip("^* ")
+    title = title.strip("^* ¹")
     title = re.sub(r" +", " ", title)
-    title = re.sub(r" *\(\*?see note\*?\)$|^1 ", "", title, flags=re.I)
+    title = re.sub(r" *\(\*?(see note|DEI APPROVED|DEI)\*?\)$|^1 ", "", title, flags=re.I)
     return title
 
 
