@@ -17,6 +17,8 @@ Exports:
 
 from typing import Dict, List, Literal, NamedTuple, Optional, Set, Tuple
 
+__all__ = ["prereqs", "major_plans", "major_codes"]
+
 CourseCode = Tuple[str, str]
 
 
@@ -87,8 +89,7 @@ def read_csv_from(
                         elif char == ",":
                             prefix: str = row_overflow[1] if row_overflow else ""
                             row_overflow = None
-                            row.append(parse_field(
-                                prefix + line[last_index:i]))
+                            row.append(parse_field(prefix + line[last_index:i]))
                             last_index = i + 1
                 if in_quotes:
                     prefix: str = row_overflow[1] if row_overflow else ""
@@ -128,7 +129,7 @@ class PlannedCourse(NamedTuple):
     Represents a course in an academic plan.
     """
 
-    course_code: str
+    course_title: str
     units: float
     type: Literal["COLLEGE", "DEPARTMENT"]
     overlaps_ge: bool
@@ -190,9 +191,9 @@ def plan_rows_to_dict(rows: List[List[str]]) -> Dict[str, MajorPlans]:
         department,  # Department
         major_code,  # Major
         college_code,  # College
-        course_code,  # Course
+        course_title,  # Course
         units,  # Units
-        course_title,  # Course Type
+        course_type,  # Course Type
         overlap,  # GE/Major Overlap
         _,  # Start Year
         year,  # Year Taken
@@ -202,15 +203,12 @@ def plan_rows_to_dict(rows: List[List[str]]) -> Dict[str, MajorPlans]:
         if major_code not in majors:
             majors[major_code] = MajorPlans(department, major_code, {})
         if college_code not in majors[major_code].plans:
-            majors[major_code].plans[college_code] = Plan(
-                [[] for _ in range(12)])
+            majors[major_code].plans[college_code] = Plan([[] for _ in range(12)])
         quarter = (int(year) - 1) * 3 + int(quarter) - 1
-        if course_title != "COLLEGE" and course_title != "DEPARTMENT":
-            raise TypeError(
-                'Course type is neither "COLLEGE" nor "DEPARTMENT"')
+        if course_type != "COLLEGE" and course_type != "DEPARTMENT":
+            raise TypeError('Course type is neither "COLLEGE" nor "DEPARTMENT"')
         majors[major_code].plans[college_code].quarters[quarter].append(
-            PlannedCourse(course_code, float(units),
-                          course_title, overlap == "Y")
+            PlannedCourse(course_title, float(units), course_type, overlap == "Y")
         )
     return majors
 
@@ -258,7 +256,7 @@ def major_rows_to_dict(rows: List[List[str]]) -> Dict[str, MajorInfo]:
             isis_code,
             description,
             department,
-            cip_code[0:2]+'.'+cip_code[2:],
+            cip_code[0:2] + "." + cip_code[2:],
             set(award_types.split(" ")) if award_types else set(),
         )
     return majors
