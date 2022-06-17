@@ -4,8 +4,10 @@ from parse import major_plans
 
 def simplify(title: str) -> str:
     # This doesn't have to be perfect. Better to keep than remove
+    # Keep DF/IEn
     title = title.strip("^* ")
-    title = re.sub(r" *\(\*?see note\*?\)$", "", title, flags=re.I)
+    title = re.sub(r" +", " ", title)
+    title = re.sub(r" *\(\*?see note\*?\)$|^1 ", "", title, flags=re.I)
     return title
 
 

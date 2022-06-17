@@ -2,24 +2,24 @@
 [CM26 WA] *PHIL/POLI 28                                                         PHIL/POLI 28
 [CM26 WA] *WCWP 10A                                                             WCWP 10A
 [CM26 WA] *WCWP 10B                                                             WCWP 10B
-[PC35 WA] 1 BUS MGT                                                             1 BUS MGT
-[PC35 WA] 1 BUS PSYC ELECTIVE                                                   1 BUS PSYC ELECTIVE
-[PC35 WA] 1 BUS PSYC RESEARCH                                                   1 BUS PSYC RESEARCH
-[PC34 WA] 1 CBN CORE                                                            1 CBN CORE
-[PC34 WA] 1 CBN ELECTIVE                                                        1 CBN ELECTIVE
-[PC34 WA] 1 CBN RESEARCH                                                        1 CBN RESEARCH
-[PC34 WA] 1 COGS/PSYC UD ELECTIVE                                               1 COGS/PSYC UD ELECTIVE
-[PC35 WA] 1 COMPUTER PROGRAMMING                                                1 COMPUTER PROGRAMMING
-[CG32 WA] 1 Computer Programming                                                1 Computer Programming
-[PC25 WA] 1 FORMAL SKILLS                                                       1 FORMAL SKILLS
-[PC35 WA] 1 NATURAL SCIENCE                                                     1 NATURAL SCIENCE
-[CG32 WA] 1 Natural Science                                                     1 Natural Science
-[PC35 WA] 1 PSYC CORE                                                           1 PSYC CORE
-[PC35 WA] 1 PSYC Core                                                           1 PSYC Core
-[PC33 WA] 1 PSYC RESEARCH                                                       1 PSYC RESEARCH
-[PC33 WA] 1 PSYC UD ELECTIVE                                                    1 PSYC UD ELECTIVE
-[PC33 WA] 1 PSYC UD SPECIALIZATION                                              1 PSYC UD SPECIALIZATION
-[PC35 WA] 1 UD PSYC ELECTIVE                                                    1 UD PSYC ELECTIVE
+[PC35 WA] 1 BUS MGT                                                             BUS MGT
+[PC35 WA] 1 BUS PSYC ELECTIVE                                                   BUS PSYC ELECTIVE
+[PC35 WA] 1 BUS PSYC RESEARCH                                                   BUS PSYC RESEARCH
+[PC34 WA] 1 CBN CORE                                                            CBN CORE
+[PC34 WA] 1 CBN ELECTIVE                                                        CBN ELECTIVE
+[PC34 WA] 1 CBN RESEARCH                                                        CBN RESEARCH
+[PC34 WA] 1 COGS/PSYC UD ELECTIVE                                               COGS/PSYC UD ELECTIVE
+[PC35 WA] 1 COMPUTER PROGRAMMING                                                COMPUTER PROGRAMMING
+[CG32 WA] 1 Computer Programming                                                Computer Programming
+[PC25 WA] 1 FORMAL SKILLS                                                       FORMAL SKILLS
+[PC35 WA] 1 NATURAL SCIENCE                                                     NATURAL SCIENCE
+[CG32 WA] 1 Natural Science                                                     Natural Science
+[PC35 WA] 1 PSYC CORE                                                           PSYC CORE
+[PC35 WA] 1 PSYC Core                                                           PSYC Core
+[PC33 WA] 1 PSYC RESEARCH                                                       PSYC RESEARCH
+[PC33 WA] 1 PSYC UD ELECTIVE                                                    PSYC UD ELECTIVE
+[PC33 WA] 1 PSYC UD SPECIALIZATION                                              PSYC UD SPECIALIZATION
+[PC35 WA] 1 UD PSYC ELECTIVE                                                    UD PSYC ELECTIVE
 [CE25 WA] ADV. CHEM 1**                                                         ADV. CHEM 1
 [CE25 WA] AS 1***                                                               AS 1
 [VA28 WA] Advanced Art Making (VIS)                                             Advanced Art Making (VIS)
@@ -66,9 +66,9 @@
 [CS26 WA] CSE 103 (or MATH 183/ECON 120A/ECE 109)                               CSE 103 (or MATH 183/ECON 120A/ECE 109)
 [EC26 SI] CSE 110/Sixth Practicum                                               CSE 110/Sixth Practicum
 [BI34 WA] CSE 12 (*SEE NOTE*)                                                   CSE 12
-[CS26 WA] CSE 141  (or CSE 142)                                                 CSE 141  (or CSE 142)
+[CS26 WA] CSE 141  (or CSE 142)                                                 CSE 141 (or CSE 142)
 [CS25 WA] CSE 141 (or CSE 142)                                                  CSE 141 (or CSE 142)
-[CS26 WA] CSE 141L  (or CSE 142L)                                               CSE 141L  (or CSE 142L)
+[CS26 WA] CSE 141L  (or CSE 142L)                                               CSE 141L (or CSE 142L)
 [CS25 WA] CSE 141L (or CSE 142L)                                                CSE 141L (or CSE 142L)
 [BI34 WA] CSE 21 (*SEE NOTE*)                                                   CSE 21
 [BI34 WA] CSE 8A (*SEE NOTE*)                                                   CSE 8A
@@ -156,7 +156,7 @@
 [IS34 WA] DF8 - MGT ELECTIVE                                                    DF8 - MGT ELECTIVE
 [IS30 WA] DF8 - POLI SCI                                                        DF8 - POLI SCI
 [IS31 WA] DF8 - SOCIOLOGY                                                       DF8 - SOCIOLOGY
-[PS26 TH] DOC  1/ DEI                                                           DOC  1/ DEI
+[PS26 TH] DOC  1/ DEI                                                           DOC 1/ DEI
 [VA30 TH] DOC 1/DEI                                                             DOC 1/DEI
 [LN34 TH] DOC1/DEI                                                              DOC1/DEI
 [DS25 WA] DSC 140A/CSE 150A                                                     DSC 140A/CSE 150A
@@ -203,9 +203,9 @@
 [IS34 WA] IE/RR3- Interdisciplinary Elective/Regional Requirement               IE/RR3- Interdisciplinary Elective/Regional Requirement
 [IS31 WA] IE1 - INTERDISC ELECT (RR1)                                           IE1 - INTERDISC ELECT (RR1)
 [IS31 WA] IE2 - INTERDISC ELECT                                                 IE2 - INTERDISC ELECT
-[IS26 WA] IE2 - INTERDISC ELECT  (RR2)                                          IE2 - INTERDISC ELECT  (RR2)
+[IS26 WA] IE2 - INTERDISC ELECT  (RR2)                                          IE2 - INTERDISC ELECT (RR2)
 [IS31 WA] IE3 - INTERDISC ELECT                                                 IE3 - INTERDISC ELECT
-[IS26 WA] IE3 - INTERDISC ELECT  (RR3)                                          IE3 - INTERDISC ELECT  (RR3)
+[IS26 WA] IE3 - INTERDISC ELECT  (RR3)                                          IE3 - INTERDISC ELECT (RR3)
 [VA29 WA] Intermediate Art Making (VIS)                                         Intermediate Art Making (VIS)
 [VA29 WA] Intermediate Computing (VIS)                                          Intermediate Computing (VIS)
 [VA28 WA] Intermediate Group A (VIS)                                            Intermediate Group A (VIS)
@@ -266,7 +266,7 @@
 [VA30 MU] MCWP 50/GE                                                            MCWP 50/GE
 [EN30 WA] MGT 162/162R                                                          MGT 162/162R
 [PC35 SI] MGT 18/DEI                                                            MGT 18/DEI
-[LN34 FI] MMW  14/GE                                                            MMW  14/GE
+[LN34 FI] MMW  14/GE                                                            MMW 14/GE
 [EC37 FI] MMW 14 /GE                                                            MMW 14 /GE
 [BE28 FI] MMW 14/ GE                                                            MMW 14/ GE
 [VA30 FI] MMW 14/GE                                                             MMW 14/GE
