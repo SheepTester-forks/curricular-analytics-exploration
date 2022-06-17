@@ -37,13 +37,13 @@
 [BI38 WA] BIBC 102/CHEM 114B                                                    BIBC 102/CHEM 114B
 [BI37 WA] BIBC 103/BIMM 101                                                     BIBC 103/BIMM 101
 [UNPS RE] BILD 1 (see note)                                                     BILD 1
-[CH35 FI] BILD 1/AWP                                                            BILD 1/AWP
+[CH35 FI] BILD 1/AWP                                                            BILD 1
 [BI38 WA] BILD 4 (*SEE NOTE*)                                                   BILD 4
 [VA30 RE] BIOLOGY GE (see note)                                                 BIOLOGY GE
 [CE25 WA] CENG 15*                                                              CENG 15
 [UNPS RE] CHEM 6A (see note)                                                    CHEM 6A
-[ES25 FI] CHEM 6A / AWP                                                         CHEM 6A / AWP
-[SI30 FI] CHEM 6A/AWP                                                           CHEM 6A/AWP
+[ES25 FI] CHEM 6A / AWP                                                         CHEM 6A
+[SI30 FI] CHEM 6A/AWP                                                           CHEM 6A
 [UNPS RE] CHEM 6B (see note)                                                    CHEM 6B
 [UNPS RE] CHEM 6C (see note)                                                    CHEM 6C
 [US26 RE] CHEMISTRY GE  (see note)                                              CHEMISTRY GE
@@ -60,7 +60,7 @@
 [CG25 WA] COGS CORE (BA) or COGS 100 (BS)                                       COGS CORE (BA) or COGS 100 (BS)
 [CG25 WA] COGS CORE (BA) or COGS 108 (BS)                                       COGS CORE (BA) or COGS 108 (BS)
 [CM26 FI] COMM 10 (DEI)                                                         COMM 10
-[CM26 SI] COMM 10/DEI                                                           COMM 10/DEI
+[CM26 SI] COMM 10/DEI                                                           COMM 10
 [CM26 WA] COMM Intermediate/Advanced Elective                                   COMM Intermediate/Advanced Elective
 [BI34 WA] CSE 100 (*SEE NOTE*)                                                  CSE 100
 [CS26 WA] CSE 103 (or MATH 183/ECON 120A/ECE 109)                               CSE 103 (or MATH 183/ECON 120A/ECE 109)
@@ -80,7 +80,7 @@
 [CS25 WA] CSE/ECE ELECTIVE                                                      CSE/ECE ELECTIVE
 [EC26 WA] CSE/ECE Elective                                                      CSE/ECE Elective
 [HI25 WA] Colloquium course numbered 160-190                                    Colloquium course numbered 160-190
-[PY26 MU] DEI/GE                                                                DEI/GE
+[PY26 MU] DEI/GE                                                                DEI
 [EC27 WA] DEPTH 1*                                                              DEPTH 1
 [EC27 WA] DEPTH 2*                                                              DEPTH 2
 [EC27 WA] DEPTH 3*                                                              DEPTH 3
@@ -156,9 +156,9 @@
 [IS34 WA] DF8 - MGT ELECTIVE                                                    DF8 - MGT ELECTIVE
 [IS30 WA] DF8 - POLI SCI                                                        DF8 - POLI SCI
 [IS31 WA] DF8 - SOCIOLOGY                                                       DF8 - SOCIOLOGY
-[PS26 TH] DOC  1/ DEI                                                           DOC 1/ DEI
-[VA30 TH] DOC 1/DEI                                                             DOC 1/DEI
-[LN34 TH] DOC1/DEI                                                              DOC1/DEI
+[PS26 TH] DOC  1/ DEI                                                           DOC 1
+[VA30 TH] DOC 1/DEI                                                             DOC 1
+[LN34 TH] DOC1/DEI                                                              DOC1
 [DS25 WA] DSC 140A/CSE 150A                                                     DSC 140A/CSE 150A
 [DS25 WA] DSC 96*                                                               DSC 96
 [IS36 WA] EAP/OAP (RECOMMENDED)                                                 EAP/OAP (RECOMMENDED)
@@ -183,12 +183,12 @@
 [VA27 WA] Foundation Media Studies (VIS)                                        Foundation Media Studies (VIS)
 [PS32 MU] GE - POLI SCI                                                         GE - POLI SCI
 [US27 MU] GE - USP 3                                                            GE - USP 3
-[IS25 FI] GE / AWP                                                              GE / AWP
-[CH35 SI] GE /DEI                                                               GE /DEI
-[LN33 SI] GE/ DEI                                                               GE/ DEI
+[IS25 FI] GE / AWP                                                              GE
+[CH35 SI] GE /DEI                                                               DEI
+[LN33 SI] GE/ DEI                                                               DEI
 [GH26 MU] GE/ Muir Writing                                                      GE/ Muir Writing
-[VA30 FI] GE/AWP                                                                GE/AWP
-[VA30 WA] GE/DEI                                                                GE/DEI
+[VA30 FI] GE/AWP                                                                GE
+[VA30 WA] GE/DEI                                                                DEI
 [JS25 FI] GE/ELECTIVE**                                                         GE/ELECTIVE
 [RE26 MU] GE/MCWP 40                                                            GE/MCWP 40
 [RE26 MU] GE/MCWP 50                                                            GE/MCWP 50
@@ -244,13 +244,13 @@
 [SI29 WA] MATH 10C/20C                                                          MATH 10C/20C
 [CG25 WA] MATH 18 (BS or BA Math 20 series)                                     MATH 18 (BS or BA Math 20 series)
 [CG25 SN] MATH 18 (BS or BA-Math 20 series)                                     MATH 18 (BS or BA-Math 20 series)
-[PY34 FI] MATH 18 / AWP                                                         MATH 18 / AWP
+[PY34 FI] MATH 18 / AWP                                                         MATH 18
 [CE25 WA] MATH 18*****                                                          MATH 18
-[PY33 FI] MATH 18/AWP                                                           MATH 18/AWP
+[PY33 FI] MATH 18/AWP                                                           MATH 18
 [DS25 WA] MATH 189 (if not yet completed)                                       MATH 189 (if not yet completed)
 [EN25 WA] MATH 20A (OR 10A)                                                     MATH 20A (OR 10A)
 [EN30 WA] MATH 20A (or 10A)                                                     MATH 20A (or 10A)
-[CE25 FI] MATH 20A /AWP                                                         MATH 20A /AWP
+[CE25 FI] MATH 20A /AWP                                                         MATH 20A
 [EN25 WA] MATH 20B (OR 10B)                                                     MATH 20B (OR 10B)
 [EN30 WA] MATH 20B (or 10B)                                                     MATH 20B (or 10B)
 [EN25 WA] MATH 20C (OR 10C)                                                     MATH 20C (OR 10C)
@@ -260,17 +260,17 @@
 [VA30 RE] MATH GE (see note)                                                    MATH GE
 [MU27 RE] MATH GE (see note) or 10C                                             MATH GE (see note) or 10C
 [PC32 RE] MATH GE (see notes)                                                   MATH GE (see notes)
-[CH36 MU] MCWP 40/ GE                                                           MCWP 40/ GE
-[VA30 MU] MCWP 40/GE                                                            MCWP 40/GE
-[AN27 MU] MCWP 50/ GE                                                           MCWP 50/ GE
-[VA30 MU] MCWP 50/GE                                                            MCWP 50/GE
+[CH36 MU] MCWP 40/ GE                                                           MCWP 40
+[VA30 MU] MCWP 40/GE                                                            MCWP 40
+[AN27 MU] MCWP 50/ GE                                                           MCWP 50
+[VA30 MU] MCWP 50/GE                                                            MCWP 50
 [EN30 WA] MGT 162/162R                                                          MGT 162/162R
-[PC35 SI] MGT 18/DEI                                                            MGT 18/DEI
-[LN34 FI] MMW  14/GE                                                            MMW 14/GE
-[EC37 FI] MMW 14 /GE                                                            MMW 14 /GE
-[BE28 FI] MMW 14/ GE                                                            MMW 14/ GE
-[VA30 FI] MMW 14/GE                                                             MMW 14/GE
-[SI30 FI] MMW14/GE                                                              MMW14/GE
+[PC35 SI] MGT 18/DEI                                                            MGT 18
+[LN34 FI] MMW  14/GE                                                            MMW 14
+[EC37 FI] MMW 14 /GE                                                            MMW 14
+[BE28 FI] MMW 14/ GE                                                            MMW 14
+[VA30 FI] MMW 14/GE                                                             MMW 14
+[SI30 FI] MMW14/GE                                                              MMW14
 [UN27 RE] Major Classes and Electives (varies)                                  Major Classes and Electives (varies)
 [UNSS RE] Major Classes or Electives (varies)                                   Major Classes or Electives (varies)
 [GS25 RE] NATURAL SCIENCE (see note)                                            NATURAL SCIENCE
@@ -307,8 +307,8 @@
 [SO27 FI] SOCI 10, 20, 30, 40, OR 50**/Elective                                 SOCI 10, 20, 30, 40, OR 50**/Elective
 [SO28 TH] SOCI 10,20,30,40OR50*                                                 SOCI 10,20,30,40OR50
 [SO33 WA] SOCI 100*                                                             SOCI 100
-[SO33 SI] SOCI 2 /DEI                                                           SOCI 2 /DEI
-[SO31 SI] SOCI 2/DEI                                                            SOCI 2/DEI
+[SO33 SI] SOCI 2 /DEI                                                           SOCI 2
+[SO31 SI] SOCI 2/DEI                                                            SOCI 2
 [SO33 WA] SOCI 60*                                                              SOCI 60
 [SO33 TH] SOCI**                                                                SOCI
 [SO33 WA] SOCI- UD METHODOLOGY                                                  SOCI- UD METHODOLOGY
@@ -340,7 +340,7 @@
 [LN29 WA] UD ELECTIVE FROM APPROVED LIST*                                       UD ELECTIVE FROM APPROVED LIST
 [MU27 RE] UD Elective (major)                                                   UD Elective (major)
 [EN30 WA] UD Elective*                                                          UD Elective
-[PY30 FI] UD GE/DEI                                                             UD GE/DEI
+[PY30 FI] UD GE/DEI                                                             UD GE
 [GH26 WA] UD GH Core Course (e.g. GLBH 148)                                     UD GH Core Course (e.g. GLBH 148)
 [BI35 WA] UD HB CORE (DISEASE)                                                  UD HB CORE (DISEASE)
 [BI35 WA] UD HB CORE (PHYSIOLOGY)                                               UD HB CORE (PHYSIOLOGY)
@@ -376,7 +376,7 @@
 [PS29 WA] UD/Political Theory                                                   UD/Political Theory
 [US27 RE] USP 1 (or Elective, if USP 2 in Winter)                               USP 1 (or Elective, if USP 2 in Winter)
 [US27 WA] USP 1 (or USP 2 in Winter)                                            USP 1 (or USP 2 in Winter)
-[US26 SI] USP 1/DEI                                                             USP 1/DEI
+[US26 SI] USP 1/DEI                                                             USP 1
 [US27 SI] USP 1/DEI (or USP 2 in Winter)                                        USP 1/DEI (or USP 2 in Winter)
 [US26 SI] USP 186/ Sixth Practicum                                              USP 186/ Sixth Practicum
 [US27 RE] USP 2 (or Elective, if USP 1 in Fall)                                 USP 2 (or Elective, if USP 1 in Fall)
@@ -390,7 +390,7 @@
 [VA30 RE] ^LANGUAGE                                                             LANGUAGE
 [PB26 RE] ^LANGUAGE GE                                                          LANGUAGE GE
 [LA26 RE] ^LTSP 2A                                                              LTSP 2A
-[PY26 RE] ^^ UD SOCIAL SCIENCE/DEI                                              UD SOCIAL SCIENCE/DEI
+[PY26 RE] ^^ UD SOCIAL SCIENCE/DEI                                              UD SOCIAL SCIENCE
 [IS28 RE] ^^AHI or ELECTIVE                                                     AHI or ELECTIVE
 [CR25 RE] ^^CGS 2A                                                              CGS 2A
 [CM26 RE] ^^COMM 10                                                             COMM 10
@@ -402,7 +402,7 @@
 [PC35 RE] ^^MGT 18 (DEI approved)                                               MGT 18
 [SO33 RE] ^^SOCI 2 (DEI APPROVED)                                               SOCI 2
 [SO25 RE] ^^SOCI 2 (DEI approved)                                               SOCI 2
-[TH27 RE] ^^SOCIAL SCIENCE/DEI                                                  SOCIAL SCIENCE/DEI
+[TH27 RE] ^^SOCIAL SCIENCE/DEI                                                  SOCIAL SCIENCE
 [PB31 RE] ^^UD DEI                                                              UD DEI
 [IS26 RE] ^^^ AHI or ELECTIVE                                                   AHI or ELECTIVE
 [HS27 RE] ^^^ UD AHI or UD ELECTIVE                                             UD AHI or UD ELECTIVE

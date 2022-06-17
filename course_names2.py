@@ -6,8 +6,13 @@ def simplify(title: str) -> str:
     # This doesn't have to be perfect. Better to keep than remove
     # Keep DF/IEn
     title = title.strip("^* ¹")
+    if match := re.match(r"(GE|DEI) */ *(GE|AWP|DEI)", title):
+        return "DEI" if match.group(1) == "DEI" or match.group(2) == "DEI" else "GE"
+    title = re.sub(r" */ *(GE|AWP|DEI)$", "", title, flags=re.I)
+    title = re.sub(
+        r" *\(\*?(see note|DEI APPROVED|DEI)\*?\)$|^1 ", "", title, flags=re.I
+    )
     title = re.sub(r" +", " ", title)
-    title = re.sub(r" *\(\*?(see note|DEI APPROVED|DEI)\*?\)$|^1 ", "", title, flags=re.I)
     return title
 
 
