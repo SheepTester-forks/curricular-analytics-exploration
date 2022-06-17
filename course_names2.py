@@ -1,8 +1,12 @@
+import re
 from parse import major_plans
 
 
 def simplify(title: str) -> str:
-    return title.strip("^* ")
+    # This doesn't have to be perfect. Better to keep than remove
+    title = title.strip("^* ")
+    title = re.sub(r" *\(\*?see note\*?\)$", "", title, flags=re.I)
+    return title
 
 
 course_titles = {

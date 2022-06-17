@@ -32,22 +32,22 @@
 [VA26 WA] Advanced Seminar (VIS)                                                Advanced Seminar (VIS)
 [VA26 WA] Advanced Theory (VIS)                                                 Advanced Theory (VIS)
 [BE29 WA] BENG DE Course (assigned)                                             BENG DE Course (assigned)
-[BI34 WA] BIBC 100/102 (*SEE NOTE*)                                             BIBC 100/102 (*SEE NOTE*)
+[BI34 WA] BIBC 100/102 (*SEE NOTE*)                                             BIBC 100/102
 [BI37 WA] BIBC 100/CHEM 114A                                                    BIBC 100/CHEM 114A
 [BI38 WA] BIBC 102/CHEM 114B                                                    BIBC 102/CHEM 114B
 [BI37 WA] BIBC 103/BIMM 101                                                     BIBC 103/BIMM 101
-[UNPS RE] BILD 1 (see note)                                                     BILD 1 (see note)
+[UNPS RE] BILD 1 (see note)                                                     BILD 1
 [CH35 FI] BILD 1/AWP                                                            BILD 1/AWP
-[BI38 WA] BILD 4 (*SEE NOTE*)                                                   BILD 4 (*SEE NOTE*)
-[VA30 RE] BIOLOGY GE (see note)                                                 BIOLOGY GE (see note)
+[BI38 WA] BILD 4 (*SEE NOTE*)                                                   BILD 4
+[VA30 RE] BIOLOGY GE (see note)                                                 BIOLOGY GE
 [CE25 WA] CENG 15*                                                              CENG 15
-[UNPS RE] CHEM 6A (see note)                                                    CHEM 6A (see note)
+[UNPS RE] CHEM 6A (see note)                                                    CHEM 6A
 [ES25 FI] CHEM 6A / AWP                                                         CHEM 6A / AWP
 [SI30 FI] CHEM 6A/AWP                                                           CHEM 6A/AWP
-[UNPS RE] CHEM 6B (see note)                                                    CHEM 6B (see note)
-[UNPS RE] CHEM 6C (see note)                                                    CHEM 6C (see note)
-[US26 RE] CHEMISTRY GE  (see note)                                              CHEMISTRY GE  (see note)
-[VA30 RE] CHEMISTRY GE (see note)                                               CHEMISTRY GE (see note)
+[UNPS RE] CHEM 6B (see note)                                                    CHEM 6B
+[UNPS RE] CHEM 6C (see note)                                                    CHEM 6C
+[US26 RE] CHEMISTRY GE  (see note)                                              CHEMISTRY GE
+[VA30 RE] CHEMISTRY GE (see note)                                               CHEMISTRY GE
 [CN25 WA] CHIN 10A (M/D/N)                                                      CHIN 10A (M/D/N)
 [CN25 WA] CHIN 10B (M/D/N)                                                      CHIN 10B (M/D/N)
 [CN25 WA] CHIN 10C (M/D/N)                                                      CHIN 10C (M/D/N)
@@ -62,18 +62,18 @@
 [CM26 FI] COMM 10 (DEI)                                                         COMM 10 (DEI)
 [CM26 SI] COMM 10/DEI                                                           COMM 10/DEI
 [CM26 WA] COMM Intermediate/Advanced Elective                                   COMM Intermediate/Advanced Elective
-[BI34 WA] CSE 100 (*SEE NOTE*)                                                  CSE 100 (*SEE NOTE*)
+[BI34 WA] CSE 100 (*SEE NOTE*)                                                  CSE 100
 [CS26 WA] CSE 103 (or MATH 183/ECON 120A/ECE 109)                               CSE 103 (or MATH 183/ECON 120A/ECE 109)
 [EC26 SI] CSE 110/Sixth Practicum                                               CSE 110/Sixth Practicum
-[BI34 WA] CSE 12 (*SEE NOTE*)                                                   CSE 12 (*SEE NOTE*)
+[BI34 WA] CSE 12 (*SEE NOTE*)                                                   CSE 12
 [CS26 WA] CSE 141  (or CSE 142)                                                 CSE 141  (or CSE 142)
 [CS25 WA] CSE 141 (or CSE 142)                                                  CSE 141 (or CSE 142)
 [CS26 WA] CSE 141L  (or CSE 142L)                                               CSE 141L  (or CSE 142L)
 [CS25 WA] CSE 141L (or CSE 142L)                                                CSE 141L (or CSE 142L)
-[BI34 WA] CSE 21 (*SEE NOTE*)                                                   CSE 21 (*SEE NOTE*)
-[BI34 WA] CSE 8A (*SEE NOTE*)                                                   CSE 8A (*SEE NOTE*)
+[BI34 WA] CSE 21 (*SEE NOTE*)                                                   CSE 21
+[BI34 WA] CSE 8A (*SEE NOTE*)                                                   CSE 8A
 [CS27 WA] CSE 8A*                                                               CSE 8A
-[BI34 WA] CSE 8B (*SEE NOTE*)                                                   CSE 8B (*SEE NOTE*)
+[BI34 WA] CSE 8B (*SEE NOTE*)                                                   CSE 8B
 [CS27 WA] CSE 8B*                                                               CSE 8B
 [CS26 WA] CSE ELECTIVE (CSE 197)                                                CSE ELECTIVE (CSE 197)
 [CS26 WA] CSE ELECTIVE (Or Technical Elective)                                  CSE ELECTIVE (Or Technical Elective)
@@ -255,9 +255,9 @@
 [EN30 WA] MATH 20B (or 10B)                                                     MATH 20B (or 10B)
 [EN25 WA] MATH 20C (OR 10C)                                                     MATH 20C (OR 10C)
 [EN30 WA] MATH 20C (or 10C)                                                     MATH 20C (or 10C)
-[UNPS RE] MATH 20C or MATH GE (see note)                                        MATH 20C or MATH GE (see note)
-[UNHA RE] MATH GE (SEE NOTE)                                                    MATH GE (SEE NOTE)
-[VA30 RE] MATH GE (see note)                                                    MATH GE (see note)
+[UNPS RE] MATH 20C or MATH GE (see note)                                        MATH 20C or MATH GE
+[UNHA RE] MATH GE (SEE NOTE)                                                    MATH GE
+[VA30 RE] MATH GE (see note)                                                    MATH GE
 [MU27 RE] MATH GE (see note) or 10C                                             MATH GE (see note) or 10C
 [PC32 RE] MATH GE (see notes)                                                   MATH GE (see notes)
 [CH36 MU] MCWP 40/ GE                                                           MCWP 40/ GE
@@ -273,8 +273,8 @@
 [SI30 FI] MMW14/GE                                                              MMW14/GE
 [UN27 RE] Major Classes and Electives (varies)                                  Major Classes and Electives (varies)
 [UNSS RE] Major Classes or Electives (varies)                                   Major Classes or Electives (varies)
-[GS25 RE] NATURAL SCIENCE (see note)                                            NATURAL SCIENCE (see note)
-[VA30 RE] NATURAL SCIENCE GE (see note)                                         NATURAL SCIENCE GE (see note)
+[GS25 RE] NATURAL SCIENCE (see note)                                            NATURAL SCIENCE
+[VA30 RE] NATURAL SCIENCE GE (see note)                                         NATURAL SCIENCE GE
 [NA25 WA] NE ELECTIVE (1)                                                       NE ELECTIVE (1)
 [NA25 WA] NE ELECTIVE (2)                                                       NE ELECTIVE (2)
 [NA25 WA] NE ELECTIVE (3)                                                       NE ELECTIVE (3)
@@ -290,11 +290,11 @@
 [CH35 RE] PHYS 1A/AL                                                            PHYS 1A/AL
 [CH38 RE] PHYS 1B/1BL                                                           PHYS 1B/1BL
 [CH38 RE] PHYS 1C/1CL                                                           PHYS 1C/1CL
-[UNPS RE] PHYS 2A (see note)                                                    PHYS 2A (see note)
-[BI34 WA] PHYS 2C (*SEE NOTE*)                                                  PHYS 2C (*SEE NOTE*)
+[UNPS RE] PHYS 2A (see note)                                                    PHYS 2A
+[BI34 WA] PHYS 2C (*SEE NOTE*)                                                  PHYS 2C
 [EC27 WA] PHYS 2D*                                                              PHYS 2D
 [EC28 WA] PHYS 2DL¹                                                             PHYS 2DL¹
-[VA30 RE] PHYSICS GE (see note)                                                 PHYSICS GE (see note)
+[VA30 RE] PHYSICS GE (see note)                                                 PHYSICS GE
 [ES28 WA] POLI 160AA**                                                          POLI 160AA
 [PS32 WA] POLI 30(D)                                                            POLI 30(D)
 [PS32 WA] POLI 5(D)                                                             POLI 5(D)
@@ -331,11 +331,11 @@
 [VA27 MU] UD Advanced Media Practice (VIS)                                      UD Advanced Media Practice (VIS)
 [VA26 MU] UD Advanced Seminar (VIS)                                             UD Advanced Seminar (VIS)
 [VA26 MU] UD Advanced Theory (VIS)                                              UD Advanced Theory (VIS)
-[BI38 WA] UD BIO ELECT (*SEE NOTE*)                                             UD BIO ELECT (*SEE NOTE*)
-[BI32 WA] UD BIO ELECTIVE (*SEE NOTE)                                           UD BIO ELECTIVE (*SEE NOTE)
-[BI35 WA] UD BIO ELECTIVE (*SEE NOTE*)                                          UD BIO ELECTIVE (*SEE NOTE*)
-[BI32 WA] UD BIO LAB (*SEE NOTE)                                                UD BIO LAB (*SEE NOTE)
-[BI38 WA] UD BIO LAB (*SEE NOTE*)                                               UD BIO LAB (*SEE NOTE*)
+[BI38 WA] UD BIO ELECT (*SEE NOTE*)                                             UD BIO ELECT
+[BI32 WA] UD BIO ELECTIVE (*SEE NOTE)                                           UD BIO ELECTIVE
+[BI35 WA] UD BIO ELECTIVE (*SEE NOTE*)                                          UD BIO ELECTIVE
+[BI32 WA] UD BIO LAB (*SEE NOTE)                                                UD BIO LAB
+[BI38 WA] UD BIO LAB (*SEE NOTE*)                                               UD BIO LAB
 [DS25 WA] UD Domain Elective 1 (if MATH 180A not taken)                         UD Domain Elective 1 (if MATH 180A not taken)
 [LN29 WA] UD ELECTIVE FROM APPROVED LIST*                                       UD ELECTIVE FROM APPROVED LIST
 [MU27 RE] UD Elective (major)                                                   UD Elective (major)
