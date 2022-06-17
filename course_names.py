@@ -2,7 +2,7 @@ import re
 from parse import major_plans
 
 course_names = {
-    course.course_code.strip("^* "): f"{major_plan.major_code} {college}"
+    course.course_title.strip("^* "): f"{major_plan.major_code} {college}"
     for major_plan in major_plans.values()
     for college, plan in major_plan.plans.items()
     for quarter in plan.quarters
