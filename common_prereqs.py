@@ -42,7 +42,7 @@ for subject in subjects:
                             prereq_freq[prereq_code] = 0
                         prereq_freq[prereq_code] += 1
         results = [
-            f"{subject} {number} {count / len(numbers) * 100:.2f}%"
+            f"{subject} {number} {count}x"
             for (subject, number), count in sorted(
                 prereq_freq.items(), key=lambda entry: entry[1], reverse=True
             )
