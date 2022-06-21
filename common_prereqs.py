@@ -46,6 +46,6 @@ for subject in subjects:
             for (subject, number), count in sorted(
                 prereq_freq.items(), key=lambda entry: entry[1], reverse=True
             )
-            if count / len(numbers) >= THRESHOLD
+            if count / len(numbers) > THRESHOLD
         ]
         print(f"[{name}] {len(numbers)}. {', '.join(results)}")
