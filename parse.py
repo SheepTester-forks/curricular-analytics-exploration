@@ -295,4 +295,9 @@ major_codes = major_rows_to_dict(
 )
 
 if __name__ == "__main__":
-    print(major_plans["LN33"].plans["SN"].quarters[9])
+    for major_code, plan in major_plans.items():
+        for college_code, college in plan.plans.items():
+            for quarter in college.quarters:
+                for course in quarter:
+                    if "PHYS 1C" in course.course_title and course.units != 3:
+                        print(f"{major_code} {college_code} {course}")
