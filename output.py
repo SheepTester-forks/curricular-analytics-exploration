@@ -21,6 +21,7 @@ from parse import (
     major_plans,
     major_codes,
     prereqs,
+    read_csv_from,
 )
 from parse_course_name import clean_course_title, parse_course_name
 
@@ -427,6 +428,5 @@ class MajorOutput:
 
 
 if __name__ == "__main__":
-    import sys
-
-    print(MajorOutput(sys.argv[1]).output(sys.argv[2] if len(sys.argv) > 2 else None))
+    for line in rows_to_csv(read_csv_from("./files/academic_plans.csv"), 11):
+        print(line.replace(".0", "").replace("\n", "\r\n"), end="")
