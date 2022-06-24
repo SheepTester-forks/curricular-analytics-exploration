@@ -10,7 +10,22 @@ if ca_session is None:
     raise EnvironmentError("No CA_SESSION environment variable")
 session = Session(ca_session)
 with track_uploaded_curricula("./files/uploaded.yml") as curricula:
-    for major_code, curriculum_id in curricula.items():
+    for major_code in (
+        "BI34",
+        "CR25",
+        "CH25",
+        "CH34",
+        "CH36",
+        "CH38",
+        "CG25",
+        "CG33",
+        "CG34",
+        "CG35",
+        "CS25",
+        "AN26",
+        "MC25",
+    ):
+        curriculum_id = curricula[major_code]
         curriculum = session.get_curriculum(curriculum_id)
         if not curriculum["courses"]:
             print(f"{major_code} empty")
