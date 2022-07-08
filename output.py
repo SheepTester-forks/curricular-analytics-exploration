@@ -36,6 +36,24 @@ from parse_course_name import clean_course_title, parse_course_name
 
 __all__ = ["MajorOutput"]
 
+INSTITUTION = "University of California, San Diego"
+SYSTEM_TYPE = "Quarter"
+HEADER = [
+    "Course ID",
+    "Course Name",
+    "Prefix",
+    "Number",
+    "Prerequisites",
+    "Corequisites",
+    "Strict-Corequisites",
+    "Credit Hours",
+    "Institution",
+    "Canonical Name",
+    "Term",
+]
+CURRICULUM_COLS = 10
+DEGREE_PLAN_COLS = 11
+
 non_course_prereqs: Dict[str, List[CourseCode]] = {
     "SOCI- UD METHODOLOGY": [("SOCI", "60")],
     "TDHD XXX": [("TDTR", "10")],
@@ -198,47 +216,6 @@ class OutputCourses:
             )
 
 
-INSTITUTION = "University of California, San Diego"
-SYSTEM_TYPE = "Quarter"
-HEADER = [
-    "Course ID",
-    "Course Name",
-    "Prefix",
-    "Number",
-    "Prerequisites",
-    "Corequisites",
-    "Strict-Corequisites",
-    "Credit Hours",
-    "Institution",
-    "Canonical Name",
-    "Term",
-]
-CURRICULUM_COLS = 10
-DEGREE_PLAN_COLS = 11
-
-
-def output_header(
-    curriculum: str = "",
-    degree_plan: Optional[str] = None,
-    institution: str = "",
-    degree_type: str = "",
-    system_type: str = "",
-    cip: str = "",
-) -> Generator[List[str], None, None]:
-    """
-    Outputs the header for the CSV file. See Curricular Analytics'
-    documentation for the CSV header format:
-    https://curricularanalytics.org/files.
-    """
-    yield ["Curriculum", curriculum]
-    if degree_plan is not None:
-        yield ["Degree Plan", degree_plan]
-    yield ["Institution", institution]
-    yield ["Degree Type", degree_type]
-    yield ["System Type", system_type]
-    yield ["CIP", cip]
-
-
 def rows_to_csv(rows: Iterable[List[str]], columns: int) -> Generator[str, None, None]:
     """
     Converts a list of lists of fields into lines of CSV records. Yields a
@@ -363,14 +340,13 @@ class MajorOutput:
         major_info = major_codes[self.plans.major_code]
         # NOTE: Currently just gets the last listed award type (bias towards BS over
         # BA). Will see how to deal with BA vs BS
-        yield from output_header(
-            curriculum=major_info.name,
-            degree_plan=college and f"{major_info.name}/ {college_names[college]}",
-            institution=INSTITUTION,
-            degree_type=list(major_info.award_types)[-1],
-            system_type=SYSTEM_TYPE,
-            cip=major_info.cip_code,
-        )
+        yield ["Curriculum", major_info.name]
+        if college:
+            yield ["Degree Plan", f"{major_info.name}/ {college_names[college]}"]
+        yield ["Institution", INSTITUTION]
+        yield ["Degree Type", list(major_info.award_types)[-1]]
+        yield ["System Type", SYSTEM_TYPE]
+        yield ["CIP", major_info.cip_code]
 
         processed = self.get_courses(college)
 
