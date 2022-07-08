@@ -21,7 +21,7 @@ from typing import (
     Union,
 )
 from college_names import college_names
-from output_json import Curriculum, Item, Term, Requisite
+from output_json import Curriculum, CurriculumHash, Item, Term, Requisite
 
 from parse import (
     CourseCode,
@@ -36,6 +36,24 @@ from parse import (
 from parse_course_name import clean_course_title, parse_course_name
 
 __all__ = ["MajorOutput"]
+
+INSTITUTION = "University of California, San Diego"
+SYSTEM_TYPE = "Quarter"
+HEADER = [
+    "Course ID",
+    "Course Name",
+    "Prefix",
+    "Number",
+    "Prerequisites",
+    "Corequisites",
+    "Strict-Corequisites",
+    "Credit Hours",
+    "Institution",
+    "Canonical Name",
+    "Term",
+]
+CURRICULUM_COLS = 10
+DEGREE_PLAN_COLS = 11
 
 non_course_prereqs: Dict[str, List[CourseCode]] = {
     "SOCI- UD METHODOLOGY": [("SOCI", "60")],
@@ -199,47 +217,6 @@ class OutputCourses:
             )
 
 
-INSTITUTION = "University of California, San Diego"
-SYSTEM_TYPE = "Quarter"
-HEADER = [
-    "Course ID",
-    "Course Name",
-    "Prefix",
-    "Number",
-    "Prerequisites",
-    "Corequisites",
-    "Strict-Corequisites",
-    "Credit Hours",
-    "Institution",
-    "Canonical Name",
-    "Term",
-]
-CURRICULUM_COLS = 10
-DEGREE_PLAN_COLS = 11
-
-
-def output_header(
-    curriculum: str = "",
-    degree_plan: Optional[str] = None,
-    institution: str = "",
-    degree_type: str = "",
-    system_type: str = "",
-    cip: str = "",
-) -> Generator[List[str], None, None]:
-    """
-    Outputs the header for the CSV file. See Curricular Analytics'
-    documentation for the CSV header format:
-    https://curricularanalytics.org/files.
-    """
-    yield ["Curriculum", curriculum]
-    if degree_plan is not None:
-        yield ["Degree Plan", degree_plan]
-    yield ["Institution", institution]
-    yield ["Degree Type", degree_type]
-    yield ["System Type", system_type]
-    yield ["CIP", cip]
-
-
 def rows_to_csv(rows: Iterable[List[str]], columns: int) -> Generator[str, None, None]:
     """
     Converts a list of lists of fields into lines of CSV records. Yields a
@@ -274,12 +251,13 @@ class MajorOutput:
     plans: MajorPlans
     course_ids: Dict[CourseCode, int]
     curriculum: List[PlannedCourse]
-    start_id = 1
+    start_id: int
 
-    def __init__(self, major_code: str) -> None:
+    def __init__(self, major_code: str, start_id: int = 1) -> None:
         self.plans = major_plans[major_code]
         self.course_ids = {}
         self.curriculum = self.plans.curriculum()
+        self.start_id = start_id
         self.populate_course_ids()
 
     def populate_course_ids(self) -> None:
@@ -305,7 +283,9 @@ class MajorOutput:
                     course, course.type == "DEPARTMENT" or course.overlaps_ge, i
                 )
                 for i, quarter in enumerate(self.plans.plans[college].quarters)
-                for course in quarter
+                for course in sorted(
+                    quarter, key=lambda course: course.course_title.strip("^* ")
+                )
             )
             if college
             else (InputCourse(course, True, 0) for course in self.curriculum)
@@ -361,14 +341,13 @@ class MajorOutput:
         major_info = major_codes[self.plans.major_code]
         # NOTE: Currently just gets the last listed award type (bias towards BS over
         # BA). Will see how to deal with BA vs BS
-        yield from output_header(
-            curriculum=major_info.name,
-            degree_plan=college and f"{major_info.name}/ {college_names[college]}",
-            institution=INSTITUTION,
-            degree_type=list(major_info.award_types)[-1],
-            system_type=SYSTEM_TYPE,
-            cip=major_info.cip_code,
-        )
+        yield ["Curriculum", major_info.name]
+        if college:
+            yield ["Degree Plan", f"{major_info.name}/ {college_names[college]}"]
+        yield ["Institution", INSTITUTION]
+        yield ["Degree Type", list(major_info.award_types)[-1]]
+        yield ["System Type", SYSTEM_TYPE]
+        yield ["CIP", major_info.cip_code]
 
         processed = self.get_courses(college)
 
@@ -406,32 +385,39 @@ class MajorOutput:
                 Term(id=i + 1, curriculum_items=[]) for i in range(12 if college else 1)
             ]
         )
-        for (
-            course_id,
-            course_title,
-            _,
-            prereq_ids,
-            coreq_ids,
-            units,
-            term,
-        ) in self.get_courses(college).list_courses():
-            curriculum["curriculum_terms"][term]["curriculum_items"].append(
-                Item(
-                    name=course_title,
-                    id=course_id,
-                    credits=units,
-                    curriculum_requisites=[
-                        Requisite(
-                            source_id=prereq_id, target_id=course_id, type="prereq"
-                        )
-                        for prereq_id in prereq_ids
-                    ]
-                    + [
-                        Requisite(source_id=coreq_id, target_id=course_id, type="coreq")
-                        for coreq_id in coreq_ids
-                    ],
+        processed = self.get_courses(college)
+        # Put college courses at the bottom of each quarter, consistent with CSV
+        for major_course_section in True, False:
+            if not college and not major_course_section:
+                break
+            for (
+                course_id,
+                course_title,
+                _,
+                prereq_ids,
+                coreq_ids,
+                units,
+                term,
+            ) in processed.list_courses(major_course_section):
+                curriculum["curriculum_terms"][term]["curriculum_items"].append(
+                    Item(
+                        name=course_title,
+                        id=course_id,
+                        credits=units,
+                        curriculum_requisites=[
+                            Requisite(
+                                source_id=prereq_id, target_id=course_id, type="prereq"
+                            )
+                            for prereq_id in prereq_ids
+                        ]
+                        + [
+                            Requisite(
+                                source_id=coreq_id, target_id=course_id, type="coreq"
+                            )
+                            for coreq_id in coreq_ids
+                        ],
+                    )
                 )
-            )
         return curriculum
 
     def output(self, college: Optional[str] = None) -> str:
@@ -442,6 +428,20 @@ class MajorOutput:
         for line in rows_to_csv(self.output_plan(college), cols):
             csv += line
         return csv
+
+    @classmethod
+    def from_json(cls, major_code: str, json: CurriculumHash) -> "MajorOutput":
+        output = MajorOutput(major_code)
+        output.course_ids = {}
+        output.start_id = 1
+        for course in json["courses"]:
+            parsed = parse_course_name(course["name"])
+            if parsed:
+                subject, number, _ = parsed
+                output.course_ids[subject, number] = course["id"]
+            if course["id"] + 1 > output.start_id:
+                output.start_id = course["id"] + 1
+        return output
 
 
 if __name__ == "__main__":
