@@ -345,7 +345,12 @@ class MajorOutput:
         if college:
             yield ["Degree Plan", f"{major_info.name}/ {college_names[college]}"]
         yield ["Institution", INSTITUTION]
-        yield ["Degree Type", list(major_info.award_types)[-1]]
+        # For undeclared majors, there is no award type, so will just use
+        # Curricular Analytics' default, BS.
+        yield [
+            "Degree Type",
+            list(major_info.award_types)[-1] if major_info.award_types else "BS",
+        ]
         yield ["System Type", SYSTEM_TYPE]
         yield ["CIP", major_info.cip_code]
 

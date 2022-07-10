@@ -13,6 +13,7 @@ for major in readdir("./files/output/")
       plan = read_csv("./files/output/$major/$college.csv")
     catch error
       if error isa SystemError
+        # Ignore if college degree plan doesn't exist
         continue
       else
         throw(error)
@@ -23,12 +24,22 @@ for major in readdir("./files/output/")
     try
       basic_metrics(curriculum)
     catch error
+      # BoundsError: attempt to access 0-element Vector{Vector{Course}} at index [1]
+      # For curricula like AN26 with no prerequisites, presumably
       if !(error isa BoundsError)
         throw(error)
       end
     end
     write(output, "$major,$college")
-    write(output, ",$(length(plan.additional_courses))")
+    try
+      # UndefRefError: access to undefined reference
+      # plan.additional_courses doesn't exist for PS33 MU
+      write(output, ",$(length(plan.additional_courses))")
+    catch error
+      if !(error isa UndefRefError)
+        throw(error)
+      end
+    end
     write(output, ",$(curriculum.metrics["complexity"][1])")
     write(output, ",$(curriculum.metrics["max. centrality"])")
     write(output, ",$(curriculum.metrics["max. centrality courses"][1].name)")
@@ -36,7 +47,6 @@ for major in readdir("./files/output/")
     write(output, "\n")
     flush(output)
   end
-  break
 end
 
 close(output)

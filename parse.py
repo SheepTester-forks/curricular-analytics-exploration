@@ -263,7 +263,9 @@ def major_rows_to_dict(rows: List[List[str]]) -> Dict[str, MajorInfo]:
             title,
             department,
             cip_code[0:2] + "." + cip_code[2:],
-            set(award_types.split(" ")) if award_types else set(),
+            set(award_types.split(" "))
+            if award_types and award_types != "NONE"
+            else set(),
         )
     return majors
 
@@ -296,9 +298,10 @@ major_codes = major_rows_to_dict(
 )
 
 if __name__ == "__main__":
-    for major_code, plan in major_plans.items():
-        for college_code, college in plan.plans.items():
-            for quarter in college.quarters:
-                for course in quarter:
-                    if "PHYS 1C" in course.course_title and course.units != 3:
-                        print(f"{major_code} {college_code} {course}")
+    # for major_code, plan in major_plans.items():
+    #     for college_code, college in plan.plans.items():
+    #         for quarter in college.quarters:
+    #             for course in quarter:
+    #                 if "PHYS 1C" in course.course_title and course.units != 3:
+    #                     print(f"{major_code} {college_code} {course}")
+    print(major_codes["UN27"].award_types)
