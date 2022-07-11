@@ -1,10 +1,10 @@
-from typing import Dict
+from typing import Dict, Tuple
 from parse import CourseCode, prereqs
 
 THRESHOLD = 0.5
 
 
-def parse_int(string: str) -> int:
+def parse_int(string: str) -> Tuple[int, str]:
     """
     Like JavaScript `parseInt`, where non-digits after the integer are ignored.
     """
@@ -14,7 +14,7 @@ def parse_int(string: str) -> int:
             break
     else:
         index = len(string)
-    return int(string[0:index])
+    return int(string[0:index]), string[index:]
 
 
 course_codes = set(prereqs.keys()) | {
@@ -27,7 +27,7 @@ subjects = sorted({subject for subject, _ in course_codes})
 
 for subject in subjects:
     numbers = [number for subj, number in course_codes if subj == subject]
-    upper_division = [number for number in numbers if parse_int(number) // 100 == 1]
+    upper_division = [number for number in numbers if parse_int(number)[0] // 100 == 1]
 
     for name, numbers in (subject, numbers), (f"{subject} UD", upper_division):
         if len(numbers) <= 1:
