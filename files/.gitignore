@@ -2,3 +2,7 @@
 *.txt
 uploaded-*.yml
 output/
+
+# Tableau tables
+*.twbr
+*.twb

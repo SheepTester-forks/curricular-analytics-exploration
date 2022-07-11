@@ -1,3 +1,8 @@
+"""
+Creates a CSV file for every curriculum and degree plan for every major in
+files/output/.
+"""
+
 import os
 from output import MajorOutput
 from parse import major_plans
