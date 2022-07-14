@@ -3,11 +3,14 @@ using CurricularAnalytics
 colleges = ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
 
 output = open("./files/metrics.csv", "w")
-write(output, "Major,College,Number of GEs,Complexity,Max centrality,Max centrality course,Longest path\n")
+write(output, "Major,College,Number of GEs,Complexity,Max centrality,Max centrality course,Longest path,Elective units\n")
 flush(output)
+
+iselective(course::Course) = occursin(r"\belective\b"i, course.name) && !occursin(r"\bmuir\b"i, course.name)
 
 for major in readdir("./files/output/")
   for college in colleges
+    print("\r$major $college")
     plan = nothing
     try
       plan = read_csv("./files/output/$major/$college.csv")
@@ -31,22 +34,32 @@ for major in readdir("./files/output/")
       end
     end
     write(output, "$major,$college")
+    ges = []
+    electives = 0
     try
       # UndefRefError: access to undefined reference
       # plan.additional_courses doesn't exist for PS33 MU
-      write(output, ",$(length(plan.additional_courses))")
+      ges = filter(plan.additional_courses) do course
+        # Removes: ELECTIVE, UD ELECTIVE, UD AHI or UD ELECTIVE, Elective
+        # Does not remove: MUIR UD Elective,
+        !iselective(course)
+      end
+      electives = sum((course.credit_hours for course in plan.additional_courses if iselective(course)), init=0)
     catch error
       if !(error isa UndefRefError)
         throw(error)
       end
     end
+    write(output, ",$(length(ges))")
     write(output, ",$(curriculum.metrics["complexity"][1])")
     write(output, ",$(curriculum.metrics["max. centrality"])")
     write(output, ",$(curriculum.metrics["max. centrality courses"][1].name)")
     write(output, isempty(curriculum.metrics["longest paths"]) ? "," : ",$(length(curriculum.metrics["longest paths"][1]))")
+    write(output, ",$electives")
     write(output, "\n")
     flush(output)
   end
 end
 
 close(output)
+println()
