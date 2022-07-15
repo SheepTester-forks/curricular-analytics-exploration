@@ -2,6 +2,13 @@ using CurricularAnalytics
 
 colleges = ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
 
+courses = Dict()
+
+mutable struct CourseStats
+  max_centrality::Int
+  max_centrality_major::String
+end
+
 output = open("./files/metrics.csv", "w")
 write(output, "Major,College,Number of GEs,Complexity,Max centrality,Max centrality course,Longest path,Elective units\n")
 flush(output)
@@ -33,6 +40,7 @@ for major in readdir("./files/output/")
         throw(error)
       end
     end
+
     write(output, "$major,$college")
     ges = []
     electives = 0
@@ -58,8 +66,29 @@ for major in readdir("./files/output/")
     write(output, ",$electives")
     write(output, "\n")
     flush(output)
+
+    for (i, course) in enumerate(curriculum.courses)
+      course_code = "$(course.prefix) $(course.num)"
+      course_centrality = centrality(course, i)
+      stats = get!(courses, course_code) do
+        CourseStats(centrality, "$major $college")
+      end
+      if stats.max_centrality > course_centrality
+        stats.max_centrality = course_centrality
+        stats.max_centrality_major = "$major $college"
+      end
+    end
   end
 end
 
 close(output)
 println()
+
+open("./files/courses.csv", "w") do file
+  write(file, "Course,Max centrality,Major with max centrality\n")
+
+  for course_code in sort(keys(courses))
+    stats = courses[course_code]
+    write(file, "$course_code,$(stats.max_centrality),$(stats.max_centrality_major)\n")
+  end
+end
