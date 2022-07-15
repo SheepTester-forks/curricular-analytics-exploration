@@ -68,12 +68,15 @@ for major in readdir("./files/output/")
     flush(output)
 
     for (i, course) in enumerate(curriculum.courses)
-      course_code = "$(course.prefix) $(course.num)"
-      course_centrality = centrality(course, i)
-      stats = get!(courses, course_code) do
-        CourseStats(centrality, "$major $college")
+      if isempty(course.prefix)
+        continue
       end
-      if stats.max_centrality > course_centrality
+      course_code = "$(course.prefix) $(course.num)"
+      course_centrality = centrality(curriculum, i)
+      stats = get!(courses, course_code) do
+        CourseStats(course_centrality, "$major $college")
+      end
+      if course_centrality > stats.max_centrality
         stats.max_centrality = course_centrality
         stats.max_centrality_major = "$major $college"
       end
@@ -87,7 +90,7 @@ println()
 open("./files/courses.csv", "w") do file
   write(file, "Course,Max centrality,Major with max centrality\n")
 
-  for course_code in sort(keys(courses))
+  for course_code in sort(collect(keys(courses)))
     stats = courses[course_code]
     write(file, "$course_code,$(stats.max_centrality),$(stats.max_centrality_major)\n")
   end
