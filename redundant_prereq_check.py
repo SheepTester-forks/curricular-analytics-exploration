@@ -25,6 +25,11 @@ for course_code, requisites in flattened.items():
     for prereq in requisites:
         get_nested_prereqs(prereq, prereqs_of_prereqs)
     redundant = {code for code in requisites if code in prereqs_of_prereqs}
+    if course_code == ("MATH", "10B"):
+        print(prereqs_of_prereqs)
+        print(redundant)
+        print(requisites)
+        exit()
     if redundant:
         redundancies[course_code] = redundant
 
