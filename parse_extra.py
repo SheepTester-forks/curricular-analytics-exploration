@@ -1,5 +1,12 @@
 from typing import Dict, List, Literal, NamedTuple, Tuple, Union
-from parse import plan_rows_to_dict, prereq_rows_to_dict, read_csv_from
+from parse import (
+    CourseCode,
+    Prerequisite,
+    plan_rows_to_dict,
+    prereq_rows_to_dict,
+    prereqs,
+    read_csv_from,
+)
 
 
 class ReqCourse(NamedTuple):
@@ -78,6 +85,26 @@ prereqs_fa12 = prereq_rows_to_dict(
     ]
 )
 
+Prereqs = Dict[CourseCode, List[List[Prerequisite]]]
+
+
+# def to_set(prereqs: Dict[CourseCode, List[List[Prerequisite]]]) -> Prereqs:
+# return {code: {set(alts) for alts in reqs} for code, reqs in prereqs.items()}
+
+
+def compare_prereqs(fa21: Prereqs, fa12: Prereqs) -> None:
+    for code in fa12.keys():
+        if code not in fa21:
+            print(f"{' '.join(code)} no longer exists")
+    for code, reqs in fa21.items():
+        if code in fa12:
+            # new = reqs - fa12[code]
+            # old = fa12[code] - reqs
+            pass
+        else:
+            print(f"{' '.join(code)} new")
+
+
 # TODO: Has summer quarters
 # major_plans_fa12 = plan_rows_to_dict(
 #     read_csv_from(
@@ -88,4 +115,4 @@ prereqs_fa12 = prereq_rows_to_dict(
 # )
 
 if __name__ == "__main__":
-    pass
+    compare_prereqs(prereqs, prereqs_fa12)

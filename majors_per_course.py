@@ -38,14 +38,17 @@ def to_sortable(code: CourseCode) -> Tuple[str, int, str]:
 
 
 def output_courses() -> Generator[List[str], None, None]:
-    yield ["Course", *college_codes]
+    yield ["Course", "College", "Majors"]
 
     for course_code in sorted(courses.keys(), key=to_sortable):
-        yield [" ".join(course_code)] + [
-            str(len(courses[course_code][college])) for college in college_codes
-        ]
+        for college in college_codes:
+            yield [
+                " ".join(course_code),
+                college,
+                str(len(courses[course_code][college])),
+            ]
 
 
 with open("./files/majors_per_course.csv", "w") as file:
-    for line in rows_to_csv(output_courses(), 1 + len(college_names)):
+    for line in rows_to_csv(output_courses(), 3):
         file.write(line)
