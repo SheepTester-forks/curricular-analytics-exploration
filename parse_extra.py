@@ -1,5 +1,5 @@
 from typing import Dict, List, Literal, NamedTuple, Tuple, Union
-from parse import read_csv_from
+from parse import plan_rows_to_dict, prereq_rows_to_dict, read_csv_from
 
 
 class ReqCourse(NamedTuple):
@@ -50,5 +50,42 @@ be25fi_uachieve = parse_uachieve(
     )[1:]
 )
 
+
+prereqs_fa12 = prereq_rows_to_dict(
+    [
+        [subject, number, prereq_id, pre_sub, pre_num, allow_concurrent]
+        for (
+            _,  # Term Code
+            _,  # Term ID
+            _,  # Course ID
+            subject,  # Course Subject Code
+            number,  # Course Number
+            prereq_id,  # Prereq Sequence ID
+            _,  # Prereq Course ID
+            pre_sub,  # Prereq Subject Code
+            pre_num,  # Prereq Course Number
+            _,  # Prereq Minimum Grade Priority
+            _,  # Prereq Minimum Grade
+            allow_concurrent,  # Allow concurrent registration
+        ) in read_csv_from(
+            "./files/prereqs_fa12.csv",
+            "There is no `prereqs.csv` file in the files/ folder. See the README for where to download it from.",
+            strip=True,
+        )[
+            1:
+        ]
+        if prereq_id
+    ]
+)
+
+# TODO: Has summer quarters
+# major_plans_fa12 = plan_rows_to_dict(
+#     read_csv_from(
+#         "./files/academic_plans_fa12.csv",
+#         "There is no `academic_plans.csv` file in the files/ folder. See the README for where to download it from.",
+#         strip=True,
+#     )[1:]
+# )
+
 if __name__ == "__main__":
-    print(be25fi_uachieve)
+    pass
