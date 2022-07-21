@@ -51,13 +51,14 @@ function parsecsv(io::IO)
       else
         ""
       end
-      row_overflow = (row=row, overflow=prefix * line[last_index:end] + "\n")
+      row_overflow = (row=row, overflow=prefix * line[last_index:end] * "\n")
     end
   end
   rows
 end
 
 function get_prereqs()
+  # Term => Course => requirements -> alternatives -> requisite
   terms = Dict{String,Dict{CourseCode,Vector{Vector{CourseCode}}}}()
   for (
     term, # Term Code
@@ -87,6 +88,39 @@ function get_prereqs()
   terms
 end
 
-print(get_prereqs()["FA21"])
+struct Course
+  code::CourseCode
+  units::Float32
+  for_major::Bool
+end
+
+function get_plans()
+  # Year => Major => College => plan -> term -> course
+  years = Dict{Int,Dict{String,Dict{String,Vector{Vector{Course}}}}}()
+  for (
+    _, # Department
+    major, # Major
+    college, # College
+    course, # Course
+    units, # Units
+    crse_type, # Course Type
+    overlaps, # GE/Major Overlap
+    plan_year, # Start Year
+    year, # Year Taken
+    qtr, # Quarter Taken
+    _, # Term Taken
+  ) in open(parsecsv, "./files/academic_plans_fa12.csv")[2:end]
+    majors = get!(years, parse(Int, plan_year), Dict())
+    colleges = get!(majors, major, Dict())
+    plan = get!(colleges, college, [[] for _ in 1:16])
+    # TODO: A lot of plans will have empty terms due to no summer quarter. Will
+    # that affect the CA score?
+    term = (parse(Int, year) - 1) * 4 + parse(Int, qtr)
+    push!(plan[term], Course(("TODO", ""), parse(Float32, units), crse_type == "DEPARTMENT" || overlaps == "Y"))
+  end
+  years
+end
+
+print(get_plans()[2021]["CS25"]["SI"])
 
 end
