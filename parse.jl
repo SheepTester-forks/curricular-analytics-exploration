@@ -27,7 +27,9 @@ function parsecsv(io::IO)
       push!(rows, row)
     end
     last_index = 1
-    for (i, char) in enumerate(line * ",")
+    line *= ","
+    for i in eachindex(line)
+      char = line[i]
       if in_quotes
         if char == '"'
           in_quotes = false
@@ -41,7 +43,7 @@ function parsecsv(io::IO)
           ""
         end
         row_overflow = nothing
-        push!(row, parsefield(prefix * line[last_index:i-1]))
+        push!(row, parsefield(prefix * line[last_index:prevind(line, i)]))
         last_index = i + 1
       end
     end
