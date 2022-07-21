@@ -6,7 +6,7 @@ export CourseCode
 
 const CourseCode = Tuple{String,String}
 
-function parsefield(field::String)
+function parsefield(field::AbstractString)
   if length(field) > 0 && field[1] == '"'
     field = replace(field[2:end-1], "\"\"" => "\"")
   end
@@ -88,8 +88,34 @@ function get_prereqs()
   terms
 end
 
+const special_cases = Dict("UD Domain Elective 1 (if MATH 180A not taken)" => [nothing])
+
+function parse_course_name(name::String)
+  name = strip(name, ['^', '*', ' '])
+  if name in keys(special_cases)
+    return special_cases[name]
+  end
+  if startswith(name, "ADV. CHEM")
+    return [nothing]
+  end
+  name = replace(name, r"DF-?\d - " => "")
+  m = match(r"\b([A-Z]{2,4}) *(\d+[A-Z]{0,2})(?: *[&/] *\d?[A-Z]([LX]))?", name)
+  if m !== nothing
+    subject, number, has_lab = m
+    if !(subject in ["IE", "RR"])
+      return if has_lab === nothing
+        [(subject, number)]
+      else
+        [(subject, number), (subject, number * has_lab)]
+      end
+    end
+  end
+  [nothing]
+end
+
 struct Course
-  code::CourseCode
+  raw_title::String
+  code::Union{CourseCode,Nothing}
   units::Float32
   for_major::Bool
 end
@@ -101,7 +127,7 @@ function get_plans()
     _, # Department
     major, # Major
     college, # College
-    course, # Course
+    course_title, # Course
     units, # Units
     crse_type, # Course Type
     overlaps, # GE/Major Overlap
@@ -116,7 +142,12 @@ function get_plans()
     # TODO: A lot of plans will have empty terms due to no summer quarter. Will
     # that affect the CA score?
     term = (parse(Int, year) - 1) * 4 + parse(Int, qtr)
-    push!(plan[term], Course(("TODO", ""), parse(Float32, units), crse_type == "DEPARTMENT" || overlaps == "Y"))
+    units = parse(Float32, units)
+    parsed = parse_course_name(course_title)
+    for_major = crse_type == "DEPARTMENT" || overlaps == "Y"
+    for course_code in parsed
+      push!(plan[term], Course(course_title, course_code, units, for_major))
+    end
   end
   years
 end
