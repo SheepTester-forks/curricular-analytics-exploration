@@ -1,6 +1,6 @@
 module Output
 
-include("parse.jl")
+include("Parse.jl")
 
 import CurricularAnalytics: Course, Curriculum, DegreePlan, Term
 import .Parse: CourseCode, get_plans
@@ -67,7 +67,5 @@ function output(year::Int, major::AbstractString)
 
   DegreePlans(curriculum, degree_plans)
 end
-
-print(output(2021, "CS26"))
 
 end
