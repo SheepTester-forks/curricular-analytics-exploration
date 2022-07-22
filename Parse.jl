@@ -90,6 +90,13 @@ function get_prereqs()
   terms
 end
 
+const unit_overrides = Dict{CourseCode,Float32}(
+  ("MATH", "11") => 5,
+  ("CAT", "2") => 6,
+  ("CAT", "3") => 6,
+  ("PHYS", "1C") => 3,
+)
+
 function parse_course_name(name::String)
   name = strip(name, ['^', '*', ' '])
   if name == "UD Domain Elective 1 (if MATH 180A not taken)" || startswith(name, "ADV. CHEM")
@@ -101,7 +108,9 @@ function parse_course_name(name::String)
     subject, number, has_lab = m
     if !(subject in ["IE", "RR"])
       return if has_lab === nothing
-        [((subject, number), nothing)]
+        [((subject, number), if (subject, number) in keys(unit_overrides)
+          unit_overrides[subject, number]
+        end)]
       else
         units = if has_lab == "L"
           3
