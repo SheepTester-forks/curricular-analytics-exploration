@@ -2,7 +2,7 @@ module Parse
 
 import CurricularAnalytics
 
-export CourseCode
+export CourseCode, get_prereqs, get_plans
 
 const CourseCode = Tuple{String,String}
 
@@ -90,15 +90,10 @@ function get_prereqs()
   terms
 end
 
-const special_cases = Dict("UD Domain Elective 1 (if MATH 180A not taken)" => [nothing])
-
 function parse_course_name(name::String)
   name = strip(name, ['^', '*', ' '])
-  if name in keys(special_cases)
-    return special_cases[name]
-  end
-  if startswith(name, "ADV. CHEM")
-    return [nothing]
+  if name == "UD Domain Elective 1 (if MATH 180A not taken)" || startswith(name, "ADV. CHEM")
+    return [(nothing, nothing)]
   end
   name = replace(name, r"DF-?\d - " => "")
   m = match(r"\b([A-Z]{2,4}) *(\d+[A-Z]{0,2})(?: *[&/] *\d?[A-Z]([LX]))?", name)
@@ -106,13 +101,18 @@ function parse_course_name(name::String)
     subject, number, has_lab = m
     if !(subject in ["IE", "RR"])
       return if has_lab === nothing
-        [(subject, number)]
+        [((subject, number), nothing)]
       else
-        [(subject, number), (subject, number * has_lab)]
+        units = if has_lab == "L"
+          3
+        else
+          2.5
+        end
+        [((subject, number), units), ((subject, number * has_lab), 5 - units)]
       end
     end
   end
-  [nothing]
+  [(nothing, nothing)]
 end
 
 struct Course
@@ -147,13 +147,16 @@ function get_plans()
     units = parse(Float32, units)
     parsed = parse_course_name(course_title)
     for_major = crse_type == "DEPARTMENT" || overlaps == "Y"
-    for course_code in parsed
-      push!(plan[term], Course(course_title, course_code, units, for_major))
+    for (course_code, course_units) in parsed
+      course_units = if course_units === nothing
+        units
+      else
+        course_units
+      end
+      push!(plan[term], Course(course_title, course_code, course_units, for_major))
     end
   end
   years
 end
-
-print(get_plans()[2021]["CS25"]["SI"])
 
 end
