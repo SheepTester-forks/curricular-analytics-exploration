@@ -2,7 +2,7 @@ module Output
 
 include("Parse.jl")
 
-import CurricularAnalytics: Course, Curriculum, DegreePlan, Term
+import CurricularAnalytics: Course, Curriculum, DegreePlan, pre, Requisite, Term
 import .Parse: CourseCode, get_plans, get_prereqs
 
 plans = get_plans()
@@ -61,6 +61,29 @@ function output(year::Int, major::AbstractString)
       end for course in term
     ]) for (i, term) in enumerate(academic_plans[college_code])]
 
+    # Add prereqs
+    for (course_code, course) in courses
+      if course_code in keys(prereqs)
+        for requirement in prereqs[course_code]
+          for option in requirement
+            if option in keys(courses)
+              add_requisite!(courses[option], course, pre)
+              break
+            end
+          end
+        end
+      end
+    end
+    for (key, courses) in non_courses
+      for prereq in non_course_prereqs[key]
+        if prereq in keys(courses)
+          for course in courses
+            add_requisite!(courses[prereq], course, pre)
+          end
+        end
+      end
+    end
+
     degree_plans[college_code] = DegreePlan(
       college_code,
       Curriculum(major, Course[]),
@@ -71,8 +94,6 @@ function output(year::Int, major::AbstractString)
 
   degree_plans
 end
-
-print(output(2021, "CS26"))
 
 function convert(::Type{Curriculum}, plan::DegreePlan)
   Curriculum(plan.name, [course for term in plan.terms for course in term.courses])
