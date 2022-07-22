@@ -8,24 +8,28 @@ import .Parse: CourseCode, get_plans, get_prereqs
 plans = get_plans()
 prereqs = get_prereqs()
 
-struct DegreePlans
-  curriculum::Curriculum
-  degree_plans::Dict{String,DegreePlan}
-end
-
 const non_course_prereqs = Dict{String,Vector{CourseCode}}(
   "SOCI- UD METHODOLOGY" => [("SOCI", "60")],
   "TDHD XXX" => [("TDTR", "10")],
 )
 
+# Mapping academic plan terms to prereq terms (assuming S1 for SU)
+const quarter_names = ["FA", "WI", "SP", "S1"]
+
+function termname(start_year::Int, term_idx::Int)
+  quarter = quarter_names[mod1(term_idx, 4)]
+  quarter * string(if quarter == "FA"
+      # Starts at FA21 for 2021 + 0 years
+      start_year % 100 + fld(term_idx - 1, 4)
+    else
+      # Starts at WI22 for 2021 + 0 years
+      start_year % 100 + fld(term_idx - 1, 4) + 1
+    end, pad=2)
+end
+
 function output(year::Int, major::AbstractString)
   academic_plans = plans[year][major]
   degree_plans = Dict{String,DegreePlan}()
-
-  # Cache of identifiable courses
-  courses = Dict{CourseCode,Course}()
-
-  curriculum = nothing
 
   non_courses = Dict(key => Course[] for key in keys(non_course_prereqs))
 
@@ -36,26 +40,18 @@ function output(year::Int, major::AbstractString)
       continue
     end
 
-    # Create `Course`s as needed
-    for term in academic_plans[college_code]
-      for plan_course in term
-        if plan_course.code !== nothing
-          get!(courses, plan_course.code) do
-            Course(plan_course.raw_title, plan_course.units, canonical_name=if plan_course.for_major
-              "DEPARTMENT"
-            else
-              "COLLEGE"
-            end)
-          end
-        end
-      end
-    end
+    # Cache of identifiable courses
+    courses = Dict{CourseCode,Course}()
 
     # This creates `Course`s for non-courses. Note that courses with the same
     # title aren't shared across degree plans. That's too complicated
     terms = [Term([
       if course.code !== nothing
-        courses[course.code]
+        courses[course.code] = Course(course.raw_title, course.units, institution=if course.for_major
+            "DEPARTMENT"
+          else
+            "COLLEGE"
+          end, canonical_name=termname(year, i))
       else
         ca_course = Course(course.raw_title, course.units)
         if course.raw_title in keys(non_courses)
@@ -63,24 +59,20 @@ function output(year::Int, major::AbstractString)
         end
         ca_course
       end for course in term
-    ]) for term in academic_plans[college_code]]
-
-    if curriculum === nothing
-      curriculum = Curriculum(major, [course for term in terms for course in term.courses if course.canonical_name == "DEPARTMENT"])
-    end
+    ]) for (i, term) in enumerate(academic_plans[college_code])]
 
     degree_plans[college_code] = DegreePlan(
       college_code,
-      curriculum,
+      Curriculum(major, Course[]),
       terms,
-      Course[course for term in terms for course in term.courses if course.canonical_name == "COLLEGE"]
+      Course[]
     )
   end
 
-  # Add prerequisites
-
-  DegreePlans(curriculum, degree_plans)
+  degree_plans
 end
+
+print(output(2021, "CS26"))
 
 function convert(::Type{Curriculum}, plan::DegreePlan)
   Curriculum(plan.name, [course for term in plan.terms for course in term.courses])
@@ -94,7 +86,6 @@ struct PlanMetrics
   units_in_major::Float32
   units_not_in_major::Float32
   term_with_most_units::Quarter
-  longest_path::Int
   percent_courses_with_prereqs::Float64
   under_180::Bool
   over_16_unit_per_term::Bool
