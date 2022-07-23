@@ -11,7 +11,7 @@ end
 
 function writerow(io::IO, row::AbstractVector{String})
   join(io, [
-      if ',' in field
+      if any([',', '"', '\r', '\n'] .∈ field)
         "\"$(replace(field, "\"" => "\"\""))\""
       else
         field
@@ -49,11 +49,19 @@ open("./files/metrics_fa12.csv", "w") do file
     "Has > 6 unit difference across colleges?",
   ])
 
-  for year in 2021:2021
+  # idk if Julia supports infinite ranges
+  for year in 2015:2050
+    if year ∉ keys(plans)
+      break
+    end
     for major in sort(collect(keys(plans[year])))
       degree_plans = output(year, major)
+      plan_units = [plan.credit_hours for plan in values(degree_plans)]
+
       for college in ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
-        if !(college in keys(degree_plans))
+        # Ignoring Seventh before 2020 because its plans were scuffed (and it
+        # didn't exist)
+        if !(college in keys(degree_plans)) || college == "SN" && year < 2020
           continue
         end
 
@@ -62,8 +70,8 @@ open("./files/metrics_fa12.csv", "w") do file
         try
           basic_metrics(curriculum)
         catch error
-          # BoundsError: attempt to access 0-element Vector{Vector{Course}} at index [1]
-          # For curricula like AN26 with no prerequisites, presumably
+          # BoundsError: attempt to access 0-element Vector{Vector{Course}} at
+          # index [1] For curricula like AN26 with no prerequisites, presumably
           if !(error isa BoundsError)
             throw(error)
           end
@@ -108,7 +116,7 @@ open("./files/metrics_fa12.csv", "w") do file
           string(plan.credit_hours > 200), # Over 200 units?
           string(any(term.credit_hours > 16 for term in plan.terms)), # Has > 16-unit term?
           string(any(term.credit_hours < 12 for term in plan.terms)), # Has < 12-unit term?
-          "", # Has > 6 unit difference across colleges?
+          string(maximum(plan_units) - minimum(plan_units) > 6), # Has > 6 unit difference across colleges?
         ])
       end
     end
