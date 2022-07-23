@@ -5,7 +5,7 @@ include("Parse.jl")
 import CurricularAnalytics: Course, Curriculum, DegreePlan, pre, Requisite, Term
 import .Parse: CourseCode, get_plans, get_prereqs
 
-export output
+export output, termname
 
 plans = get_plans()
 prereqs = get_prereqs()
