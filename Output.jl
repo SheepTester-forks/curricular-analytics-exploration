@@ -2,7 +2,7 @@ module Output
 
 include("Parse.jl")
 
-import CurricularAnalytics: Course, Curriculum, DegreePlan, pre, Requisite, Term
+import CurricularAnalytics: add_requisite!, Course, Curriculum, DegreePlan, pre, Requisite, Term
 import .Parse: CourseCode, get_plans, get_prereqs
 
 export output, termname
@@ -49,14 +49,14 @@ function output(year::Int, major::AbstractString)
     # title aren't shared across degree plans. That's too complicated
     terms = [Term([
       begin
+        # Repurposing `institution` for whether it's a major or GE and
+        # `canonical_name` for the term name
         ca_course = Course(course.raw_title, course.units, institution=if course.for_major
             "DEPARTMENT"
           else
             "COLLEGE"
           end, canonical_name=termname(year, i))
         if course.code !== nothing
-          # Repurposing `institution` for whether it's a major or GE and
-          # `canonical_name` for the term name
           courses[course.code] = ca_course
         else
           if course.raw_title ∈ keys(non_courses)
@@ -70,8 +70,14 @@ function output(year::Int, major::AbstractString)
 
     # Add prereqs
     for (course_code, course) in courses
-      if course_code ∈ keys(prereqs)
-        for requirement in prereqs[course.canonical_name][course_code]
+      term = course.canonical_name
+      if term ∉ keys(prereqs)
+        # Assume the most recent term if the term doesn't have prereqs available
+        # (eg FA23)
+        term = "WI23"
+      end
+      if course_code ∈ keys(prereqs[term])
+        for requirement in prereqs[term][course_code]
           for option in requirement
             if option ∈ keys(courses)
               add_requisite!(courses[option], course, pre)
