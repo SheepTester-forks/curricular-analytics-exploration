@@ -106,7 +106,7 @@ function parse_course_name(name::String)
   m = match(r"\b([A-Z]{2,4}) *(\d+[A-Z]{0,2})(?: *[&/] *\d?[A-Z]([LX]))?", name)
   if m !== nothing
     subject, number, has_lab = m
-    if !(subject in ["IE", "RR"])
+    if subject ∉ ["IE", "RR"]
       return if has_lab === nothing
         [((subject, number), if (subject, number) in keys(unit_overrides)
           unit_overrides[subject, number]

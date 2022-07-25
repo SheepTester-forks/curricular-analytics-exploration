@@ -38,7 +38,7 @@ function output(year::Int, major::AbstractString)
   # College codes from least to most weird colleges (see #14) to make a
   # curriculum from the first college
   for college_code in ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
-    if !(college_code in keys(academic_plans))
+    if college_code ∉ keys(academic_plans)
       continue
     end
 
@@ -59,7 +59,7 @@ function output(year::Int, major::AbstractString)
           # `canonical_name` for the term name
           courses[course.code] = ca_course
         else
-          if course.raw_title in keys(non_courses)
+          if course.raw_title ∈ keys(non_courses)
             push!(non_courses[course.raw_title], ca_course)
           end
         end
@@ -70,10 +70,10 @@ function output(year::Int, major::AbstractString)
 
     # Add prereqs
     for (course_code, course) in courses
-      if course_code in keys(prereqs)
+      if course_code ∈ keys(prereqs)
         for requirement in prereqs[course.canonical_name][course_code]
           for option in requirement
-            if option in keys(courses)
+            if option ∈ keys(courses)
               add_requisite!(courses[option], course, pre)
               break
             end

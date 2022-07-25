@@ -61,7 +61,7 @@ open("./files/metrics_fa12.csv", "w") do file
       for college in ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
         # Ignoring Seventh before 2020 because its plans were scuffed (and it
         # didn't exist)
-        if !(college in keys(degree_plans)) || college == "SN" && year < 2020
+        if college ∉ keys(degree_plans) || college == "SN" && year < 2020
           continue
         end
 
