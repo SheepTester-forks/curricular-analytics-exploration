@@ -111,10 +111,10 @@ open("./files/metrics_fa12.csv", "w") do file
           curriculum.metrics["max. centrality courses"][1].name, # Highest centrality name
           string(max_term_units), # Highest term unit load
           termname(2021, findfirst(term.credit_hours == max_term_units for term in plan.terms)), # Highest term unit load name
-          "$(count(curriculum.courses) do course
+          string(count(curriculum.courses) do course
             !isempty(course.requisites)
-          end / length(curriculum.courses) * 100)%", # % of courses with prerequisites
-          "$(major_units / plan.credit_hours * 100)%", # % of units in major
+          end / length(curriculum.courses)), # % of courses with prerequisites
+          string(major_units / plan.credit_hours), # % of units in major
           # Flags
           string(plan.credit_hours < 180), # Under 180 units?
           string(plan.credit_hours > 200), # Over 200 units?
