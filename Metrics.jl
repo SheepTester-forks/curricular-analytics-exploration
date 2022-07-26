@@ -2,11 +2,15 @@ module Metrics
 
 include("Output.jl")
 
-import CurricularAnalytics: basic_metrics, Course, Curriculum, DegreePlan
+import CurricularAnalytics: basic_metrics, Course, Curriculum, DegreePlan, isvalid_curriculum
 import .Output: output, plans, termname
 
 function convert(::Type{Curriculum}, plan::DegreePlan)
-  Curriculum(plan.name, [course for term in plan.terms for course in term.courses])
+  c = Curriculum(plan.name, [course for term in plan.terms for course in term.courses])
+  if !isvalid_curriculum(c)
+    error("$(plan.name) is not a valid curriculum")
+  end
+  c
 end
 
 function writerow(io::IO, row::AbstractVector{String})
@@ -100,7 +104,7 @@ open("./files/metrics_fa12.csv", "w") do file
           string(major_units), # Units in major #
           string(plan.credit_hours - major_units), # Units not in major #
           string(length(longest_path)), # Longest path #
-          string(join(longest_path, " → ")), # Longest path courses
+          string(join((course.name for course in longest_path), " → ")), # Longest path courses
           string(curriculum.metrics["max. complexity"]), # Highest complexity #
           curriculum.metrics["max. complexity courses"][1].name, # Highest complexity name
           string(curriculum.metrics["max. centrality"]), # Highest centrality #

@@ -62,6 +62,7 @@ end
 function get_prereqs()
   # Term => Course => requirements -> alternatives -> requisite
   terms = Dict{String,Dict{CourseCode,Vector{Vector{CourseCode}}}}()
+
   for (
     term, # Term Code
     _, # Term ID
@@ -87,6 +88,12 @@ function get_prereqs()
     end
     push!(prereqs[req_seq], (req_sub, req_num))
   end
+
+  # Add prereq overrides
+  for term in values(terms)
+    term["DOC", "2"] = [[("DOC", "1")]]
+  end
+
   terms
 end
 
