@@ -43,6 +43,8 @@ open("./files/metrics_fa12.csv", "w") do file
     "Highest centrality name",
     "Highest term unit load",
     "Highest term unit load name",
+    "Lowest term unit load",
+    "Lowest term unit load name",
     "% of courses with prerequisites",
     "% of units in major",
     # Flags
@@ -92,7 +94,7 @@ open("./files/metrics_fa12.csv", "w") do file
           if course.institution == "DEPARTMENT";
           init=0
         )
-        max_term_units = maximum(term.credit_hours for term in plan.terms)
+        min_term_units, max_term_units = extrema(term.credit_hours for term in plan.terms)
 
         writerow(file, String[
           string(year), # Year
@@ -110,7 +112,9 @@ open("./files/metrics_fa12.csv", "w") do file
           string(curriculum.metrics["max. centrality"]), # Highest centrality #
           curriculum.metrics["max. centrality courses"][1].name, # Highest centrality name
           string(max_term_units), # Highest term unit load
-          termname(2021, findfirst(term.credit_hours == max_term_units for term in plan.terms)), # Highest term unit load name
+          termname(year, findfirst(term.credit_hours == max_term_units for term in plan.terms)), # Highest term unit load name
+          string(min_term_units), # Lowest term unit load
+          termname(year, findfirst(term.credit_hours == min_term_units for term in plan.terms)), # Lowest term unit load name
           string(count(curriculum.courses) do course
             !isempty(course.requisites)
           end / length(curriculum.courses)), # % of courses with prerequisites
