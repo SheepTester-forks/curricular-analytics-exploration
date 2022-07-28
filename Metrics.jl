@@ -2,7 +2,7 @@ module Metrics
 
 include("Output.jl")
 
-import CurricularAnalytics: basic_metrics, Course, Curriculum, DegreePlan, isvalid_curriculum
+import CurricularAnalytics: basic_metrics, Course, course_from_id, Curriculum, DegreePlan, extraneous_requisites, isvalid_curriculum
 import .Output: output, plans, termname
 
 function convert(::Type{Curriculum}, plan::DegreePlan)
@@ -45,6 +45,8 @@ open("./files/metrics_fa12.csv", "w") do file
     "Highest term unit load name",
     "Lowest term unit load",
     "Lowest term unit load name",
+    "# redundant prereqs",
+    "Redundant prereqs",
     "% of courses with prerequisites",
     "% of units in major",
     # Flags
@@ -96,6 +98,8 @@ open("./files/metrics_fa12.csv", "w") do file
         )
         min_term_units, max_term_units = extrema(term.credit_hours for term in plan.terms)
 
+        redundant_reqs = extraneous_requisites(curriculum)
+
         writerow(file, String[
           string(year), # Year
           major, # Major
@@ -115,6 +119,8 @@ open("./files/metrics_fa12.csv", "w") do file
           termname(year, findfirst(term.credit_hours == max_term_units for term in plan.terms)), # Highest term unit load name
           string(min_term_units), # Lowest term unit load
           termname(year, findfirst(term.credit_hours == min_term_units for term in plan.terms)), # Lowest term unit load name
+          string(length(redundant_reqs)), # # redundant prereqs
+          join(("$(course_from_id(curriculum, prereq).name) → $(course_from_id(curriculum, course).name)" for (prereq, course) in redundant_reqs), ", "), # Redundant prereqs
           string(count(curriculum.courses) do course
             !isempty(course.requisites)
           end / length(curriculum.courses)), # % of courses with prerequisites
