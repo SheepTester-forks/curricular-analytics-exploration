@@ -5,10 +5,12 @@ include("Parse.jl")
 import CurricularAnalytics: add_requisite!, Course, Curriculum, DegreePlan, isvalid_degree_plan, pre, Requisite, Term
 import .Parse: CourseCode, get_plans, get_prereqs
 
-export output, termname
+export colleges, output, termname
 
 plans = get_plans()
 prereqs = get_prereqs()
+
+const colleges = ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
 
 const non_course_prereqs = Dict{String,Vector{CourseCode}}(
   "SOCI- UD METHODOLOGY" => [("SOCI", "60")],
@@ -35,9 +37,7 @@ function output(year::Int, major::AbstractString)
 
   non_courses = Dict(key => Course[] for key in keys(non_course_prereqs))
 
-  # College codes from least to most weird colleges (see #14) to make a
-  # curriculum from the first college
-  for college_code in ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
+  for college_code in colleges
     if college_code ∉ keys(academic_plans)
       continue
     end
@@ -51,11 +51,26 @@ function output(year::Int, major::AbstractString)
       begin
         # Repurposing `institution` for whether it's a major or GE and
         # `canonical_name` for the term name
-        ca_course = Course(course.raw_title, course.units, institution=if course.for_major
+        ca_course = Course(
+          course.raw_title,
+          course.units,
+          prefix=if course.code !== nothing
+            course.code[1]
+          else
+            ""
+          end,
+          num=if course.code !== nothing
+            course.code[2]
+          else
+            ""
+          end,
+          institution=if course.for_major
             "DEPARTMENT"
           else
             "COLLEGE"
-          end, canonical_name=termname(year, i))
+          end,
+          canonical_name=termname(year, i)
+        )
         if course.code !== nothing
           courses[course.code] = ca_course, i
         else

@@ -1,29 +1,11 @@
 module Metrics
 
 include("Output.jl")
+include("Utils.jl")
 
-import CurricularAnalytics: basic_metrics, Course, course_from_id, Curriculum, DegreePlan, extraneous_requisites, isvalid_curriculum
-import .Output: output, plans, termname
-
-function convert(::Type{Curriculum}, plan::DegreePlan)
-  c = Curriculum(plan.name, [course for term in plan.terms for course in term.courses])
-  if !isvalid_curriculum(c)
-    error("$(plan.name) is not a valid curriculum")
-  end
-  c
-end
-
-function writerow(io::IO, row::AbstractVector{String})
-  join(io, [
-      if any([',', '"', '\r', '\n'] .∈ field)
-        "\"$(replace(field, "\"" => "\"\""))\""
-      else
-        field
-      end for field in row
-    ], ",")
-  write(io, "\n")
-  flush(io)
-end
+import CurricularAnalytics: basic_metrics, Course, course_from_id, Curriculum, extraneous_requisites
+import .Output: colleges, output, plans, termname
+import .Utils: convert, writerow
 
 open("./files/metrics_fa12.csv", "w") do file
   writerow(file, [
@@ -66,7 +48,7 @@ open("./files/metrics_fa12.csv", "w") do file
       degree_plans = output(year, major)
       plan_units = [plan.credit_hours for plan in values(degree_plans)]
 
-      for college in ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
+      for college in colleges
         # Ignoring Seventh before 2020 because its plans were scuffed (and it
         # didn't exist)
         if college ∉ keys(degree_plans) || college == "SN" && year < 2020
