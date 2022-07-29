@@ -31,7 +31,7 @@ open("./files/courses_fa12.csv", "w") do file
         )]
       )
       for (i, course) in enumerate(curriculum.courses)
-        if course.prefix == ""
+        if course.prefix == "" || course.institution != "DEPARTMENT"
           continue
         end
 
