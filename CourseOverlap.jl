@@ -1,0 +1,33 @@
+module CourseOverlap
+
+include("Parse.jl")
+include("Utils.jl")
+
+import .Parse: get_plans
+import .Utils: writerow
+
+plans = get_plans()
+
+open("./files/course_overlap.csv", "w") do file
+  for year in 2015:2050
+    if year ∉ keys(plans)
+      break
+    end
+    curricula = Dict(
+      major => [
+        course
+        for term in degree_plans[first(
+          college
+          for college in ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
+          if college ∈ keys(degree_plans) && !(college == "SN" && year < 2020)
+        )]
+        for course in term
+        if course.for_major
+      ]
+      for (major, degree_plans) in plans[year]
+    )
+    majors = sort(collect(keys(curricula)))
+  end
+end
+
+end
