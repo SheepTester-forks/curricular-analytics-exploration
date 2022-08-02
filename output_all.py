@@ -13,7 +13,7 @@ def csv_to_file(csv: str, path: str) -> None:
         file.write(csv)
 
 
-for major_code, plan in major_plans.items():
+for major_code, plan in major_plans().items():
     os.makedirs(f"./files/output/{major_code}/", exist_ok=True)
 
     output = MajorOutput(major_code)
