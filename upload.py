@@ -100,7 +100,7 @@ class MajorUploader(Session):
         output = MajorOutput(major_code)
         self.upload_curriculum(
             organization_id,
-            f"{major_code}-{major.name}",
+            f"{year} {major_code}-{major.name}",
             year,
             output.output_json(),
             major.cip_code,
@@ -125,7 +125,12 @@ class MajorUploader(Session):
         return curriculum_id
 
     def edit_major(
-        self, curriculum_id: int, major: MajorInfo, start_id: int = 1, log: bool = False
+        self,
+        curriculum_id: int,
+        major: MajorInfo,
+        year: int,
+        start_id: int = 1,
+        log: bool = False,
     ) -> int:
         """
         Similar to `upload_major_json`, but instead edits an existing curriculum.
@@ -134,7 +139,9 @@ class MajorUploader(Session):
         output = MajorOutput(major_code, start_id=start_id)
         self.edit_curriculum(curriculum_id, output.output_json())
         self.edit_curriculum_metadata(
-            curriculum_id, name=f"{major_code}-{major.name}", cip_code=major.cip_code
+            curriculum_id,
+            name=f"{year} {major_code}-{major.name}",
+            cip_code=major.cip_code,
         )
         if log:
             print(f"[{major_code}] Curriculum edited")
@@ -172,7 +179,7 @@ def track_uploaded_curricula(path: str) -> Generator[Uploaded, None, None]:
         yield curricula
     finally:
         with open(path, "w") as file:
-            for major_code in major_plans.keys():
+            for major_code in major_plans().keys():
                 curriculum_id = curricula.get(major_code)
                 if curriculum_id is None:
                     file.write(f"{major_code}:\n")
@@ -223,7 +230,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     major_code: str = args.major_code
-    if major_code not in major_codes:
+    if major_code not in major_codes():
         raise KeyError(f"{major_code} is not a major code that I know of.")
     org_id: Optional[int] = args.org
     if org_id is None:
@@ -234,11 +241,11 @@ if __name__ == "__main__":
         initials = get_env("INITIALS")
     upload = lambda: (
         MajorUploader().upload_major_json(
-            major_codes[major_code], org_id, year, log=True
+            major_codes()[major_code], org_id, year, log=True
         )
         if args.json
         else MajorUploader().upload_major(
-            major_codes[major_code], org_id, year, initials, log=True
+            major_codes()[major_code], org_id, year, initials, log=True
         )
     )
     if args.track:

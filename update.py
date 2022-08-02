@@ -36,7 +36,8 @@ if __name__ == "__main__":
             else:
                 session.edit_major(
                     curricula[major_code],
-                    major_codes[major_code],
+                    major_codes()[major_code],
+                    2021,
                     start_id=600,
                     log=True,
                 )
