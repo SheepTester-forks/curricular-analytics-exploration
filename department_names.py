@@ -1,8 +1,8 @@
 from parse import major_codes, major_plans
 
 
-from_plans = sorted(set(major.department for major in major_plans.values()))
-from_codes = sorted(set(major.department for major in major_codes.values()))
+from_plans = sorted(set(major.department for major in major_plans(2021).values()))
+from_codes = sorted(set(major.department for major in major_codes().values()))
 
 print("PLANS CODES")
 i = 0
@@ -29,4 +29,4 @@ for dept in from_codes[j:]:
 # academic_plans.csv, which makes sense
 print(from_plans)
 
-print(sorted(set(major.major_code[0:2] for major in major_plans.values())))
+print(sorted(set(major.major_code[0:2] for major in major_plans(2021).values())))

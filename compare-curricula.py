@@ -41,17 +41,17 @@ def display_set(ls: List[str]) -> str:
 
 oddity_scores = {college: 0 for college in colleges}
 deviation_scores = {college: 0 for college in colleges}
-for major_plan in major_plans.values():
+for major_plan in major_plans(2021).values():
     try:
         curricula = {
             college: sorted(
                 re.sub(
                     r"( ?/ ?(awp|dei|sixth practicum)| \(dei approved\)|\*\* ?/elective)$",
                     "",
-                    course.course_code.strip(" *^").lower(),
+                    course.course_title.strip(" *^").lower(),
                 )
                 for course in major_plan.curriculum(college)
-                if course.course_code not in ignored
+                if course.course_title not in ignored
             )
             for college in colleges
         }

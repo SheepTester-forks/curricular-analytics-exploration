@@ -2,8 +2,8 @@ from output import MajorOutput
 from parse import major_plans
 
 
-for major_code in major_plans.keys():
-    output = MajorOutput(major_code)
+for major_code, plan in major_plans(2021).items():
+    output = MajorOutput(plan)
     for college in output.plans.plans.keys():
         plan = output.output_json(college)
         units = sum(

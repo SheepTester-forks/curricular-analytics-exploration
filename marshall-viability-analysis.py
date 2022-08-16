@@ -1,21 +1,21 @@
-from typing import Callable, Set, Tuple
+from typing import Callable, List, Set, Tuple
 from parse import PlannedCourse, major_plans
 
 
 def simplify(
-    get_curriculum: Callable[[], Set[PlannedCourse]]
+    get_curriculum: Callable[[], List[PlannedCourse]]
 ) -> Set[Tuple[str, float]]:
     try:
         curriculum = get_curriculum()
     except KeyError:
         return {("No curriculum. Sad!", 0.0)}
-    return {(course.course_code, course.units) for course in curriculum}
+    return {(course.course_title, course.units) for course in curriculum}
 
 
 UNFUNNY = "TH"  # Least funny college per oddity analysis
 colleges = ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
 
-for major_plan in major_plans.values():
+for major_plan in major_plans(2021).values():
     good_curriculum = simplify(lambda: major_plan.curriculum(UNFUNNY))
 
     curricula = {

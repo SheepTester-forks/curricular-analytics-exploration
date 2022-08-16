@@ -17,9 +17,9 @@ def parse_int(string: str) -> Tuple[int, str]:
     return int(string[0:index]), string[index:]
 
 
-course_codes = set(prereqs.keys()) | {
+course_codes = set(prereqs("FA21").keys()) | {
     prerequisite.course_code
-    for requirements in prereqs.values()
+    for requirements in prereqs("FA21").values()
     for alternatives in requirements
     for prerequisite in alternatives
 }
@@ -35,8 +35,8 @@ for subject in subjects:
         prereq_freq: Dict[CourseCode, int] = {}
         for number in numbers:
             code = subject, number
-            if code in prereqs:
-                for alternatives in prereqs[code]:
+            if code in prereqs("FA21"):
+                for alternatives in prereqs("FA21")[code]:
                     for prereq_code, _ in alternatives:
                         if prereq_code not in prereq_freq:
                             prereq_freq[prereq_code] = 0

@@ -9,7 +9,7 @@ ca_session = os.getenv("CA_SESSION")
 if ca_session is None:
     raise EnvironmentError("No CA_SESSION environment variable")
 session = Session(ca_session)
-with track_uploaded_curricula("./files/uploaded.yml") as curricula:
+with track_uploaded_curricula(2021) as curricula:
     for major_code in (
         "BI34",
         "CR25",

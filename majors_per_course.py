@@ -17,7 +17,7 @@ def major_has_course(major_code: str, college_code: str, code: CourseCode) -> No
     courses[code][college_code].append(major_code)
 
 
-for major_code, major in major_plans.items():
+for major_code, major in major_plans(2021).items():
     for college_code, plan in major.plans.items():
         for quarter in plan.quarters:
             for course in quarter:

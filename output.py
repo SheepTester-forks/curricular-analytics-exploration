@@ -30,7 +30,6 @@ from parse import (
     Prerequisite,
     major_codes,
     prereqs,
-    read_csv_from,
 )
 from parse_course_name import clean_course_title, parse_course_name
 

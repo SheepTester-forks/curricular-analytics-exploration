@@ -18,7 +18,7 @@ def simplify(title: str) -> str:
 
 course_titles = {
     course.course_title: f"{major_plan.major_code} {college}"
-    for major_plan in major_plans.values()
+    for major_plan in major_plans(2021).values()
     for college, plan in major_plan.plans.items()
     for quarter in plan.quarters
     for course in quarter

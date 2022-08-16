@@ -6,7 +6,7 @@ flattened = {
     course_code: {
         course.course_code for alternatives in requirements for course in alternatives
     }
-    for course_code, requirements in prereqs.items()
+    for course_code, requirements in prereqs("FA21").items()
 }
 
 
@@ -35,7 +35,7 @@ for course_code, requisites in flattened.items():
 
 print(redundancies)
 
-for major_code, major in major_plans.items():
+for major_code, major in major_plans(2021).items():
     need_prereq_removal: Set[CourseCode] = set()
     for course in major.curriculum():
         parsed = parse_course_name(course.course_title)
