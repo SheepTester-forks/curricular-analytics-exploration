@@ -12,8 +12,8 @@ for year in range(2015, 2023):
             print(
                 ",".join(
                     [
-                        dept_schools.get(department) or department_name,
-                        department_name,
+                        f'"{dept_schools.get(department) or department_name}"',
+                        f'"{department_name}"',
                         major_code,
                         str(year),
                         f"https://curricularanalytics.org/curriculums/{curriculum_id}",
