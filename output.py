@@ -35,6 +35,24 @@ from parse_course_name import clean_course_title, parse_course_name
 
 __all__ = ["MajorOutput"]
 
+INSTITUTION = "University of California, San Diego"
+SYSTEM_TYPE = "Quarter"
+HEADER = [
+    "Course ID",
+    "Course Name",
+    "Prefix",
+    "Number",
+    "Prerequisites",
+    "Corequisites",
+    "Strict-Corequisites",
+    "Credit Hours",
+    "Institution",
+    "Canonical Name",
+    "Term",
+]
+CURRICULUM_COLS = 10
+DEGREE_PLAN_COLS = 11
+
 non_course_prereqs: Dict[str, List[CourseCode]] = {
     "SOCI- UD METHODOLOGY": [("SOCI", "60")],
     "TDHD XXX": [("TDTR", "10")],
@@ -298,25 +316,6 @@ class OutputCourses:
             )
 
 
-INSTITUTION = "University of California, San Diego"
-SYSTEM_TYPE = "Quarter"
-HEADER = [
-    "Course ID",
-    "Course Name",
-    "Prefix",
-    "Number",
-    "Prerequisites",
-    "Corequisites",
-    "Strict-Corequisites",
-    "Credit Hours",
-    "Institution",
-    "Canonical Name",
-    "Term",
-]
-CURRICULUM_COLS = 10
-DEGREE_PLAN_COLS = 11
-
-
 def rows_to_csv(rows: Iterable[List[str]], columns: int) -> Generator[str, None, None]:
     """
     Converts a list of lists of fields into lines of CSV records. Yields a
@@ -467,7 +466,12 @@ class MajorOutput:
         yield ["Institution", INSTITUTION]
         # NOTE: Currently just gets the last listed award type (bias towards BS over
         # BA). Will see how to deal with BA vs BS
-        yield ["Degree Type", list(major_info.award_types)[-1]]
+        # For undeclared majors, there is no award type, so will just use
+        # Curricular Analytics' default, BS.
+        yield [
+            "Degree Type",
+            list(major_info.award_types)[-1] if major_info.award_types else "BS",
+        ]
         yield ["System Type", SYSTEM_TYPE]
         yield ["CIP", major_info.cip_code]
 

@@ -19,6 +19,15 @@ departments: Dict[str, str] = {}
 with open("./files/LoadSearchControls.json") as controls:
     for department in json.load(controls)["departments"]:
         departments[department["code"]] = department["name"]
+# Add old department names
+# https://registrar.ucsd.edu/catalog/15-16/curric/JUDA-ug.html
+departments["JUDA"] = "Jewish Studies Program"
+# https://registrar.ucsd.edu/catalog/15-16/curric/TWS.html
+departments["TWS"] = "Third World Studies Program"
+# https://registrar.ucsd.edu/catalog/15-16/curric/FPM-ug.html
+departments["FPMU"] = "Undergraduate Program in Public Health"
+# https://registrar.ucsd.edu/catalog/15-16/curric/HDP.html
+departments["HDP"] = "Human Development Program"
 
 # List of school names: https://evc.ucsd.edu/about/Divisions%20and%20Schools.html
 _schools: Dict[str, List[str]] = {
@@ -44,6 +53,10 @@ _schools: Dict[str, List[str]] = {
         # Literature, but its membership of the School or Department aren't
         # stated explicitly
         "RELI",
+        # Judaic Studies, now Jewish Studies (JWSP) http://judaicstudies.ucsd.edu/
+        "JUDA",
+        # Third World Studies, now Global South Studies (GSS)
+        "TWS",
     ],
     # https://biology.ucsd.edu/education/undergrad/maj-min/majors/fall20-later/index.html
     "School of Biological Sciences": ["BIOL"],
@@ -76,13 +89,9 @@ _schools: Dict[str, List[str]] = {
     ],
     # https://datascience.ucsd.edu/academics/undergraduate/
     "Halıcıoğlu Data Science Institute": ["DSC"],
-    # === Not listed as schools ===
+    # Not listed as a school
     # https://scripps.ucsd.edu/esys
     "Scripps Institution of Oceanography": ["SIO", "ESYS"],
-    # https://catalog.ucsd.edu/curric/FMPH-ug.html
-    # "HrbWrth Sch of PblHlth& HmnLngvtySc"
-    "Herbert Wertheim School of Public Health and Human Longevity Science": ["SPH"],
-    "Unaffiliated": ["UNAF"],
 }
 dept_schools: Dict[str, str] = {}
 for school, depts in _schools.items():
