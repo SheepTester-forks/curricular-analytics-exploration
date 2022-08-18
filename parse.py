@@ -18,6 +18,8 @@ Exports:
 from functools import total_ordering
 from typing import Dict, List, Literal, NamedTuple, Optional, Set, Tuple
 
+from parse_course_name import clean_course_title, parse_course_name
+
 __all__ = ["prereqs", "major_plans", "major_codes"]
 
 CourseCode = Tuple[str, str]
@@ -184,48 +186,120 @@ def prereqs(term: str) -> Dict[CourseCode, List[List[Prerequisite]]]:
     return _prereqs[term]
 
 
-class PlannedCourse(NamedTuple):
+class ParsedCourse(NamedTuple):
     """
     Represents a course in an academic plan.
+
+    `term` is the index of the term from 0 to 11, where 0 is the first fall
+    quarter and 12 is the last spring quarter. Summer quarters from the raw plan
+    are merged into the previous spring quarter.
+    """
+
+    course_title: str
+    course_code: Optional[CourseCode]
+    units: float
+    for_major: bool
+    term: int
+
+
+class RawCourse(NamedTuple):
+    """
+    Represents a course in an academic plan containing raw values from the CSV,
+    so lab courses may be merged into a single course. Course codes aren't
+    parsed immediately for performance reasons.
     """
 
     course_title: str
     units: float
     type: Literal["COLLEGE", "DEPARTMENT"]
     overlaps_ge: bool
+    term: int
+
+    def as_parsed(
+        self,
+        course_code: Optional[CourseCode] = None,
+        course_title: Optional[str] = None,
+        units: Optional[float] = None,
+    ) -> ParsedCourse:
+        """
+        Helper method for creating a `ParsedCourse` from a `RawCourse` to reduce
+        code repetition.
+        """
+        return ParsedCourse(
+            course_title or clean_course_title(self.course_title),
+            course_code,
+            units or self.units,
+            self.type == "DEPARTMENT" or self.overlaps_ge,
+            # Move summer sessions to previous quarter, per Carlos'
+            # request. They tend to be GEs says Arturo, so it shouldn't
+            # affect prereqs
+            self.term - (self.term + 1) // 4,
+        )
 
 
-class Plan(NamedTuple):
-    """
-    Represents a college-specific academic plan. Can be used to create degree
-    plans for Curricular Analytics.
-
-    `quarters` is always of length 16, with four sequences of
-    fall-winter-spring-summer. Yes, some plans do, namely 2014 CLLA DP and 2020
-    CG35 SN, which are already known to be oddballs. Plans shouldn't be
-    including summer sessions, but some older plans do anyways.
-    """
-
-    quarters: List[List[PlannedCourse]]
-
-
-class MajorPlans(NamedTuple):
+class MajorPlans:
     """
     Represents a major's set of academic plans. Contains plans for each college.
 
     To get the plan for a specific college, use the two-letter college code. For
-    example, `plans["FI"]` contains the academic plan for ERC (Fifth College).
+    example, `plan("FI")` contains the academic plan for ERC (Fifth College).
     """
 
     # College codes from least to most weird colleges (see #14)
     least_weird_colleges = ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
 
+    unit_overrides: Dict[str, Tuple[CourseCode, float]] = {
+        "MATH 11": (("MATH", "11"), 5),
+        "CAT 2": (("CAT", "2"), 6),
+        "CAT 3": (("CAT", "3"), 6),
+        "PHYS 1C": (("PHYS", "1C"), 3),
+    }
+
     year: int
     department: str
     major_code: str
-    plans: Dict[str, Plan]
+    raw_plans: Dict[str, List[RawCourse]]
+    _parsed_plans: Dict[str, List[ParsedCourse]]
 
-    def curriculum(self, college: Optional[str] = None) -> List[PlannedCourse]:
+    def __init__(self, year: int, department: str, major_code: str) -> None:
+        self.year = year
+        self.department = department
+        self.major_code = major_code
+        self.raw_plans = {}
+        self._parsed_plans = {}
+
+    def plan(self, college: str) -> List[ParsedCourse]:
+        if college not in self._parsed_plans:
+            courses: List[ParsedCourse] = []
+            for course in self.raw_plans[college]:
+                if course.course_title in MajorPlans.unit_overrides:
+                    code, units = MajorPlans.unit_overrides[course.course_title]
+                    courses.append(course.as_parsed(code, units=units))
+                    continue
+                parsed = parse_course_name(course.course_title)
+                if not parsed:
+                    courses.append(course.as_parsed())
+                    continue
+                subject, number, has_lab = parsed
+                courses.append(
+                    course.as_parsed(
+                        (subject, number),
+                        course_title=f"{subject} {number}" if has_lab else None,
+                        units=3 if has_lab == "L" else 2.5 if has_lab == "X" else None,
+                    )
+                )
+                if has_lab:
+                    courses.append(
+                        course.as_parsed(
+                            (subject, number + has_lab),
+                            course_title=f"{subject} {number}{has_lab}",
+                            units=3 if has_lab == "L" else 2.5,
+                        )
+                    )
+            self._parsed_plans[college] = courses
+        return self._parsed_plans[college]
+
+    def curriculum(self, college: Optional[str] = None) -> List[ParsedCourse]:
         """
         Returns a list of courses based on the specified college's degree plan
         with college-specific courses removed. Can be used to create a
@@ -245,17 +319,18 @@ class MajorPlans(NamedTuple):
         """
         if college is None:
             for college_code in MajorPlans.least_weird_colleges:
-                if college_code in self.plans:
+                if college_code in self:
                     college = college_code
                     break
             if college is None:
                 raise KeyError("Major has no college plans.")
-        return [
-            course
-            for quarter in self.plans[college].quarters
-            for course in quarter
-            if course.type == "DEPARTMENT" or course.overlaps_ge
-        ]
+        return [course for course in self.plan(college) if course.for_major]
+
+    def __contains__(self, college_code: str) -> bool:
+        """
+        Whether the major has a plan for the specified college, for convenience.
+        """
+        return college_code in self.raw_plans
 
 
 def plan_rows_to_dict(rows: List[List[str]]) -> Dict[int, Dict[str, MajorPlans]]:
@@ -281,14 +356,14 @@ def plan_rows_to_dict(rows: List[List[str]]) -> Dict[int, Dict[str, MajorPlans]]
         if year not in years:
             years[year] = {}
         if major_code not in years[year]:
-            years[year][major_code] = MajorPlans(year, department, major_code, {})
-        if college_code not in years[year][major_code].plans:
-            years[year][major_code].plans[college_code] = Plan([[] for _ in range(16)])
-        quarter = (int(plan_yr) - 1) * 4 + int(plan_qtr) - 1
+            years[year][major_code] = MajorPlans(year, department, major_code)
+        if college_code not in years[year][major_code]:
+            years[year][major_code].raw_plans[college_code] = []
+        term = (int(plan_yr) - 1) * 4 + int(plan_qtr) - 1
         if course_type != "COLLEGE" and course_type != "DEPARTMENT":
             raise TypeError('Course type is neither "COLLEGE" nor "DEPARTMENT"')
-        years[year][major_code].plans[college_code].quarters[quarter].append(
-            PlannedCourse(course_title, float(units), course_type, overlap == "Y")
+        years[year][major_code].raw_plans[college_code].append(
+            RawCourse(course_title, float(units), course_type, overlap == "Y", term)
         )
     return years
 
