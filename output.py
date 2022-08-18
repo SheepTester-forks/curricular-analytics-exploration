@@ -342,7 +342,7 @@ class MajorOutput:
         single newline-terminated string with the entire CSV. You'll probably
         want to use this instead of `_output_plan`.
         """
-        if college is not None and college not in self.plans:
+        if college is not None and college not in self.plans.colleges:
             raise KeyError(f"No degree plan available for {college}.")
         cols = DEGREE_PLAN_COLS if college else CURRICULUM_COLS
         csv = ""

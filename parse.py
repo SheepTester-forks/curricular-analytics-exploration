@@ -258,20 +258,28 @@ class MajorPlans:
     year: int
     department: str
     major_code: str
-    raw_plans: Dict[str, List[RawCourse]]
+    colleges: Set[str]
+    _raw_plans: Dict[str, List[RawCourse]]
     _parsed_plans: Dict[str, List[ParsedCourse]]
 
     def __init__(self, year: int, department: str, major_code: str) -> None:
         self.year = year
         self.department = department
         self.major_code = major_code
-        self.raw_plans = {}
+        self.colleges = set()
+        self._raw_plans = {}
         self._parsed_plans = {}
+
+    def add_raw_course(self, college_code: str, course: RawCourse) -> None:
+        if college_code not in self.colleges:
+            self.colleges.add(college_code)
+            self._raw_plans[college_code] = []
+        self._raw_plans[college_code].append(course)
 
     def plan(self, college: str) -> List[ParsedCourse]:
         if college not in self._parsed_plans:
             courses: List[ParsedCourse] = []
-            for course in self.raw_plans[college]:
+            for course in self._raw_plans[college]:
                 if course.course_title in MajorPlans.unit_overrides:
                     code, units = MajorPlans.unit_overrides[course.course_title]
                     courses.append(course.as_parsed(code, units=units))
@@ -297,6 +305,7 @@ class MajorPlans:
                         )
                     )
             self._parsed_plans[college] = courses
+            del self._raw_plans[college]
         return self._parsed_plans[college]
 
     def curriculum(self, college: Optional[str] = None) -> List[ParsedCourse]:
@@ -319,18 +328,12 @@ class MajorPlans:
         """
         if college is None:
             for college_code in MajorPlans.least_weird_colleges:
-                if college_code in self:
+                if college_code in self.colleges:
                     college = college_code
                     break
             if college is None:
                 raise KeyError("Major has no college plans.")
         return [course for course in self.plan(college) if course.for_major]
-
-    def __contains__(self, college_code: str) -> bool:
-        """
-        Whether the major has a plan for the specified college, for convenience.
-        """
-        return college_code in self.raw_plans
 
 
 def plan_rows_to_dict(rows: List[List[str]]) -> Dict[int, Dict[str, MajorPlans]]:
@@ -357,13 +360,12 @@ def plan_rows_to_dict(rows: List[List[str]]) -> Dict[int, Dict[str, MajorPlans]]
             years[year] = {}
         if major_code not in years[year]:
             years[year][major_code] = MajorPlans(year, department, major_code)
-        if college_code not in years[year][major_code]:
-            years[year][major_code].raw_plans[college_code] = []
         term = (int(plan_yr) - 1) * 4 + int(plan_qtr) - 1
         if course_type != "COLLEGE" and course_type != "DEPARTMENT":
             raise TypeError('Course type is neither "COLLEGE" nor "DEPARTMENT"')
-        years[year][major_code].raw_plans[college_code].append(
-            RawCourse(course_title, float(units), course_type, overlap == "Y", term)
+        years[year][major_code].add_raw_course(
+            college_code,
+            RawCourse(course_title, float(units), course_type, overlap == "Y", term),
         )
     return years
 
