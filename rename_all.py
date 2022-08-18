@@ -8,7 +8,7 @@ from upload import MajorUploader, track_uploaded_curricula
 session = MajorUploader()
 year = 2021
 
-with track_uploaded_curricula("./files/uploaded.yml") as curricula:
+with track_uploaded_curricula(year) as curricula:
     for major_code, curriculum_id in curricula.items():
         name = f"{year} {major_code}-{major_codes()[major_code].name}"
         print(name)

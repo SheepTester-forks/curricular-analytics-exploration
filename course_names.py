@@ -4,9 +4,8 @@ from parse import major_plans
 course_names = {
     course.course_title.strip("^* "): f"{major_plan.major_code} {college}"
     for major_plan in major_plans(2021).values()
-    for college, plan in major_plan.plans.items()
-    for quarter in plan.quarters
-    for course in quarter
+    for college in major_plan.colleges
+    for course in major_plan.plan(college)
 }
 
 

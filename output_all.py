@@ -18,7 +18,7 @@ for major_code, plan in major_plans(2021).items():
 
     output = MajorOutput(plan)
     csv_to_file(output.output(), f"./files/output/{major_code}/curriculum.csv")
-    for college_code in plan.plans.keys():
+    for college_code in plan.colleges:
         csv_to_file(
             output.output(college_code),
             f"./files/output/{major_code}/{college_code}.csv",

@@ -1,6 +1,5 @@
 from typing import Dict, Set
 from parse import CourseCode, major_plans, prereqs
-from parse_course_name import parse_course_name
 
 flattened = {
     course_code: {
@@ -38,13 +37,8 @@ print(redundancies)
 for major_code, major in major_plans(2021).items():
     need_prereq_removal: Set[CourseCode] = set()
     for course in major.curriculum():
-        parsed = parse_course_name(course.course_title)
-        if parsed is not None:
-            subject, number, has_lab = parsed
-            if (subject, number) in redundancies:
-                need_prereq_removal.add((subject, number))
-            if has_lab is not None and (subject, number + has_lab) in redundancies:
-                need_prereq_removal.add((subject, number + has_lab))
+        if course.course_code:
+            need_prereq_removal.add(course.course_code)
     if need_prereq_removal:
         display = " | ".join(
             f"{subject} {number} <- {', '.join(map( ' '.join, redundancies[subject, number]))}"
