@@ -205,17 +205,14 @@ class ParsedCourse(NamedTuple):
     are merged into the previous spring quarter.
 
     `course_title` has been cleaned up by `clean_course_title`.
-
-    NOTE: `course_title_raw` is the same as `course_title` if a lab course was
-    split in two, so it's not really raw.
     """
 
     course_title: str
-    course_title_raw: str
     course_code: Optional[CourseCode]
     units: float
     for_major: bool
     term: int
+    raw: "RawCourse"
 
 
 class RawCourse(NamedTuple):
@@ -245,7 +242,6 @@ class RawCourse(NamedTuple):
             str(course_code)
             if title_from_code
             else clean_course_title(self.course_title),
-            str(course_code) if title_from_code else self.course_title,
             course_code,
             units or self.units,
             self.type == "DEPARTMENT" or self.overlaps_ge,
@@ -253,6 +249,7 @@ class RawCourse(NamedTuple):
             # request. They tend to be GEs says Arturo, so it shouldn't
             # affect prereqs
             self.term - (self.term + 1) // 4,
+            self,
         )
 
 
