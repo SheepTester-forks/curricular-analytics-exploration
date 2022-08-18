@@ -52,12 +52,13 @@ class Issues:
     multiple_options: List[str] = []
     duplicate_courses: List[str] = []
     missing_ges: List[str] = []
+    wrong_units: List[str] = []
 
 
 def check_plan(name: str, plan: List[ParsedCourse], college: str) -> None:
     course_codes = [course.course_code for course in plan if course.course_code]
     course_titles = {
-        course.course_code: course.course_title_raw
+        course.course_code: course.raw.course_title
         for course in plan
         if course.course_code
     }
@@ -77,6 +78,15 @@ def check_plan(name: str, plan: List[ParsedCourse], college: str) -> None:
             Issues.missing_ges.append(
                 f"[{name}] missing {college_names[college]} GE {code}"
             )
+    for course in plan:
+        # Course title must match to exclude split lab courses
+        if (
+            course.units != course.raw.units
+            and course.course_title == course.raw.course_title
+        ):
+            Issues.wrong_units.append(
+                f"[{name}] “{course.course_title}” should be {course.units} units but is {course.raw.units} units"
+            )
 
 
 for major_code, plans in major_plans(year).items():
@@ -94,6 +104,7 @@ def print_issues(issues: List[str], description: str) -> None:
 
 
 print_issues(Issues.missing_ges, "Missing college GE")
+print_issues(Issues.wrong_units, "Wrong unit numbers")
 print_issues(Issues.duplicate_courses, "Duplicate courses")
 print_issues(
     Issues.multiple_options, "Courses with multiple options listed multiple times"
