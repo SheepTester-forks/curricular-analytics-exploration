@@ -41,7 +41,7 @@ for major_code, major in major_plans(2021).items():
             need_prereq_removal.add(course.course_code)
     if need_prereq_removal:
         display = " | ".join(
-            f"{subject} {number} <- {', '.join(map( ' '.join, redundancies[subject, number]))}"
+            f"{subject} {number} <- {', '.join(map( ' '.join, redundancies[CourseCode(subject, number)]))}"
             for subject, number in need_prereq_removal
         )
         print(f"[{major_code}] {display}")
