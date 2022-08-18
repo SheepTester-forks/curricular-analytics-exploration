@@ -22,7 +22,13 @@ from parse_course_name import clean_course_title, parse_course_name
 
 __all__ = ["prereqs", "major_plans", "major_codes"]
 
-CourseCode = Tuple[str, str]
+
+class CourseCode(NamedTuple):
+    subject: str
+    number: str
+
+    def __str__(self) -> str:
+        return f"{self.subject} {self.number}"
 
 
 def read_csv_from(
@@ -145,8 +151,8 @@ def prereq_rows_to_dict(
         term = TermCode(term)
         if term not in terms:
             terms[term] = {}
-        course: CourseCode = subject, number
-        prereq = Prerequisite((req_subj, req_num), allow_concurrent == "Y")
+        course = CourseCode(subject, number)
+        prereq = Prerequisite(CourseCode(req_subj, req_num), allow_concurrent == "Y")
         if course not in terms[term]:
             terms[term][course] = []
         if req_id == "":
@@ -174,8 +180,12 @@ def prereqs(term: str) -> Dict[CourseCode, List[List[Prerequisite]]]:
         )
         # Fix possible errors in prereqs (#52)
         for term_prereqs in _prereqs.values():
-            term_prereqs["NANO", "102"] = [[Prerequisite(("CHEM", "6C"), False)]]
-            term_prereqs["DOC", "2"] = [[Prerequisite(("DOC", "1"), False)]]
+            term_prereqs[CourseCode("NANO", "102")] = [
+                [Prerequisite(CourseCode("CHEM", "6C"), False)]
+            ]
+            term_prereqs[CourseCode("DOC", "2")] = [
+                [Prerequisite(CourseCode("DOC", "1"), False)]
+            ]
     term = TermCode(term)
     if term not in _prereqs:
         first_term = min(_prereqs.keys())
@@ -193,9 +203,15 @@ class ParsedCourse(NamedTuple):
     `term` is the index of the term from 0 to 11, where 0 is the first fall
     quarter and 12 is the last spring quarter. Summer quarters from the raw plan
     are merged into the previous spring quarter.
+
+    `course_title` has been cleaned up by `clean_course_title`.
+
+    NOTE: `course_title_raw` is the same as `course_title` if a lab course was
+    split in two, so it's not really raw.
     """
 
     course_title: str
+    course_title_raw: str
     course_code: Optional[CourseCode]
     units: float
     for_major: bool
@@ -218,7 +234,7 @@ class RawCourse(NamedTuple):
     def as_parsed(
         self,
         course_code: Optional[CourseCode] = None,
-        course_title: Optional[str] = None,
+        title_from_code: bool = False,
         units: Optional[float] = None,
     ) -> ParsedCourse:
         """
@@ -226,7 +242,10 @@ class RawCourse(NamedTuple):
         code repetition.
         """
         return ParsedCourse(
-            course_title or clean_course_title(self.course_title),
+            str(course_code)
+            if title_from_code
+            else clean_course_title(self.course_title),
+            str(course_code) if title_from_code else self.course_title,
             course_code,
             units or self.units,
             self.type == "DEPARTMENT" or self.overlaps_ge,
@@ -249,10 +268,10 @@ class MajorPlans:
     least_weird_colleges = ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
 
     unit_overrides: Dict[str, Tuple[CourseCode, float]] = {
-        "MATH 11": (("MATH", "11"), 5),
-        "CAT 2": (("CAT", "2"), 6),
-        "CAT 3": (("CAT", "3"), 6),
-        "PHYS 1C": (("PHYS", "1C"), 3),
+        "MATH 11": (CourseCode("MATH", "11"), 5),
+        "CAT 2": (CourseCode("CAT", "2"), 6),
+        "CAT 3": (CourseCode("CAT", "3"), 6),
+        "PHYS 1C": (CourseCode("PHYS", "1C"), 3),
     }
 
     year: int
@@ -291,16 +310,16 @@ class MajorPlans:
                 subject, number, has_lab = parsed
                 courses.append(
                     course.as_parsed(
-                        (subject, number),
-                        course_title=f"{subject} {number}" if has_lab else None,
+                        CourseCode(subject, number),
+                        title_from_code=bool(has_lab),
                         units=3 if has_lab == "L" else 2.5 if has_lab == "X" else None,
                     )
                 )
                 if has_lab:
                     courses.append(
                         course.as_parsed(
-                            (subject, number + has_lab),
-                            course_title=f"{subject} {number}{has_lab}",
+                            CourseCode(subject, number + has_lab),
+                            title_from_code=True,
                             units=3 if has_lab == "L" else 2.5,
                         )
                     )
