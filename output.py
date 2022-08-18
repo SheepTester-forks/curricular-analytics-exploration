@@ -52,8 +52,8 @@ CURRICULUM_COLS = 10
 DEGREE_PLAN_COLS = 11
 
 non_course_prereqs: Dict[str, List[CourseCode]] = {
-    "SOCI- UD METHODOLOGY": [("SOCI", "60")],
-    "TDHD XXX": [("TDTR", "10")],
+    "SOCI- UD METHODOLOGY": [CourseCode("SOCI", "60")],
+    "TDHD XXX": [CourseCode("TDTR", "10")],
 }
 
 
@@ -178,7 +178,7 @@ class OutputCourses:
         requirement. If `show_major` is None or unspecified, all courses will be
         yielded.
         """
-        for course_title, code, units, major_course, term in self.processed_courses:
+        for course_title, _, code, units, major_course, term in self.processed_courses:
             if show_major is not None and major_course != show_major:
                 continue
 
@@ -221,7 +221,7 @@ class OutputCourses:
             yield OutputCourse(
                 course_id,
                 course_title,
-                code or ("", ""),
+                code or CourseCode("", ""),
                 prereq_ids,
                 coreq_ids,
                 units,
@@ -414,7 +414,7 @@ class MajorOutput:
                 # Assumes lab courses were already split, so won't bother
                 # handling has_lab
                 subject, number, _ = parsed
-                output.course_ids[subject, number] = course["id"]
+                output.course_ids[CourseCode(subject, number)] = course["id"]
             if course["id"] + 1 > output.start_id:
                 output.start_id = course["id"] + 1
         return output
