@@ -82,7 +82,7 @@ class MajorUploader(Session):
         for college_code, college_name in college_names.items():
             # Seventh's 2018 plans are messy, so we've been asked to ignore them
             if (
-                college_code not in output.plans.plans
+                college_code not in output.plans.colleges
                 or college_code == "SN"
                 and year < 2020
             ):
@@ -126,7 +126,7 @@ class MajorUploader(Session):
             )
         for college_code, college_name in college_names.items():
             if (
-                college_code not in output.plans.plans
+                college_code not in output.plans.colleges
                 or college_code == "SN"
                 and year < 2020
             ):
@@ -165,7 +165,7 @@ class MajorUploader(Session):
         for college_code, college_name in college_names.items():
             plan_name = f"{major_code}/{college_name}"
             if (
-                college_code not in output.plans.plans
+                college_code not in output.plans.colleges
                 or college_code == "SN"
                 and year < 2020
             ):
