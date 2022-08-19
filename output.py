@@ -178,7 +178,7 @@ class OutputCourses:
         requirement. If `show_major` is None or unspecified, all courses will be
         yielded.
         """
-        for course_title, _, code, units, major_course, term in self.processed_courses:
+        for course_title, code, units, major_course, term, _ in self.processed_courses:
             if show_major is not None and major_course != show_major:
                 continue
 
