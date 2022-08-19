@@ -53,18 +53,15 @@ class Issues:
     duplicate_courses: List[str] = []
     missing_ges: List[str] = []
     wrong_units: List[str] = []
+    miscategorized_courses: List[str] = []
 
 
 def check_plan(name: str, plan: List[ParsedCourse], college: str) -> None:
     course_codes = [course.course_code for course in plan if course.course_code]
-    course_titles = {
-        course.course_code: course.raw.course_title
-        for course in plan
-        if course.course_code
-    }
+    courses = {course.course_code: course for course in plan if course.course_code}
     for i, code in enumerate(course_codes):
         if code in course_codes[0:i]:
-            title = course_titles[code]
+            title = courses[code].raw.course_title
             if any(char in title for char in ["/", "or", "OR", "-"]):
                 Issues.multiple_options.append(
                     f"[{name}] multiple options for {code} “{title}”"
@@ -77,6 +74,10 @@ def check_plan(name: str, plan: List[ParsedCourse], college: str) -> None:
         if code not in course_codes:
             Issues.missing_ges.append(
                 f"[{name}] missing {college_names[college]} GE {code}"
+            )
+        elif courses[code].raw.type != "COLLEGE":
+            Issues.miscategorized_courses.append(
+                f"[{name}] {code} is marked as a department course (it's a college GE)"
             )
     for course in plan:
         # Course title must match to exclude split lab courses
@@ -103,6 +104,10 @@ def print_issues(issues: List[str], description: str) -> None:
     print()
 
 
+print_issues(
+    Issues.miscategorized_courses,
+    "College GE courses marked as major/department courses",
+)
 print_issues(Issues.missing_ges, "Missing college GE")
 print_issues(Issues.wrong_units, "Wrong unit numbers")
 print_issues(Issues.duplicate_courses, "Duplicate courses")
