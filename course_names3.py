@@ -91,7 +91,7 @@ def clean_course_name(name: str) -> str:
     name = re.sub(r" ?\( ?(GE SEE|NOTE|FOR|SEE|REQUIRES|ONLY|OFFERED)[^)]*\)", "", name)
 
     # 9. Remove unnecessary digits at the start of a course name
-    name = re.sub(r"^\d+ ?", "", name)
+    name = re.sub(r"^\d+ ", "", name)
 
     # 10. Replace Elect and elec for Elective
     name = re.sub(r"ELECT?\b", "ELECTIVE", name)
@@ -108,10 +108,10 @@ def clean_course_name(name: str) -> str:
         name = re.sub(r"[()]", "", name)
 
     # 34. Complete incomplete words
-    name = re.sub("TECH\b", "TECHNICAL", name)
-    name = re.sub("REQUIRE\b", "REQUIREMENT", name)
-    name = re.sub("BIO\b", "BIOLOGY", name)
-    name = re.sub("BIOPHYS\b", "BIOPHYSICS", name)
+    name = re.sub(r"TECH\b", "TECHNICAL", name)
+    name = re.sub(r"REQUIRE\b", "REQUIREMENT", name)
+    name = re.sub(r"BIO\b", "BIOLOGY", name)
+    name = re.sub(r"BIOPHYS\b", "BIOPHYSICS", name)
 
     return name
 
@@ -127,6 +127,6 @@ for year in range(2015, 2023):
                     course_titles[title] = 0
                 course_titles[title] += 1
 
-print(f"{len(course_titles)} course names")
 for title in sorted(course_titles.keys()):
     print(f"({course_titles[title]})".rjust(7) + " " + title)
+print(f"{len(course_titles)} course names")
