@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Set
 from college_names import college_names
 from parse import CourseCode, ParsedCourse, major_plans
 
@@ -54,9 +54,12 @@ class Issues:
     missing_ges: List[str] = []
     wrong_units: List[str] = []
     miscategorized_courses: List[str] = []
+    curriculum_deviances: List[str] = []
 
 
-def check_plan(name: str, plan: List[ParsedCourse], college: str) -> None:
+def check_plan(
+    name: str, curriculum: Set[str], plan: List[ParsedCourse], college: str
+) -> None:
     course_codes = [course.course_code for course in plan if course.course_code]
     courses = {course.course_code: course for course in plan if course.course_code}
     for i, code in enumerate(course_codes):
@@ -88,12 +91,27 @@ def check_plan(name: str, plan: List[ParsedCourse], college: str) -> None:
             Issues.wrong_units.append(
                 f"[{name}] “{course.course_title}” should be {course.units} units but is {course.raw.units} units"
             )
+        if course.course_title in curriculum:
+            if not course.for_major:
+                Issues.miscategorized_courses.append(
+                    f"[{name}] Curriculum course “{course.course_title}” marked as GE"
+                )
+        else:
+            if course.for_major:
+                Issues.curriculum_deviances.append(
+                    f"[{name}] “{course.course_title}” differs from curriculum"
+                )
 
 
 for major_code, plans in major_plans(year).items():
+    curriculum = {course.course_title for course in plans.curriculum()}
+
     for college_code in plans.colleges:
         check_plan(
-            f"{major_code} {college_code}", plans.plan(college_code), college_code
+            f"{major_code} {college_code}",
+            curriculum,
+            plans.plan(college_code),
+            college_code,
         )
 
 
@@ -113,4 +131,8 @@ print_issues(Issues.wrong_units, "Wrong unit numbers")
 print_issues(Issues.duplicate_courses, "Duplicate courses")
 print_issues(
     Issues.multiple_options, "Courses with multiple options listed multiple times"
+)
+print_issues(
+    Issues.curriculum_deviances,
+    "Course names marked as for the major not present in other colleges' curricula",
 )
