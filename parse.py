@@ -275,7 +275,7 @@ class MajorPlans:
     department: str
     major_code: str
     colleges: Set[str]
-    _raw_plans: Dict[str, List[RawCourse]]
+    raw_plans: Dict[str, List[RawCourse]]
     _parsed_plans: Dict[str, List[ParsedCourse]]
 
     def __init__(self, year: int, department: str, major_code: str) -> None:
@@ -283,19 +283,19 @@ class MajorPlans:
         self.department = department
         self.major_code = major_code
         self.colleges = set()
-        self._raw_plans = {}
+        self.raw_plans = {}
         self._parsed_plans = {}
 
     def add_raw_course(self, college_code: str, course: RawCourse) -> None:
         if college_code not in self.colleges:
             self.colleges.add(college_code)
-            self._raw_plans[college_code] = []
-        self._raw_plans[college_code].append(course)
+            self.raw_plans[college_code] = []
+        self.raw_plans[college_code].append(course)
 
     def plan(self, college: str) -> List[ParsedCourse]:
         if college not in self._parsed_plans:
             courses: List[ParsedCourse] = []
-            for course in self._raw_plans[college]:
+            for course in self.raw_plans[college]:
                 if course.course_title in MajorPlans.unit_overrides:
                     code, units = MajorPlans.unit_overrides[course.course_title]
                     courses.append(course.as_parsed(code, units=units))
@@ -321,7 +321,6 @@ class MajorPlans:
                         )
                     )
             self._parsed_plans[college] = courses
-            del self._raw_plans[college]
         return self._parsed_plans[college]
 
     def curriculum(self, college: Optional[str] = None) -> List[ParsedCourse]:
