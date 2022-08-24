@@ -60,12 +60,16 @@ def similarity(a: str, b: str) -> float:
 
 
 def diff(old: List[RawCourse], new: List[RawCourse]) -> DiffResults:
-    old_only = [course for course in old if course not in new]
-    new_only = [course for course in new if course not in old]
+    old_only = old.copy()
+    new_only = new.copy()
+    for course in old:
+        if course in new_only:
+            old_only.remove(course)
+            new_only.remove(course)
     changed: List[Tuple[RawCourse, RawCourse]] = []
 
     # Prioritize matching courses with the same course title
-    for course in old_only[:]:
+    for course in old_only.copy():
         for other in new_only:
             if course.course_title.lower() == other.course_title.lower():
                 old_only.remove(course)
@@ -73,7 +77,7 @@ def diff(old: List[RawCourse], new: List[RawCourse]) -> DiffResults:
                 changed.append((course, other))
                 break
     # Match courses based on similarity
-    for course in old_only[:]:
+    for course in old_only.copy():
         max_similarity = 0
         most_similar: Optional[RawCourse] = None
         for other in new_only:
@@ -97,12 +101,12 @@ def diff(old: List[RawCourse], new: List[RawCourse]) -> DiffResults:
 if __name__ == "__main__":
     # https://stackoverflow.com/questions/287871/how-do-i-print-colored-text-to-the-terminal#comment113206663_21786287
     import os
+    import sys
 
     if os.name == "nt":
         os.system("color")
 
-    major = "BE25"
-    college = "RE"
+    _, major, college = sys.argv
     for year in range(2015, 2022):
         differences = diff(
             major_plans(year)[major].raw_plans[college],
