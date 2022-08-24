@@ -10,13 +10,19 @@ class Colors:
     RED = "\033[31m"
     GREEN = "\033[32m"
     YELLOW = "\033[33m"
+    CYAN = "\033[36m"
+
+
+def display_term(term: int) -> str:
+    return f"Y{term // 4 + 1} {['FA', 'WI', 'SP', 'SU'][term % 4]}"
 
 
 class DiffResults(NamedTuple):
     added: List[RawCourse]
     removed: List[RawCourse]
     changed: List[Tuple[RawCourse, RawCourse]]
-    unit_change: float
+    old_units: float
+    new_units: float
 
     def print(self) -> None:
         for course in self.removed:
@@ -35,7 +41,7 @@ class DiffResults(NamedTuple):
                     else ""
                 )
                 + (
-                    f" · term {Colors.YELLOW}{old.term + 1} → {new.term + 1}{Colors.RESET}"
+                    f" · term {Colors.YELLOW}{display_term(old.term)} → {display_term(new.term)}{Colors.RESET}"
                     if old.term != new.term
                     else ""
                 )
@@ -45,7 +51,7 @@ class DiffResults(NamedTuple):
                     else ""
                 )
                 + (
-                    f" · overlaps GE? {Colors.YELLOW}{old.overlaps_ge} → {new.overlaps_ge}{Colors.RESET}"
+                    f" · {Colors.YELLOW}{'now' if new.overlaps_ge else 'no longer'}{Colors.RESET} overlaps GE"
                     if old.overlaps_ge != new.overlaps_ge
                     else ""
                 )
@@ -85,7 +91,7 @@ def diff(old: List[RawCourse], new: List[RawCourse]) -> DiffResults:
             if sim > max_similarity:
                 max_similarity = sim
                 most_similar = other
-        if most_similar:
+        if most_similar and max_similarity >= 0.5:
             old_only.remove(course)
             new_only.remove(most_similar)
             changed.append((course, most_similar))
@@ -94,7 +100,8 @@ def diff(old: List[RawCourse], new: List[RawCourse]) -> DiffResults:
         new_only,
         old_only,
         changed,
-        sum(course.units for course in new) - sum(course.units for course in old),
+        sum(course.units for course in old),
+        sum(course.units for course in new),
     )
 
 
@@ -108,6 +115,13 @@ if __name__ == "__main__":
 
     _, major, college = sys.argv
     for year in range(2015, 2022):
+        if (
+            major not in major_plans(year)
+            or major not in major_plans(year + 1)
+            or college not in major_plans(year)[major].colleges
+            or college not in major_plans(year + 1)[major].colleges
+        ):
+            continue
         differences = diff(
             major_plans(year)[major].raw_plans[college],
             major_plans(year + 1)[major].raw_plans[college],
@@ -116,8 +130,8 @@ if __name__ == "__main__":
         print(
             f"{Colors.BOLD}{year + 1} changes{Colors.RESET}"
             + (
-                f" ({differences.unit_change:+g} units)"
-                if differences.unit_change != 0
+                f" {Colors.CYAN}({differences.new_units - differences.old_units:+g} → {differences.new_units:g} units){Colors.RESET}"
+                if differences.old_units != differences.new_units
                 else ""
             )
         )
