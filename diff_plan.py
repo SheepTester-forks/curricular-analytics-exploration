@@ -1,7 +1,12 @@
 from difflib import SequenceMatcher
-from typing import List, NamedTuple, Optional, Tuple
+import json
+from sys import argv, stdout
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple
+from college_names import college_names
+from curricula_index import urls
+from departments import departments
 
-from parse import RawCourse, major_plans
+from parse import RawCourse, major_codes, major_plans
 
 
 class Colors:
@@ -59,6 +64,36 @@ class DiffResults(NamedTuple):
         for course in self.added:
             print(f"{Colors.GREEN}+ {course.course_title}{Colors.RESET}")
 
+    def to_json(self):
+        changes: List[Any] = []
+        for course in self.removed:
+            changes.append({"type": "removed", "course": course.course_title})
+        for old, new in self.changed:
+            course_changes = {}
+            if old.course_title != new.course_title:
+                course_changes["title"] = [old.course_title, new.course_title]
+            if old.units != new.units:
+                course_changes["units"] = [old.units, new.units]
+            if old.term != new.term:
+                course_changes["term"] = [old.term, new.term]
+            if old.type != new.type:
+                course_changes["type"] = [old.type, new.type]
+            if old.overlaps_ge != new.overlaps_ge:
+                course_changes["overlap"] = [old.overlaps_ge, new.overlaps_ge]
+            changes.append(
+                {
+                    "type": "changed",
+                    "course": new.course_title,
+                    "changes": course_changes,
+                }
+            )
+        for course in self.added:
+            changes.append({"type": "added", "course": course.course_title})
+        return {
+            "changes": changes,
+            "units": [self.old_units, self.new_units],
+        }
+
 
 def similarity(a: str, b: str) -> float:
     # https://stackoverflow.com/a/17388505
@@ -105,15 +140,7 @@ def diff(old: List[RawCourse], new: List[RawCourse]) -> DiffResults:
     )
 
 
-if __name__ == "__main__":
-    # https://stackoverflow.com/questions/287871/how-do-i-print-colored-text-to-the-terminal#comment113206663_21786287
-    import os
-    import sys
-
-    if os.name == "nt":
-        os.system("color")
-
-    _, major, college = sys.argv
+def print_major_changes(major: str, college: str) -> None:
     for year in range(2015, 2022):
         if (
             major not in major_plans(year)
@@ -137,5 +164,57 @@ if __name__ == "__main__":
         )
         differences.print()
 
-# do it for every year
-# just print the added and removed courses
+
+def diff_major(major: str, college: str):
+    years: List[Any] = []
+    for year in range(2015, 2022):
+        if (
+            major not in major_plans(year)
+            or major not in major_plans(year + 1)
+            or college not in major_plans(year)[major].colleges
+            or college not in major_plans(year + 1)[major].colleges
+        ):
+            continue
+        differences = diff(
+            major_plans(year)[major].raw_plans[college],
+            major_plans(year + 1)[major].raw_plans[college],
+        )
+        years.append(
+            {
+                **differences.to_json(),
+                "year": [year, year + 1],
+                "url": [urls[year, major], urls[year + 1, major]],
+            }
+        )
+    return years
+
+
+def diff_all() -> None:
+    majors_by_dept: Dict[str, Dict[str, Any]] = {}
+    for year in range(2015, 2023):
+        for major_code in major_plans(year).keys():
+            major = f"{major_code} {major_codes()[major_code].name}"
+            department = departments[major_codes()[major_code].department]
+            if department not in majors_by_dept:
+                majors_by_dept[department] = {}
+            if major not in majors_by_dept[department]:
+                majors_by_dept[department][major] = {}
+            for college_code, college_name in college_names.items():
+                output = diff_major(major_code, college_code)
+                if output:
+                    majors_by_dept[department][major][college_name] = output
+    json.dump(majors_by_dept, stdout)
+
+
+if __name__ == "__main__":
+    # https://stackoverflow.com/questions/287871/how-do-i-print-colored-text-to-the-terminal#comment113206663_21786287
+    import os
+
+    # Enable ANSI colours on Windows
+    if os.name == "nt":
+        os.system("color")
+
+    if len(argv) < 3:
+        diff_all()
+    else:
+        print_major_changes(*argv[1:3])
