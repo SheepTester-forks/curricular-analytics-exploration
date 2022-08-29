@@ -54,7 +54,8 @@ const collegeNames = [
   'Seventh'
 ]
 
-const byLocale = (a: string, b: string) => a.localeCompare(b)
+const byKeyLocale = <T,>([a]: [string, T], [b]: [string, T]) =>
+  a.localeCompare(b)
 
 type TableProps = {
   diffs: Diffs
@@ -71,55 +72,77 @@ const Table = memo(({ diffs, onSelect }: TableProps) => {
           <th scope='row'>{name}</th>
         ))}
       </tr>
-      {Object.entries(diffs).flatMap(([school, departments]) =>
-        Object.entries(departments).flatMap(([department, majors], j) =>
-          Object.entries(majors).flatMap(([major, colleges], k) => {
-            // https://stackoverflow.com/a/36665251
-            const [code, ...name] = major.split(' ')
-            return (
-              <tr>
-                {j === 0 && k === 0 && (
-                  <th
-                    scope='col'
-                    rowSpan={Object.values(departments)
-                      .map(majors => Object.keys(majors).length)
-                      .reduce((a, b) => a + b, 0)}
-                  >
-                    {school}
-                  </th>
-                )}
-                {k === 0 && (
-                  <th scope='col' rowSpan={Object.keys(majors).length}>
-                    {department}
-                  </th>
-                )}
-                <td>
-                  <abbr title={name.join(' ') || undefined}>{code}</abbr>
-                </td>
-                {collegeNames.map(college => (
-                  <td>
-                    {college in colleges && (
-                      <button
-                        onClick={() =>
-                          onSelect({
-                            name: `${major} / ${college}`,
-                            diff: colleges[college]
-                          })
-                        }
-                      >
-                        View
-                      </button>
-                    )}
-                  </td>
-                ))}
-              </tr>
+      {Object.entries(diffs)
+        .sort(byKeyLocale)
+        .flatMap(([school, departments]) =>
+          Object.entries(departments)
+            .sort(byKeyLocale)
+            .flatMap(([department, majors], j) =>
+              Object.entries(majors)
+                .sort(byKeyLocale)
+                .flatMap(([major, colleges], k) => {
+                  // https://stackoverflow.com/a/36665251
+                  const [code, ...name] = major.split(' ')
+                  return (
+                    <tr>
+                      {j === 0 && k === 0 && (
+                        <th
+                          scope='col'
+                          rowSpan={Object.values(departments)
+                            .map(majors => Object.keys(majors).length)
+                            .reduce((a, b) => a + b, 0)}
+                        >
+                          {school}
+                        </th>
+                      )}
+                      {k === 0 && (
+                        <th scope='col' rowSpan={Object.keys(majors).length}>
+                          {department}
+                        </th>
+                      )}
+                      <td>
+                        <abbr title={name.join(' ') || undefined}>{code}</abbr>
+                      </td>
+                      {collegeNames.map(college => (
+                        <td>
+                          {college in colleges && (
+                            <button
+                              onClick={() =>
+                                onSelect({
+                                  name: `${major} / ${college}`,
+                                  diff: colleges[college]
+                                })
+                              }
+                            >
+                              View
+                            </button>
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  )
+                })
             )
-          })
-        )
-      )}
+        )}
     </table>
   )
 })
+
+type ChangeProps = {
+  before: string | number
+  after: string | number
+}
+function Change ({ before, after }: ChangeProps) {
+  return (
+    <span class='change'>
+      {before} <span class='arrow'>→</span> {after}
+    </span>
+  )
+}
+
+function displayTerm (term: number) {
+  return `Y${(term / 4) | 0} ${['FA', 'WI', 'SP', 'SU'][term % 4]}`
+}
 
 type DiffProps = {
   name: string
@@ -134,11 +157,82 @@ function Diff ({ name, diff }: DiffProps) {
           Starts in <a href={diff[0].url[0]}>{diff[0].year[0]}</a>.
         </em>
       </p>
-      {diff.map(({ year: [, year], url: [, url] }) => (
+      {diff.map(({ year: [, year], url: [, url], units, changes }) => (
         <>
           <h2>
             Changes in <a href={url}>{year}</a>
+            {units[0] !== units[1] && (
+              <>
+                {' '}
+                <span class='units'>
+                  ({<Change before={units[0]} after={units[1]} />},{' '}
+                  {units[1] > units[0] && '+'}
+                  {units[1] - units[0]} units)
+                </span>
+              </>
+            )}
           </h2>
+          <ul class='changes'>
+            {changes.length === 0 && (
+              <li>
+                <em>No changes.</em>
+              </li>
+            )}
+            {changes.map(change => (
+              <li class={`change-item ${change.type}`}>
+                {change.type === 'changed' && change.changes.title ? (
+                  <Change
+                    before={change.changes.title[0]}
+                    after={change.changes.title[1]}
+                  />
+                ) : (
+                  change.course
+                )}
+                {change.type === 'changed' && change.changes.units && (
+                  <>
+                    {' '}
+                    ·{' '}
+                    <Change
+                      before={change.changes.units[0]}
+                      after={change.changes.units[1]}
+                    />{' '}
+                    units
+                  </>
+                )}
+                {change.type === 'changed' && change.changes.term && (
+                  <>
+                    {' '}
+                    ·{' '}
+                    <Change
+                      before={displayTerm(change.changes.term[0])}
+                      after={displayTerm(change.changes.term[1])}
+                    />
+                  </>
+                )}
+                {change.type === 'changed' && change.changes.type && (
+                  <>
+                    {' '}
+                    ·{' '}
+                    <Change
+                      before={change.changes.type[0].toLowerCase()}
+                      after={change.changes.type[1].toLowerCase()}
+                    />
+                    -type course
+                  </>
+                )}
+                {change.type === 'changed' && change.changes.overlap && (
+                  <>
+                    {' '}
+                    ·{' '}
+                    <span class='change'>
+                      {change.changes.overlap[1] ? 'now' : 'no longer'}
+                    </span>{' '}
+                    overlaps GE
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
         </>
       ))}
     </div>
