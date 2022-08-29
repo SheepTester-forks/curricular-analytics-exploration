@@ -4,7 +4,7 @@ from sys import argv, stdout
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 from college_names import college_names
 from curricula_index import urls
-from departments import departments
+from departments import departments, dept_schools
 
 from parse import RawCourse, major_codes, major_plans
 
@@ -190,19 +190,22 @@ def diff_major(major: str, college: str):
 
 
 def diff_all() -> None:
-    majors_by_dept: Dict[str, Dict[str, Any]] = {}
+    majors_by_dept: Dict[str, Dict[str, Dict[str, Any]]] = {}
     for year in range(2015, 2023):
         for major_code in major_plans(year).keys():
             major = f"{major_code} {major_codes()[major_code].name}"
             department = departments[major_codes()[major_code].department]
-            if department not in majors_by_dept:
-                majors_by_dept[department] = {}
-            if major not in majors_by_dept[department]:
-                majors_by_dept[department][major] = {}
+            school = dept_schools.get(major_codes()[major_code].department) or ""
+            if school not in majors_by_dept:
+                majors_by_dept[school] = {}
+            if department not in majors_by_dept[school]:
+                majors_by_dept[school][department] = {}
+            if major not in majors_by_dept[school][department]:
+                majors_by_dept[school][department][major] = {}
             for college_code, college_name in college_names.items():
                 output = diff_major(major_code, college_code)
                 if output:
-                    majors_by_dept[department][major][college_name] = output
+                    majors_by_dept[school][department][major][college_name] = output
     json.dump(majors_by_dept, stdout)
 
 

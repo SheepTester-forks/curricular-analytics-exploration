@@ -8,7 +8,47 @@
     <meta name="description" content="No description yet." />
 
     <style>
-      /* TEMP */
+      html,
+      body,
+      #root {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+      }
+      #root {
+        display: flex;
+      }
+      .side {
+        flex: 1 0 0;
+        width: 50%;
+        overflow: auto;
+      }
+      tr:first-child {
+        position: sticky;
+        top: 0;
+        background-color: white;
+      }
+      tr:nth-child(2n) td:not([rowspan]) {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      th {
+        vertical-align: top;
+        text-align: left;
+      }
+      th[scope='row'] {
+        border-bottom: 1px solid currentColor;
+      }
+      button:not(:disabled) {
+        cursor: pointer;
+      }
+      .diff {
+        background-color: #333;
+        color: white;
+        padding: 20px;
+        font-family: sans-serif;
+        color-scheme: dark;
+      }
     </style>
   </head>
   <body>
