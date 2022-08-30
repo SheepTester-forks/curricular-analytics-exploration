@@ -64,7 +64,7 @@ class DiffResults(NamedTuple):
         for course in self.added:
             print(f"{Colors.GREEN}+ {course.course_title}{Colors.RESET}")
 
-    def to_json(self):
+    def to_json(self) -> Dict[str, Any]:
         changes: Dict[str, List[Any]] = {"changes": []}
         for course in self.removed:
             changes["changes"].append(
@@ -198,18 +198,18 @@ def diff_all() -> None:
             differences = diff(
                 major_plans(year)[major].raw_plans[college],
                 major_plans(year + 1)[major].raw_plans[college],
-            )
-            years.append(
-                {
-                    **differences.to_json(),
-                    "year": year + 1,
-                    "url": urls[year + 1, major],
-                    "complexity": [
-                        complexities[year, major, college],
-                        complexities[year + 1, major, college],
-                    ],
-                }
-            )
+            ).to_json()
+            differences["year"] = year + 1
+            differences["url"] = urls[year + 1, major]
+            if (
+                complexities[year, major, college]
+                != complexities[year + 1, major, college]
+            ):
+                differences["complexity"] = [
+                    complexities[year, major, college],
+                    complexities[year + 1, major, college],
+                ]
+            years.append(differences)
         return years
 
     majors_by_dept: Dict[str, Dict[str, Dict[str, Any]]] = {}
@@ -231,8 +231,8 @@ def diff_all() -> None:
                     majors_by_dept[school][department][major][college_name] = {
                         "changes": output,
                         "first": {
-                            "year": first_year,
-                            "url": urls[first_year, major_code],
+                            "year": first_year - 1,
+                            "url": urls[first_year - 1, major_code],
                         },
                     }
     json.dump(majors_by_dept, stdout)

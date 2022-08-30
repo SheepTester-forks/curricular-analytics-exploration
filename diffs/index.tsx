@@ -32,7 +32,7 @@ type YearDiff = {
   units?: BeforeAfter<number>
   year: number
   url: string
-  complexity: BeforeAfter<number>
+  complexity?: BeforeAfter<number>
 }
 
 type PlanDiffs = {
@@ -79,7 +79,7 @@ const getMetric = {
   maxComplexityChange (diff: PlanDiffs) {
     return Math.max(
       ...diff.changes.map(year =>
-        Math.abs(year.complexity[1] - year.complexity[0])
+        year.complexity ? Math.abs(year.complexity[1] - year.complexity[0]) : 0
       )
     )
   },
@@ -298,19 +298,34 @@ function Diff ({ name, diff }: DiffProps) {
           Starts in <a href={diff.first.url}>{diff.first.year}</a>.
         </em>
       </p>
-      {diff.changes.map(({ year, url, units, changes }) => {
+      {diff.changes.map(({ year, url, units, complexity, changes }) => {
         const majorChanges = changes.filter(isMajorChange)
         const minorChanges = changes.filter(change => !isMajorChange(change))
         return (
           <>
             <h2>
               Changes in <a href={url}>{year}</a>
-              {units && (
+              {(units || complexity) && (
                 <>
                   {' '}
-                  <span class='units'>
-                    ({<Change change={units} />}, {units[1] > units[0] && '+'}
-                    {units[1] - units[0]} units)
+                  <span class={`units ${units ? '' : 'complexity'}`}>
+                    (
+                    {units && (
+                      <>
+                        {<Change change={units} />},{' '}
+                        {units[1] > units[0] && '+'}
+                        {units[1] - units[0]} units
+                      </>
+                    )}
+                    {units && complexity && '; '}
+                    {complexity && (
+                      <span class='complexity'>
+                        {<Change change={complexity} />},{' '}
+                        {complexity[1] > complexity[0] && '+'}
+                        {complexity[1] - complexity[0]} complexity
+                      </span>
+                    )}
+                    )
                   </span>
                 </>
               )}
