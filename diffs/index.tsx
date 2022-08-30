@@ -30,21 +30,18 @@ type Change =
 type YearDiff = {
   changes: Change[]
   units?: BeforeAfter<number>
-  year: BeforeAfter<number>
-  url: BeforeAfter<string>
+  year: number
+  url: string
+  complexity: BeforeAfter<number>
 }
 
 type PlanDiffs = {
   changes: YearDiff[]
-  maxUnitChange: number
-  maxComplexityChange: number
-  numUnitChanges: number
+  first: {
+    year: number
+    url: string
+  }
 }
-const metrics = [
-  'maxUnitChange',
-  'maxComplexityChange',
-  'numUnitChanges'
-] as const
 
 type Diffs = {
   [school: string]: {
@@ -56,7 +53,7 @@ type Diffs = {
   }
 }
 
-type Diff = { name: string; diff: YearDiff[] }
+type Diff = { name: string; diff: PlanDiffs }
 
 const collegeNames = [
   'Revelle',
@@ -71,31 +68,46 @@ const collegeNames = [
 const byKeyLocale = <T,>([a]: [string, T], [b]: [string, T]) =>
   a.localeCompare(b)
 
+const getMetric = {
+  maxUnitChange (diff: PlanDiffs) {
+    return Math.max(
+      ...diff.changes.map(year =>
+        year.units ? Math.abs(year.units[1] - year.units[0]) : 0
+      )
+    )
+  },
+  maxComplexityChange (diff: PlanDiffs) {
+    return Math.max(
+      ...diff.changes.map(year =>
+        Math.abs(year.complexity[1] - year.complexity[0])
+      )
+    )
+  },
+  numUnitChanges (diff: PlanDiffs) {
+    return diff.changes.filter(year => year.units).length
+  }
+}
+
 type TableProps = {
   diffs: Diffs
   selected?: string
   onSelect: (diff: Diff) => void
 }
 function Table ({ diffs, selected, onSelect }: TableProps) {
-  const maxMetrics = {
-    maxUnitChange: 0,
-    maxComplexityChange: 0,
-    numUnitChanges: 0
-  }
+  const [metric, setMetric] = useState<keyof typeof getMetric>('maxUnitChange')
+  let max = 0
   for (const departments of Object.values(diffs)) {
     for (const majors of Object.values(departments)) {
       for (const plans of Object.values(majors)) {
         for (const diffs of Object.values(plans)) {
-          for (const metric of metrics) {
-            if (diffs[metric] > maxMetrics[metric]) {
-              maxMetrics[metric] = diffs[metric]
-            }
+          const value = getMetric[metric](diffs)
+          if (value > max) {
+            max = value
           }
         }
       }
     }
   }
-  const [metric, setMetric] = useState<typeof metrics[number]>('maxUnitChange')
   return (
     <>
       <table>
@@ -146,8 +158,7 @@ function Table ({ diffs, selected, onSelect }: TableProps) {
                               backgroundColor:
                                 college in colleges
                                   ? `rgba(0, 0, 255, ${
-                                      colleges[college][metric] /
-                                      maxMetrics[metric]
+                                      getMetric[metric](colleges[college]) / max
                                     })`
                                   : null
                             }}
@@ -158,7 +169,7 @@ function Table ({ diffs, selected, onSelect }: TableProps) {
                                 onClick={() =>
                                   onSelect({
                                     name: `${major} / ${college}`,
-                                    diff: colleges[college].changes
+                                    diff: colleges[college]
                                   })
                                 }
                               >
@@ -276,7 +287,7 @@ const isMajorChange = (change: Change) =>
 
 type DiffProps = {
   name: string
-  diff: YearDiff[]
+  diff: PlanDiffs
 }
 function Diff ({ name, diff }: DiffProps) {
   return (
@@ -284,10 +295,10 @@ function Diff ({ name, diff }: DiffProps) {
       <h1>{name}</h1>
       <p>
         <em>
-          Starts in <a href={diff[0].url[0]}>{diff[0].year[0]}</a>.
+          Starts in <a href={diff.first.url}>{diff.first.year}</a>.
         </em>
       </p>
-      {diff.map(({ year: [, year], url: [, url], units, changes }) => {
+      {diff.changes.map(({ year, url, units, changes }) => {
         const majorChanges = changes.filter(isMajorChange)
         const minorChanges = changes.filter(change => !isMajorChange(change))
         return (

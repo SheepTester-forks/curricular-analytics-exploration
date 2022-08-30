@@ -178,44 +178,39 @@ def print_major_changes(major: str, college: str) -> None:
         differences.print()
 
 
-def diff_major(major: str, college: str):
-    years: List[Any] = []
-    for year in range(2015, 2022):
-        if (
-            major not in major_plans(year)
-            or major not in major_plans(year + 1)
-            or college not in major_plans(year)[major].colleges
-            or college not in major_plans(year + 1)[major].colleges
-        ):
-            continue
-        differences = diff(
-            major_plans(year)[major].raw_plans[college],
-            major_plans(year + 1)[major].raw_plans[college],
-        )
-        years.append(
-            {
-                **differences.to_json(),
-                "year": [year, year + 1],
-                "url": [urls[year, major], urls[year + 1, major]],
-            }
-        )
-    return years
-
-
 def diff_all() -> None:
-    metrics: Dict[Tuple[str, str], Dict[str, float]] = {}
-    for (
-        major,
-        college,
-        max_unit_change,
-        max_complexity_change,
-        num_unit_changes,
-    ) in read_csv_from("./files/changes.csv", "julia PlanChanges.jl")[1:]:
-        metrics[major, college] = {
-            "maxUnitChange": float(max_unit_change),
-            "maxComplexityChange": float(max_complexity_change),
-            "numUnitChanges": int(num_unit_changes),
-        }
+    complexities: Dict[Tuple[int, str, str], float] = {}
+    for (year, major, college, complexity, *_,) in read_csv_from(
+        "./files/metrics_fa12.csv", "julia Metrics.jl"
+    )[1:]:
+        complexities[int(year), major, college] = float(complexity)
+
+    def diff_major(major: str, college: str):
+        years: List[Any] = []
+        for year in range(2015, 2022):
+            if (
+                major not in major_plans(year)
+                or major not in major_plans(year + 1)
+                or college not in major_plans(year)[major].colleges
+                or college not in major_plans(year + 1)[major].colleges
+            ):
+                continue
+            differences = diff(
+                major_plans(year)[major].raw_plans[college],
+                major_plans(year + 1)[major].raw_plans[college],
+            )
+            years.append(
+                {
+                    **differences.to_json(),
+                    "year": year + 1,
+                    "url": urls[year + 1, major],
+                    "complexity": [
+                        complexities[year, major, college],
+                        complexities[year + 1, major, college],
+                    ],
+                }
+            )
+        return years
 
     majors_by_dept: Dict[str, Dict[str, Dict[str, Any]]] = {}
     for year in range(2015, 2023):
@@ -232,9 +227,13 @@ def diff_all() -> None:
             for college_code, college_name in college_names.items():
                 output = diff_major(major_code, college_code)
                 if output:
+                    first_year: int = output[0]["year"]
                     majors_by_dept[school][department][major][college_name] = {
                         "changes": output,
-                        **metrics[major_code, college_code],
+                        "first": {
+                            "year": first_year,
+                            "url": urls[first_year, major_code],
+                        },
                     }
     json.dump(majors_by_dept, stdout)
 
