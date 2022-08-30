@@ -4,7 +4,7 @@
 /// <reference lib="deno.ns" />
 
 import { render } from 'https://esm.sh/preact@10.10.6'
-import { memo, useState } from 'https://esm.sh/preact@10.10.6/compat'
+import { useState } from 'https://esm.sh/preact@10.10.6/hooks'
 
 type BeforeAfter<T> = [T, T]
 
@@ -12,6 +12,8 @@ type Change =
   | {
       type: 'removed' | 'added'
       course: string
+      units: number
+      term: number
     }
   | {
       type: 'changed'
@@ -27,7 +29,7 @@ type Change =
 
 type YearDiff = {
   changes: Change[]
-  units: BeforeAfter<number>
+  units?: BeforeAfter<number>
   year: BeforeAfter<number>
   url: BeforeAfter<string>
 }
@@ -194,21 +196,83 @@ function Table ({ diffs, selected, onSelect }: TableProps) {
   )
 }
 
-type ChangeProps = {
-  before: string | number
-  after: string | number
+type ChangeProps<T> = {
+  change: BeforeAfter<T>
+  map?: (value: T) => string
 }
-function Change ({ before, after }: ChangeProps) {
+function Change<T extends string | number> ({
+  change: [before, after],
+  map = String
+}: ChangeProps<T>) {
   return (
     <span class='change'>
-      {before} <span class='arrow'>→</span> {after}
+      {map(before)} <span class='arrow'>→</span> {map(after)}
     </span>
   )
 }
 
 function displayTerm (term: number) {
-  return `Y${(term / 4) | 0} ${['FA', 'WI', 'SP', 'SU'][term % 4]}`
+  return `Y${Math.floor(term / 4) + 1} ${['FA', 'WI', 'SP', 'SU'][term % 4]}`
 }
+
+type ChangeItemProps = {
+  change: Change
+}
+function ChangeItem ({ change }: ChangeItemProps) {
+  return (
+    <li class={`change-item ${change.type}`}>
+      {change.type === 'changed' && change.changes.title ? (
+        <Change change={change.changes.title} />
+      ) : (
+        change.course
+      )}
+      {change.type !== 'changed' && (
+        <>
+          {' '}
+          <span class='info'>
+            ({displayTerm(change.term)} · {change.units} units)
+          </span>
+        </>
+      )}
+      {change.type === 'changed' && change.changes.units && (
+        <>
+          {' '}
+          · <Change change={change.changes.units} /> units
+        </>
+      )}
+      {change.type === 'changed' && change.changes.term && (
+        <>
+          {' '}
+          · <Change change={change.changes.term} map={displayTerm} />
+        </>
+      )}
+      {change.type === 'changed' && change.changes.type && (
+        <>
+          {' '}
+          ·{' '}
+          <Change
+            change={change.changes.type}
+            map={type => type.toLowerCase()}
+          />
+          -type course
+        </>
+      )}
+      {change.type === 'changed' && change.changes.overlap && (
+        <>
+          {' '}
+          ·{' '}
+          <span class='change'>
+            {change.changes.overlap[1] ? 'now' : 'no longer'}
+          </span>{' '}
+          overlaps GE
+        </>
+      )}
+    </li>
+  )
+}
+
+const isMajorChange = (change: Change) =>
+  change.type !== 'changed' || change.changes.units !== undefined
 
 type DiffProps = {
   name: string
@@ -223,84 +287,48 @@ function Diff ({ name, diff }: DiffProps) {
           Starts in <a href={diff[0].url[0]}>{diff[0].year[0]}</a>.
         </em>
       </p>
-      {diff.map(({ year: [, year], url: [, url], units, changes }) => (
-        <>
-          <h2>
-            Changes in <a href={url}>{year}</a>
-            {units[0] !== units[1] && (
-              <>
-                {' '}
-                <span class='units'>
-                  ({<Change before={units[0]} after={units[1]} />},{' '}
-                  {units[1] > units[0] && '+'}
-                  {units[1] - units[0]} units)
-                </span>
-              </>
-            )}
-          </h2>
-          <ul class='changes'>
+      {diff.map(({ year: [, year], url: [, url], units, changes }) => {
+        const majorChanges = changes.filter(isMajorChange)
+        const minorChanges = changes.filter(change => !isMajorChange(change))
+        return (
+          <>
+            <h2>
+              Changes in <a href={url}>{year}</a>
+              {units && (
+                <>
+                  {' '}
+                  <span class='units'>
+                    ({<Change change={units} />}, {units[1] > units[0] && '+'}
+                    {units[1] - units[0]} units)
+                  </span>
+                </>
+              )}
+            </h2>
             {changes.length === 0 && (
-              <li>
+              <p class='changes'>
                 <em>No changes.</em>
-              </li>
+              </p>
             )}
-            {changes.map(change => (
-              <li class={`change-item ${change.type}`}>
-                {change.type === 'changed' && change.changes.title ? (
-                  <Change
-                    before={change.changes.title[0]}
-                    after={change.changes.title[1]}
-                  />
-                ) : (
-                  change.course
-                )}
-                {change.type === 'changed' && change.changes.units && (
-                  <>
-                    {' '}
-                    ·{' '}
-                    <Change
-                      before={change.changes.units[0]}
-                      after={change.changes.units[1]}
-                    />{' '}
-                    units
-                  </>
-                )}
-                {change.type === 'changed' && change.changes.term && (
-                  <>
-                    {' '}
-                    ·{' '}
-                    <Change
-                      before={displayTerm(change.changes.term[0])}
-                      after={displayTerm(change.changes.term[1])}
-                    />
-                  </>
-                )}
-                {change.type === 'changed' && change.changes.type && (
-                  <>
-                    {' '}
-                    ·{' '}
-                    <Change
-                      before={change.changes.type[0].toLowerCase()}
-                      after={change.changes.type[1].toLowerCase()}
-                    />
-                    -type course
-                  </>
-                )}
-                {change.type === 'changed' && change.changes.overlap && (
-                  <>
-                    {' '}
-                    ·{' '}
-                    <span class='change'>
-                      {change.changes.overlap[1] ? 'now' : 'no longer'}
-                    </span>{' '}
-                    overlaps GE
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
-        </>
-      ))}
+            {majorChanges.length > 0 && (
+              <ul class='changes'>
+                {majorChanges.map(change => (
+                  <ChangeItem change={change} />
+                ))}
+              </ul>
+            )}
+            {minorChanges.length > 0 && (
+              <details>
+                <summary>View minor changes</summary>
+                <ul class='changes'>
+                  {minorChanges.map(change => (
+                    <ChangeItem change={change} />
+                  ))}
+                </ul>
+              </details>
+            )}
+          </>
+        )
+      })}
     </div>
   )
 }

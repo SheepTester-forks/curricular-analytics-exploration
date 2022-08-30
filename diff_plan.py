@@ -65,9 +65,16 @@ class DiffResults(NamedTuple):
             print(f"{Colors.GREEN}+ {course.course_title}{Colors.RESET}")
 
     def to_json(self):
-        changes: List[Any] = []
+        changes: Dict[str, List[Any]] = {"changes": []}
         for course in self.removed:
-            changes.append({"type": "removed", "course": course.course_title})
+            changes["changes"].append(
+                {
+                    "type": "removed",
+                    "course": course.course_title,
+                    "units": course.units,
+                    "term": course.term,
+                }
+            )
         for old, new in self.changed:
             course_changes = {}
             if old.course_title != new.course_title:
@@ -80,7 +87,7 @@ class DiffResults(NamedTuple):
                 course_changes["type"] = [old.type, new.type]
             if old.overlaps_ge != new.overlaps_ge:
                 course_changes["overlap"] = [old.overlaps_ge, new.overlaps_ge]
-            changes.append(
+            changes["changes"].append(
                 {
                     "type": "changed",
                     "course": new.course_title,
@@ -88,11 +95,17 @@ class DiffResults(NamedTuple):
                 }
             )
         for course in self.added:
-            changes.append({"type": "added", "course": course.course_title})
-        return {
-            "changes": changes,
-            "units": [self.old_units, self.new_units],
-        }
+            changes["changes"].append(
+                {
+                    "type": "added",
+                    "course": course.course_title,
+                    "units": course.units,
+                    "term": course.term,
+                }
+            )
+        if self.old_units != self.new_units:
+            changes["units"] = [self.old_units, self.new_units]
+        return changes
 
 
 def similarity(a: str, b: str) -> float:

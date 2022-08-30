@@ -4,8 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Curriculum diffs</title>
-    <meta name="description" content="No description yet." />
+    <title>Changes in plans over time</title>
+    <meta
+      name="description"
+      content="Shows the specific changes made to each major/college academic plan between each year."
+    />
 
     <style>
       html,
@@ -88,13 +91,25 @@
         font-family: monospace;
         color: white;
       }
+      .info {
+        opacity: 0.8;
+      }
+      summary {
+        cursor: pointer;
+      }
       .select-metric {
         position: sticky;
         bottom: 0;
       }
+      noscript {
+        color: red;
+      }
     </style>
   </head>
   <body>
+    <noscript>
+      <p>Please enable JavaScript to view the changes in plans.</p>
+    </noscript>
     <div id="root"></div>
   </body>
 </html>
