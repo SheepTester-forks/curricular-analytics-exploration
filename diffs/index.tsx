@@ -285,11 +285,64 @@ function ChangeItem ({ change }: ChangeItemProps) {
 const isMajorChange = (change: Change) =>
   change.type !== 'changed' || change.changes.units !== undefined
 
-type DiffProps = {
-  name: string
-  diff: PlanDiffs
+function YearDiff ({ year, url, units, complexity, changes }: YearDiff) {
+  const majorChanges = changes.filter(isMajorChange)
+  const minorChanges = changes.filter(change => !isMajorChange(change))
+  return (
+    <>
+      <h2>
+        Changes in <a href={url}>{year}</a>
+        {(units || complexity) && (
+          <>
+            {' '}
+            <span class={`units ${units ? '' : 'complexity'}`}>
+              (
+              {units && (
+                <>
+                  {<Change change={units} />}, {units[1] > units[0] && '+'}
+                  {units[1] - units[0]} units
+                </>
+              )}
+              {units && complexity && '; '}
+              {complexity && (
+                <span class='complexity'>
+                  {<Change change={complexity} />},{' '}
+                  {complexity[1] > complexity[0] && '+'}
+                  {complexity[1] - complexity[0]} complexity
+                </span>
+              )}
+              )
+            </span>
+          </>
+        )}
+      </h2>
+      {changes.length === 0 && (
+        <p class='changes'>
+          <em>No changes.</em>
+        </p>
+      )}
+      {majorChanges.length > 0 && (
+        <ul class='changes'>
+          {majorChanges.map(change => (
+            <ChangeItem change={change} />
+          ))}
+        </ul>
+      )}
+      {minorChanges.length > 0 && (
+        <details>
+          <summary>View minor changes</summary>
+          <ul class='changes'>
+            {minorChanges.map(change => (
+              <ChangeItem change={change} />
+            ))}
+          </ul>
+        </details>
+      )}
+    </>
+  )
 }
-function Diff ({ name, diff }: DiffProps) {
+
+function Diff ({ name, diff }: Diff) {
   return (
     <div>
       <h1>{name}</h1>
@@ -298,63 +351,9 @@ function Diff ({ name, diff }: DiffProps) {
           Starts in <a href={diff.first.url}>{diff.first.year}</a>.
         </em>
       </p>
-      {diff.changes.map(({ year, url, units, complexity, changes }) => {
-        const majorChanges = changes.filter(isMajorChange)
-        const minorChanges = changes.filter(change => !isMajorChange(change))
-        return (
-          <>
-            <h2>
-              Changes in <a href={url}>{year}</a>
-              {(units || complexity) && (
-                <>
-                  {' '}
-                  <span class={`units ${units ? '' : 'complexity'}`}>
-                    (
-                    {units && (
-                      <>
-                        {<Change change={units} />},{' '}
-                        {units[1] > units[0] && '+'}
-                        {units[1] - units[0]} units
-                      </>
-                    )}
-                    {units && complexity && '; '}
-                    {complexity && (
-                      <span class='complexity'>
-                        {<Change change={complexity} />},{' '}
-                        {complexity[1] > complexity[0] && '+'}
-                        {complexity[1] - complexity[0]} complexity
-                      </span>
-                    )}
-                    )
-                  </span>
-                </>
-              )}
-            </h2>
-            {changes.length === 0 && (
-              <p class='changes'>
-                <em>No changes.</em>
-              </p>
-            )}
-            {majorChanges.length > 0 && (
-              <ul class='changes'>
-                {majorChanges.map(change => (
-                  <ChangeItem change={change} />
-                ))}
-              </ul>
-            )}
-            {minorChanges.length > 0 && (
-              <details>
-                <summary>View minor changes</summary>
-                <ul class='changes'>
-                  {minorChanges.map(change => (
-                    <ChangeItem change={change} />
-                  ))}
-                </ul>
-              </details>
-            )}
-          </>
-        )
-      })}
+      {diff.changes.map(change => (
+        <YearDiff {...change} />
+      ))}
     </div>
   )
 }
@@ -371,7 +370,7 @@ function App ({ diffs }: AppProps) {
       </div>
       <div class='side diff'>
         {diff ? (
-          <Diff name={diff.name} diff={diff.diff} />
+          <Diff {...diff} />
         ) : (
           <p>
             <em>Select a major/college to view its changes.</em>
