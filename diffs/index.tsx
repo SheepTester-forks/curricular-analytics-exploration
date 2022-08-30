@@ -32,11 +32,23 @@ type YearDiff = {
   url: BeforeAfter<string>
 }
 
+type PlanDiffs = {
+  changes: YearDiff[]
+  maxUnitChange: number
+  maxComplexityChange: number
+  numUnitChanges: number
+}
+const metrics = [
+  'maxUnitChange',
+  'maxComplexityChange',
+  'numUnitChanges'
+] as const
+
 type Diffs = {
   [school: string]: {
     [department: string]: {
       [major: string]: {
-        [college: string]: YearDiff[]
+        [college: string]: PlanDiffs
       }
     }
   }
@@ -59,74 +71,128 @@ const byKeyLocale = <T,>([a]: [string, T], [b]: [string, T]) =>
 
 type TableProps = {
   diffs: Diffs
+  selected?: string
   onSelect: (diff: Diff) => void
 }
-const Table = memo(({ diffs, onSelect }: TableProps) => {
+function Table ({ diffs, selected, onSelect }: TableProps) {
+  const maxMetrics = {
+    maxUnitChange: 0,
+    maxComplexityChange: 0,
+    numUnitChanges: 0
+  }
+  for (const departments of Object.values(diffs)) {
+    for (const majors of Object.values(departments)) {
+      for (const plans of Object.values(majors)) {
+        for (const diffs of Object.values(plans)) {
+          for (const metric of metrics) {
+            if (diffs[metric] > maxMetrics[metric]) {
+              maxMetrics[metric] = diffs[metric]
+            }
+          }
+        }
+      }
+    }
+  }
+  const [metric, setMetric] = useState<typeof metrics[number]>('maxUnitChange')
   return (
-    <table>
-      <tr>
-        <th scope='row'>School</th>
-        <th scope='row'>Department</th>
-        <th scope='row'>Major</th>
-        {collegeNames.map(name => (
-          <th scope='row'>{name}</th>
-        ))}
-      </tr>
-      {Object.entries(diffs)
-        .sort(byKeyLocale)
-        .flatMap(([school, departments]) =>
-          Object.entries(departments)
-            .sort(byKeyLocale)
-            .flatMap(([department, majors], j) =>
-              Object.entries(majors)
-                .sort(byKeyLocale)
-                .flatMap(([major, colleges], k) => {
-                  // https://stackoverflow.com/a/36665251
-                  const [code, ...name] = major.split(' ')
-                  return (
-                    <tr>
-                      {j === 0 && k === 0 && (
-                        <th
-                          scope='col'
-                          rowSpan={Object.values(departments)
-                            .map(majors => Object.keys(majors).length)
-                            .reduce((a, b) => a + b, 0)}
-                        >
-                          {school}
-                        </th>
-                      )}
-                      {k === 0 && (
-                        <th scope='col' rowSpan={Object.keys(majors).length}>
-                          {department}
-                        </th>
-                      )}
-                      <td>
-                        <abbr title={name.join(' ') || undefined}>{code}</abbr>
-                      </td>
-                      {collegeNames.map(college => (
+    <>
+      <table>
+        <tr>
+          <th scope='row'>School</th>
+          <th scope='row'>Department</th>
+          <th scope='row'>Major</th>
+          {collegeNames.map(name => (
+            <th scope='row'>{name}</th>
+          ))}
+        </tr>
+        {Object.entries(diffs)
+          .sort(byKeyLocale)
+          .flatMap(([school, departments]) =>
+            Object.entries(departments)
+              .sort(byKeyLocale)
+              .flatMap(([department, majors], j) =>
+                Object.entries(majors)
+                  .sort(byKeyLocale)
+                  .flatMap(([major, colleges], k) => {
+                    // https://stackoverflow.com/a/36665251
+                    const [code, ...name] = major.split(' ')
+                    return (
+                      <tr>
+                        {j === 0 && k === 0 && (
+                          <th
+                            scope='col'
+                            rowSpan={Object.values(departments)
+                              .map(majors => Object.keys(majors).length)
+                              .reduce((a, b) => a + b, 0)}
+                          >
+                            {school}
+                          </th>
+                        )}
+                        {k === 0 && (
+                          <th scope='col' rowSpan={Object.keys(majors).length}>
+                            {department}
+                          </th>
+                        )}
                         <td>
-                          {college in colleges && (
-                            <button
-                              onClick={() =>
-                                onSelect({
-                                  name: `${major} / ${college}`,
-                                  diff: colleges[college]
-                                })
-                              }
-                            >
-                              View
-                            </button>
-                          )}
+                          <abbr title={name.join(' ') || undefined}>
+                            {code}
+                          </abbr>
                         </td>
-                      ))}
-                    </tr>
-                  )
-                })
-            )
-        )}
-    </table>
+                        {collegeNames.map(college => (
+                          <td
+                            style={{
+                              backgroundColor:
+                                college in colleges
+                                  ? `rgba(0, 0, 255, ${
+                                      colleges[college][metric] /
+                                      maxMetrics[metric]
+                                    })`
+                                  : null
+                            }}
+                          >
+                            {college in colleges && (
+                              <button
+                                disabled={selected === `${major} / ${college}`}
+                                onClick={() =>
+                                  onSelect({
+                                    name: `${major} / ${college}`,
+                                    diff: colleges[college].changes
+                                  })
+                                }
+                              >
+                                View
+                              </button>
+                            )}
+                          </td>
+                        ))}
+                      </tr>
+                    )
+                  })
+              )
+          )}
+      </table>
+      <p class='select-metric'>
+        Color by{' '}
+        <select
+          value={metric}
+          onChange={e => {
+            if (
+              e.currentTarget.value === 'maxUnitChange' ||
+              e.currentTarget.value === 'maxComplexityChange' ||
+              e.currentTarget.value === 'numUnitChanges'
+            ) {
+              setMetric(e.currentTarget.value)
+            }
+          }}
+        >
+          <option value='maxUnitChange'>largest unit change</option>
+          <option value='maxComplexityChange'>largest complexity change</option>
+          <option value='numUnitChanges'>frequency of unit changes</option>
+        </select>
+      </p>
+    </>
   )
-})
+}
 
 type ChangeProps = {
   before: string | number
@@ -247,10 +313,16 @@ function App ({ diffs }: AppProps) {
   return (
     <>
       <div class='side'>
-        <Table diffs={diffs} onSelect={setDiff} />
+        <Table diffs={diffs} selected={diff?.name} onSelect={setDiff} />
       </div>
       <div class='side diff'>
-        {diff && <Diff name={diff.name} diff={diff.diff} />}
+        {diff ? (
+          <Diff name={diff.name} diff={diff.diff} />
+        ) : (
+          <p>
+            <em>Select a major/college to view its changes.</em>
+          </p>
+        )}
       </div>
     </>
   )

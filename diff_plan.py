@@ -6,7 +6,7 @@ from college_names import college_names
 from curricula_index import urls
 from departments import departments, dept_schools
 
-from parse import RawCourse, major_codes, major_plans
+from parse import RawCourse, major_codes, major_plans, read_csv_from
 
 
 class Colors:
@@ -190,6 +190,20 @@ def diff_major(major: str, college: str):
 
 
 def diff_all() -> None:
+    metrics: Dict[Tuple[str, str], Dict[str, float]] = {}
+    for (
+        major,
+        college,
+        max_unit_change,
+        max_complexity_change,
+        num_unit_changes,
+    ) in read_csv_from("./files/changes.csv", "julia PlanChanges.jl")[1:]:
+        metrics[major, college] = {
+            "maxUnitChange": float(max_unit_change),
+            "maxComplexityChange": float(max_complexity_change),
+            "numUnitChanges": int(num_unit_changes),
+        }
+
     majors_by_dept: Dict[str, Dict[str, Dict[str, Any]]] = {}
     for year in range(2015, 2023):
         for major_code in major_plans(year).keys():
@@ -205,7 +219,10 @@ def diff_all() -> None:
             for college_code, college_name in college_names.items():
                 output = diff_major(major_code, college_code)
                 if output:
-                    majors_by_dept[school][department][major][college_name] = output
+                    majors_by_dept[school][department][major][college_name] = {
+                        "changes": output,
+                        **metrics[major_code, college_code],
+                    }
     json.dump(majors_by_dept, stdout)
 
 
