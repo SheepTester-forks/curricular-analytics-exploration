@@ -188,11 +188,11 @@ Note: "outputs `<file name>`" means the program prints to standard output, which
 
 **course_names3.py** outputs `course_names3.txt`. This is an implementation of Arturo's [course name cleanup algorithm](https://www.overleaf.com/read/ncghhmgtxtgb), and it lists all the unique course names resulting from the algorithm and how often they occur.
 
-**CourseMetrics.jl** produces `files/courses_fa12.csv`, a CSV file containing the complexity and centrality scores of each identifiable course (i.e. courses with a course code) in each major curriculum.
+**CourseMetrics.jl** produces `files/courses_fa12.csv`, a CSV file containing the complexity and centrality scores of each identifiable course (i.e. courses with a course code) in each major curriculum. Used for [reports](https://public.tableau.com/app/profile/sean.yen/viz/reports_16591343716100/Report1) on Tableau.
 
-**CourseOverlap.jl** produces `files/course_overlap.csv`, a CSV file containing the percentage of how many courses in each major curriculum overlaps with another curriculum.
+**CourseOverlap.jl** produces `files/course_overlap.csv`, a CSV file containing the percentage of how many courses in each major curriculum overlaps with another curriculum. Used for [reports](https://public.tableau.com/app/profile/sean.yen/viz/reports_16591343716100/Report1) on Tableau.
 
-**curricula_index.py** outputs `files/curricula_index.csv`, a CSV file containing the school, department, and Curricular Analytics curriculum URL of every major. As a module, it exports `urls`, which maps majors to their URL.
+**curricula_index.py** outputs `files/curricula_index.csv`, a CSV file containing the school, department, and Curricular Analytics curriculum URL of every major. As a module, it exports `urls`, which maps majors to their URL. Used for [curriculum_index](https://public.tableau.com/app/profile/sean.yen/viz/curriculum_index/Index) on Tableau.
 
 **department_names.py** outputs `departments.txt`, which compares the list of unique department codes of the degree plans available with the department codes from the ISIS major code spreadsheet. This is to figure out which department names I don't need to get the name for.
 
@@ -206,9 +206,9 @@ Note: "outputs `<file name>`" means the program prints to standard output, which
 
 **marshall-viability-analysis.py** outputs `marshall.txt`. It identifies in which majors does Marshall's academic plan deviate from all the other colleges. This is to check that its academic plans are generally a good base for creating curricula.
 
-**metrics.jl** depends on `files/output/` from output_all.py and produces `files/metrics.csv`, a CSV file with various metrics for each academic plan, and `files/courses.csv`, a CSV file identifying the major in which the course has the highest centrality for each course. I wrote this before writing the other Julia files, which is why it doesn't use Output.jl.
+**metrics.jl** depends on `files/output/` from output_all.py and produces `files/metrics.csv`, a CSV file with various metrics for each academic plan, and `files/courses.csv`, a CSV file identifying the major in which the course has the highest centrality for each course. I wrote this before writing the other Julia files, which is why it doesn't use Output.jl. Used for [metrics](https://public.tableau.com/app/profile/sean.yen/viz/metrics_16619827387790/MatrixGEs) on Tableau.
 
-**Metrics.jl** produces `files/metrics_fa12.csv`, a CSV file with various metrics for each academic plan. This one is newer than metrics.jl and contains exactly the metrics that Carlos wanted.
+**Metrics.jl** produces `files/metrics_fa12.csv`, a CSV file with various metrics for each academic plan. This one is newer than metrics.jl and contains exactly the metrics that Carlos wanted. Used for [metrics_fa12](https://public.tableau.com/app/profile/sean.yen/viz/metrics_fa12/View1) on Tableau.
 
 **output_all.py** produces a CSV file for the curriculum and each college's degree plan for every major in `files/output/`.
 
