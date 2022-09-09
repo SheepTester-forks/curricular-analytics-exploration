@@ -1,6 +1,5 @@
 __pycache__
 .env
-*.sh
 *.txt
 !course_names*.txt
 *.tmp

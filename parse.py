@@ -196,6 +196,11 @@ def prereqs(term: str) -> Dict[CourseCode, List[List[Prerequisite]]]:
     return _prereqs[term]
 
 
+def prereqs_raw() -> Dict[TermCode, Dict[CourseCode, List[List[Prerequisite]]]]:
+    prereqs("FA21") # cache _prereqs
+    return _prereqs or {}
+
+
 class ParsedCourse(NamedTuple):
     """
     Represents a course in an academic plan.
