@@ -1,8 +1,14 @@
-from typing import List
+from typing import List, TypeVar
 from common_prereqs import parse_int
 from parse import Prerequisite, prereqs_raw
 
 Prereqs = List[List[Prerequisite]]
+
+T = TypeVar("T")
+
+
+def remove_duplicates(ls: List[T]) -> List[T]:
+    return [item for i, item in enumerate(ls) if item not in ls[0:i]]
 
 
 all_prereqs = prereqs_raw()
@@ -43,16 +49,27 @@ def compare_prereqs(first: bool, term: str, old: Prereqs, new: Prereqs) -> None:
         print(
             f'<li class="change-item added">{" or ".join(str(alt.course_code) for alt in req)}</li>'
         )
+    print("</ul>")
     if not new:
         print("<p>All prerequisites were removed.</p>")
-    print("</ul>")
 
 
 def main() -> None:
     for course_code in course_codes:
         prereq_history = [
-            (term_code, all_prereqs[term_code].get(course_code) or [])
+            (
+                term_code,
+                remove_duplicates(
+                    [
+                        remove_duplicates(req)
+                        for req in all_prereqs[term_code].get(course_code) or []
+                    ]
+                ),
+            )
             for term_code in term_codes
+            # Ignore special and medical summer, which seems to often omit
+            # prereqs only for them to be readded in fall
+            if term_code.quarter() != "S3" and term_code.quarter() != "SU"
         ]
         first_index = 0
         first_prereqs: Prereqs = []

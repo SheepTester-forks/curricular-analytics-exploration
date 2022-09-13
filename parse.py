@@ -106,8 +106,11 @@ class Prerequisite(NamedTuple):
 class TermCode(str):
     quarters = ["WI", "SP", "S1", "S2", "S3", "SU", "FA"]
 
+    def quarter(self) -> str:
+        return self[0:2]
+
     def quarter_value(self) -> int:
-        return TermCode.quarters.index(self[0:2])
+        return TermCode.quarters.index(self.quarter())
 
     def year(self) -> int:
         # Assumes 21st century (all the plans we have are in the 21st century)
@@ -197,7 +200,7 @@ def prereqs(term: str) -> Dict[CourseCode, List[List[Prerequisite]]]:
 
 
 def prereqs_raw() -> Dict[TermCode, Dict[CourseCode, List[List[Prerequisite]]]]:
-    prereqs("FA21") # cache _prereqs
+    prereqs("FA21")  # cache _prereqs
     return _prereqs or {}
 
 
@@ -474,11 +477,4 @@ def major_codes():
 
 
 if __name__ == "__main__":
-    # print(' '.join(set(major.department for major in major_codes().values())))
-    print(
-        [
-            major.isis_code
-            for major in major_codes().values()
-            if major.department == "BIOL"
-        ]
-    )
+    print(prereqs("SU19")[CourseCode("WARR", "11B")])
