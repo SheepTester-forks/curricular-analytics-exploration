@@ -1,6 +1,6 @@
-from typing import List, TypeVar
+from typing import List, NamedTuple, Optional, TypeVar
 from common_prereqs import parse_int
-from parse import Prerequisite, prereqs_raw
+from parse import CourseCode, Prerequisite, prereqs_raw
 
 Prereqs = List[List[Prerequisite]]
 
@@ -17,6 +17,22 @@ course_codes = sorted(
     key=lambda subject_code: (subject_code.subject, *parse_int(subject_code.number)),
 )
 term_codes = sorted(all_prereqs.keys())
+
+
+def find_requirement_with_course(
+    prereqs: Prereqs, course_code: CourseCode
+) -> Optional[List[Prerequisite]]:
+    for requirement in prereqs:
+        for course, _ in requirement:
+            if course == course_code:
+                return requirement
+
+
+class Change(NamedTuple):
+    unchanged: List[Prerequisite]
+    flipped_concurrent: List[Prerequisite]
+    removed: List[Prerequisite]
+    added: List[Prerequisite]
 
 
 def compare_prereqs(first: bool, term: str, old: Prereqs, new: Prereqs) -> None:
@@ -39,12 +55,55 @@ def compare_prereqs(first: bool, term: str, old: Prereqs, new: Prereqs) -> None:
             )
         print("</ul>")
         return
+
+    changes: List[Change] = []
+    for old_req in old_only[:]:
+        for course, _ in old_req:
+            new_req = find_requirement_with_course(new_only, course)
+            if not new_req:
+                continue
+            old_only.remove(old_req)
+            new_only.remove(new_req)
+            unchanged: List[Prerequisite] = []
+            flipped_concurrent: List[Prerequisite] = []
+            for prereq in old_req[:]:
+                if prereq in new_req:
+                    old_req.remove(prereq)
+                    new_req.remove(prereq)
+                    unchanged.append(prereq)
+                    continue
+                for new_prereq in new_req:
+                    if new_prereq.course_code == prereq.course_code:
+                        old_req.remove(prereq)
+                        new_req.remove(new_prereq)
+                        flipped_concurrent.append(new_prereq)
+                        break
+            changes.append(Change(unchanged, flipped_concurrent, old_req, new_req))
+            break
+
     print(f"<h3>{term} changes</h3>")
     print('<ul class="changes">')
     for req in old_only:
         print(
             f'<li class="change-item removed">{" or ".join(str(alt.course_code) for alt in req)}</li>'
         )
+    for unchanged, flipped_concurrent, removed, added in changes:
+        items = " or ".join(
+            [str(course) for course, _ in unchanged]
+            + [
+                f'{course} (<span class="change">{"now" if allow_concurrent else "no longer"}</span> allows concurrent)'
+                for course, allow_concurrent in flipped_concurrent
+            ]
+        )
+        if added:
+            if items:
+                items += " or "
+            items += f'<span class="added">{" or ".join(str(course) for course, _ in added)}</span>'
+        if removed:
+            if items:
+                items += " · removed: "
+            items += f'<span class="removed">{", ".join(str(course) for course, _ in removed)}</span>'
+        print(f'<li class="change-item changed">{items}</li>')
     for req in new_only:
         print(
             f'<li class="change-item added">{" or ".join(str(alt.course_code) for alt in req)}</li>'

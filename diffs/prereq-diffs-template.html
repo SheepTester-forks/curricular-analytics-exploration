@@ -28,18 +28,26 @@
         color: #ffd8d3;
         background-color: #78191b;
       }
-      .removed::before {
+      .change-item.removed::before {
         content: '- ';
       }
       .added {
         color: #b4f1b4;
         background-color: #1b4721;
       }
-      .added::before {
+      .change-item.added::before {
         content: '+ ';
       }
       .changed::before {
         content: '* ';
+      }
+      .change {
+        color: #ffddb0;
+        background-color: #682d0f;
+      }
+      .arrow {
+        font-family: monospace;
+        color: white;
       }
       details {
         background-color: rgba(255, 255, 255, 0.1);
