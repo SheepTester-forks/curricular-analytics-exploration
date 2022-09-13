@@ -16,6 +16,9 @@ term_codes = sorted(all_prereqs.keys())
 def compare_prereqs(
     course_code: Optional[CourseCode], term: str, old: Prereqs, new: Prereqs
 ) -> bool:
+    """
+    `course_code` is None if it has already printed the course header.
+    """
     old_only = [req for req in old if req not in new]
     new_only = [req for req in new if req not in old]
     if not old_only and not new_only:
@@ -24,7 +27,8 @@ def compare_prereqs(
         assert not old_only
         assert len(new_only) == len(new)
         print(f"<h2>{course_code}</h2>")
-    if term == term_codes[0]:
+        if term == term_codes[0]:
+            print(f"<h3>New in {term}</h3>")
         print('<ul class="changes">')
         for req in new:
             print(
@@ -32,7 +36,6 @@ def compare_prereqs(
             )
         print("</ul>")
         return True
-    print(f"<h3>{term} changes</h3>")
     print('<ul class="changes">')
     for req in old_only:
         print(
@@ -52,7 +55,7 @@ def main() -> None:
         printed = False
         for term_code in term_codes:
             prereqs = all_prereqs[term_code].get(course_code) or []
-            printed = compare_prereqs(
+            printed = printed or compare_prereqs(
                 None if printed else course_code, term_code, prev_prereqs, prereqs
             )
             prev_prereqs = prereqs
