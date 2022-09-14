@@ -47,7 +47,9 @@ def compare_prereqs(first: bool, term: str, old: Prereqs, new: Prereqs) -> None:
         assert not old_only
         assert len(new_only) == len(new)
         if term != term_codes[0]:
-            print(f"<p>New in {term}.</p>")
+            print(f"<p>New in {term}. Originally:</p>")
+        else:
+            print("<p>Originally:</p>")
         print('<ul class="changes">')
         for req in new:
             print(
@@ -64,6 +66,9 @@ def compare_prereqs(first: bool, term: str, old: Prereqs, new: Prereqs) -> None:
                 continue
             old_only.remove(old_req)
             new_only.remove(new_req)
+
+            old_req = old_req.copy()
+            new_req = new_req.copy()
             unchanged: List[Prerequisite] = []
             flipped_concurrent: List[Prerequisite] = []
             for prereq in old_req[:]:
@@ -122,6 +127,7 @@ def main() -> None:
                     [
                         remove_duplicates(req)
                         for req in all_prereqs[term_code].get(course_code) or []
+                        if req
                     ]
                 ),
             )
