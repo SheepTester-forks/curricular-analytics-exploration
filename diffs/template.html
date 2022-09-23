@@ -22,9 +22,13 @@
       #root {
         display: flex;
       }
+      @media (max-width: 900px) {
+        #root {
+          flex-direction: column;
+        }
+      }
       .side {
         flex: 1 0 0;
-        width: 50%;
         overflow: auto;
       }
       tr:first-child {

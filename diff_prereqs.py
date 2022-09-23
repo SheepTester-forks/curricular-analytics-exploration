@@ -1,6 +1,6 @@
-from typing import List, NamedTuple, Optional, TypeVar
+from typing import List, NamedTuple, Optional, Tuple, TypeVar
 from common_prereqs import parse_int
-from parse import CourseCode, Prerequisite, prereqs_raw
+from parse import CourseCode, Prerequisite, TermCode, prereqs_raw
 
 Prereqs = List[List[Prerequisite]]
 
@@ -26,6 +26,47 @@ def find_requirement_with_course(
         for course, _ in requirement:
             if course == course_code:
                 return requirement
+
+
+class History(NamedTuple):
+    course_code: CourseCode
+    has_changed: bool
+    prereq_history: List[Tuple[TermCode, List[List[Prerequisite]]]] = []
+    first_index: int = -1
+    still_exists: bool = False
+
+
+def get_history(course_code: CourseCode) -> History:
+    prereq_history = [
+        (
+            term_code,
+            remove_duplicates(
+                [
+                    remove_duplicates(req)
+                    for req in all_prereqs[term_code].get(course_code) or []
+                    if req
+                ]
+            ),
+        )
+        for term_code in term_codes
+        # Ignore special and medical summer, which seems to often omit
+        # prereqs only for them to be readded in fall
+        if term_code.quarter() != "S3" and term_code.quarter() != "SU"
+    ]
+    first_index = 0
+    first_prereqs: Prereqs = []
+    prereqs_changed = False
+    for i, (_, prereqs) in enumerate(prereq_history):
+        if prereqs and not first_prereqs:
+            first_index = i
+            first_prereqs = prereqs
+        if first_prereqs and prereqs != first_prereqs:
+            prereqs_changed = True
+            break
+    if not prereqs_changed:
+        return History(course_code, False)
+    still_exists = len(prereq_history[-1][1]) > 0
+    return History(course_code, True, prereq_history, first_index, still_exists)
 
 
 class Change(NamedTuple):
@@ -119,37 +160,39 @@ def compare_prereqs(first: bool, term: str, old: Prereqs, new: Prereqs) -> None:
 
 
 def main() -> None:
-    for course_code in course_codes:
-        prereq_history = [
-            (
-                term_code,
-                remove_duplicates(
-                    [
-                        remove_duplicates(req)
-                        for req in all_prereqs[term_code].get(course_code) or []
-                        if req
-                    ]
-                ),
-            )
-            for term_code in term_codes
-            # Ignore special and medical summer, which seems to often omit
-            # prereqs only for them to be readded in fall
-            if term_code.quarter() != "S3" and term_code.quarter() != "SU"
-        ]
-        first_index = 0
-        first_prereqs: Prereqs = []
-        prereqs_changed = False
-        for i, (_, prereqs) in enumerate(prereq_history):
-            if prereqs and not first_prereqs:
-                first_index = i
-                first_prereqs = prereqs
-            if first_prereqs and prereqs != first_prereqs:
-                prereqs_changed = True
-                break
-        if not prereqs_changed:
-            continue
-        still_exists = len(prereq_history[-1][1]) > 0
+    changed_courses = [get_history(course_code) for course_code in course_codes]
 
+    print("<body>")
+    print('<nav class="sidebar">')
+    prev_subj = ""
+    for course_code, has_changed, *_, still_exists in changed_courses:
+        if course_code.subject != prev_subj:
+            if prev_subj:
+                print("</ul></details>")
+            print(f"<details><summary>{course_code.subject}</summary><ul>")
+            prev_subj = course_code.subject
+        if has_changed:
+            print(
+                f'<li><a href="#{"".join(course_code).lower()}">{course_code}</a></li>'
+            )
+        else:
+            print(f'<li title="Prerequisites have not changed.">{course_code}</li>')
+    print("</ul></details>")
+    print('<a href="#" class="top-link">↑ Back to top</a>')
+    print("</nav>")
+
+    print('<main class="main">')
+    print("<h1>Changes made to course prerequisites over time</h1>")
+    print("<p>Only courses whose prerequisites have changed are shown.</p>")
+    for (
+        course_code,
+        has_changed,
+        prereq_history,
+        first_index,
+        still_exists,
+    ) in changed_courses:
+        if not has_changed:
+            continue
         if not still_exists:
             print(f"<details><summary>{course_code} no longer exists</summary>")
         print(f'<h2 id="{"".join(course_code).lower()}">{course_code}</h2>')
@@ -164,6 +207,8 @@ def main() -> None:
             )
         if not still_exists:
             print("</details>")
+    print("</main>")
+    print("</body>")
 
 
 if __name__ == "__main__":

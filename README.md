@@ -60,6 +60,8 @@
     who enrolls at UCSD in fall 2019 should follow the plan with a `Start Year`
     of 2019.
 
+  - `Term Taken` is not used.
+
   Some but not all degree plans put courses in a summer quarter (with a `Term Taken` of `SUxx`) even though they're not supposed to.
 
 - [**`prereqs_fa12.csv`**](https://drive.google.com/file/d/19oVI16mmhDIclyj6p3GMlxTMPDRNIcHw/view),
@@ -89,6 +91,9 @@
   courses have it set to `Y`. Some course pairs, such as CSE 12 and 15L, are
   supposedly corequisites according to the course catalog, but they are not
   listed as corequisites in the table.
+
+  `Term ID`, `Course ID`, `Prereq Course ID`, `Prereq Minimum Grade Priority`,
+  and `Prereq Minimum Grade` aren't used.
 
 - **`isis_major_code_list.xlsx - Major Codes.csv`**: Open [isis_major_code_list.xlsx "Major Codes"](https://docs.google.com/spreadsheets/d/1Mgr99R6OFXJuNO_Xx-j49mBgurpwExKL/edit#gid=616727155) and go to File > Download > Comma Separated Values (.csv). This should be the default name it suggests, so you don't have to worry about setting the name.
 
