@@ -183,7 +183,7 @@ def main() -> None:
 
     print('<main class="main">')
     print("<h1>Changes made to course prerequisites over time</h1>")
-    print("<p>Only courses whose prerequisites have changed are shown.</p>")
+    print("<p>Only courses whose prerequisites have changed are shown. Most courses that no longer have prerequisites no longer exist.</p>")
     for (
         course_code,
         has_changed,
