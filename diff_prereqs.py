@@ -194,7 +194,7 @@ def main() -> None:
         if not has_changed:
             continue
         if not still_exists:
-            print(f"<details><summary>{course_code} no longer exists</summary>")
+            print(f"<details><summary>{course_code} no longer has prerequisites</summary>")
         print(f'<h2 id="{"".join(course_code).lower()}">{course_code}</h2>')
         for i, (term_code, prereqs) in enumerate(prereq_history):
             if i < first_index:
