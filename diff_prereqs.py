@@ -1,3 +1,4 @@
+from symbol import term
 from typing import List, NamedTuple, Optional, Tuple, TypeVar
 from common_prereqs import parse_int
 from parse import CourseCode, Prerequisite, TermCode, prereqs_raw
@@ -16,7 +17,13 @@ course_codes = sorted(
     {course for courses in all_prereqs.values() for course in courses.keys()},
     key=lambda subject_code: (subject_code.subject, *parse_int(subject_code.number)),
 )
-term_codes = sorted(all_prereqs.keys())
+# Ignore special and medical summer, which seems to often omit prereqs only for
+# them to be readded in fall
+term_codes = sorted(
+    term_code
+    for term_code in all_prereqs.keys()
+    if term_code.quarter() != "S3" and term_code.quarter() != "SU"
+)
 
 
 def find_requirement_with_course(
@@ -28,47 +35,6 @@ def find_requirement_with_course(
                 return requirement
 
 
-class History(NamedTuple):
-    course_code: CourseCode
-    has_changed: bool
-    prereq_history: List[Tuple[TermCode, List[List[Prerequisite]]]] = []
-    first_index: int = -1
-    still_exists: bool = False
-
-
-def get_history(course_code: CourseCode) -> History:
-    prereq_history = [
-        (
-            term_code,
-            remove_duplicates(
-                [
-                    remove_duplicates(req)
-                    for req in all_prereqs[term_code].get(course_code) or []
-                    if req
-                ]
-            ),
-        )
-        for term_code in term_codes
-        # Ignore special and medical summer, which seems to often omit
-        # prereqs only for them to be readded in fall
-        if term_code.quarter() != "S3" and term_code.quarter() != "SU"
-    ]
-    first_index = 0
-    first_prereqs: Prereqs = []
-    prereqs_changed = False
-    for i, (_, prereqs) in enumerate(prereq_history):
-        if prereqs and not first_prereqs:
-            first_index = i
-            first_prereqs = prereqs
-        if first_prereqs and prereqs != first_prereqs:
-            prereqs_changed = True
-            break
-    if not prereqs_changed:
-        return History(course_code, False)
-    still_exists = len(prereq_history[-1][1]) > 0
-    return History(course_code, True, prereq_history, first_index, still_exists)
-
-
 class Change(NamedTuple):
     unchanged: List[Prerequisite]
     flipped_concurrent: List[Prerequisite]
@@ -76,28 +42,17 @@ class Change(NamedTuple):
     added: List[Prerequisite]
 
 
-def compare_prereqs(first: bool, term: str, old: Prereqs, new: Prereqs) -> None:
-    """
-    `course_code` is None if it has already printed the course header.
-    """
+class Diff(NamedTuple):
+    added: Prereqs
+    removed: Prereqs
+    changes: List[Change]
+
+
+def diff_prereqs(old: Prereqs, new: Prereqs) -> Optional[Diff]:
     old_only = [req for req in old if req not in new]
     new_only = [req for req in new if req not in old]
     if not old_only and not new_only:
-        return
-    if first:
-        assert not old_only
-        assert len(new_only) == len(new)
-        if term != term_codes[0]:
-            print(f"<p>New in {term}. Originally:</p>")
-        else:
-            print("<p>Originally:</p>")
-        print('<ul class="changes">')
-        for req in new:
-            print(
-                f'<li class="change-item">{" or ".join(str(alt.course_code) for alt in req)}</li>'
-            )
-        print("</ul>")
-        return
+        return None
 
     changes: List[Change] = []
     for old_req in old_only[:]:
@@ -126,14 +81,79 @@ def compare_prereqs(first: bool, term: str, old: Prereqs, new: Prereqs) -> None:
                         break
             changes.append(Change(unchanged, flipped_concurrent, old_req, new_req))
             break
+    return Diff(new_only, old_only, changes)
 
-    print(f"<h3>{term} changes</h3>")
+
+class History(NamedTuple):
+    course_code: CourseCode
+    has_changed: bool
+    prereq_history: List[Tuple[TermCode, Prereqs]] = []
+    first_index: int = -1
+    still_exists: bool = False
+
+
+def get_history(course_code: CourseCode) -> History:
+    prereq_history = [
+        (
+            term_code,
+            remove_duplicates(
+                [
+                    remove_duplicates(req)
+                    for req in all_prereqs[term_code].get(course_code) or []
+                    if req
+                ]
+            ),
+        )
+        for term_code in term_codes
+    ]
+    first_index = 0
+    first_prereqs: Prereqs = []
+    prereqs_changed = False
+    for i, (_, prereqs) in enumerate(prereq_history):
+        if prereqs and not first_prereqs:
+            first_index = i
+            first_prereqs = prereqs
+        if first_prereqs and prereqs != first_prereqs:
+            prereqs_changed = True
+            break
+    if not prereqs_changed:
+        return History(course_code, False)
+    still_exists = len(prereq_history[-1][1]) > 0
+    return History(course_code, True, prereq_history, first_index, still_exists)
+
+
+def get_changed_courses() -> List[History]:
+    return [get_history(course_code) for course_code in course_codes]
+
+
+def compare_prereqs(
+    course_id: str, first: bool, term: str, old: Prereqs, new: Prereqs
+) -> None:
+    diff = diff_prereqs(old, new)
+    if not diff:
+        return
+    if first:
+        assert not diff.removed
+        assert len(diff.added) == len(new)
+        if term != term_codes[0]:
+            print(f"<p>New in {term}. Originally:</p>")
+        else:
+            print("<p>Originally:</p>")
+        print('<ul class="changes">')
+        for req in new:
+            print(
+                f'<li class="change-item">{" or ".join(str(alt.course_code) for alt in req)}</li>'
+            )
+        print("</ul>")
+        return
+
+    print(f'<h3 id="{course_id}-{term.lower()}">{term} changes</h3>')
     print('<ul class="changes">')
-    for req in old_only:
+    for req in diff.removed:
         print(
             f'<li class="change-item removed">{" or ".join(str(alt.course_code) for alt in req)}</li>'
         )
-    for unchanged, flipped_concurrent, removed, added in changes:
+    for unchanged, flipped_concurrent, removed, added in diff.changes:
         items = " or ".join(
             [str(course) for course, _ in unchanged]
             + [
@@ -150,7 +170,7 @@ def compare_prereqs(first: bool, term: str, old: Prereqs, new: Prereqs) -> None:
                 items += " · removed: "
             items += f'<span class="removed">{", ".join(str(course) for course, _ in removed)}</span>'
         print(f'<li class="change-item changed">{items}</li>')
-    for req in new_only:
+    for req in diff.added:
         print(
             f'<li class="change-item added">{" or ".join(str(alt.course_code) for alt in req)}</li>'
         )
@@ -159,8 +179,8 @@ def compare_prereqs(first: bool, term: str, old: Prereqs, new: Prereqs) -> None:
         print("<p>All prerequisites were removed.</p>")
 
 
-def main() -> None:
-    changed_courses = [get_history(course_code) for course_code in course_codes]
+def print_diff() -> None:
+    changed_courses = get_changed_courses()
 
     print("<body>")
     print('<nav class="sidebar">')
@@ -183,7 +203,9 @@ def main() -> None:
 
     print('<main class="main">')
     print("<h1>Changes made to course prerequisites over time</h1>")
-    print("<p>Only courses whose prerequisites have changed are shown. Most courses that no longer have prerequisites no longer exist.</p>")
+    print(
+        "<p>Only courses whose prerequisites have changed are shown. Most courses that no longer have prerequisites no longer exist.</p>"
+    )
     for (
         course_code,
         has_changed,
@@ -194,12 +216,16 @@ def main() -> None:
         if not has_changed:
             continue
         if not still_exists:
-            print(f"<details><summary>{course_code} no longer has prerequisites</summary>")
-        print(f'<h2 id="{"".join(course_code).lower()}">{course_code}</h2>')
+            print(
+                f"<details><summary>{course_code} no longer has prerequisites</summary>"
+            )
+        course_id = "".join(course_code).lower()
+        print(f'<h2 id="{course_id}">{course_code}</h2>')
         for i, (term_code, prereqs) in enumerate(prereq_history):
             if i < first_index:
                 continue
             compare_prereqs(
+                course_id,
                 i == first_index,
                 term_code,
                 prereq_history[i - 1][1] if i > 0 else [],
@@ -211,5 +237,22 @@ def main() -> None:
     print("</body>")
 
 
+def print_timeline() -> None:
+    """
+    Can I ask for a companion view/report that does this by term? (e.g. Fa22,
+    following courses changes, Sp22, following courses changed, Wi22... etc)
+    """
+    changed_courses = get_changed_courses()
+
+    for term_code in term_codes:
+        print('<div class="term">')
+        print(f"<h2>{term}</h2>")
+        for course_code, _, history, _, _ in changed_courses:
+            for term, changes in history:
+                if term == term_code:
+                    break
+        print("</div>")
+
+
 if __name__ == "__main__":
-    main()
+    print_diff()
