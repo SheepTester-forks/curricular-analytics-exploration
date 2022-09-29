@@ -126,7 +126,7 @@ def get_changed_courses() -> List[History]:
     return [get_history(course_code) for course_code in course_codes]
 
 
-def compare_prereqs(course_id: str, first: bool, diff: Diff) -> None:
+def print_prereq_diff(course_id: str, first: bool, diff: Diff) -> None:
     if first:
         if diff.term != term_codes[0]:
             print(f"<p>New in {diff.term}. Originally:</p>")
@@ -209,11 +209,28 @@ def print_diff() -> None:
         course_id = "".join(course_code).lower()
         print(f'<h2 id="{course_id}">{course_code}</h2>')
         for i, diff in enumerate(diffs):
-            compare_prereqs(course_id, i == 0, diff)
+            print_prereq_diff(course_id, i == 0, diff)
         if not still_exists:
             print("</details>")
     print("</main>")
     print("</body>")
+
+
+def print_changed_course(
+    term_code: TermCode, course_code: CourseCode, diff: Diff
+) -> None:
+    added_badge = (
+        f' <span class="added">+{len(diff.added)}</span>' if diff.added else ""
+    )
+    removed_badge = (
+        f' <span class="removed">−{len(diff.removed)}</span>' if diff.removed else ""
+    )
+    changed_badge = (
+        f' <span class="changed">±{len(diff.changes)}</span>' if diff.changes else ""
+    )
+    print(
+        f'<li class="course"><a href="./prereq-diffs.html#{"".join(course_code).lower()}-{term_code.lower()}">{course_code}</a>:{added_badge}{removed_badge}{changed_badge}</li>'
+    )
 
 
 def print_timeline() -> None:
@@ -223,41 +240,46 @@ def print_timeline() -> None:
     """
     changed_courses = get_changed_courses()
 
+    terms = " ".join(
+        f'<a href="#{term_code.lower()}">{term_code}</a>' for term_code in term_codes
+    )
+    print(f"<p>Jump to: {terms}</p>")
+
     # Skip first term because we assume FA12 is when the prereqs have always
     # existed (it won't print the first time a course's prereqs are added to
     # ISIS)
     for term_code in term_codes[1:]:
-        print(f"<h2>{term_code}</h2>")
-        print("<ul>")
-        printed = False
-        for course_code, _, _, diffs, _ in changed_courses:
-            for i, diff in enumerate(diffs):
-                if i == 0 or diff.term != term_code:
-                    continue
-                added_badge = (
-                    f' <span class="added">+{len(diff.added)}</span>'
-                    if diff.added
-                    else ""
-                )
-                removed_badge = (
-                    f' <span class="removed">−{len(diff.removed)}</span>'
-                    if diff.removed
-                    else ""
-                )
-                changed_badge = (
-                    f' <span class="changed">±{len(diff.changes)}</span>'
-                    if diff.changes
-                    else ""
-                )
-                deleted_badge = " → ❌" if diff.req_count == 0 else ""
-                print(
-                    f'<li class="course"><a href="./prereq-diffs.html#{"".join(course_code).lower()}-{term_code.lower()}">{course_code}</a>:{added_badge}{removed_badge}{changed_badge}{deleted_badge}</li>'
-                )
-                printed = True
-                break
-        if not printed:
-            print("<li>No prereqs changed.</li>")
-        print("</ul>")
+        changed = [
+            (course_code, diff)
+            for course_code, _, _, diffs, _ in changed_courses
+            for diff in (
+                next(
+                    (
+                        diff
+                        for i, diff in enumerate(diffs)
+                        if i > 0 and diff.term == term_code
+                    ),
+                    None,
+                ),
+            )
+            if diff
+        ]
+        print(f'<h2 id="{term_code.lower()}">{term_code}</h2>')
+        if not changed:
+            print("<p>No prerequisites changed.</p>")
+            continue
+        if any(diff for _, diff in changed if diff.req_count > 0):
+            print("<ul>")
+            for course_code, diff in changed:
+                if diff.req_count > 0:
+                    print_changed_course(term_code, course_code, diff)
+            print("</ul>")
+        if any(diff for _, diff in changed if diff.req_count == 0):
+            print("<details><summary>Courses that lost all prerequisites</summary><ul>")
+            for course_code, diff in changed:
+                if diff.req_count == 0:
+                    print_changed_course(term_code, course_code, diff)
+            print("</ul></details>")
 
 
 if __name__ == "__main__":
