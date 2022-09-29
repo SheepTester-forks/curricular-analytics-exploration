@@ -1,4 +1,3 @@
-from symbol import term
 from typing import List, NamedTuple, Optional, Tuple, TypeVar
 from common_prereqs import parse_int
 from parse import CourseCode, Prerequisite, TermCode, prereqs_raw
@@ -43,12 +42,14 @@ class Change(NamedTuple):
 
 
 class Diff(NamedTuple):
+    term: TermCode
     added: Prereqs
     removed: Prereqs
     changes: List[Change]
+    req_count: int
 
 
-def diff_prereqs(old: Prereqs, new: Prereqs) -> Optional[Diff]:
+def diff_prereqs(term: TermCode, old: Prereqs, new: Prereqs) -> Optional[Diff]:
     old_only = [req for req in old if req not in new]
     new_only = [req for req in new if req not in old]
     if not old_only and not new_only:
@@ -81,14 +82,14 @@ def diff_prereqs(old: Prereqs, new: Prereqs) -> Optional[Diff]:
                         break
             changes.append(Change(unchanged, flipped_concurrent, old_req, new_req))
             break
-    return Diff(new_only, old_only, changes)
+    return Diff(term, new_only, old_only, changes, len(new))
 
 
 class History(NamedTuple):
     course_code: CourseCode
     has_changed: bool
     prereq_history: List[Tuple[TermCode, Prereqs]] = []
-    first_index: int = -1
+    diffs: List[Diff] = []
     still_exists: bool = False
 
 
@@ -106,48 +107,40 @@ def get_history(course_code: CourseCode) -> History:
         )
         for term_code in term_codes
     ]
-    first_index = 0
-    first_prereqs: Prereqs = []
-    prereqs_changed = False
-    for i, (_, prereqs) in enumerate(prereq_history):
-        if prereqs and not first_prereqs:
-            first_index = i
-            first_prereqs = prereqs
-        if first_prereqs and prereqs != first_prereqs:
-            prereqs_changed = True
-            break
-    if not prereqs_changed:
+    diffs: List[Diff] = []
+    for i, (term_code, prereqs) in enumerate(prereq_history):
+        diff = diff_prereqs(
+            term_code,
+            prereq_history[i - 1][1] if i > 0 else [],
+            prereqs,
+        )
+        if diff:
+            diffs.append(diff)
+    if len(diffs) <= 1:
         return History(course_code, False)
     still_exists = len(prereq_history[-1][1]) > 0
-    return History(course_code, True, prereq_history, first_index, still_exists)
+    return History(course_code, True, prereq_history, diffs, still_exists)
 
 
 def get_changed_courses() -> List[History]:
     return [get_history(course_code) for course_code in course_codes]
 
 
-def compare_prereqs(
-    course_id: str, first: bool, term: str, old: Prereqs, new: Prereqs
-) -> None:
-    diff = diff_prereqs(old, new)
-    if not diff:
-        return
+def compare_prereqs(course_id: str, first: bool, diff: Diff) -> None:
     if first:
-        assert not diff.removed
-        assert len(diff.added) == len(new)
-        if term != term_codes[0]:
-            print(f"<p>New in {term}. Originally:</p>")
+        if diff.term != term_codes[0]:
+            print(f"<p>New in {diff.term}. Originally:</p>")
         else:
             print("<p>Originally:</p>")
         print('<ul class="changes">')
-        for req in new:
+        for req in diff.added:
             print(
                 f'<li class="change-item">{" or ".join(str(alt.course_code) for alt in req)}</li>'
             )
         print("</ul>")
         return
 
-    print(f'<h3 id="{course_id}-{term.lower()}">{term} changes</h3>')
+    print(f'<h3 id="{course_id}-{diff.term.lower()}">{diff.term} changes</h3>')
     print('<ul class="changes">')
     for req in diff.removed:
         print(
@@ -175,7 +168,7 @@ def compare_prereqs(
             f'<li class="change-item added">{" or ".join(str(alt.course_code) for alt in req)}</li>'
         )
     print("</ul>")
-    if not new:
+    if diff.req_count == 0:
         print("<p>All prerequisites were removed.</p>")
 
 
@@ -206,13 +199,7 @@ def print_diff() -> None:
     print(
         "<p>Only courses whose prerequisites have changed are shown. Most courses that no longer have prerequisites no longer exist.</p>"
     )
-    for (
-        course_code,
-        has_changed,
-        prereq_history,
-        first_index,
-        still_exists,
-    ) in changed_courses:
+    for course_code, has_changed, _, diffs, still_exists in changed_courses:
         if not has_changed:
             continue
         if not still_exists:
@@ -221,16 +208,8 @@ def print_diff() -> None:
             )
         course_id = "".join(course_code).lower()
         print(f'<h2 id="{course_id}">{course_code}</h2>')
-        for i, (term_code, prereqs) in enumerate(prereq_history):
-            if i < first_index:
-                continue
-            compare_prereqs(
-                course_id,
-                i == first_index,
-                term_code,
-                prereq_history[i - 1][1] if i > 0 else [],
-                prereqs,
-            )
+        for i, diff in enumerate(diffs):
+            compare_prereqs(course_id, i == 0, diff)
         if not still_exists:
             print("</details>")
     print("</main>")
@@ -244,15 +223,47 @@ def print_timeline() -> None:
     """
     changed_courses = get_changed_courses()
 
-    for term_code in term_codes:
-        print('<div class="term">')
-        print(f"<h2>{term}</h2>")
-        for course_code, _, history, _, _ in changed_courses:
-            for term, changes in history:
-                if term == term_code:
-                    break
-        print("</div>")
+    # Skip first term because we assume FA12 is when the prereqs have always
+    # existed (it won't print the first time a course's prereqs are added to
+    # ISIS)
+    for term_code in term_codes[1:]:
+        print(f"<h2>{term_code}</h2>")
+        print("<ul>")
+        printed = False
+        for course_code, _, _, diffs, _ in changed_courses:
+            for i, diff in enumerate(diffs):
+                if i == 0 or diff.term != term_code:
+                    continue
+                added_badge = (
+                    f' <span class="added">+{len(diff.added)}</span>'
+                    if diff.added
+                    else ""
+                )
+                removed_badge = (
+                    f' <span class="removed">−{len(diff.removed)}</span>'
+                    if diff.removed
+                    else ""
+                )
+                changed_badge = (
+                    f' <span class="changed">±{len(diff.changes)}</span>'
+                    if diff.changes
+                    else ""
+                )
+                deleted_badge = " → ❌" if diff.req_count == 0 else ""
+                print(
+                    f'<li class="course"><a href="./prereq-diffs.html#{"".join(course_code).lower()}-{term_code.lower()}">{course_code}</a>:{added_badge}{removed_badge}{changed_badge}{deleted_badge}</li>'
+                )
+                printed = True
+                break
+        if not printed:
+            print("<li>No prereqs changed.</li>")
+        print("</ul>")
 
 
 if __name__ == "__main__":
-    print_diff()
+    import sys as sus
+
+    if len(sus.argv) > 1:
+        print_timeline()
+    else:
+        print_diff()

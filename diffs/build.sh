@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cd diffs
 # https://stackoverflow.com/a/18127758
 head -n -2 < template.html > index.html
