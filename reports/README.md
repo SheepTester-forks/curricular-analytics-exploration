@@ -1,3 +1,6 @@
+All produced HTML files are entirely self-contained and can be opened in the
+browser and uploaded anywhere.
+
 ## Curriculum diffs
 
 Requires files/prereqs_fa12.csv and files/academic_plans_fa12.csv.
@@ -6,15 +9,12 @@ Requires files/prereqs_fa12.csv and files/academic_plans_fa12.csv.
 # make files/metrics_fa12.csv
 $ julia Metrics.jl
 
-# make diffs/diffs.json
-$ python3 diff_plan.py > diffs/diffs.json
+# make reports/diffs.json
+$ python3 diff_plan.py > reports/academic-plan-diffs.json
 
-# make index.html (requires Deno)
-$ bash diffs/build.sh
+# make academic-plan-diffs.html (requires Deno)
+$ bash reports/build-plans.sh
 ```
-
-index.html is entirely self-contained and can be opened in the browser and
-uploaded anywhere.
 
 ## Prerequisite diffs
 
@@ -22,7 +22,7 @@ Requires files/prereqs_fa12.csv.
 
 ```sh
 # make prereq-diffs.html (requires Deno)
-$ bash diffs/build-prereqs.sh
+$ bash reports/build-prereqs.sh
 ```
 
 ## Prerequisite diff timeline
@@ -31,5 +31,5 @@ Requires files/prereqs_fa12.csv.
 
 ```sh
 # make prereq-timeline.html (requires Deno)
-$ bash diffs/build-timeline.sh
+$ bash reports/build-timeline.sh
 ```
