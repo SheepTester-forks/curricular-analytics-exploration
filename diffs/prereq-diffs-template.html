@@ -95,6 +95,17 @@
         cursor: pointer;
         color: white;
       }
+      :target {
+        animation: flash 3s;
+      }
+      @keyframes flash {
+        from {
+          background-color: #682d0f;
+        }
+        to {
+          background-color: transparent;
+        }
+      }
     </style>
   </head>
 </html>

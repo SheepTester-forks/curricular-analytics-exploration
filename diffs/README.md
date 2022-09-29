@@ -21,6 +21,15 @@ uploaded anywhere.
 Requires files/prereqs_fa12.csv.
 
 ```sh
-# make prereqs-diffs.html (requires Deno)
+# make prereq-diffs.html (requires Deno)
 $ bash diffs/build-prereqs.sh
+```
+
+## Prerequisite diff timeline
+
+Requires files/prereqs_fa12.csv.
+
+```sh
+# make prereq-timeline.html (requires Deno)
+$ bash diffs/build-timeline.sh
 ```
