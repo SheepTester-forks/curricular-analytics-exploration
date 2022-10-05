@@ -74,5 +74,9 @@ def merge_partition(
     return target
 
 
-def sorted_partition(dictionary: Dict[CompK, List[V]]) -> List[Tuple[CompK, List[V]]]:
-    return [*sorted(dictionary.items(), key=lambda entry: entry[0])]
+def sorted_dict(dictionary: Dict[CompK, V]) -> List[Tuple[CompK, V]]:
+    """
+    Returns a list of key-value pairs in the given directionary sorted by the
+    key.
+    """
+    return sorted(dictionary.items(), key=lambda entry: entry[0])
