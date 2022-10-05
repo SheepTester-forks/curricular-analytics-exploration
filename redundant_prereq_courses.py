@@ -1,4 +1,4 @@
-from typing import List, NamedTuple, Optional, Set
+from typing import List, NamedTuple, Optional, Set, Tuple
 from parse import CourseCode, prereqs
 
 
@@ -17,57 +17,56 @@ course_prereqs = {
 }
 
 
-class TakenCourse(NamedTuple):
-    course: CourseCode
-    satisfies: CourseCode
+# First course in list is the earliest prereq
+PrereqChain = Tuple[CourseCode, ...]
 
 
 class State(NamedTuple):
-    taken: List[TakenCourse]
+    taken: List[PrereqChain]
     explored: Set[CourseCode]
-    nonexistent: Set[TakenCourse]
+    nonexistent: Set[PrereqChain]
 
 
-def take_prereq(course_code: CourseCode, target: State) -> None:
+def take_prereq(course_code: CourseCode, target: State, satisfies: PrereqChain) -> None:
     if course_code in target.explored:
         return
     target.explored.add(course_code)
     for course in course_prereqs[course_code]:
-        target.taken.append(TakenCourse(course, course_code))
+        chain = course, *satisfies
+        target.taken.append(chain)
         if course in course_prereqs:
-            take_prereq(course, target)
+            take_prereq(course, target, chain)
         else:
-            target.nonexistent.add(TakenCourse(course, course_code))
+            target.nonexistent.add(chain)
 
 
 def redundant_prereqs(
-    course_code: CourseCode, nonexistent: Optional[Set[TakenCourse]] = None
-) -> List[TakenCourse]:
+    course_code: CourseCode, nonexistent: Optional[Set[PrereqChain]] = None
+) -> List[PrereqChain]:
     state = State([], set(), set())
     prereqs = course_prereqs[course_code]
     for course in prereqs:
         if course in course_prereqs:
-            take_prereq(course, state)
+            take_prereq(course, state, (course, course_code))
         else:
-            state.nonexistent.add(TakenCourse(course, course_code))
+            state.nonexistent.add((course, course_code))
     if nonexistent is not None:
         nonexistent |= state.nonexistent
-    return [
-        taken for course in prereqs for taken in state.taken if course == taken.course
-    ]
+    return [taken for course in prereqs for taken in state.taken if course == taken[0]]
 
 
 def main() -> None:
-    nonexistent: Set[TakenCourse] = set()
+    nonexistent: Set[PrereqChain] = set()
     for course in sorted(course_prereqs):
         redundant = redundant_prereqs(course, nonexistent)
         if not redundant:
             continue
-        print(f"[{course} redundant prereqs]")
-        for course, satisfies in redundant:
-            print(f"prereq: {course} (implied by {satisfies})")
+        print(f"[{course}]")
+        for course, *satisfies in redundant:
+            chain = " → ".join(str(course) for course in satisfies)
+            print(f"Has redundant prereq {course}, which was already taken for {chain}")
     print("[Nonexistent courses]")
-    for course, satisfies in nonexistent:
+    for course, satisfies, *_ in nonexistent:
         print(f"{satisfies} requires {course}, which doesn't exist")
 
 
