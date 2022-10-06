@@ -83,9 +83,9 @@ def main() -> None:
     print("[Nonexistent prereqs]")
     for course_code, reqs in sorted_dict(course_prereqs):
         for req in reqs:
-            if len(req) == 1 and req[0].course_code not in course_prereqs:
+            if req and all(alt.course_code not in course_prereqs for alt in req):
                 print(
-                    f"{course_code} strictly requires nonexistent {req[0].course_code}"
+                    f"{course_code} strictly requires nonexistent {'/'.join(str(alt.course_code) for alt in req)}"
                 )
 
 
