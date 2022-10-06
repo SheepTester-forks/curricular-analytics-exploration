@@ -101,6 +101,9 @@ class Prerequisite(NamedTuple):
     course_code: CourseCode
     allow_concurrent: bool
 
+    def __repr__(self) -> str:
+        return f"{self.course_code}{'*' if self.allow_concurrent else ''}"
+
 
 @total_ordering
 class TermCode(str):
@@ -477,4 +480,5 @@ def major_codes():
 
 
 if __name__ == "__main__":
-    print(prereqs("SU19")[CourseCode("WARR", "11B")])
+    # CGS 100A has any CGS upper div as a prereq, so 100B can come before 100A
+    print(prereqs("FA22")[CourseCode("CGS", "100A")])
