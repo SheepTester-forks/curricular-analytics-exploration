@@ -61,31 +61,32 @@ def redundant_prereqs(
 
 
 def main() -> None:
+    print("Error type,Prerequisite,Required by,Course with redundant prereq")
     nonexistent: Dict[CourseCode, List[PrereqChain]] = {}
-    for course in sorted(course_prereqs_flat.keys()):
-        redundant = redundant_prereqs(course, nonexistent)
+    for course_code in sorted(course_prereqs_flat.keys()):
+        redundant = redundant_prereqs(course_code, nonexistent)
         if not redundant:
             continue
-        print(f"[{course}]")
         for course, chains in sorted_dict(redundant):
             display_chains = ", ".join(
                 " → ".join(str(course) for course in chain) for chain in chains
             )
-            print(
-                f"Has redundant prereq {course}, which was already taken for {display_chains}"
-            )
-    print("[Nonexistent courses]")
+            # _ has redundant prereq _, which was already taken for _
+            print(f'Redundant prereq,{course},"{display_chains}",{course_code}')
+
     for course, chains in sorted_dict(nonexistent):
         display_chains = ", ".join(
             map(str, sorted({satisfies for satisfies, *_ in chains}))
         )
-        print(f"Nonexistent {course} required by {display_chains}")
-    print("[Nonexistent prereqs]")
+        # Nonexistent _ required by _
+        print(f'Nonexistent course,{course},"{display_chains}",')
+
     for course_code, reqs in sorted_dict(course_prereqs):
         for req in reqs:
             if req and all(alt.course_code not in course_prereqs for alt in req):
+                # _ strictly requires nonexistent _
                 print(
-                    f"{course_code} strictly requires nonexistent {'/'.join(str(alt.course_code) for alt in req)}"
+                    f"Nonexistent prereq,{'/'.join(str(alt.course_code) for alt in req)},{course_code},"
                 )
 
 

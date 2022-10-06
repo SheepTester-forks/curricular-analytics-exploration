@@ -481,4 +481,4 @@ def major_codes():
 
 if __name__ == "__main__":
     # CGS 100A has any CGS upper div as a prereq, so 100B can come before 100A
-    print(prereqs("FA22")[CourseCode("CGS", "100A")])
+    print(prereqs("FA22")[CourseCode("NANO", "110")])
