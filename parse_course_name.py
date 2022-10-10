@@ -51,7 +51,7 @@ def parse_course_name(
     )
     if match:
         subject, number, has_lab = match.group(1, 2, 3)
-        if subject in ["IE", "RR"]:
+        if subject in ["IE", "RR", "OR"]:
             return None
         return subject, number, has_lab if has_lab == "L" or has_lab == "X" else None
     return None
