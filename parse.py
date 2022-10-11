@@ -328,7 +328,7 @@ class MajorPlans:
                         course.as_parsed(
                             CourseCode(subject, number + has_lab),
                             title_from_code=True,
-                            units=3 if has_lab == "L" else 2.5,
+                            units=2 if has_lab == "L" else 2.5,
                         )
                     )
             self._parsed_plans[college] = courses

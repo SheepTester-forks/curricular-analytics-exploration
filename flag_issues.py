@@ -1,4 +1,5 @@
-from typing import List, Set
+import json
+from typing import Dict, List, Set
 from college_names import college_names
 from parse import CourseCode, ParsedCourse, major_plans
 
@@ -48,6 +49,13 @@ ges = {
 }
 
 
+with open("./units_per_course.json") as file:
+    consensus_units: Dict[CourseCode, float] = {
+        CourseCode(*course_code.split(" ")): units
+        for course_code, units in json.load(file).items()
+    }
+
+
 class Issues:
     multiple_options: List[str] = []
     duplicate_courses: List[str] = []
@@ -90,6 +98,13 @@ def check_plan(
         ):
             Issues.wrong_units.append(
                 f"[{name}] “{course.course_title}” should be {course.units} units but is {course.raw.units} units"
+            )
+        elif (
+            course.course_code in consensus_units
+            and consensus_units[course.course_code] != course.units
+        ):
+            Issues.wrong_units.append(
+                f"[{name}] “{course.course_title}” should be {consensus_units[course.course_code]} units (by consensus) but is {course.units} units"
             )
         if course.course_title in curriculum:
             if not course.for_major:
