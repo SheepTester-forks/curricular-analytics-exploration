@@ -60,35 +60,56 @@ def redundant_prereqs(
     return {course: state.taken[course] for course in prereqs if course in state.taken}
 
 
-def main() -> None:
-    print("Error type,Prerequisite,Required by,Course with redundant prereq")
+def main(csv: bool = True) -> None:
+    if csv:
+        print("Error type,Prerequisite,Required by,Course with redundant prereq")
     nonexistent: Dict[CourseCode, List[PrereqChain]] = {}
     for course_code in sorted(course_prereqs_flat.keys()):
         redundant = redundant_prereqs(course_code, nonexistent)
         if not redundant:
             continue
+        if not csv:
+            print(f"[{course_code}]")
         for course, chains in sorted_dict(redundant):
-            display_chains = ", ".join(
-                " → ".join(str(course) for course in chain) for chain in chains
-            )
-            # _ has redundant prereq _, which was already taken for _
-            print(f'Redundant prereq,{course},"{display_chains}",{course_code}')
+            if csv:
+                display_chains = ", ".join(
+                    " → ".join(str(course) for course in chain) for chain in chains
+                )
+                print(f'Redundant prereq,{course},"{display_chains}",{course_code}')
+            # elif len(chains) > 0 and len(chains[0]) > 10:
+            #     print(
+            #         f"Has redundant prereq {course}, which was already taken for a lot of courses"
+            #     )
+            else:
+                display_chains = ", ".join({str(chain[-2]) for chain in chains})
+                print(
+                    f"Has redundant prereq {course}, which was already taken for {display_chains}"
+                )
+
+    if not csv:
+        print()
 
     for course, chains in sorted_dict(nonexistent):
         display_chains = ", ".join(
             map(str, sorted({satisfies for satisfies, *_ in chains}))
         )
-        # Nonexistent _ required by _
-        print(f'Nonexistent course,{course},"{display_chains}",')
+        if csv:
+            print(f'Nonexistent course,{course},"{display_chains}",')
+        else:
+            print(f"Nonexistent {display_chains} required by {course}")
+
+    if not csv:
+        print()
 
     for course_code, reqs in sorted_dict(course_prereqs):
         for req in reqs:
             if req and all(alt.course_code not in course_prereqs for alt in req):
-                # _ strictly requires nonexistent _
-                print(
-                    f"Nonexistent prereq,{'/'.join(str(alt.course_code) for alt in req)},{course_code},"
-                )
+                reqs = "/".join(str(alt.course_code) for alt in req)
+                if csv:
+                    print(f"Nonexistent prereq,{reqs},{course_code},")
+                else:
+                    print(f"{course_code} strictly requires nonexistent {reqs}")
 
 
 if __name__ == "__main__":
-    main()
+    main(csv=False)
