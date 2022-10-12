@@ -63,6 +63,19 @@ def redundant_prereqs(
 def main(csv: bool = True) -> None:
     if csv:
         print("Error type,Prerequisite,Required by,Course with redundant prereq")
+
+    for course_code, reqs in sorted_dict(course_prereqs):
+        for req in reqs:
+            if req and all(alt.course_code not in course_prereqs for alt in req):
+                reqs = "/".join(str(alt.course_code) for alt in req)
+                if csv:
+                    print(f"Nonexistent prereq,{reqs},{course_code},")
+                else:
+                    print(f"{course_code} strictly requires nonexistent {reqs}")
+
+    if not csv:
+        print()
+
     nonexistent: Dict[CourseCode, List[PrereqChain]] = {}
     for course_code in sorted(course_prereqs_flat.keys(), key=CourseCode.key):
         redundant = redundant_prereqs(course_code, nonexistent)
@@ -101,18 +114,6 @@ def main(csv: bool = True) -> None:
             print(f'Nonexistent course,{course},"{display_chains}",')
         else:
             print(f"Nonexistent {display_chains} required by {course}")
-
-    if not csv:
-        print()
-
-    for course_code, reqs in sorted_dict(course_prereqs):
-        for req in reqs:
-            if req and all(alt.course_code not in course_prereqs for alt in req):
-                reqs = "/".join(str(alt.course_code) for alt in req)
-                if csv:
-                    print(f"Nonexistent prereq,{reqs},{course_code},")
-                else:
-                    print(f"{course_code} strictly requires nonexistent {reqs}")
 
 
 if __name__ == "__main__":
