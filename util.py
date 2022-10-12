@@ -3,7 +3,7 @@ Utility functions for a partitioned list, which is what I will call a dictionary
 that maps keys to lists of values with the same key.
 """
 
-from typing import Any, Dict, Iterator, List, Protocol, Tuple, TypeVar
+from typing import Any, Callable, Dict, Iterator, List, Protocol, Tuple, TypeVar
 
 
 K = TypeVar("K")
@@ -20,6 +20,7 @@ class SupportsDunderLT(Protocol[_T_contra]):
 
 
 CompK = TypeVar("CompK", bound=SupportsDunderLT[Any])
+CompK2 = TypeVar("CompK2", bound=SupportsDunderLT[Any])
 
 
 def add_entries(target: Dict[K, List[V]], key: K, values: List[V]) -> None:
@@ -74,9 +75,11 @@ def merge_partition(
     return target
 
 
-def sorted_dict(dictionary: Dict[CompK, V]) -> List[Tuple[CompK, V]]:
+def sorted_dict(
+    dictionary: Dict[CompK, V], key: Callable[[CompK], CompK2] = lambda x: x
+) -> List[Tuple[CompK, V]]:
     """
     Returns a list of key-value pairs in the given directionary sorted by the
     key.
     """
-    return sorted(dictionary.items(), key=lambda entry: entry[0])
+    return sorted(dictionary.items(), key=lambda entry: key(entry[0]))

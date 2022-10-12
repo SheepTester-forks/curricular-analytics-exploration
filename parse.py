@@ -27,6 +27,16 @@ class CourseCode(NamedTuple):
     subject: str
     number: str
 
+    def key(self) -> Tuple[str, int, str]:
+        for i, char in enumerate(self.number):
+            if not char.isdigit():
+                index = i
+                break
+        else:
+            index = len(self.number)
+            # Return 1000 so WARR CULTD gets put after all numbers
+        return self.subject, int(self.number[0:index]) if index > 0 else 1000, self.number[index:]
+
     def __str__(self) -> str:
         return f"{self.subject} {self.number}"
 
