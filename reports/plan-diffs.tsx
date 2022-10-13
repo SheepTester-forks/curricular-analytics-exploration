@@ -330,7 +330,7 @@ function YearDiff ({ year, url, units, complexity, changes }: YearDiff) {
       )}
       {minorChanges.length > 0 && (
         <details>
-          <summary>View minor changes</summary>
+          <summary>View smaller changes</summary>
           <ul class='changes'>
             {minorChanges.map(change => (
               <ChangeItem change={change} />

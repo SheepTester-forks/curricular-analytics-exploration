@@ -9,8 +9,8 @@ Requires files/prereqs_fa12.csv and files/academic_plans_fa12.csv.
 # make files/metrics_fa12.csv
 $ julia Metrics.jl
 
-# make reports/diffs.json
-$ python3 diff_plan.py > reports/academic-plan-diffs.json
+# make reports/output/academic-plan-diffs.json
+$ python3 diff_plan.py > reports/output/academic-plan-diffs.json
 
 # make academic-plan-diffs.html (requires Deno)
 $ bash reports/build-plans.sh
