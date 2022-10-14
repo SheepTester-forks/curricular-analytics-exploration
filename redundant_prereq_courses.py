@@ -1,7 +1,10 @@
+"""
+python3 redundant_prereq_courses.py txt > files/redundant_prereq_courses.txt
+"""
+
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple
 from parse import CourseCode, prereqs
 from util import add_entry, merge_partition, sorted_dict
-
 
 # PHYS 1B requires [MATH 10B, MATH 20B], among others. PHYS 2B requires [MATH
 # 20B, MATH 20C, MATH 31BH], among others. PHYS 1C requires [PHYS 1B, PHYS 2B]

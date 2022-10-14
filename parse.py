@@ -35,7 +35,11 @@ class CourseCode(NamedTuple):
         else:
             index = len(self.number)
             # Return 1000 so WARR CULTD gets put after all numbers
-        return self.subject, int(self.number[0:index]) if index > 0 else 1000, self.number[index:]
+        return (
+            self.subject,
+            int(self.number[0:index]) if index > 0 else 1000,
+            self.number[index:],
+        )
 
     def __str__(self) -> str:
         return f"{self.subject} {self.number}"
@@ -290,6 +294,12 @@ class MajorPlans:
         "CAT 2": (CourseCode("CAT", "2"), 6),
         "CAT 3": (CourseCode("CAT", "3"), 6),
         "PHYS 1C": (CourseCode("PHYS", "1C"), 3),
+        "JAPN 130A": (CourseCode("JAPN", "130A"), 5),
+        "JAPN 130B": (CourseCode("JAPN", "130B"), 5),
+        "JAPN 130C": (CourseCode("JAPN", "130C"), 5),
+        "JWSP 1": (CourseCode("JWSP", "1"), 5),
+        "JWSP 2": (CourseCode("JWSP", "2"), 5),
+        "JWSP 3": (CourseCode("JWSP", "3"), 5),
     }
 
     year: int
@@ -326,11 +336,12 @@ class MajorPlans:
                     courses.append(course.as_parsed())
                     continue
                 subject, number, has_lab = parsed
+                child_units = 2 if has_lab == "L" else 2.5 if has_lab == "X" else 0
                 courses.append(
                     course.as_parsed(
                         CourseCode(subject, number),
                         title_from_code=bool(has_lab),
-                        units=3 if has_lab == "L" else 2.5 if has_lab == "X" else None,
+                        units=course.units - child_units,
                     )
                 )
                 if has_lab:
@@ -338,7 +349,7 @@ class MajorPlans:
                         course.as_parsed(
                             CourseCode(subject, number + has_lab),
                             title_from_code=True,
-                            units=2 if has_lab == "L" else 2.5,
+                            units=child_units,
                         )
                     )
             self._parsed_plans[college] = courses
@@ -490,5 +501,10 @@ def major_codes():
 
 
 if __name__ == "__main__":
-    # CGS 100A has any CGS upper div as a prereq, so 100B can come before 100A
-    print(prereqs("FA22")[CourseCode("NANO", "110")])
+    print(
+        next(
+            course
+            for course in major_plans(2022)["MC25"].plan("RE")
+            if course.course_title in "PHYS 2C"
+        )
+    )

@@ -1,3 +1,8 @@
+"""
+python3 units_per_course.py json > units_per_course.json
+python3 flag_issues.py > files/flagged_issues.txt
+"""
+
 import json
 from typing import Dict, List, Set
 from college_names import college_names
@@ -48,6 +53,12 @@ ges = {
     ],
 }
 
+consensus_wrong = [CourseCode("JAPN", "130A"),
+CourseCode("JAPN", "130B"),
+CourseCode("JAPN", "130C"),
+CourseCode("JWSP", "1"),
+CourseCode("JWSP", "2"),
+CourseCode("JWSP", "3")]
 
 with open("./units_per_course.json") as file:
     consensus_units: Dict[CourseCode, float] = {
@@ -101,6 +112,7 @@ def check_plan(
             )
         elif (
             course.course_code in consensus_units
+            and course.course_code not in consensus_wrong
             and consensus_units[course.course_code] != course.units
         ):
             Issues.wrong_units.append(
