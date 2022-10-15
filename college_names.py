@@ -1,4 +1,4 @@
-__all__ = ["college_names"]
+__all__ = ["college_names", "college_codes"]
 
 college_names = {
     "RE": "Revelle",
@@ -9,3 +9,6 @@ college_names = {
     "SI": "Sixth",
     "SN": "Seventh",
 }
+
+
+college_codes = ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
