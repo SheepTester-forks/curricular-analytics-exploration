@@ -8,6 +8,44 @@ from parse import major_codes, major_plans
 
 html = sys.argv[1] == "html"
 
+all_extra_ge_units = {
+    (major_code, college): sum(
+        course.units
+        for course in plans.plan(college)
+        if course.course_title.upper() != "ELECTIVE" and not course.for_major
+    )
+    for major_code, plans in major_plans(2022).items()
+    for college in plans.colleges
+}
+min_ge = min(units for units in all_extra_ge_units.values() if units > 0)
+max_ge = max(all_extra_ge_units.values())
+print(f"min={min_ge} max={max_ge}", file=sys.stderr)
+
+
+class ColorScale:
+    # Google Sheets color scale colors
+    _GREEN = 87, 187, 138
+    _YELLOW = 255, 214, 102
+    _RED = 230, 124, 115
+
+    @staticmethod
+    def _interpolate(t: float, a: float, b: float) -> str:
+        return str(a + (b - a) * t)
+
+    @classmethod
+    def color_scale(cls, t: float) -> str:
+        # green: rgb(87,187,138)
+        # yellow: rgb(255,214,102)
+        # red: rgb(230,124,115)
+        channels = ",".join(
+            cls._interpolate(t * 2, cls._GREEN[i], cls._YELLOW[i])
+            if t < 0.5
+            else cls._interpolate(t * 2 - 1, cls._YELLOW[i], cls._RED[i])
+            for i in range(3)
+        )
+        return f"rgb({channels})"
+
+
 if html:
     college_headers = "".join(
         f'<th class="college-header">{college_names[college]}</th>'
@@ -17,9 +55,13 @@ if html:
 else:
     print("Major," + ",".join(college_names[college] for college in college_codes))
 
-for major_code, plans in major_plans(2022).items():
+sums = {college: 0.0 for college in college_codes}
+major_count = 0
+
+for major_code in major_plans(2022).keys():
     if major_code.startswith("UN"):
         continue
+    major_count += 1
     if html:
         print('<tr><th scope="col" class="major">')
         print(
@@ -28,25 +70,28 @@ for major_code, plans in major_plans(2022).items():
     else:
         print(major_code, end="")
     for college in college_codes:
-        if college not in plans.colleges:
+        if (major_code, college) not in all_extra_ge_units:
             if html:
                 print("<td></td>")
             else:
                 print(",", end="")
             continue
-        extra_ge_units = sum(
-            course.units
-            for course in plans.plan(college)
-            if course.course_title.upper() != "ELECTIVE" and not course.for_major
-        )
+        extra_ge_units = all_extra_ge_units[major_code, college]
+        sums[college] += extra_ge_units
         if html:
-            print(f"<td>{extra_ge_units}</td>")
+            print(f"<td>{extra_ge_units: .0f}</td>")
         else:
             print(f",{extra_ge_units}", end="")
     if html:
         print(f"</tr>")
     else:
         print()
+
+if html:
+    print('<tr><th scope="col" class="major">Average</th>')
+    for college in college_codes:
+        print(f"<td>{sums[college] / major_count: .0f}</td>")
+    print(f"</tr>")
 
 if html:
     print("</table>")
