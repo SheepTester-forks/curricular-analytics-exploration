@@ -3,42 +3,32 @@ browser and uploaded anywhere.
 
 ## Curriculum diffs
 
-Requires `files/prereqs_fa12.csv` and `files/academic_plans_fa12.csv`.
+Requires `files/prereqs_fa12.csv` and `files/academic_plans_fa12.csv`. Uses Julia, Python, Deno. Produces `reports/output/academic-plan-diffs.html`.
 
 ```sh
-# make files/metrics_fa12.csv
-$ julia Metrics.jl
-
-# make reports/output/academic-plan-diffs.json
-$ python3 diff_plan.py > reports/output/academic-plan-diffs.json
-
-# make academic-plan-diffs.html (requires Deno)
-$ bash reports/build-plans.sh
+$ make academic-plan-diffs
 ```
 
 ## Prerequisite diffs
 
-Requires `files/prereqs_fa12.csv`.
+Requires `files/prereqs_fa12.csv`. Uses Python. Produces `reports/output/prereq-diffs.html`.
 
 ```sh
-# make reports/output/prereq-diffs.html (requires Python)
-$ bash reports/build-prereqs.sh
+$ make prereq-diffs
 ```
 
 ## Prerequisite diff timeline
 
-Requires `files/prereqs_fa12.csv`.
+Requires `files/prereqs_fa12.csv`. Uses Python. Produces `reports/output/prereq-timeline.html`.
 
 ```sh
-# make reports/output/prereq-timeline.html (requires Python)
-$ bash reports/build-timeline.sh
+$ make prereq-timeline
 ```
 
 ## GE units by college
 
-Requires `files/academic_plans_fa12.csv` and `files/isis_major_code_list.xlsx - Major Codes.csv`.
+Requires `files/academic_plans_fa12.csv` and `files/isis_major_code_list.xlsx - Major Codes.csv`. Uses Python. Produces `reports/output/college-ge-units.html`.
 
 ```sh
-# make reports/output/college-ge-units.html (requires Python)
-$ bash reports/build-ges.sh
+$ make college-ge-units
 ```
