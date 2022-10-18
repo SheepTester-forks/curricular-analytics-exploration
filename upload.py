@@ -216,16 +216,18 @@ def track_uploaded_curricula(year: int) -> Generator[Uploaded, None, None]:
                     curricula[major_code] = int(curriculum_id[len(URL_BASE) :])
     except FileNotFoundError:
         pass
+    original = {**curricula}
     try:
         yield curricula
     finally:
-        with open(f"./files/uploaded{year}.yml", "w") as file:
-            for major_code in major_plans(year).keys():
-                curriculum_id = curricula.get(major_code)
-                if curriculum_id is None:
-                    file.write(f"{major_code}:\n")
-                else:
-                    file.write(f"{major_code}: {URL_BASE}{curriculum_id}\n")
+        if original != curricula:
+            with open(f"./files/uploaded{year}.yml", "w") as file:
+                for major_code in major_plans(year).keys():
+                    curriculum_id = curricula.get(major_code)
+                    if curriculum_id is None:
+                        file.write(f"{major_code}:\n")
+                    else:
+                        file.write(f"{major_code}: {URL_BASE}{curriculum_id}\n")
 
 
 if __name__ == "__main__":
