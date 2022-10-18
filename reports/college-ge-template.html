@@ -7,7 +7,7 @@
     <title>Additional units from college-specific GEs by major</title>
     <meta
       name="description"
-      content="Determine which college is best for your major."
+      content="Determine which college is best for your major. Last updated October 2022."
     />
 
     <style>
@@ -20,13 +20,18 @@
       tr {
         display: flex;
       }
+      @media (hover: hover) {
+        .row:hover {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+      }
       th {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
       }
       .major {
-        width: 50vw;
+        width: 40vw;
         text-align: left;
       }
       .major-code {
@@ -62,12 +67,107 @@
       .average {
         border-top: 1px solid rgba(0, 0, 0, 0.1);
       }
+      .college-header {
+        display: flex;
+      }
+      .college-header-btn {
+        flex: auto;
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+        text-align: left;
+      }
+      .college-header-label {
+        display: inline-block;
+        width: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        flex: auto;
+      }
+      .college-header-btn::after {
+        content: '⇅';
+        flex: none;
+      }
+      .sort-forward::after {
+        content: '↑';
+      }
+      .sort-reverse::after {
+        content: '↓';
+      }
+
+      button {
+        -webkit-appearance: none;
+        border: none;
+        background: none;
+        color: inherit;
+        font: inherit;
+      }
+      button:not(:disabled) {
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
     <script type="module">
-      const rows = document.querySelectorAll('.row')
-      console.log(rows)
+      const rows = Array.from(document.querySelectorAll('.row'))
+      const headers = Array.from(document.querySelectorAll('.college-header'))
+      let currentSort = null
+      function sort (column, order) {
+        return rows
+          .slice()
+          .sort(
+            (a, b) =>
+              (+a.children[column + 1].textContent -
+                +b.children[column + 1].textContent) *
+              order
+          )
+      }
+      function setRows (rows) {
+        for (let i = 1; i < rows.length; i++) {
+          rows[i - 1].after(rows[i])
+        }
+      }
+      for (const [column, header] of headers.entries()) {
+        const button = document.createElement('button')
+        button.className = 'college-header-btn'
+        button.title = 'Sort ascending'
+        button.append(
+          Object.assign(document.createElement('span'), {
+            className: 'college-header-label',
+            textContent: header.textContent
+          })
+        )
+        header.replaceChildren(button)
+
+        button.addEventListener('click', () => {
+          if (currentSort?.column === column) {
+            if (currentSort.order === 1) {
+              currentSort.order = -1
+              button.classList.remove('sort-forward')
+              button.classList.add('sort-reverse')
+              button.title = 'Reset sort'
+            } else {
+              button.classList.remove('sort-reverse')
+              currentSort = null
+              setRows(rows)
+              button.title = 'Sort ascending'
+              return
+            }
+          } else {
+            if (currentSort) {
+              currentSort.button.classList.remove(
+                'sort-forward',
+                'sort-reverse'
+              )
+              currentSort.button.title = 'Sort ascending'
+            }
+            currentSort = { column, order: 1, button }
+            button.classList.add('sort-forward')
+            button.title = 'Sort descending'
+          }
+          setRows(sort(column, currentSort.order))
+        })
+      }
     </script>
   </body>
 </html>

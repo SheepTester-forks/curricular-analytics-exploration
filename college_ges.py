@@ -5,8 +5,37 @@ python3 college_ges.py > college_ges.csv
 import sys
 from college_names import college_codes, college_names
 from parse import major_codes, major_plans
+from util import partition
 
-html = sys.argv[1] == "html"
+if len(sys.argv) > 1 and sys.argv[1] == "debug":
+    if len(sys.argv) != 4:
+        raise Exception("Need major code and college")
+    major_code = sys.argv[2]
+    college = sys.argv[3]
+    courses = partition(
+        (
+            "MAJOR"
+            if course.for_major
+            else "ELECTIVE"
+            if course.course_title.upper() == "ELECTIVE"
+            else "GE",
+            course.course_title
+            if course.units == 4
+            else f"{course.course_title} ({course.units})",
+        )
+        for course in major_plans(2022)[major_code].plan(college)
+    )
+    print("[Major]")
+    print(", ".join(courses.get("MAJOR") or []) or "(none)")
+    print()
+    print("[GE]")
+    print(", ".join(courses.get("GE") or []) or "(none)")
+    print()
+    print("[Padding]")
+    print(", ".join(courses.get("ELECTIVE") or []) or "(none)")
+    exit()
+
+html = len(sys.argv) > 1 and sys.argv[1] == "html"
 
 all_extra_ge_units = {
     (major_code, college): sum(
