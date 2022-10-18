@@ -51,7 +51,9 @@ if html:
         f'<th class="college-header">{college_names[college]}</th>'
         for college in college_codes
     )
-    print(f'<table><tr><th class="major">Major</th>{college_headers}</tr>')
+    print(
+        f'<table><tr class="header"><th class="major">Major</th>{college_headers}</tr>'
+    )
 else:
     print("Major," + ",".join(college_names[college] for college in college_codes))
 
@@ -63,7 +65,7 @@ for major_code in major_plans(2022).keys():
         continue
     major_count += 1
     if html:
-        print('<tr><th scope="col" class="major">')
+        print('<tr class="row"><th scope="col" class="major">')
         print(
             f'<span class="major-code">{major_code}</span><span class="major-name">: {major_codes()[major_code].name}</span></th>'
         )
@@ -79,7 +81,12 @@ for major_code in major_plans(2022).keys():
         extra_ge_units = all_extra_ge_units[major_code, college]
         sums[college] += extra_ge_units
         if html:
-            print(f"<td>{extra_ge_units: .0f}</td>")
+            color = (
+                ColorScale.color_scale((extra_ge_units - min_ge) / (max_ge - min_ge))
+                if extra_ge_units >= min_ge
+                else "transparent"
+            )
+            print(f'<td style="--color: {color};">{extra_ge_units: .0f}</td>')
         else:
             print(f",{extra_ge_units}", end="")
     if html:
@@ -88,9 +95,11 @@ for major_code in major_plans(2022).keys():
         print()
 
 if html:
-    print('<tr><th scope="col" class="major">Average</th>')
+    print('<tr class="average"><th scope="col" class="major">Average</th>')
     for college in college_codes:
-        print(f"<td>{sums[college] / major_count: .0f}</td>")
+        average = sums[college] / major_count
+        color = ColorScale.color_scale((average - min_ge) / (max_ge - min_ge))
+        print(f'<td style="--color: {color};">{average: .0f}</td>')
     print(f"</tr>")
 
 if html:

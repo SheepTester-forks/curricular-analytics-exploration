@@ -4,8 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>I haven't bothered setting a website title yet.</title>
-    <meta name="description" content="No description yet." />
+    <title>Additional units from college-specific GEs by major</title>
+    <meta
+      name="description"
+      content="Determine which college is best for your major."
+    />
 
     <style>
       body {
@@ -17,23 +20,54 @@
       tr {
         display: flex;
       }
-      .major {
-        width: 50%;
+      th {
         text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .major {
+        width: 50vw;
         text-align: left;
+      }
+      .major-code {
+        font-family: monospace;
+        font-size: 1.2em;
+      }
+      .major-name {
+        font-weight: normal;
+      }
+      @media (max-width: 500px) {
+        .major {
+          width: 50px;
+        }
+        .major-name {
+          display: none;
+        }
       }
       .college-header,
       td {
-        flex: 1 0 0;
+        flex: auto;
+        width: 0;
       }
       td {
         text-align: right;
+        background-color: var(--color);
+      }
+      .header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        background-color: white;
+        position: sticky;
+        top: 0;
+      }
+      .average {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
       }
     </style>
   </head>
   <body>
-    <script>
-      // TEMP
+    <script type="module">
+      const rows = document.querySelectorAll('.row')
+      console.log(rows)
     </script>
   </body>
 </html>
