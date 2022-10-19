@@ -20,12 +20,18 @@
       tr {
         display: flex;
       }
+      .row {
+        position: relative;
+      }
       @media (hover: hover) {
         .row:hover {
           background-color: rgba(0, 0, 0, 0.02);
           box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
-          position: relative;
           font-weight: bold;
+          z-index: 1;
+        }
+        .college-header-btn:hover {
+          background-color: rgba(0, 0, 0, 0.1);
         }
       }
       th {
@@ -66,6 +72,7 @@
         background-color: white;
         position: sticky;
         top: 0;
+        z-index: 2;
       }
       .average {
         border-top: 1px solid rgba(0, 0, 0, 0.1);
