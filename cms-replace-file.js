@@ -11,6 +11,9 @@ async function writeFile (fileId, contents, message) {
   formData.set('submittedFormIdentifier', submittedFormIdentifier)
   formData.set('id', fileId)
   formData.set('bytesAsString', contents)
+  formData.set('shouldBeIndexed', 'on')
+  formData.set('shouldBePublished', 'on')
+  formData.set('customLinkRewriting', 'ABSOLUTE')
 
   await fetch('/entity/submitfile.act?saveAs=draft', {
     body: formData,
