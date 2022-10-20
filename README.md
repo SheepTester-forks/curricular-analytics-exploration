@@ -12,12 +12,14 @@
   We use this to create degree plans and curriculum for every major to upload to
   [Curricular Analytics](https://curricularanalytics.org/).
 
-  If others want to adapt our code for their university, here is a preview of
-  the first two rows to show what we were dealing with.
+  If others want to adapt our code for their university, here is sampling of rows to show what we were dealing with.
 
-  | Department | Major | College | Course | Units | Course Type | GE/Major Overlap | Start Year | Year Taken | Quarter Taken | Term Taken |
-  | ---------- | ----- | ------- | ------ | ----- | ----------- | ---------------- | ---------- | ---------- | ------------- | ---------- |
-  | ANTHROPOLO | AN27  | SI      | ANTH 1 | 4.0   | DEPARTMENT  | N                | 2012       | 1          | 1             | FA12       |
+  | Department | Major | College | Course  | Units | Course Type | GE/Major Overlap | Start Year | Year Taken | Quarter Taken | Term Taken |
+  | ---------- | ----- | ------- | ------- | ----- | ----------- | ---------------- | ---------- | ---------- | ------------- | ---------- |
+  | ANTHROPOLO | AN27  | SI      | ANTH 1  | 4.0   | DEPARTMENT  | N                | 2012       | 1          | 1             | FA12       |
+  | ANTHROPOLO | AN27  | SI      | CAT 1   | 4.0   | COLLEGE     | N                | 2012       | 1          | 1             | FA12       |
+  | BENG       | BE25  | FI      | CHEM 6A | 4.0   | DEPARTMENT  | N                | 2012       | 1          | 1             | FA12       |
+  | BENG       | BE25  | MU      | CHEM 6A | 4.0   | DEPARTMENT  | N                | 2012       | 1          | 1             | FA12       |
 
   - `Major` is an [ISIS major
     code](https://blink.ucsd.edu/instructors/academic-info/majors/major-codes.html).
@@ -39,30 +41,40 @@
     are exceptions, usually for weird majors that aren't actually 4-year plans
     (e.g. only Revelle has plans for undeclared "majors").
 
+    For universities without a college system, this column can be set to a single value or be used for plans with different general education requirements (e.g. an honors college). The Python programs do not expect a specific format for college codes.
+
   - `Course` is a **manually-written** description of a course. It's usually the
     course subject and number, but it can also be a phrase like "CSE Elective"
     or list alternatives like "MATH 10A/20A." Human error makes parsing this
     difficult; see [`parse_course_name`](./parse_course_name.py) for an attempt.
 
-  - `Course Type` is either `COLLEGE` or `DEPARTMENT`. When `GE/Major Overlap`
-    is `Y` (a course satisfies both major and college requirements), `Course Type` can still be either `COLLEGE` or `DEPARTMENT`.
+    Course codes from other colleges will likely require modifying the implementation of [`parse_course_name`](./parse_course_name.py).
+
+  - `Course Type` is either `DEPARTMENT` (major requirement) or `COLLEGE` (GE requirement). When `GE/Major Overlap`
+    is `Y` (a course satisfies both major and college requirements), it doesn't matter what `Course Type` is.
 
     To get a curriculum (the major requirements) from a plan, we only keep
     courses with a `Course Type` of `DEPARTMENT` _or_ a `GE/Major Overlap` of
     `Y`.
 
-    They do not provide a plan with only major requirements. In #14 it seems
+    We were not provided a plan with only major requirements. According to #14 it seems
     removing college-specific courses from Marshall (TH)'s degree plan tends to
     produce the most compatible results for other colleges, so we base curricula
     off of Marshall.
+
+    Currently, many parts of the code only handle UCSD's seven colleges. Some modification would be required to use other college codes.
 
   - `Start Year` indicates the year that the plan is for. For example, a student
     who enrolls at UCSD in fall 2019 should follow the plan with a `Start Year`
     of 2019.
 
-  - `Term Taken` is not used.
+  - `Year Taken` and `Quarter Taken` define the *n*th school year and *n*th quarter.
 
-  Some but not all degree plans put courses in a summer quarter (with a `Term Taken` of `SUxx`) even though they're not supposed to.
+    Our Python programs expect four quarters per year (this includes a summer quarter at the end of each year, even though plans should not require summer sessions), but not all quarters need to be used. For universities on the semester system, the first two quarters could be used to represent the two semesters.
+
+    Many parts of the code currently expect four years, each with three quarters. Summer quarters (the fourth quarter of each year) are merged with the prior spring quarter.
+
+  - `Term Taken` is not used.
 
 - [**`prereqs_fa12.csv`**](https://drive.google.com/file/d/19oVI16mmhDIclyj6p3GMlxTMPDRNIcHw/view),
   containing every course and their prerequisites for every quarter since fall 2012.
@@ -75,8 +87,13 @@
 
   | Term Code | Term ID | Course ID | Course Subject Code | Course Number | Prereq Sequence ID | Prereq Course ID | Prereq Subject Code | Prereq Course Number | Prereq Minimum Grade Priority | Prereq Minimum Grade | Allow concurrent registration |
   | --------- | ------- | --------- | ------------------- | ------------- | ------------------ | ---------------- | ------------------- | -------------------- | ----------------------------- | -------------------- | ----------------------------- |
-  | FA12      | 4550    | AIP197    | AIP                 | 197           |                    |                  |                     |                      |                               |                      |
-  | FA12      | 4550    | ANAR144   | ANAR                | 144           | 001                | ANTH3            | ANTH                | 3                    | 600                           | P                    | Y                             |
+  | FA22      | 5250    | CHEM43AM  | CHEM                | 43AM          | 001                | CHEM7L           | CHEM                | 7L                   | 600                           | P                    | N                             |
+  | FA22      | 5250    | CHEM43AM  | CHEM                | 43AM          | 001                | CHEM7LM          | CHEM                | 7LM                  | 600                           | P                    | N                             |
+  | FA22      | 5250    | CHEM43AM  | CHEM                | 43AM          | 002                | CHEM40A          | CHEM                | 40A                  | 600                           | P                    | N                             |
+  | FA22      | 5250    | CHEM43AM  | CHEM                | 43AM          | 002                | CHEM40AH         | CHEM                | 40AH                 | 600                           | P                    | N                             |
+  | FA22      | 5250    | CHEM43AM  | CHEM                | 43AM          | 002                | CHEM41A          | CHEM                | 41A                  | 600                           | P                    | N                             |
+  | FA22      | 5250    | CHEM6A    | CHEM                | 6A            |                    |                  |                     |                      |                               |                      |
+  | FA22      | 5250    | CHEM6AH   | CHEM                | 6AH           |                    |                  |                     |                      |                               |                      |
 
   Some courses do not have prerequisites, so they will have a single row with
   empty fields after `Course Number`.
@@ -90,10 +107,12 @@
   It's unclear what `Allow concurrent registration` really means---only a few
   courses have it set to `Y`. Some course pairs, such as CSE 12 and 15L, are
   supposedly corequisites according to the course catalog, but they are not
-  listed as corequisites in the table.
+  listed as corequisites in the table. The Python program creates a corequisite relationship between two courses with this flag set to `Y`.
 
   `Term ID`, `Course ID`, `Prereq Course ID`, `Prereq Minimum Grade Priority`,
   and `Prereq Minimum Grade` aren't used.
+
+  `Term Code` is respected in case prerequisites change midway through the plan. They currently are expected to be in UCSD's term code format: `<quarter><year>`, such as `FA22` for Fall 2022.
 
 - **`isis_major_code_list.xlsx - Major Codes.csv`**: Open [isis_major_code_list.xlsx "Major Codes"](https://docs.google.com/spreadsheets/d/1Mgr99R6OFXJuNO_Xx-j49mBgurpwExKL/edit#gid=616727155) and go to File > Download > Comma Separated Values (.csv). This should be the default name it suggests, so you don't have to worry about setting the name.
 
@@ -104,6 +123,20 @@
   We use this to add the major name and CIP major code to the uploaded
   curriculum on the [Curricular Analytics
   website](https://curricularanalytics.org/).
+
+  | Previous Local Code | UCOP Major Code (CSS) | ISIS Major Code | Major Abbreviation | Major Description              | Diploma Title                             | Start Term | End Term | Student Level | Department | Award Type | Program Length (in years) | College              | CIP Code | CIP Description                | STEM | Self Supporting | Discontinued or Phasing Out | Notes                                                                   |
+  | ------------------- | --------------------- | --------------- | ------------------ | ------------------------------ | ----------------------------------------- | ---------- | -------- | ------------- | ---------- | ---------- | ------------------------- | -------------------- | -------- | ------------------------------ | ---- | --------------- | --------------------------- | ----------------------------------------------------------------------- |
+  |                     | 0HK                   | AA25            | BlkDspAfAm         | Black Diaspora &African AmrcSt | Black Diaspora & African American Studies | S122       |          | UN            | AAS        | BA         | 4.00                      | RE MU TH WA FI SI SN | 050201   | AFRICAN-AMERICAN/BLACK STUDIES |      |                 |                             | Administrative start in S1 to accommodate new students attending Summer |
+
+  Only the following fields are used:
+
+  - `ISIS Major Code` is the major code used by UCSD and the Python programs as an ID for each major. At UCSD, they are of the format `<subject><number>`, such as `CG25` for Cognitive Science. The Python programs do not expect a specific format for these major codes.
+
+  - `Diploma Title` is used as a human-readable display name for the major.
+
+  - `Department` is a department code used to group majors by departments and schools. The Python programs don't expect a specific format for department codes, but the way majors are grouped for Tableau views is defined in [`departments.py`](./departments.py).
+
+  - `Award Type` (BS vs BA) and `CIP Code` (national major codes) are used to populate data fields for Curricular Analytics. That's it.
 
 ### Uploading
 

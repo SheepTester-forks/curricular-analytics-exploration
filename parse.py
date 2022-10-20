@@ -379,7 +379,8 @@ class MajorPlans:
                     college = college_code
                     break
             if college is None:
-                raise KeyError("Major has no college plans.")
+                # Support non-UCSD plans; uses an arbitrary college as the base
+                college = next(iter(self.colleges))
         return [course for course in self.plan(college) if course.for_major]
 
 
