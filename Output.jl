@@ -81,7 +81,7 @@ function output(year::Int, major::AbstractString)
         ca_course
       end
       for course in term
-    ]) for (i, term) in enumerate(academic_plans[college_code]) if !isempty(term)]
+    ]) for (i, term) in enumerate(academic_plans[college_code])]
 
     # Add prereqs
     for (course_code, (course, i)) in courses

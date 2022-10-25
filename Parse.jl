@@ -156,10 +156,15 @@ function get_plans()
   ) in open(parsecsv, "./files/academic_plans_fa12.csv")[2:end]
     majors = get!(years, parse(Int, plan_year), Dict())
     colleges = get!(majors, major, Dict())
-    plan = get!(colleges, college, [[] for _ in 1:16])
+    plan = get!(colleges, college, [[] for _ in 1:12])
+    qtr = parse(Int, qtr)
     # TODO: A lot of plans will have empty terms due to no summer quarter. Will
     # that affect the CA score?
-    term = (parse(Int, year) - 1) * 4 + parse(Int, qtr)
+    if qtr == 4
+      # Merge summer quarter with previous spring quarter (per Carlos)
+      qtr = 3
+    end
+    term = (parse(Int, year) - 1) * 3 + qtr
     units = parse(Float32, units)
     parsed = parse_course_name(course_title)
     for_major = crse_type == "DEPARTMENT" || overlaps == "Y"

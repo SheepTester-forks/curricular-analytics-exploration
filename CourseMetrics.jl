@@ -14,6 +14,7 @@ open("./files/courses_fa12.csv", "w") do file
     "Course",
     "Complexity",
     "Centrality",
+    "Year taken in plan",
   ])
 
   for year in 2015:2050
@@ -22,14 +23,12 @@ open("./files/courses_fa12.csv", "w") do file
     end
     for major in sort(collect(keys(plans[year])))
       degree_plans = output(year, major)
-      curriculum = convert(
-        Curriculum,
-        degree_plans[first(
-          college
-          for college in ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
-          if college ∈ keys(degree_plans) && !(college == "SN" && year < 2020)
-        )]
+      curriculum_college = first(
+        college
+        for college in ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
+        if college ∈ keys(degree_plans) && !(college == "SN" && year < 2020)
       )
+      curriculum = convert(Curriculum, degree_plans[curriculum_college])
       for (i, course) in enumerate(curriculum.courses)
         if course.prefix == "" || course.institution != "DEPARTMENT"
           continue
@@ -41,6 +40,9 @@ open("./files/courses_fa12.csv", "w") do file
           "$(course.prefix) $(course.num)", # Course
           string(complexity(curriculum, i)), # Complexity
           string(centrality(curriculum, i)), # Centrality
+          # Use the curriculum college's year, even though it could vary between
+          # colleges
+          string((findfirst(course ∈ term.courses for term in degree_plans[curriculum_college].terms) - 1) ÷ 3 + 1),
         ])
       end
     end
