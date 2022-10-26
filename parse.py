@@ -27,7 +27,7 @@ class CourseCode(NamedTuple):
     subject: str
     number: str
 
-    def key(self) -> Tuple[str, int, str]:
+    def parts(self) -> Tuple[str, int, str]:
         for i, char in enumerate(self.number):
             if not char.isdigit():
                 index = i
@@ -226,7 +226,7 @@ class ParsedCourse(NamedTuple):
     Represents a course in an academic plan.
 
     `term` is the index of the term from 0 to 11, where 0 is the first fall
-    quarter and 12 is the last spring quarter. Summer quarters from the raw plan
+    quarter and 11 is the last spring quarter. Summer quarters from the raw plan
     are merged into the previous spring quarter.
 
     `course_title` has been cleaned up by `clean_course_title`.

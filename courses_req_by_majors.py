@@ -14,6 +14,6 @@ courses = partition(
     if course.for_major and course.course_code
 )
 
-for course_code, major_codes in sorted_dict(courses, key=CourseCode.key):
+for course_code, major_codes in sorted_dict(courses, key=CourseCode.parts):
     majors = ", ".join(sorted(set(major_codes)))
     print(f"[{course_code}] {majors}")

@@ -53,12 +53,14 @@ ges = {
     ],
 }
 
-consensus_wrong = [CourseCode("JAPN", "130A"),
-CourseCode("JAPN", "130B"),
-CourseCode("JAPN", "130C"),
-CourseCode("JWSP", "1"),
-CourseCode("JWSP", "2"),
-CourseCode("JWSP", "3")]
+consensus_wrong = [
+    CourseCode("JAPN", "130A"),
+    CourseCode("JAPN", "130B"),
+    CourseCode("JAPN", "130C"),
+    CourseCode("JWSP", "1"),
+    CourseCode("JWSP", "2"),
+    CourseCode("JWSP", "3"),
+]
 
 with open("./units_per_course.json") as file:
     consensus_units: Dict[CourseCode, float] = {
@@ -74,6 +76,7 @@ class Issues:
     wrong_units: List[str] = []
     miscategorized_courses: List[str] = []
     curriculum_deviances: List[str] = []
+    early_upper_division: List[str] = []
 
 
 def check_plan(
@@ -128,6 +131,15 @@ def check_plan(
                 Issues.curriculum_deviances.append(
                     f"[{name}] “{course.course_title}” differs from curriculum"
                 )
+        if (
+            course.term < 6
+            and course.course_code
+            and course.course_code.parts()[1] >= 100
+        ):
+            quarter = ["fall", "winter", "spring"][course.term % 3]
+            Issues.early_upper_division.append(
+                f"[{name}] “{course.course_title}” is taken in year {course.term // 3 + 1} {quarter} quarter"
+            )
 
 
 for major_code, plans in major_plans(year).items():
@@ -162,4 +174,8 @@ print_issues(
 print_issues(
     Issues.curriculum_deviances,
     "Course names marked as for the major not present in other colleges' curricula",
+)
+print_issues(
+    Issues.early_upper_division,
+    "Upper division courses taken before junior year",
 )

@@ -80,13 +80,13 @@ def main(csv: bool = True) -> None:
         print()
 
     nonexistent: Dict[CourseCode, List[PrereqChain]] = {}
-    for course_code in sorted(course_prereqs_flat.keys(), key=CourseCode.key):
+    for course_code in sorted(course_prereqs_flat.keys(), key=CourseCode.parts):
         redundant = redundant_prereqs(course_code, nonexistent)
         if not redundant:
             continue
         if not csv:
             print(f"[{course_code}]")
-        for course, chains in sorted_dict(redundant, key=CourseCode.key):
+        for course, chains in sorted_dict(redundant, key=CourseCode.parts):
             if csv:
                 display_chains = ", ".join(
                     " → ".join(str(course) for course in chain) for chain in chains
@@ -99,7 +99,8 @@ def main(csv: bool = True) -> None:
             else:
                 display_chains = ", ".join(
                     map(
-                        str, sorted({chain[-2] for chain in chains}, key=CourseCode.key)
+                        str,
+                        sorted({chain[-2] for chain in chains}, key=CourseCode.parts),
                     )
                 )
                 print(
