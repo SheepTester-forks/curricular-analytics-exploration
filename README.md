@@ -202,6 +202,8 @@ Inconsistently, some programs only work with 2021's academic plans, while other 
 
 **output_json.py** defines the JSON structure for JSON relating to the Curricular Analytics API.
 
+**util.py** just has helper functions.
+
 ### In Julia (to use with CurricularAnalytics.jl)
 
 **Parse.jl** is basically equivalent to parse.py.
@@ -216,6 +218,10 @@ Note: "outputs `<file name>`" means the program prints to standard output, which
 
 **check_uploaded.py** checks every curriculum and degree plan on Curricular Analytics to check that they uploaded properly. Uploading curricula too quickly sometimes prevents them from being processed correctly, and so there can be missing courses or terms.
 
+**cms-replace-file.js** is a script to help with replacing large HTML files on the UCSD CMS.
+
+**college_ges.py** outputs `college_ges.csv` and `reports/output/college-ge-units-fragment.html`. It determines the number of additional units each college adds to a major's degree plan through its general education requirements. This is used to generate the [_Additional Units from College-Specific General Education Requirements_](https://educationalinnovation.ucsd.edu/ca-views/college-ge-units.html) report.
+
 **common_prereqs.py** outputs `common_prereqs.txt`. We decided that `SOCI- UD METHODOLOGY` and `TDHD XXX` should have hardcoded prerequisites even though they aren't specific course codes because all of the course options share the same prereqs. I wanted to see whether other subjects or their upper division electives also share many prereqs in common.
 
 **compare-curricula.py** outputs `comparisons.txt`. It lists differences between department-type courses in college academic plans for each major. It can also identify whether a college differs from all the other colleges. It counts how often a college deviates from the others and determines that Marshall tends to deviate the least, so it is the best candidate for basing a curriculum off of.
@@ -226,15 +232,19 @@ Note: "outputs `<file name>`" means the program prints to standard output, which
 
 **course_names3.py** outputs `course_names3.txt`. This is an implementation of Arturo's [course name cleanup algorithm](https://www.overleaf.com/read/ncghhmgtxtgb), and it lists all the unique course names resulting from the algorithm and how often they occur.
 
-**CourseMetrics.jl** produces `files/courses_fa12.csv`, a CSV file containing the complexity and centrality scores of each identifiable course (i.e. courses with a course code) in each major curriculum. Used for [reports](https://public.tableau.com/app/profile/sean.yen/viz/reports_16591343716100/Report1) on Tableau.
+**courses_req_by_majors.py** outputs each course and the majors that require them. This duplicates [_Number of plans to include a given course by year_](https://public.tableau.com/app/profile/sean.yen/viz/reports_16591343716100/Report1); I made this quickly to see if there are non-ECE majors that require ECE courses.
 
-**CourseOverlap.jl** produces `files/course_overlap.csv`, a CSV file containing the percentage of how many courses in each major curriculum overlaps with another curriculum. Used for [reports](https://public.tableau.com/app/profile/sean.yen/viz/reports_16591343716100/Report1) on Tableau.
+**CourseMetrics.jl** produces `files/courses_fa12.csv`, a CSV file containing the complexity and centrality scores of each identifiable course (i.e. courses with a course code) in each major curriculum. Used for the first two views in [_Courses at a glance_](https://public.tableau.com/app/profile/sean.yen/viz/reports_16591343716100/Report1) on Tableau.
 
-**curricula_index.py** outputs `files/curricula_index.csv`, a CSV file containing the school, department, and Curricular Analytics curriculum URL of every major. As a module, it exports `urls`, which maps majors to their URL. Used for [curriculum_index](https://public.tableau.com/app/profile/sean.yen/viz/curriculum_index/Index) on Tableau.
+**CourseOverlap.jl** produces `files/course_overlap.csv`, a CSV file containing the percentage of how many courses in each major curriculum overlaps with another curriculum. Used for ["Course overlap between majors"](https://public.tableau.com/app/profile/sean.yen/viz/reports_16591343716100/Report1) on Tableau.
+
+**curricula_index.py** outputs `files/curricula_index.csv`, a CSV file containing the school, department, and Curricular Analytics curriculum URL of every major. As a module, it exports `urls`, which maps majors to their URL. Used for [_Curriculum Index_](https://public.tableau.com/app/profile/sean.yen/viz/curriculum_index/Index) on Tableau.
 
 **department_names.py** outputs `departments.txt`, which compares the list of unique department codes of the degree plans available with the department codes from the ISIS major code spreadsheet. This is to figure out which department names I don't need to get the name for.
 
-**diff_plan.py** outputs `diff/diffs.json` and depends on `files/metrics_fa12.csv` from Metrics.jl. It determines the changes made to an academic plan over the years for every major.
+**diff_plan.py** outputs `diff/diffs.json` and depends on `files/metrics_fa12.csv` from Metrics.jl. It determines the changes made to an academic plan over the years for every major. This is used to produce the [_Changes to Academic Plans over Time_](https://educationalinnovation.ucsd.edu/ca-views/plan-changes.html) report.
+
+**diff_prereqs.py** outputs `reports/output/prereq-diffs-fragment.html` and `reports/output/prereq-timeline-fragment.html`, which are used for the [_Changes to Prerequisites over Time_](https://educationalinnovation.ucsd.edu/ca-views/prereq-changes.html) reports.
 
 - CLI: `python3 diff_plan.py <major> <college>` will print a fancy diff for the academic plans in the terminal. Otherwise, it'll print the JSON file.
 
@@ -254,6 +264,10 @@ Note: "outputs `<file name>`" means the program prints to standard output, which
 
 **redundant_prereq_check.py** was an attempt at identifying redundant prerequisites (for example, a course requiring both MATH 20A and 20B has a redundant 20A requirement because 20B implies 20A). This has been superseded by Metrics.jl.
 
+**redundant_prereq_courses.py** outputs `redundant_prereq_courses.csv`. In addition to identifying prerequisites that are redundant because they would've already been taken to satisfy another prerequisite, it also identifies courses that strictly require a course that no longer exists. The CSV file allows you to filter by error type.
+
 **rename_all.py** is a script to rename all the 2021 curricula uploaded on Curricular Analytics to include the year.
 
 **unit_check.py** prints the degree plans with fewer than 180 units.
+
+**unit_per_course.py** outputs `units_per_course.json` and `units_per_course.txt`. Some courses have an incorrect number of units listed in the academic plan. The script goes through each plan and lists the frequency of each number of units per course to determine by majority vote which number of units is most likely to be correct for the course. For example, LTSP 2A is 5 units, but a few plans list it as 4 units.
