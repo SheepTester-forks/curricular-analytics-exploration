@@ -1,6 +1,7 @@
 import re
 from typing import Dict, List, Optional, Tuple
-from parse import CourseCode, ParsedCourse, RawCourse
+
+from parse_defs import CourseCode, ProcessedCourse, RawCourse
 
 
 ParsedCourseCodes = List[Tuple[Optional[CourseCode], float]]
@@ -87,17 +88,17 @@ class UCSD:
     curriculum_priority = ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
 
     @staticmethod
-    def process_plan(plan: List[RawCourse]) -> List[ParsedCourse]:
-        courses: List[ParsedCourse] = []
+    def process_plan(plan: List[RawCourse]) -> List[ProcessedCourse]:
+        courses: List[ProcessedCourse] = []
         for course in plan:
             parsed = parse_course_name(course.course_title, course.units)
             term = course.year * 4 + course.quarter
             for course_code, units in parsed:
                 courses.append(
-                    ParsedCourse(
-                        clean_course_title(course.course_title)
+                    ProcessedCourse(
+                        str(course_code)
                         if len(parsed) > 1
-                        else str(course_code),
+                        else clean_course_title(course.course_title),
                         course_code,
                         units,
                         course.type == "DEPARTMENT" or course.overlaps_ge,

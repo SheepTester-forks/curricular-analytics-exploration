@@ -1,5 +1,6 @@
 from typing import Dict, Tuple
-from parse import CourseCode, prereqs
+from parse import prereqs
+from parse_defs import CourseCode
 
 THRESHOLD = 0.5
 

@@ -15,34 +15,13 @@ Exports:
     objects, which contains data from the ISIS major codes spreadsheet.
 """
 
-from functools import total_ordering
-from typing import Dict, List, Literal, NamedTuple, Optional, Set, Tuple
+from csv import reader
+from typing import Dict, List, NamedTuple, Optional, Set
+from parse_defs import CourseCode, ProcessedCourse, Prerequisite, RawCourse, TermCode
 
 from ucsd import UCSD
 
 __all__ = ["prereqs", "major_plans", "major_codes"]
-
-
-class CourseCode(NamedTuple):
-    subject: str
-    number: str
-
-    def parts(self) -> Tuple[str, int, str]:
-        for i, char in enumerate(self.number):
-            if not char.isdigit():
-                index = i
-                break
-        else:
-            index = len(self.number)
-            # Return 1000 so WARR CULTD gets put after all numbers
-        return (
-            self.subject,
-            int(self.number[0:index]) if index > 0 else 1000,
-            self.number[index:],
-        )
-
-    def __str__(self) -> str:
-        return f"{self.subject} {self.number}"
 
 
 def read_csv_from(
@@ -66,80 +45,12 @@ def read_csv_from(
 
     Set `strip` to true to remove whitespace padding from record fields.
     """
-    rows: List[List[str]] = []
-
-    def parse_field(field: str) -> str:
-        """
-        Helper function to process a raw field from the CSV file. Removes quotes
-        from quoted fields and strips whitespace if desired.
-        """
-        if len(field) > 0 and field[0] == '"':
-            field = field[1:-1].replace('""', '"')
-        return field.strip() if strip else field
-
     try:
-        with open(path, "r") as file:
-            row_overflow: Optional[Tuple[List[str], str]] = None
-            for line in file.read().splitlines():
-                row: List[str]
-                in_quotes: bool
-                if row_overflow:
-                    row = row_overflow[0]
-                    in_quotes = True
-                else:
-                    row = []
-                    rows.append(row)
-                    in_quotes = False
-                last_index: int = 0
-                for i, char in enumerate(line + ","):
-                    if in_quotes:
-                        if char == '"':
-                            in_quotes = False
-                    else:
-                        if char == '"':
-                            in_quotes = True
-                        elif char == ",":
-                            prefix: str = row_overflow[1] if row_overflow else ""
-                            row_overflow = None
-                            row.append(parse_field(prefix + line[last_index:i]))
-                            last_index = i + 1
-                if in_quotes:
-                    prefix: str = row_overflow[1] if row_overflow else ""
-                    row_overflow = row, prefix + line[last_index:] + "\n"
+        with open(path, "r", newline="") as file:
+            rows = list(reader(file))
     except FileNotFoundError as e:
         raise e if not_found_msg is None else FileNotFoundError(not_found_msg)
     return rows
-
-
-class Prerequisite(NamedTuple):
-    course_code: CourseCode
-    allow_concurrent: bool
-
-    def __repr__(self) -> str:
-        return f"{self.course_code}{'*' if self.allow_concurrent else ''}"
-
-
-@total_ordering
-class TermCode(str):
-    quarters = ["WI", "SP", "S1", "S2", "S3", "SU", "FA"]
-
-    def quarter(self) -> str:
-        return self[0:2]
-
-    def quarter_value(self) -> int:
-        return TermCode.quarters.index(self.quarter())
-
-    def year(self) -> int:
-        # Assumes 21st century (all the plans we have are in the 21st century)
-        return 2000 + int(self[2:4])
-
-    def __lt__(self, other: str) -> bool:
-        if not isinstance(other, TermCode):
-            raise NotImplemented
-        if self.year() == other.year():
-            return self.quarter_value() < other.quarter_value()
-        else:
-            return self.year() < other.year()
 
 
 def prereq_rows_to_dict(
@@ -221,40 +132,6 @@ def prereqs_raw() -> Dict[TermCode, Dict[CourseCode, List[List[Prerequisite]]]]:
     return _prereqs or {}
 
 
-class ParsedCourse(NamedTuple):
-    """
-    Represents a course in an academic plan.
-
-    `term` is the index of the term from 0 to 11, where 0 is the first fall
-    quarter and 11 is the last spring quarter. Summer quarters from the raw plan
-    are merged into the previous spring quarter.
-
-    `course_title` has been cleaned up by `clean_course_title`.
-    """
-
-    course_title: str
-    course_code: Optional[CourseCode]
-    units: float
-    for_major: bool
-    term: int
-    raw: "RawCourse"
-
-
-class RawCourse(NamedTuple):
-    """
-    Represents a course in an academic plan containing raw values from the CSV,
-    so lab courses may be merged into a single course. Course codes aren't
-    parsed immediately for performance reasons.
-    """
-
-    course_title: str
-    units: float
-    type: Literal["COLLEGE", "DEPARTMENT"]
-    overlaps_ge: bool
-    year: int
-    quarter: int
-
-
 class MajorPlans:
     """
     Represents a major's set of academic plans. Contains plans for each college.
@@ -263,14 +140,14 @@ class MajorPlans:
     example, `plan("FI")` contains the academic plan for ERC (Fifth College).
     """
 
-    university: UCSD
+    university = UCSD
 
     year: int
     department: str
     major_code: str
     colleges: Set[str]
     raw_plans: Dict[str, List[RawCourse]]
-    _parsed_plans: Dict[str, List[ParsedCourse]]
+    _parsed_plans: Dict[str, List[ProcessedCourse]]
 
     def __init__(self, year: int, department: str, major_code: str) -> None:
         self.year = year
@@ -286,14 +163,14 @@ class MajorPlans:
             self.raw_plans[college_code] = []
         self.raw_plans[college_code].append(course)
 
-    def plan(self, college: str) -> List[ParsedCourse]:
+    def plan(self, college: str) -> List[ProcessedCourse]:
         if college not in self._parsed_plans:
             self._parsed_plans[college] = self.university.process_plan(
                 self.raw_plans[college]
             )
         return self._parsed_plans[college]
 
-    def curriculum(self, college: Optional[str] = None) -> List[ParsedCourse]:
+    def curriculum(self, college: Optional[str] = None) -> List[ProcessedCourse]:
         """
         Returns a list of courses based on the specified college's degree plan
         with college-specific courses removed. Can be used to create a
@@ -450,6 +327,6 @@ if __name__ == "__main__":
         next(
             course
             for course in major_plans(2022)["MC25"].plan("RE")
-            if course.course_title in "PHYS 2C"
+            if "PHYS 2C" in course.course_title
         )
     )

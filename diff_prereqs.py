@@ -1,6 +1,7 @@
 from typing import List, NamedTuple, Optional, Tuple, TypeVar
 from common_prereqs import parse_int
-from parse import CourseCode, Prerequisite, TermCode, prereqs_raw
+from parse import prereqs_raw
+from parse_defs import CourseCode, Prerequisite, TermCode
 
 Prereqs = List[List[Prerequisite]]
 

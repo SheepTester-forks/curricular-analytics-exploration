@@ -24,7 +24,7 @@ from output_json import Curriculum, CurriculumHash, Item, Term, Requisite
 from parse import (
     CourseCode,
     MajorPlans,
-    ParsedCourse,
+    ProcessedCourse,
     Prerequisite,
     major_codes,
     prereqs,
@@ -95,7 +95,7 @@ class OutputCourses:
 
     term_names = ["FA", "WI", "SP", "S1"]
 
-    processed_courses: List[ParsedCourse]
+    processed_courses: List[ProcessedCourse]
     current_id: int
     course_ids: Dict[CourseCode, int]
     duplicate_titles: Dict[str, int]
@@ -265,7 +265,7 @@ class MajorOutput:
 
     plans: MajorPlans
     course_ids: Dict[CourseCode, int]
-    curriculum: List[ParsedCourse]
+    curriculum: List[ProcessedCourse]
     start_id: int
 
     def __init__(self, plans: MajorPlans, start_id: int = 1) -> None:

@@ -6,7 +6,8 @@ python3 flag_issues.py > files/flagged_issues.txt
 import json
 from typing import Dict, List, Set
 from college_names import college_names
-from parse import CourseCode, ParsedCourse, major_plans
+from parse import major_plans
+from parse_defs import CourseCode, ProcessedCourse
 
 year = 2022
 
@@ -80,7 +81,7 @@ class Issues:
 
 
 def check_plan(
-    name: str, curriculum: Set[str], plan: List[ParsedCourse], college: str
+    name: str, curriculum: Set[str], plan: List[ProcessedCourse], college: str
 ) -> None:
     course_codes = [course.course_code for course in plan if course.course_code]
     courses = {course.course_code: course for course in plan if course.course_code}

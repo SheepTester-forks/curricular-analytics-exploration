@@ -4,7 +4,8 @@ from college_names import college_names
 from common_prereqs import parse_int
 from output import rows_to_csv
 
-from parse import CourseCode, major_plans
+from parse import major_plans
+from parse_defs import CourseCode
 
 college_codes = list(college_names.keys())
 courses: Dict[CourseCode, Dict[str, List[str]]] = {}

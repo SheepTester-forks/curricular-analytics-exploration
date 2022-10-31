@@ -1,5 +1,6 @@
 from typing import Dict, Set
-from parse import CourseCode, major_plans, prereqs
+from parse import major_plans, prereqs
+from parse_defs import CourseCode
 
 flattened = {
     course_code: {

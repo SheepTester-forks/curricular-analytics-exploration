@@ -6,7 +6,8 @@ from college_names import college_names
 from curricula_index import urls
 from departments import departments, dept_schools
 
-from parse import RawCourse, major_codes, major_plans, read_csv_from
+from parse import major_codes, major_plans, read_csv_from
+from parse_defs import RawCourse
 
 
 class Colors:

@@ -1,6 +1,7 @@
 from functools import cmp_to_key
 from typing import Dict, List, NamedTuple
-from parse import CourseCode, MajorPlans, major_plans
+from parse import MajorPlans, major_plans
+from parse_defs import CourseCode
 
 MAX_SAMPLE_LEN = 5
 

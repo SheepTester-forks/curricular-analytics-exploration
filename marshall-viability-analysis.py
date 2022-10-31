@@ -1,9 +1,10 @@
 from typing import Callable, List, Set, Tuple
-from parse import ParsedCourse, major_plans
+from parse import major_plans
+from parse_defs import ProcessedCourse
 
 
 def simplify(
-    get_curriculum: Callable[[], List[ParsedCourse]]
+    get_curriculum: Callable[[], List[ProcessedCourse]]
 ) -> Set[Tuple[str, float]]:
     try:
         curriculum = get_curriculum()

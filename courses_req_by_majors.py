@@ -2,7 +2,8 @@
 Lists what majors require each course. I might've done this already, I forgot.
 """
 
-from parse import CourseCode, major_plans
+from parse import major_plans
+from parse_defs import CourseCode
 from util import partition, sorted_dict
 
 
