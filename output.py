@@ -23,7 +23,6 @@ from parse import (
     major_codes,
     prereqs,
 )
-from parse_course_name import parse_course_name
 from ucsd import university
 
 __all__ = ["MajorOutput"]
@@ -41,8 +40,6 @@ HEADER = [
     "Canonical Name",
     "Term",
 ]
-CURRICULUM_COLS = 10
-DEGREE_PLAN_COLS = 11
 
 non_course_prereqs: Dict[str, List[CourseCode]] = {
     "SOCI- UD METHODOLOGY": [CourseCode("SOCI", "60")],
@@ -377,12 +374,10 @@ class MajorOutput:
         output.course_ids = {}
         output.start_id = 1
         for course in json["courses"]:
-            parsed = parse_course_name(course["name"])
-            if parsed:
-                # Assumes lab courses were already split, so won't bother
-                # handling has_lab
-                subject, number, _ = parsed
-                output.course_ids[CourseCode(subject, number)] = course["id"]
+            if course["prefix"] and course["num"]:
+                output.course_ids[CourseCode(course["prefix"], course["num"])] = course[
+                    "id"
+                ]
             if course["id"] + 1 > output.start_id:
                 output.start_id = course["id"] + 1
         return output

@@ -39,6 +39,8 @@ class DegreePlanJson(TypedDict):
 class Course(TypedDict):
     id: int
     name: str
+    prefix: Optional[str]
+    num: Optional[str]
     credits: float
     requisites: List[Requisite]
     nameCanonical: Optional[str]
@@ -49,6 +51,7 @@ class Course(TypedDict):
 class CurriculumHash(TypedDict):
     courses: List[Course]
     name: str
+    system_type: Literal["quarter", "semester"]
 
 
 class TermHash(TypedDict):
@@ -59,3 +62,4 @@ class TermHash(TypedDict):
 
 class DegreePlanHash(TypedDict):
     terms: List[TermHash]
+    system_type: Literal["quarter", "semester"]
