@@ -15,8 +15,8 @@ Exports:
     objects, which contains data from the ISIS major codes spreadsheet.
 """
 
-from csv import reader
-from typing import Dict, List, NamedTuple, Optional, Set
+import csv
+from typing import Dict, Iterable, List, NamedTuple, Optional, Set
 from parse_defs import CourseCode, ProcessedCourse, Prerequisite, RawCourse, TermCode
 
 from ucsd import UCSD
@@ -24,38 +24,9 @@ from ucsd import UCSD
 __all__ = ["prereqs", "major_plans", "major_codes"]
 
 
-def read_csv_from(
-    path: str, not_found_msg: Optional[str] = None, strip: bool = False
-) -> List[List[str]]:
-    """
-    Reads and parses the file at the given path as a CSV file.
-
-    The CSV parser doesn't validate the CSV, so it's kind of dumb, but I don't
-    think much cleverness is needed for parsing these fairly tame CSV files.
-    There is support for quoted fields and rudimentary support for backslashes
-    (they won't break, but they're currently not interpreted, so `\\"` remains
-    in the field value).
-
-    This function returns a list of records (rows), each containing the fields
-    of the record. Quoted fields have their double quotes removed.
-
-    Since I gitignored the CSV files, I'm using `not_found_msg` to give more
-    helpful error messages in case someone running this code hasn't put the
-    necessary CSV files in files/ folder.
-
-    Set `strip` to true to remove whitespace padding from record fields.
-    """
-    try:
-        with open(path, "r", newline="") as file:
-            rows = list(reader(file))
-    except FileNotFoundError as e:
-        raise e if not_found_msg is None else FileNotFoundError(not_found_msg)
-    return rows
-
-
 def prereq_rows_to_dict(
-    rows: List[List[str]],
-) -> Dict[TermCode, Dict[CourseCode, List[List[Prerequisite]]]]:
+    rows: Iterable[List[str]],
+) -> Dict[CourseCode, List[List[Prerequisite]]]:
     """
     Converts prerequisite rows from a CSV to a nested dictionary mapping from a
     term code (e.g. FA12) to a course code to its prerequisites.
@@ -64,9 +35,9 @@ def prereq_rows_to_dict(
     requirements, like an AND, while each inner list is a list of possible
     courses to satisfy the requirement, like an OR.
     """
-    terms: Dict[TermCode, Dict[CourseCode, List[List[Prerequisite]]]] = {}
+    courses: Dict[CourseCode, List[List[Prerequisite]]] = {}
     for (
-        term,  # Term Code
+        _,  # Term Code
         _,  # Term ID
         _,  # Course ID
         subject,  # Course Subject Code
@@ -79,57 +50,61 @@ def prereq_rows_to_dict(
         _,  # Prereq Minimum Grade
         allow_concurrent,  # Allow concurrent registration
     ) in rows:
-        term = TermCode(term)
-        if term not in terms:
-            terms[term] = {}
         course = CourseCode(subject, number)
         prereq = Prerequisite(CourseCode(req_subj, req_num), allow_concurrent == "Y")
-        if course not in terms[term]:
-            terms[term][course] = []
+        if course not in courses:
+            courses[course] = []
         if req_id == "":
             continue
         index = int(req_id) - 1
-        while len(terms[term][course]) <= index:
-            terms[term][course].append([])
+        while len(courses[course]) <= index:
+            courses[course].append([])
         # Could probably include the allow concurrent registration info here
-        terms[term][course][index].append(prereq)
-    return terms
+        courses[course][index].append(prereq)
+    return courses
 
 
-_prereqs: Optional[Dict[TermCode, Dict[CourseCode, List[List[Prerequisite]]]]] = None
+_term_cache: Optional[List[TermCode]] = None
+
+
+def terms() -> List[TermCode]:
+    global _term_cache
+    if not _term_cache:
+        terms: Set[TermCode] = set()
+        with open("./files/prereqs_fa12.csv", newline="") as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip header
+            for term, *_ in reader:
+                terms.add(TermCode(term))
+        _term_cache = sorted(terms)
+    return _term_cache
+
+
+_prereq_cache: Dict[TermCode, Dict[CourseCode, List[List[Prerequisite]]]] = {}
 
 
 def prereqs(term: str) -> Dict[CourseCode, List[List[Prerequisite]]]:
-    global _prereqs
-    if _prereqs is None:
-        _prereqs = prereq_rows_to_dict(
-            read_csv_from(
-                "./files/prereqs_fa12.csv",
-                "There is no `prereqs_fa12.csv` file in the files/ folder. See the README for where to download it from.",
-                strip=True,
-            )[1:]
-        )
-        # Fix possible errors in prereqs (#52)
-        for term_prereqs in _prereqs.values():
-            term_prereqs[CourseCode("NANO", "102")] = [
-                [Prerequisite(CourseCode("CHEM", "6C"), False)]
-            ]
-            term_prereqs[CourseCode("DOC", "2")] = [
-                [Prerequisite(CourseCode("DOC", "1"), False)]
-            ]
+    global _prereq_cache
     term = TermCode(term)
-    if term not in _prereqs:
-        first_term = min(_prereqs.keys())
-        if term < first_term:
-            term = first_term
-        else:
-            term = max(_prereqs.keys())
-    return _prereqs[term]
-
-
-def prereqs_raw() -> Dict[TermCode, Dict[CourseCode, List[List[Prerequisite]]]]:
-    prereqs("FA21")  # cache _prereqs
-    return _prereqs or {}
+    if term not in _prereq_cache:
+        if term < terms()[0]:
+            term = terms()[0]
+        elif term > terms()[-1]:
+            term = terms()[-1]
+        with open("./files/prereqs_fa12.csv", newline="") as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip header
+            _prereq_cache[term] = prereq_rows_to_dict(
+                row for row in reader if row[0] == term
+            )
+        # Fix possible errors in prereqs (#52)
+        _prereq_cache[term][CourseCode("NANO", "102")] = [
+            [Prerequisite(CourseCode("CHEM", "6C"), False)]
+        ]
+        _prereq_cache[term][CourseCode("DOC", "2")] = [
+            [Prerequisite(CourseCode("DOC", "1"), False)]
+        ]
+    return _prereq_cache[term]
 
 
 class MajorPlans:
@@ -199,12 +174,12 @@ class MajorPlans:
         return [course for course in self.plan(college) if course.for_major]
 
 
-def plan_rows_to_dict(rows: List[List[str]]) -> Dict[int, Dict[str, MajorPlans]]:
+def plan_rows_to_dict(rows: Iterable[List[str]]) -> Dict[str, MajorPlans]:
     """
     Converts the academic plans CSV rows into a dictionary of major codes to
     `Major` objects.
     """
-    years: Dict[int, Dict[str, MajorPlans]] = {}
+    plans: Dict[str, MajorPlans] = {}
     for (
         department,  # Department
         major_code,  # Major
@@ -219,13 +194,11 @@ def plan_rows_to_dict(rows: List[List[str]]) -> Dict[int, Dict[str, MajorPlans]]
         _,  # Term Taken
     ) in rows:
         year = int(year)
-        if year not in years:
-            years[year] = {}
-        if major_code not in years[year]:
-            years[year][major_code] = MajorPlans(year, department, major_code)
+        if major_code not in plans:
+            plans[major_code] = MajorPlans(year, department, major_code)
         if course_type != "COLLEGE" and course_type != "DEPARTMENT":
             raise TypeError('Course type is neither "COLLEGE" nor "DEPARTMENT"')
-        years[year][major_code].add_raw_course(
+        plans[major_code].add_raw_course(
             college_code,
             RawCourse(
                 course_title,
@@ -236,23 +209,22 @@ def plan_rows_to_dict(rows: List[List[str]]) -> Dict[int, Dict[str, MajorPlans]]
                 int(plan_qtr) - 1,
             ),
         )
-    return years
+    return plans
 
 
-_major_plans: Optional[Dict[int, Dict[str, MajorPlans]]] = None
+_plan_cache: Dict[int, Dict[str, MajorPlans]] = {}
 
 
 def major_plans(year: int) -> Dict[str, MajorPlans]:
     global _major_plans
-    if _major_plans is None:
-        _major_plans = plan_rows_to_dict(
-            read_csv_from(
-                "./files/academic_plans_fa12.csv",
-                "There is no `academic_plans_fa12.csv` file in the files/ folder. See the README for where to download it from.",
-                strip=True,
-            )[1:]
-        )
-    return _major_plans[year]
+    if year not in _plan_cache:
+        with open("./files/academic_plans_fa12.csv", newline="") as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip header
+            _plan_cache[year] = plan_rows_to_dict(
+                row for row in reader if int(row[7]) == year
+            )
+    return _plan_cache[year]
 
 
 class MajorInfo(NamedTuple):
@@ -271,7 +243,7 @@ class MajorInfo(NamedTuple):
     award_types: Set[str]
 
 
-def major_rows_to_dict(rows: List[List[str]]) -> Dict[str, MajorInfo]:
+def major_rows_to_dict(rows: Iterable[List[str]]) -> Dict[str, MajorInfo]:
     majors: Dict[str, MajorInfo] = {}
     for (
         _,  # Previous Local Code
@@ -312,13 +284,12 @@ _major_codes: Optional[Dict[str, MajorInfo]] = None
 def major_codes():
     global _major_codes
     if _major_codes is None:
-        _major_codes = major_rows_to_dict(
-            read_csv_from(
-                "./files/isis_major_code_list.xlsx - Major Codes.csv",
-                "There is no `isis_major_code_list.xlsx - Major Codes.csv` file in the files/ folder. See the README for where to download it from.",
-                strip=True,
-            )[1:]
-        )
+        with open(
+            "./files/isis_major_code_list.xlsx - Major Codes.csv", newline=""
+        ) as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip header
+            _major_codes = major_rows_to_dict(reader)
     return _major_codes
 
 

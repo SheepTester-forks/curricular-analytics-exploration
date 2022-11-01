@@ -1,3 +1,4 @@
+from itertools import chain
 import re
 from typing import Dict, List, Optional, Tuple
 
@@ -9,7 +10,7 @@ ParsedCourseCodes = List[Tuple[Optional[CourseCode], float]]
 
 course_code_overrides: Dict[str, ParsedCourseCodes] = {
     # See #15
-    "UD Domain Elective 1 (if MATH 180A not taken)": [(None, 4)],
+    "UD DOMAIN ELECTIVE 1 (IF MATH 180A NOT TAKEN)": [(None, 4)],
     "MATH 11": [(CourseCode("MATH", "11"), 5)],
     "CAT 2": [(CourseCode("CAT", "2"), 6)],
     "CAT 3": [(CourseCode("CAT", "3"), 6)],
@@ -43,14 +44,13 @@ def parse_course_name(
     """
     # Based on
     # https://github.com/SheepTester-forks/ExploratoryCurricularAnalytics/blob/a9e6d0d7afb74f217b3efb382ed39cdd86fe0559/course_names.py#L13-L37
-    name = name.strip("^* ")
     if name in course_code_overrides:
         return course_code_overrides[name]
-    if name.startswith("ADV. CHEM"):
+    if name.startswith("ADV CHEM"):
         return [(None, units)]
     name = re.sub(r"DF-?\d - ", "", name)
     match = re.search(
-        r"\b([A-Z]{2,4}) *(\d+[A-Z]{0,2})(?: *[&/] *\d?[A-Z]([LX]))?", name
+        r"\b([A-Z]{2,4}) ?(\d+[A-Z]{0,2})(?: ?[&/] ?\d?[A-Z]([LX]))?", name
     )
     if match:
         subject, number, has_lab = match.group(1, 2, 3)
@@ -67,19 +67,37 @@ def parse_course_name(
     return [(None, units)]
 
 
+# https://stackoverflow.com/a/93029
+control_chars = re.escape(
+    "".join(map(chr, chain(range(0x00, 0x20), range(0x7F, 0xA0))))
+)
+
+
 def clean_course_title(title: str) -> str:
     """
     Cleans up the course title by removing asterisks and (see note)s.
     """
-    title = title.strip("^* ¹")
-    match = re.match(r"(GE|DEI) */ *(GE|AWP|DEI)", title)
-    if match:
-        return "DEI" if match.group(1) == "DEI" or match.group(2) == "DEI" else "GE"
-    title = re.sub(r" */ *(GE|AWP|DEI)$", "", title, flags=re.I)
-    title = re.sub(
-        r" *\(\*?(see note|DEI APPROVED|DEI)\*?\)$|^1 ", "", title, flags=re.I
-    )
+    title = re.sub(r"[*^~.#+=%s]+|<..?>" % control_chars, "", title)
+    title = title.strip()
+    title = re.sub(r"\s*/\s*(AWPE?|A?ELWR|SDCC)", "", title)
+    title = title.upper()
+    title = re.sub(r"\s+OR\s+|\s*/\s*", " / ", title)
+    title = re.sub(r"-+", " - ", title)
     title = re.sub(r" +", " ", title)
+    title = re.sub(
+        r" ?\( ?(GE SEE|NOTE|FOR|SEE|REQUIRES|ONLY|OFFERED)[^)]*\)", "", title
+    )
+    title = re.sub(r"^\d+ ", "", title)
+    title = re.sub(r"ELECT?\b", "ELECTIVE", title)
+    if "(OR " in title:
+        title = title.replace("(OR", "/").replace(")", "")
+    title = title.replace(" (VIS)", "")
+    if title.startswith("NE ELECTIVE "):
+        title = re.sub(r"[()]", "", title)
+    title = re.sub(r"TECH\b", "TECHNICAL", title)
+    title = re.sub(r"REQUIRE\b", "REQUIREMENT", title)
+    title = re.sub(r"BIO\b", "BIOLOGY", title)
+    title = re.sub(r"BIOPHYS\b", "BIOPHYSICS", title)
     return title
 
 
@@ -91,14 +109,13 @@ class UCSD:
     def process_plan(plan: List[RawCourse]) -> List[ProcessedCourse]:
         courses: List[ProcessedCourse] = []
         for course in plan:
-            parsed = parse_course_name(course.course_title, course.units)
+            title = clean_course_title(course.course_title)
+            parsed = parse_course_name(title, course.units)
             term = course.year * 4 + course.quarter
             for course_code, units in parsed:
                 courses.append(
                     ProcessedCourse(
-                        str(course_code)
-                        if len(parsed) > 1
-                        else clean_course_title(course.course_title),
+                        str(course_code) if len(parsed) > 1 else title,
                         course_code,
                         units,
                         course.type == "DEPARTMENT" or course.overlaps_ge,
