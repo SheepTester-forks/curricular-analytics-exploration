@@ -1,5 +1,7 @@
 """
 Based on https://www.overleaf.com/project/62e8265ff1395d787286ea5b
+
+python3 course_names3.py > course_names3.txt
 """
 
 import itertools
@@ -66,7 +68,7 @@ removals = {
 
 def clean_course_name(name: str) -> str:
     # 1. Strip *, ^, ~, #, +, non-ASCII, and <I> and </I> from the names
-    name = re.sub(r"[*^~.#+=%s]+|<..?>" % control_chars, "", name)
+    name = re.sub(r"[*^~.#+=¹%s]+|<..?>" % control_chars, "", name)
 
     # 2. Strip trailing and leading spaces
     name = name.strip()

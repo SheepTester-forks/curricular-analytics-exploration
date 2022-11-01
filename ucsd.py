@@ -77,7 +77,7 @@ def clean_course_title(title: str) -> str:
     """
     Cleans up the course title by removing asterisks and (see note)s.
     """
-    title = re.sub(r"[*^~.#+=%s]+|<..?>" % control_chars, "", title)
+    title = re.sub(r"[*^~.#+=¹%s]+|<..?>" % control_chars, "", title)
     title = title.strip()
     title = re.sub(r"\s*/\s*(AWPE?|A?ELWR|SDCC)", "", title)
     title = title.upper()
@@ -89,8 +89,6 @@ def clean_course_title(title: str) -> str:
     )
     title = re.sub(r"^\d+ ", "", title)
     title = re.sub(r"ELECT?\b", "ELECTIVE", title)
-    if "(OR " in title:
-        title = title.replace("(OR", "/").replace(")", "")
     title = title.replace(" (VIS)", "")
     if title.startswith("NE ELECTIVE "):
         title = re.sub(r"[()]", "", title)
