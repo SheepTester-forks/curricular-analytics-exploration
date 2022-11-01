@@ -1,8 +1,8 @@
+import csv
 from typing import Dict, Generator, List, Tuple
 
 from college_names import college_names
 from common_prereqs import parse_int
-from output import rows_to_csv
 
 from parse import major_plans
 from parse_defs import CourseCode
@@ -42,6 +42,7 @@ def output_courses() -> Generator[List[str], None, None]:
             ]
 
 
-with open("./files/majors_per_course.csv", "w") as file:
-    for line in rows_to_csv(output_courses(), 3):
-        file.write(line)
+with open("./files/majors_per_course.csv", "w",newline='') as file:
+    writer = csv.writer(file)
+    for row in output_courses():
+        writer.writerow(row)

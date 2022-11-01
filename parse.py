@@ -18,8 +18,7 @@ Exports:
 import csv
 from typing import Dict, Iterable, List, NamedTuple, Optional, Set
 from parse_defs import CourseCode, ProcessedCourse, Prerequisite, RawCourse, TermCode
-
-from ucsd import UCSD
+from ucsd import university
 
 __all__ = ["prereqs", "major_plans", "major_codes"]
 
@@ -71,7 +70,7 @@ def terms() -> List[TermCode]:
     global _term_cache
     if not _term_cache:
         terms: Set[TermCode] = set()
-        with open("./files/prereqs_fa12.csv", newline="") as file:
+        with open(university.prereqs_file, newline="") as file:
             reader = csv.reader(file)
             next(reader)  # Skip header
             for term, *_ in reader:
@@ -115,8 +114,6 @@ class MajorPlans:
     example, `plan("FI")` contains the academic plan for ERC (Fifth College).
     """
 
-    university = UCSD
-
     year: int
     department: str
     major_code: str
@@ -140,7 +137,7 @@ class MajorPlans:
 
     def plan(self, college: str) -> List[ProcessedCourse]:
         if college not in self._parsed_plans:
-            self._parsed_plans[college] = self.university.process_plan(
+            self._parsed_plans[college] = university.process_plan(
                 self.raw_plans[college]
             )
         return self._parsed_plans[college]
@@ -164,12 +161,13 @@ class MajorPlans:
         different college.
         """
         if college is None:
-            for college_code in self.university.curriculum_priority:
+            for college_code in university.curriculum_priority:
                 if college_code in self.colleges:
                     college = college_code
                     break
             if college is None:
-                # Support non-UCSD plans; uses an arbitrary college as the base
+                # Use an arbitrary college as the base if there is one (for
+                # non-UCSD plans)
                 college = next(iter(self.colleges))
         return [course for course in self.plan(college) if course.for_major]
 
@@ -218,7 +216,7 @@ _plan_cache: Dict[int, Dict[str, MajorPlans]] = {}
 def major_plans(year: int) -> Dict[str, MajorPlans]:
     global _major_plans
     if year not in _plan_cache:
-        with open("./files/academic_plans_fa12.csv", newline="") as file:
+        with open(university.plans_file, newline="") as file:
             reader = csv.reader(file)
             next(reader)  # Skip header
             _plan_cache[year] = plan_rows_to_dict(
@@ -284,9 +282,7 @@ _major_codes: Optional[Dict[str, MajorInfo]] = None
 def major_codes():
     global _major_codes
     if _major_codes is None:
-        with open(
-            "./files/isis_major_code_list.xlsx - Major Codes.csv", newline=""
-        ) as file:
+        with open(university.majors_file, newline="") as file:
             reader = csv.reader(file)
             next(reader)  # Skip header
             _major_codes = major_rows_to_dict(reader)

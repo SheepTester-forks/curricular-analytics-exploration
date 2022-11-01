@@ -4,6 +4,8 @@ from typing import Dict, List, Optional, Tuple
 
 from parse_defs import CourseCode, ProcessedCourse, RawCourse
 
+__all__ = ["university"]
+
 
 ParsedCourseCodes = List[Tuple[Optional[CourseCode], float]]
 
@@ -100,11 +102,17 @@ def clean_course_title(title: str) -> str:
 
 
 class UCSD:
+    name = "University of California, San Diego"
+    term_type = "Quarter"
+
+    prereqs_file = "./files/prereqs_fa12.csv"
+    plans_file = "./files/academic_plans_fa12.csv"
+    majors_file = "./files/isis_major_code_list.xlsx - Major Codes.csv"
+
     # College codes from least to most weird colleges (see #14)
     curriculum_priority = ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
 
-    @staticmethod
-    def process_plan(plan: List[RawCourse]) -> List[ProcessedCourse]:
+    def process_plan(self, plan: List[RawCourse]) -> List[ProcessedCourse]:
         courses: List[ProcessedCourse] = []
         for course in plan:
             title = clean_course_title(course.course_title)
@@ -125,3 +133,6 @@ class UCSD:
                     )
                 )
         return courses
+
+
+university = UCSD()

@@ -9,15 +9,9 @@ Exports:
     variable.
 """
 
-from typing import (
-    Dict,
-    Generator,
-    Iterable,
-    List,
-    NamedTuple,
-    Optional,
-    Set,
-)
+import csv
+from io import StringIO
+from typing import Dict, Generator, List, NamedTuple, Optional, Set
 from college_names import college_names
 from output_json import Curriculum, CurriculumHash, Item, Term, Requisite
 
@@ -30,11 +24,10 @@ from parse import (
     prereqs,
 )
 from parse_course_name import parse_course_name
+from ucsd import university
 
 __all__ = ["MajorOutput"]
 
-INSTITUTION = "University of California, San Diego"
-SYSTEM_TYPE = "Quarter"
 HEADER = [
     "Course ID",
     "Course Name",
@@ -229,32 +222,6 @@ class OutputCourses:
             )
 
 
-def rows_to_csv(rows: Iterable[List[str]], columns: int) -> Generator[str, None, None]:
-    """
-    Converts a list of lists of fields into lines of CSV records. Yields a
-    newline-terminated line.
-
-    The return value from `_output_plan` should be passed as the `rows` argument.
-
-    `_output_plan` always outputs a "Term" column because I'm lazy, so this
-    function can cut off extra columns or adds empty fields as needed to meet
-    the column count.
-    """
-    for row in rows:
-        yield (
-            ",".join(
-                [
-                    '"' + field.replace('"', '""') + '"'
-                    if any(c in field for c in ',"\r\n')
-                    else field
-                    for field in row
-                ][:columns]
-                + [""] * (columns - len(row))
-            )
-            + "\n"
-        )
-
-
 class MajorOutput:
     """
     Keeps track of the course IDs used by a curriculum so major courses share
@@ -279,40 +246,50 @@ class MajorOutput:
                 self.course_ids[course.course_code] = self.start_id
                 self.start_id += 1
 
-    def _output_plan(
-        self, college: Optional[str] = None
-    ) -> Generator[List[str], None, None]:
+    def output(self, college: Optional[str] = None) -> str:
         """
-        Outputs a curriculum or degree plan in Curricular Analytics' CSV format,
-        yielding one row at a time.
+        Outputs a curriculum or degree plan in Curricular Analytics' CSV
+        format[^1], yielding one row at a time.
 
         To output a degree plan, specify the college that the degree plan is
         for. If the college isn't specified, then `_output_plan` will output the
         major's curriculum instead.
+
+        [^1]: https://curricularanalytics.org/files
         """
+        if college is not None and college not in self.plans.colleges:
+            raise KeyError(f"No degree plan available for {college}.")
+        output = StringIO()
+        writer = csv.writer(output)
         major_info = major_codes()[self.plans.major_code]
-        yield ["Curriculum", major_info.name]
+        writer.writerow(["Curriculum", major_info.name])
         if college:
-            yield ["Degree Plan", f"{major_info.name}/ {college_names[college]}"]
-        yield ["Institution", INSTITUTION]
+            writer.writerow(
+                ["Degree Plan", f"{major_info.name}/ {college_names[college]}"]
+            )
+        writer.writerow(["Institution", university.name])
         # NOTE: Currently just gets the last listed award type (bias towards BS over
         # BA). Will see how to deal with BA vs BS
         # For undeclared majors, there is no award type, so will just use
         # Curricular Analytics' default, BS.
-        yield [
-            "Degree Type",
-            list(major_info.award_types)[-1] if major_info.award_types else "BS",
-        ]
-        yield ["System Type", SYSTEM_TYPE]
-        yield ["CIP", major_info.cip_code]
+        writer.writerow(
+            [
+                "Degree Type",
+                list(major_info.award_types)[-1] if major_info.award_types else "BS",
+            ]
+        )
+        writer.writerow(["System Type", university.term_type])
+        writer.writerow(["CIP", major_info.cip_code])
 
         processed = OutputCourses(self, college)
 
         for major_course_section in True, False:
             if not college and not major_course_section:
                 break
-            yield ["Courses" if major_course_section else "Additional Courses"]
-            yield HEADER
+            writer.writerow(
+                ["Courses" if major_course_section else "Additional Courses"]
+            )
+            writer.writerow(HEADER)
             for (
                 course_id,
                 course_title,
@@ -322,33 +299,24 @@ class MajorOutput:
                 units,
                 term,
             ) in processed.list_courses(major_course_section):
-                yield [
-                    str(course_id),
-                    course_title,
-                    subject,
-                    number,
-                    ";".join(map(str, prereq_ids)),
-                    ";".join(map(str, coreq_ids)),
-                    "",
-                    f"{units:g}",  # https://stackoverflow.com/a/2440708
-                    "",
-                    "",
-                    str(term + 1),
+                row = [
+                    str(course_id),  # Course ID
+                    course_title,  # Course Name
+                    subject,  # Prefix
+                    number,  # Number
+                    ";".join(map(str, prereq_ids)),  # Prerequisites
+                    ";".join(map(str, coreq_ids)),  # Corequisites
+                    "",  # Strict-Corequisites
+                    f"{units:g}",  # Credit Hours; https://stackoverflow.com/a/2440708
+                    "",  # Institution
+                    "",  # Canonical Name
                 ]
+                if college:
+                    row.append(str(term + 1))  # Term
+                writer.writerow(row)
 
-    def output(self, college: Optional[str] = None) -> str:
-        """
-        A helper function that collects the rows from `_output_plan` into a
-        single newline-terminated string with the entire CSV. You'll probably
-        want to use this instead of `_output_plan`.
-        """
-        if college is not None and college not in self.plans.colleges:
-            raise KeyError(f"No degree plan available for {college}.")
-        cols = DEGREE_PLAN_COLS if college else CURRICULUM_COLS
-        csv = ""
-        for line in rows_to_csv(self._output_plan(college), cols):
-            csv += line
-        return csv
+        # https://stackoverflow.com/a/9157370
+        return output.getvalue()
 
     def output_json(self, college: Optional[str] = None) -> Curriculum:
         """
