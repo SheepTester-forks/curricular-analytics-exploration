@@ -49,8 +49,8 @@ def prereq_rows_to_dict(
         _,  # Prereq Minimum Grade
         allow_concurrent,  # Allow concurrent registration
     ) in rows:
-        course = CourseCode(subject, number)
-        prereq = Prerequisite(CourseCode(req_subj, req_num), allow_concurrent == "Y")
+        course = CourseCode(subject.strip(), number.strip())
+        prereq = Prerequisite(CourseCode(req_subj.strip(), req_num.strip()), allow_concurrent == "Y")
         if course not in courses:
             courses[course] = []
         if req_id == "":
@@ -90,19 +90,13 @@ def prereqs(term: str) -> Dict[CourseCode, List[List[Prerequisite]]]:
             term = terms()[0]
         elif term > terms()[-1]:
             term = terms()[-1]
-        with open("./files/prereqs_fa12.csv", newline="") as file:
+        with open(university.prereqs_file, newline="") as file:
             reader = csv.reader(file)
             next(reader)  # Skip header
             _prereq_cache[term] = prereq_rows_to_dict(
                 row for row in reader if row[0] == term
             )
-        # Fix possible errors in prereqs (#52)
-        _prereq_cache[term][CourseCode("NANO", "102")] = [
-            [Prerequisite(CourseCode("CHEM", "6C"), False)]
-        ]
-        _prereq_cache[term][CourseCode("DOC", "2")] = [
-            [Prerequisite(CourseCode("DOC", "1"), False)]
-        ]
+        university.fix_prereqs(_prereq_cache[term], term)
     return _prereq_cache[term]
 
 
@@ -290,10 +284,4 @@ def major_codes():
 
 
 if __name__ == "__main__":
-    print(
-        next(
-            course
-            for course in major_plans(2022)["MC25"].plan("RE")
-            if "PHYS 2C" in course.course_title
-        )
-    )
+    print(prereqs("FA21")[CourseCode("CAT", "3")])

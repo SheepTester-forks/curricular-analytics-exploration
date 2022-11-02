@@ -1,6 +1,6 @@
 from typing import List, NamedTuple, Optional, Tuple, TypeVar
 from common_prereqs import parse_int
-from parse import prereqs_raw
+from parse import prereqs, terms
 from parse_defs import CourseCode, Prerequisite, TermCode
 
 Prereqs = List[List[Prerequisite]]
@@ -12,16 +12,15 @@ def remove_duplicates(ls: List[T]) -> List[T]:
     return [item for i, item in enumerate(ls) if item not in ls[0:i]]
 
 
-all_prereqs = prereqs_raw()
 course_codes = sorted(
-    {course for courses in all_prereqs.values() for course in courses.keys()},
+    {course for term in terms() for course in prereqs(term).keys()},
     key=lambda subject_code: (subject_code.subject, *parse_int(subject_code.number)),
 )
 # Ignore special and medical summer, which seems to often omit prereqs only for
 # them to be readded in fall
 term_codes = sorted(
     term_code
-    for term_code in all_prereqs.keys()
+    for term_code in terms()
     if term_code.quarter() != "S3" and term_code.quarter() != "SU"
 )
 
@@ -101,7 +100,7 @@ def get_history(course_code: CourseCode) -> History:
             remove_duplicates(
                 [
                     remove_duplicates(req)
-                    for req in all_prereqs[term_code].get(course_code) or []
+                    for req in prereqs(term_code).get(course_code) or []
                     if req
                 ]
             ),
@@ -109,11 +108,11 @@ def get_history(course_code: CourseCode) -> History:
         for term_code in term_codes
     ]
     diffs: List[Diff] = []
-    for i, (term_code, prereqs) in enumerate(prereq_history):
+    for i, (term_code, reqs) in enumerate(prereq_history):
         diff = diff_prereqs(
             term_code,
             prereq_history[i - 1][1] if i > 0 else [],
-            prereqs,
+            reqs,
         )
         if diff:
             diffs.append(diff)

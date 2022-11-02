@@ -3,6 +3,8 @@ Utility functions for a partitioned list, which is what I will call a dictionary
 that maps keys to lists of values with the same key.
 """
 
+import csv
+from io import StringIO
 from typing import Any, Callable, Dict, Iterator, List, Protocol, Tuple, TypeVar
 
 
@@ -83,3 +85,33 @@ def sorted_dict(
     key.
     """
     return sorted(dictionary.items(), key=lambda entry: key(entry[0]))
+
+
+class CsvWriter:
+    """
+    Writes rows in CSV format to a string. Adds empty cells or truncates cells
+    as needed to meet the specified column count.
+    """
+
+    _cols: int
+    _output = StringIO()
+    _writer = csv.writer(_output)  # idk how to make its type _writer
+
+    def __init__(self, cols: int) -> None:
+        self._cols = cols
+        self._output = StringIO()
+        self._writer = csv.writer(self._output)
+
+    def row(self, *values: str) -> None:
+        row = list(values)
+        self._writer.writerow(
+            row[0 : self._cols]
+            if len(row) > self._cols
+            else row + [""] * (len(row) - self._cols)
+            if len(row) < self._cols
+            else row
+        )
+
+    def done(self) -> str:
+        # https://stackoverflow.com/a/9157370
+        return self._output.getvalue()

@@ -74,16 +74,15 @@ class ProcessedCourse(NamedTuple):
     """
     Represents a course in an academic plan.
 
-    `term` is the index of the term from 0 to 11, where 0 is the first fall
-    quarter and 11 is the last spring quarter. Summer quarters from the raw plan
-    are merged into the previous spring quarter.
-
     `course_title` has been cleaned up by `clean_course_title`.
+
+    `term_index` represents the *n*th term in the plan and isn't tied to a
+    specific year.
     """
 
     course_title: str
     course_code: Optional[CourseCode]
     units: float
     for_major: bool
-    term: int
+    term_index: int
     raw: RawCourse
