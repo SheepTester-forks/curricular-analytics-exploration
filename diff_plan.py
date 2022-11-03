@@ -1,13 +1,14 @@
+import csv
 from difflib import SequenceMatcher
 import json
 from sys import argv, stdout
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple
-from college_names import college_names
 from curricula_index import urls
 from departments import departments, dept_schools
 
-from parse import major_codes, major_plans, read_csv_from
+from parse import major_codes, major_plans
 from parse_defs import RawCourse
+from ucsd import university
 
 
 class Colors:
@@ -181,10 +182,17 @@ def print_major_changes(major: str, college: str) -> None:
 
 def diff_all() -> None:
     complexities: Dict[Tuple[int, str, str], float] = {}
-    for (year, major, college, complexity, *_,) in read_csv_from(
-        "./files/metrics_fa12.csv", "julia Metrics.jl"
-    )[1:]:
-        complexities[int(year), major, college] = float(complexity)
+    with open("./files/metrics_fa12.csv", newline="") as file:
+        reader = csv.reader(file)
+        next(reader)  # Skip header
+        for (
+            year,
+            major,
+            college,
+            complexity,
+            *_,
+        ) in reader:
+            complexities[int(year), major, college] = float(complexity)
 
     def diff_major(major: str, college: str):
         years: List[Any] = []
@@ -225,7 +233,7 @@ def diff_all() -> None:
                 majors_by_dept[school][department] = {}
             if major not in majors_by_dept[school][department]:
                 majors_by_dept[school][department][major] = {}
-            for college_code, college_name in college_names.items():
+            for college_code, college_name in university.college_names.items():
                 output = diff_major(major_code, college_code)
                 if output:
                     first_year: int = output[0]["year"]

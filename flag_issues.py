@@ -5,9 +5,9 @@ python3 flag_issues.py > files/flagged_issues.txt
 
 import json
 from typing import Dict, List, Set
-from college_names import college_names
 from parse import major_plans
 from parse_defs import CourseCode, ProcessedCourse
+from ucsd import university
 
 year = 2022
 
@@ -99,7 +99,7 @@ def check_plan(
     for code in ges[college]:
         if code not in course_codes:
             Issues.missing_ges.append(
-                f"[{name}] missing {college_names[college]} GE {code}"
+                f"[{name}] missing {university.college_names[college]} GE {code}"
             )
         elif courses[code].raw.type != "COLLEGE":
             Issues.miscategorized_courses.append(
@@ -133,13 +133,13 @@ def check_plan(
                     f"[{name}] “{course.course_title}” differs from curriculum"
                 )
         if (
-            course.term < 6
+            course.term_index < 6
             and course.course_code
             and course.course_code.parts()[1] >= 100
         ):
-            quarter = ["fall", "winter", "spring"][course.term % 3]
+            quarter = ["fall", "winter", "spring"][course.term_index % 3]
             Issues.early_upper_division.append(
-                f"[{name}] “{course.course_title}” is taken in year {course.term // 3 + 1} {quarter} quarter"
+                f"[{name}] “{course.course_title}” is taken in year {course.term_index // 3 + 1} {quarter} quarter"
             )
 
 

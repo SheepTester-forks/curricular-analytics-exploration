@@ -19,9 +19,9 @@ from typing import Dict, Generator, Optional
 from dotenv import load_dotenv  # type: ignore
 
 from api import Session
-from college_names import college_names
 from output import MajorOutput
 from parse import MajorInfo, major_codes, major_plans
+from ucsd import university
 
 Uploaded = Dict[str, int]
 
@@ -79,7 +79,7 @@ class MajorUploader(Session):
             print(
                 f"[{major_code}] Curriculum URL: https://curricularanalytics.org/curriculums/{curriculum_id}"
             )
-        for college_code, college_name in college_names.items():
+        for college_code, college_name in university.college_names.items():
             # Seventh's 2018 plans are messy, so we've been asked to ignore them
             if (
                 college_code not in output.plans.colleges
@@ -124,7 +124,7 @@ class MajorUploader(Session):
             print(
                 f"[{major_code}] Curriculum URL: https://curricularanalytics.org/curriculums/{curriculum_id}"
             )
-        for college_code, college_name in college_names.items():
+        for college_code, college_name in university.college_names.items():
             if (
                 college_code not in output.plans.colleges
                 or college_code == "SN"
@@ -162,7 +162,7 @@ class MajorUploader(Session):
         if log:
             print(f"[{major_code}] Curriculum edited")
         plan_ids = self.get_degree_plans(curriculum_id)
-        for college_code, college_name in college_names.items():
+        for college_code, college_name in university.college_names.items():
             plan_name = f"{major_code}/{college_name}"
             if (
                 college_code not in output.plans.colleges

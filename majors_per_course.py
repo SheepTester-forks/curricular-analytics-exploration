@@ -1,19 +1,18 @@
 import csv
 from typing import Dict, Generator, List, Tuple
 
-from college_names import college_names
 from common_prereqs import parse_int
 
 from parse import major_plans
 from parse_defs import CourseCode
+from ucsd import university
 
-college_codes = list(college_names.keys())
 courses: Dict[CourseCode, Dict[str, List[str]]] = {}
 
 
 def major_has_course(major_code: str, college_code: str, code: CourseCode) -> None:
     if code not in courses:
-        courses[code] = {college: [] for college in college_codes}
+        courses[code] = {college: [] for college in university.college_codes}
     courses[code][college_code].append(major_code)
 
 
@@ -34,7 +33,7 @@ def output_courses() -> Generator[List[str], None, None]:
     yield ["Course", "College", "Majors"]
 
     for course_code in sorted(courses.keys(), key=to_sortable):
-        for college in college_codes:
+        for college in university.college_codes:
             yield [
                 " ".join(course_code),
                 college,
@@ -42,7 +41,7 @@ def output_courses() -> Generator[List[str], None, None]:
             ]
 
 
-with open("./files/majors_per_course.csv", "w",newline='') as file:
+with open("./files/majors_per_course.csv", "w", newline="") as file:
     writer = csv.writer(file)
     for row in output_courses():
         writer.writerow(row)

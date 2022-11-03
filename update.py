@@ -1,15 +1,15 @@
 from typing import Dict
 from api import Session
 
-from college_names import college_names
 from parse import major_codes, major_plans
+from ucsd import university
 
 
 def get_plan_id(
     session: Session, curriculum_ids: Dict[str, int], major_code: str, college_code: str
 ) -> int:
     return session.get_degree_plans(curriculum_ids[major_code])[
-        f"{major_code}/{college_names[college_code]}"
+        f"{major_code}/{university.college_names[college_code]}"
     ]
 
 

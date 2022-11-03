@@ -3,24 +3,15 @@ Outputs a CSV file in Curricular Analytics' curriculum and degree plan formats
 from the parsed academic plans and course prerequisites.
 
 Exports:
-    `output`, a generator function that takes a major code and optionally a
-    college code and yields lines of the CSV file. You can use a for loop on the
-    return value to print, write to a file, or store the lines in a string
-    variable.
+    `MajorOutput`, a class capable of producing degree plans or a curriculum for
+    a particular major in Curricular Analytics' CSV and JSON formats.
 """
 
 from typing import Dict, Generator, List, NamedTuple, Optional, Set
-from college_names import college_names
 from output_json import Curriculum, CurriculumHash, Item, Term, Requisite
 
-from parse import (
-    CourseCode,
-    MajorPlans,
-    ProcessedCourse,
-    Prerequisite,
-    major_codes,
-    prereqs,
-)
+from parse import MajorPlans, major_codes, prereqs
+from parse_defs import CourseCode, Prerequisite, ProcessedCourse
 from ucsd import university
 from util import CsvWriter
 
@@ -41,12 +32,6 @@ HEADER = [
 ]
 CURRICULUM_COLS = 10
 DEGREE_PLAN_COLS = 11
-
-# TODO: Remove this
-non_course_prereqs: Dict[str, List[CourseCode]] = {
-    "SOCI- UD METHODOLOGY": [CourseCode("SOCI", "60")],
-    "TDHD XXX": [CourseCode("TDTR", "10")],
-}
 
 
 class OutputCourse(NamedTuple):
@@ -181,24 +166,18 @@ class OutputCourses:
 
             prereq_ids: List[int] = []
             coreq_ids: List[int] = []
-            if course_title in non_course_prereqs:
-                for prereq in non_course_prereqs[course_title]:
+            if code:
+                reqs = prereqs(university.get_term_code(self.year, term)).get(code)
+            else:
+                reqs = university.non_course_prereqs.get(course_title)
+            if reqs:
+                for alternatives in reqs:
                     self._find_prereq(
                         prereq_ids,
                         coreq_ids,
-                        [Prerequisite(prereq, False)],
+                        alternatives,
                         term,
                     )
-            else:
-                reqs = prereqs(university.get_term_code(self.year, term))
-                if code in reqs:
-                    for alternatives in reqs[code]:
-                        self._find_prereq(
-                            prereq_ids,
-                            coreq_ids,
-                            alternatives,
-                            term,
-                        )
 
             if course_title in self.duplicate_titles:
                 self.duplicate_titles[course_title] += 1
@@ -256,7 +235,9 @@ class MajorOutput:
         major_info = major_codes()[self.plans.major_code]
         output.row("Curriculum", major_info.name)
         if college:
-            output.row("Degree Plan", f"{major_info.name}/ {college_names[college]}")
+            output.row(
+                "Degree Plan", f"{major_info.name}/ {university.college_names[college]}"
+            )
         output.row("Institution", university.name)
         # NOTE: Currently just gets the last listed award type (bias towards BS over
         # BA). Will see how to deal with BA vs BS

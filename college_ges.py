@@ -3,8 +3,8 @@ python3 college_ges.py > college_ges.csv
 """
 
 import sys
-from college_names import college_codes, college_names
 from parse import major_codes, major_plans
+from ucsd import university
 from util import partition
 
 if len(sys.argv) > 1 and sys.argv[1] == "debug":
@@ -77,16 +77,21 @@ class ColorScale:
 
 if html:
     college_headers = "".join(
-        f'<th class="college-header">{college_names[college]}</th>'
-        for college in college_codes
+        f'<th class="college-header">{university.college_names[college]}</th>'
+        for college in university.college_codes
     )
     print(
         f'<table><tr class="header"><th class="major">Major</th>{college_headers}</tr>'
     )
 else:
-    print("Major," + ",".join(college_names[college] for college in college_codes))
+    print(
+        "Major,"
+        + ",".join(
+            university.college_names[college] for college in university.college_codes
+        )
+    )
 
-sums = {college: 0.0 for college in college_codes}
+sums = {college: 0.0 for college in university.college_codes}
 major_count = 0
 
 for major_code in major_plans(2022).keys():
@@ -100,7 +105,7 @@ for major_code in major_plans(2022).keys():
         )
     else:
         print(major_code, end="")
-    for college in college_codes:
+    for college in university.college_codes:
         if (major_code, college) not in all_extra_ge_units:
             if html:
                 print("<td></td>")
@@ -125,7 +130,7 @@ for major_code in major_plans(2022).keys():
 
 if html:
     print('<tr class="average"><th scope="col" class="major">Average</th>')
-    for college in college_codes:
+    for college in university.college_codes:
         average = sums[college] / major_count
         color = ColorScale.color_scale((average - min_ge) / (max_ge - min_ge))
         print(f'<td style="--color: {color};">{average: .0f}</td>')

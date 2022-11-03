@@ -115,6 +115,23 @@ class UCSD:
 
     # College codes from least to most weird colleges (see #14)
     curriculum_priority = ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
+    # Defines the display order of colleges
+    college_codes = ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
+    college_names = {
+        "RE": "Revelle",
+        "MU": "Muir",
+        "TH": "Marshall",
+        "WA": "Warren",
+        "FI": "ERC",
+        "SI": "Sixth",
+        "SN": "Seventh",
+    }
+
+    # Prerequisites for courses without course codes
+    non_course_prereqs: Dict[str, List[List[Prerequisite]]] = {
+        "SOCI- UD METHODOLOGY": [[Prerequisite(CourseCode("SOCI", "60"), False)]],
+        "TDHD XXX": [[Prerequisite(CourseCode("TDTR", "10"), False)]],
+    }
 
     def process_plan(self, plan: List[RawCourse]) -> List[ProcessedCourse]:
         courses: List[ProcessedCourse] = []
