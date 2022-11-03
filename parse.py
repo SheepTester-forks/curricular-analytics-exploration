@@ -50,7 +50,9 @@ def prereq_rows_to_dict(
         allow_concurrent,  # Allow concurrent registration
     ) in rows:
         course = CourseCode(subject.strip(), number.strip())
-        prereq = Prerequisite(CourseCode(req_subj.strip(), req_num.strip()), allow_concurrent == "Y")
+        prereq = Prerequisite(
+            CourseCode(req_subj.strip(), req_num.strip()), allow_concurrent == "Y"
+        )
         if course not in courses:
             courses[course] = []
         if req_id == "":
@@ -130,7 +132,9 @@ class MajorPlans:
         self.raw_plans[college_code].append(course)
 
     def plan(self, college: str) -> List[ProcessedCourse]:
-        if college not in self._parsed_plans:
+        if college not in self._parsed_plans and university.keep_plan(
+            self.year, college
+        ):
             self._parsed_plans[college] = university.process_plan(
                 self.raw_plans[college]
             )

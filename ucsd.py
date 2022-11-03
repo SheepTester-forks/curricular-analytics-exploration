@@ -133,6 +133,11 @@ class UCSD:
         "TDHD XXX": [[Prerequisite(CourseCode("TDTR", "10"), False)]],
     }
 
+    def keep_plan(self, start_year: int, college: str) -> bool:
+        # Seventh's 2018 plans are messy (and the 2019 ones don't exist), so
+        # Carlos wants us to ignore them
+        return not (college == "SN" and start_year < 2020)
+
     def process_plan(self, plan: List[RawCourse]) -> List[ProcessedCourse]:
         courses: List[ProcessedCourse] = []
         for course in plan:
