@@ -20,8 +20,12 @@ class Colors:
     CYAN = "\033[36m"
 
 
-def display_term(term: int) -> str:
-    return f"Y{term // 4 + 1} {['FA', 'WI', 'SP', 'SU'][term % 4]}"
+def display_term(course: RawCourse) -> str:
+    return f"Y{course.year + 1} {university.quarter_name(course.quarter)}"
+
+
+def term_for_web(course: RawCourse) -> List[Any]:
+    return [course.year, university.quarter_name(course.quarter)]
 
 
 class DiffResults(NamedTuple):
@@ -48,8 +52,8 @@ class DiffResults(NamedTuple):
                     else ""
                 )
                 + (
-                    f" · term {Colors.YELLOW}{display_term(old.term)} → {display_term(new.term)}{Colors.RESET}"
-                    if old.term != new.term
+                    f" · year {Colors.YELLOW}{display_term(old)} → {display_term(new)}{Colors.RESET}"
+                    if old.year != new.year or old.quarter != new.quarter
                     else ""
                 )
                 + (
@@ -74,7 +78,7 @@ class DiffResults(NamedTuple):
                     "type": "removed",
                     "course": course.course_title,
                     "units": course.units,
-                    "term": course.term,
+                    "term": term_for_web(course),
                 }
             )
         for old, new in self.changed:
@@ -83,8 +87,8 @@ class DiffResults(NamedTuple):
                 course_changes["title"] = [old.course_title, new.course_title]
             if old.units != new.units:
                 course_changes["units"] = [old.units, new.units]
-            if old.term != new.term:
-                course_changes["term"] = [old.term, new.term]
+            if old.year != new.year or old.quarter != new.quarter:
+                course_changes["term"] = [term_for_web(old), term_for_web(new)]
             if old.type != new.type:
                 course_changes["type"] = [old.type, new.type]
             if old.overlaps_ge != new.overlaps_ge:
@@ -102,7 +106,7 @@ class DiffResults(NamedTuple):
                     "type": "added",
                     "course": course.course_title,
                     "units": course.units,
-                    "term": course.term,
+                    "term": term_for_web(course),
                 }
             )
         if self.old_units != self.new_units:

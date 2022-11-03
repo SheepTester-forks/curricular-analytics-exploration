@@ -179,5 +179,8 @@ class UCSD:
             QUARTERS[term_index % 3] + f"{(start_year + term_index // 3) % 100:02d}"
         )
 
+    def quarter_name(self, quarter: int) -> str:
+        return ['FA', 'WI', 'SP', 'SU'][quarter]
+
 
 university = UCSD()

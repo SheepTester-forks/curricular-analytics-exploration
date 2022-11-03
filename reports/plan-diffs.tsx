@@ -8,12 +8,14 @@ import { useState } from 'https://esm.sh/preact@10.10.6/hooks'
 
 type BeforeAfter<T> = [T, T]
 
+type Term = [number, string]
+
 type Change =
   | {
       type: 'removed' | 'added'
       course: string
       units: number
-      term: number
+      term: Term
     }
   | {
       type: 'changed'
@@ -21,7 +23,7 @@ type Change =
       changes: {
         title?: BeforeAfter<string>
         units?: BeforeAfter<number>
-        term?: BeforeAfter<number>
+        term?: BeforeAfter<Term>
         type?: BeforeAfter<'COLLEGE' | 'DEPARTMENT'>
         overlap?: BeforeAfter<boolean>
       }
@@ -211,10 +213,7 @@ type ChangeProps<T> = {
   change: BeforeAfter<T>
   map?: (value: T) => string
 }
-function Change<T extends string | number> ({
-  change: [before, after],
-  map = String
-}: ChangeProps<T>) {
+function Change<T> ({ change: [before, after], map = String }: ChangeProps<T>) {
   return (
     <span class='change'>
       {map(before)} <span class='arrow'>→</span> {map(after)}
@@ -222,8 +221,8 @@ function Change<T extends string | number> ({
   )
 }
 
-function displayTerm (term: number) {
-  return `Y${Math.floor(term / 4) + 1} ${['FA', 'WI', 'SP', 'SU'][term % 4]}`
+function displayTerm ([year, quarter]: Term) {
+  return `Y${year} ${quarter}`
 }
 
 type ChangeItemProps = {
