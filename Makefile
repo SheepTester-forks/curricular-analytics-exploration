@@ -52,3 +52,8 @@ reports/output/college-ge-units.html: reports/college-ge-template.html reports/o
 	head -n -2 < reports/college-ge-template.html > reports/output/college-ge-units.html
 	cat reports/output/college-ge-units-fragment.html >> reports/output/college-ge-units.html
 	echo '</body></html>' >> reports/output/college-ge-units.html
+
+# Prereq tree
+
+reports/output/prereqs.json: dump_prereqs.py files/prereqs_fa12.csv
+	python3 dump_prereqs.py FA22
