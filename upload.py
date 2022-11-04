@@ -21,7 +21,7 @@ from dotenv import load_dotenv  # type: ignore
 from api import Session
 from output import MajorOutput
 from parse import MajorInfo, major_codes, major_plans
-from ucsd import university
+from university import university
 
 Uploaded = Dict[str, int]
 

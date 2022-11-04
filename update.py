@@ -2,7 +2,7 @@ from typing import Dict
 from api import Session
 
 from parse import major_codes, major_plans
-from ucsd import university
+from university import university
 
 
 def get_plan_id(

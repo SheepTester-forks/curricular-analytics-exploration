@@ -4,7 +4,7 @@ python3 college_ges.py > college_ges.csv
 
 import sys
 from parse import major_codes, major_plans
-from ucsd import university
+from university import university
 from util import partition
 
 if len(sys.argv) > 1 and sys.argv[1] == "debug":

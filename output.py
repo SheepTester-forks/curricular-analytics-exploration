@@ -12,7 +12,7 @@ from output_json import Curriculum, CurriculumHash, Item, Term, Requisite
 
 from parse import MajorPlans, major_codes, prereqs
 from parse_defs import CourseCode, Prerequisite, ProcessedCourse
-from ucsd import university
+from university import university
 from util import CsvWriter
 
 __all__ = ["MajorOutput"]

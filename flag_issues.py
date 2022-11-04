@@ -7,7 +7,7 @@ import json
 from typing import Dict, List, Set
 from parse import major_plans
 from parse_defs import CourseCode, ProcessedCourse
-from ucsd import university
+from university import university
 
 year = 2022
 

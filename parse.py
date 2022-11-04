@@ -18,7 +18,7 @@ Exports:
 import csv
 from typing import Dict, Iterable, List, NamedTuple, Optional, Set
 from parse_defs import CourseCode, ProcessedCourse, Prerequisite, RawCourse, TermCode
-from ucsd import university
+from university import university
 
 __all__ = ["prereqs", "major_plans", "major_codes"]
 
@@ -288,4 +288,4 @@ def major_codes():
 
 
 if __name__ == "__main__":
-    print(prereqs("FA21")[CourseCode("CAT", "3")])
+    print(prereqs("WI23")[CourseCode("CSE", "101")])

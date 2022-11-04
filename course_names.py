@@ -4,7 +4,7 @@ python3 course_names.py > course_names.txt
 
 import re
 from parse import major_plans
-from ucsd import clean_course_title, parse_course_name
+from university import clean_course_title, parse_course_name
 
 course_names = {
     clean_course_title(course.course_title): f"{major_plan.major_code} {college}"

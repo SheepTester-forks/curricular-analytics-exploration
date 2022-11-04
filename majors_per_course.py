@@ -5,7 +5,7 @@ from common_prereqs import parse_int
 
 from parse import major_plans
 from parse_defs import CourseCode
-from ucsd import university
+from university import university
 
 courses: Dict[CourseCode, Dict[str, List[str]]] = {}
 

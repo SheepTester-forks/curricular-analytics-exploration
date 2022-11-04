@@ -8,7 +8,7 @@ from departments import departments, dept_schools
 
 from parse import major_codes, major_plans
 from parse_defs import RawCourse
-from ucsd import university
+from university import university
 
 
 class Colors:
