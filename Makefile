@@ -1,10 +1,11 @@
-all: academic-plan-diffs prereq-diffs prereq-timeline college-ge-units
+all: academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree
 
 # Reports
 academic-plan-diffs: reports/output/academic-plan-diffs.html
 prereq-diffs: reports/output/prereq-diffs.html
 prereq-timeline: reports/output/prereq-timeline.html
 college-ge-units: reports/output/college-ge-units.html
+prereq-tree: reports/output/prereq-tree.html
 
 # Plan diffs
 
@@ -57,3 +58,12 @@ reports/output/college-ge-units.html: reports/college-ge-template.html reports/o
 
 reports/output/prereqs.json: dump_prereqs.py files/prereqs_fa12.csv
 	python3 dump_prereqs.py FA22
+
+reports/output/prereq-tree.html: reports/prereq-tree-template.html reports/output/prereqs.json reports/prereq-tree.tsx
+	head -n -2 < reports/prereq-tree-template.html > reports/output/prereq-tree.html
+	echo '<script id="prereqs" type="application/json">' >> reports/output/prereq-tree.html
+	cat reports/output/prereqs.json >> reports/output/prereq-tree.html
+	echo '</script>' >> reports/output/prereq-tree.html
+	echo '<script type="module">' >> reports/output/prereq-tree.html
+	deno bundle reports/prereq-tree.tsx >> reports/output/prereq-tree.html
+	echo '</script></body></html>' >> reports/output/prereq-tree.html
