@@ -4,7 +4,11 @@
 /// <reference lib="deno.ns" />
 
 import { render } from 'https://esm.sh/preact@10.11.2'
-import { useState } from 'https://esm.sh/preact@10.11.2/hooks'
+import {
+  useEffect,
+  useRef,
+  useState
+} from 'https://esm.sh/preact@10.11.2/hooks'
 
 type Prereqs = Record<string, string[][]>
 
@@ -104,25 +108,74 @@ function getUnlockedCourses (prereqs: Prereqs, taken: string[]): string[] {
   return newCourses
 }
 
+type Size = {
+  width: number
+  height: number
+  scale: number
+}
 type TreeProps = {
   prereqs: Prereqs
   courses: string[]
 }
 function Tree ({ prereqs, courses }: TreeProps) {
+  const [size, setSize] = useState<Size | null>(null)
+
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const observerRef = useRef(
+    new ResizeObserver(entries => {
+      const { inlineSize: contentWidth } = entries[0].contentBoxSize[0]
+      const { blockSize: height, inlineSize: width } =
+        entries[0].devicePixelContentBoxSize[0]
+      setSize({ width, height, scale: width / contentWidth })
+    })
+  )
+
   const levels = [courses]
   while (levels[levels.length - 1].length > 0) {
     levels.push(getUnlockedCourses(prereqs, levels.flat()))
   }
+
+  useEffect(() => {
+    if (!canvasRef.current) return
+    observerRef.current.observe(canvasRef.current.parentElement!)
+  }, [canvasRef.current])
+
+  useEffect(() => {
+    if (!canvasRef.current || !size) return
+    canvasRef.current.width = size.width
+    canvasRef.current.height = size.height
+
+    const context = canvasRef.current.getContext('2d')!
+    context.scale(size.scale, size.scale)
+
+    let id: number
+    const render = () => {
+      context.clearRect(0, 0, size.width / size.scale, size.height / size.scale)
+      context.fillStyle = 'rgba(0, 0, 0, 0.3)'
+      context.fillRect(10, 20, 30, 240 + Math.sin(Date.now() / 1000) * 100)
+      id = requestAnimationFrame(render)
+    }
+    render()
+    return () => {
+      cancelAnimationFrame(id)
+    }
+  }, [canvasRef.current, size])
+
   return (
-    <ol>
-      {levels.map((level, i) => (
-        <li key={i}>
-          {level.map(course => (
-            <span key={course}> &middot; {course}</span>
-          ))}
-        </li>
-      ))}
-    </ol>
+    <>
+      <ol>
+        {levels.map((level, i) => (
+          <li key={i}>
+            {level.map(course => (
+              <span key={course}> &middot; {course}</span>
+            ))}
+          </li>
+        ))}
+      </ol>
+      <div class='canvas-wrapper'>
+        <canvas class='canvas' ref={canvasRef} />
+      </div>
+    </>
   )
 }
 

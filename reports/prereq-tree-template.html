@@ -8,11 +8,6 @@
     <meta name="description" content="Work in progress!" />
 
     <style>
-      html,
-      body,
-      #root {
-        height: 100%;
-      }
       body {
         margin: 0;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
@@ -40,7 +35,7 @@
       }
 
       .course-adder {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         margin: 20px;
@@ -50,6 +45,7 @@
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
         display: flex;
         align-items: stretch;
+        z-index: 10;
       }
       .added-courses {
         display: flex;
@@ -92,6 +88,21 @@
       .add-btn:disabled {
         color: inherit;
         opacity: 0.5;
+      }
+
+      .canvas-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      .canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
       }
     </style>
   </head>
