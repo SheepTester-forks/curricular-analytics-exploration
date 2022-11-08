@@ -63,6 +63,54 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
   )
 }
 
+function courseUnlocked (reqs: string[][], taken: string[]): boolean {
+  reqs: for (const req of reqs) {
+    for (const alt of req) {
+      if (taken.includes(alt)) {
+        continue reqs
+      }
+    }
+    return false
+  }
+  return true
+}
+
+function getUnlockedCourses (prereqs: Prereqs, taken: string[]): string[] {
+  const newCourses: string[] = []
+  for (const [courseCode, reqs] of Object.entries(prereqs)) {
+    // Skip classes that are unlocked by default
+    if (reqs.length === 0) {
+      continue
+    }
+    if (!taken.includes(courseCode) && courseUnlocked(reqs, taken)) {
+      newCourses.push(courseCode)
+    }
+  }
+  return newCourses
+}
+
+type TreeProps = {
+  prereqs: Prereqs
+  courses: string[]
+}
+function Tree ({ prereqs, courses }: TreeProps) {
+  const levels = [courses]
+  while (levels[levels.length - 1].length > 0) {
+    levels.push(getUnlockedCourses(prereqs, levels.flat()))
+  }
+  return (
+    <ol>
+      {levels.map((level, i) => (
+        <li key={i}>
+          {level.map(course => (
+            <span key={course}> &middot; {course}</span>
+          ))}
+        </li>
+      ))}
+    </ol>
+  )
+}
+
 type AppProps = {
   prereqs: Prereqs
 }
@@ -76,6 +124,7 @@ function App ({ prereqs }: AppProps) {
         selected={courses}
         onSelected={setCourses}
       />
+      <Tree prereqs={prereqs} courses={courses} />
     </>
   )
 }
