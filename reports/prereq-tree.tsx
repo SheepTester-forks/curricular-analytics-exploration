@@ -16,13 +16,18 @@ type CourseAdderProps = {
 function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
   const [query, setQuery] = useState('')
 
+  const courseCode = query.toUpperCase().trim().replace(/\s+/, ' ')
+  const queryValid =
+    courseCodes.includes(courseCode) && !selected.includes(courseCode)
+
   return (
-    <>
-      <ul>
+    <div class='course-adder'>
+      <ul class='added-courses'>
         {selected.map(courseCode => (
-          <li key={courseCode}>
+          <li key={courseCode} class='added-course'>
             {courseCode}
             <button
+              class='remove-course'
               onClick={() => {
                 onSelected(selected.filter(code => code !== courseCode))
               }}
@@ -33,6 +38,7 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
         ))}
       </ul>
       <form
+        class='course-adder-form'
         onSubmit={e => {
           const courseCode = query.toUpperCase().trim().replace(/\s+/, ' ')
           if (courseCodes.includes(courseCode)) {
@@ -45,13 +51,22 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
         }}
       >
         <input
+          class='add-course'
           type='search'
           name='course-code'
           list='courses'
+          placeholder='Search for a course'
+          autofocus
           value={query}
           onInput={e => {
             setQuery(e.currentTarget.value)
           }}
+        />
+        <input
+          class='add-btn'
+          type='submit'
+          value='Add'
+          disabled={!queryValid}
         />
       </form>
       <datalist id='courses'>
@@ -59,7 +74,7 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
           <option value={code} key={code} />
         ))}
       </datalist>
-    </>
+    </div>
   )
 }
 
