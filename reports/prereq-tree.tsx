@@ -113,6 +113,9 @@ type Size = {
   height: number
   scale: number
 }
+type State = {
+  number: number
+}
 type TreeProps = {
   prereqs: Prereqs
   courses: string[]
@@ -129,6 +132,9 @@ function Tree ({ prereqs, courses }: TreeProps) {
       setSize({ width, height, scale: width / contentWidth })
     })
   )
+  const stateRef = useRef<State>({
+    number: 0
+  })
 
   const levels = [courses]
   while (levels[levels.length - 1].length > 0) {
@@ -152,7 +158,12 @@ function Tree ({ prereqs, courses }: TreeProps) {
     const render = () => {
       context.clearRect(0, 0, size.width / size.scale, size.height / size.scale)
       context.fillStyle = 'rgba(0, 0, 0, 0.3)'
-      context.fillRect(10, 20, 30, 240 + Math.sin(Date.now() / 1000) * 100)
+      context.fillRect(
+        10,
+        20,
+        30,
+        240 + Math.sin(Date.now() / 1000) * 100 * stateRef.current.number
+      )
       id = requestAnimationFrame(render)
     }
     render()
@@ -160,6 +171,10 @@ function Tree ({ prereqs, courses }: TreeProps) {
       cancelAnimationFrame(id)
     }
   }, [canvasRef.current, size])
+
+  useEffect(() => {
+    stateRef.current.number = courses.length
+  }, [courses])
 
   return (
     <>
