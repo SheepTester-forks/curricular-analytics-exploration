@@ -10,12 +10,13 @@ import {
   useState
 } from 'https://esm.sh/preact@10.11.2/hooks'
 
-type Prereqs = Record<string, string[][]>
+type CourseCode = string
+type Prereqs = Record<CourseCode, CourseCode[][]>
 
 type CourseAdderProps = {
-  courseCodes: string[]
-  selected: string[]
-  onSelected: (selected: string[]) => void
+  courseCodes: CourseCode[]
+  selected: CourseCode[]
+  onSelected: (selected: CourseCode[]) => void
 }
 function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
   const [query, setQuery] = useState('')
@@ -82,7 +83,7 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
   )
 }
 
-function courseUnlocked (reqs: string[][], taken: string[]): boolean {
+function courseUnlocked (reqs: CourseCode[][], taken: CourseCode[]): boolean {
   reqs: for (const req of reqs) {
     for (const alt of req) {
       if (taken.includes(alt)) {
@@ -94,8 +95,11 @@ function courseUnlocked (reqs: string[][], taken: string[]): boolean {
   return true
 }
 
-function getUnlockedCourses (prereqs: Prereqs, taken: string[]): string[] {
-  const newCourses: string[] = []
+function getUnlockedCourses (
+  prereqs: Prereqs,
+  taken: CourseCode[]
+): CourseCode[] {
+  const newCourses: CourseCode[] = []
   for (const [courseCode, reqs] of Object.entries(prereqs)) {
     // Skip classes that are unlocked by default
     if (reqs.length === 0) {
@@ -108,17 +112,85 @@ function getUnlockedCourses (prereqs: Prereqs, taken: string[]): string[] {
   return newCourses
 }
 
+type Parameter = {
+  position: number
+  velocity: number
+  acceleration: number
+}
+
+class Node {
+  static #RADIUS = 40
+
+  name: string
+  x: Parameter
+  y: Parameter
+  connections: CourseCode[] = []
+
+  constructor (name: string, x: number, y: number) {
+    this.name = name
+    this.x = { position: x, velocity: 0, acceleration: 0 }
+    this.y = { position: y, velocity: 0, acceleration: 0 }
+  }
+
+  simulate (nodes: Record<CourseCode, Node>): void {
+    //
+  }
+
+  move (time: number): void {
+    this.x.position +=
+      (this.x.acceleration * time * time) / 2 + this.x.velocity * time
+    this.x.velocity += this.x.acceleration * time
+    this.y.position +=
+      (this.y.acceleration * time * time) / 2 + this.y.velocity * time
+    this.y.velocity += this.y.acceleration * time
+  }
+
+  drawNode (context: CanvasRenderingContext2D): void {
+    context.beginPath()
+    context.moveTo(this.x.position + Node.#RADIUS, this.y.position)
+    context.arc(this.x.position, this.y.position, Node.#RADIUS, 0, Math.PI * 2)
+    context.fillStyle = '#0891b2'
+    context.fill()
+    context.stroke()
+    context.fillStyle = 'white'
+    context.fillText(this.name, this.x.position, this.y.position)
+  }
+
+  drawEdges (context: CanvasRenderingContext2D): void {}
+}
+
+type State = {
+  nodes: Record<CourseCode, Node>
+}
+
+const FONT =
+  "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
+function draw (
+  context: CanvasRenderingContext2D,
+  state: State,
+  width: number,
+  height: number
+): void {
+  context.clearRect(-width / 2, -height / 2, width, height)
+
+  context.font = `16px ${FONT}`
+  context.textAlign = 'center'
+  context.textBaseline = 'middle'
+  context.strokeStyle = '#164e63'
+  context.lineWidth = 3
+  for (const node of Object.values(state.nodes)) {
+    node.drawNode(context)
+  }
+}
+
 type Size = {
   width: number
   height: number
   scale: number
 }
-type State = {
-  number: number
-}
 type TreeProps = {
   prereqs: Prereqs
-  courses: string[]
+  courses: CourseCode[]
 }
 function Tree ({ prereqs, courses }: TreeProps) {
   const [size, setSize] = useState<Size | null>(null)
@@ -133,7 +205,7 @@ function Tree ({ prereqs, courses }: TreeProps) {
     })
   )
   const stateRef = useRef<State>({
-    number: 0
+    nodes: {}
   })
 
   const levels = [courses]
@@ -153,17 +225,17 @@ function Tree ({ prereqs, courses }: TreeProps) {
 
     const context = canvasRef.current.getContext('2d')!
     context.scale(size.scale, size.scale)
+    context.translate(size.width / 2, size.height / 2)
 
     let id: number
     const render = () => {
-      context.clearRect(0, 0, size.width / size.scale, size.height / size.scale)
-      context.fillStyle = 'rgba(0, 0, 0, 0.3)'
-      context.fillRect(
-        10,
-        20,
-        30,
-        240 + Math.sin(Date.now() / 1000) * 100 * stateRef.current.number
+      draw(
+        context,
+        stateRef.current,
+        size.width / size.scale,
+        size.height / size.scale
       )
+
       id = requestAnimationFrame(render)
     }
     render()
@@ -173,7 +245,12 @@ function Tree ({ prereqs, courses }: TreeProps) {
   }, [canvasRef.current, size])
 
   useEffect(() => {
-    stateRef.current.number = courses.length
+    stateRef.current.nodes = Object.fromEntries(
+      courses.map(course => [
+        course,
+        stateRef.current.nodes[course] ?? new Node(course, 0, 0)
+      ])
+    )
   }, [courses])
 
   return (
