@@ -117,32 +117,66 @@ type Parameter = {
   velocity: number
   acceleration: number
 }
+function friction (param: Parameter, reduction: number): void {
+  if (param.velocity > 0) {
+    param.velocity -= reduction
+    if (param.velocity < 0) {
+      param.velocity = 0
+    }
+  } else {
+    param.velocity += reduction
+    if (param.velocity > 0) {
+      param.velocity = 0
+    }
+  }
+}
 
 class Node {
   static #RADIUS = 40
+  static #SPACING = 10
+  static #REPULSION_RADIUS = Node.#RADIUS * 2 + Node.#SPACING
 
-  name: string
+  static #REPULSION = 0.02
+  static #FRICTION = 0.02
+
+  name: CourseCode
   x: Parameter
   y: Parameter
   connections: CourseCode[] = []
 
-  constructor (name: string, x: number, y: number) {
+  constructor (name: CourseCode, x: number, y: number) {
     this.name = name
     this.x = { position: x, velocity: 0, acceleration: 0 }
     this.y = { position: y, velocity: 0, acceleration: 0 }
   }
 
-  simulate (nodes: Record<CourseCode, Node>): void {
-    //
+  interact (other: Node): void {
+    const dx = this.x.position - other.x.position
+    const dy = this.y.position - other.y.position
+    const distance = Math.hypot(dx, dy)
+    // Normalized vector. Arbitrarily make <0, 0> -> <1, 0>
+    const ux = distance === 0 ? 1 : dx / distance
+    const uy = distance === 0 ? 0 : dy / distance
+    if (distance < Node.#REPULSION_RADIUS) {
+      // Apply repelling force proportional to distance to center
+      const strength = 1 - distance / Node.#REPULSION_RADIUS
+      const force = strength * Node.#REPULSION
+      this.x.acceleration += force * ux
+      this.y.acceleration += force * uy
+      other.x.acceleration -= force * ux
+      other.y.acceleration -= force * uy
+    }
   }
 
   move (time: number): void {
     this.x.position +=
       (this.x.acceleration * time * time) / 2 + this.x.velocity * time
     this.x.velocity += this.x.acceleration * time
+    friction(this.x, time * Node.#FRICTION)
     this.y.position +=
       (this.y.acceleration * time * time) / 2 + this.y.velocity * time
     this.y.velocity += this.y.acceleration * time
+    friction(this.y, time * Node.#FRICTION)
   }
 
   drawNode (context: CanvasRenderingContext2D): void {
@@ -157,12 +191,36 @@ class Node {
   }
 
   drawEdges (context: CanvasRenderingContext2D): void {}
+
+  static spawn (name: CourseCode): Node {
+    const WIGGLE_RADIUS = 5
+    const angle = Math.random() * Math.PI * 2
+    return new Node(
+      name,
+      Math.cos(angle) * WIGGLE_RADIUS,
+      Math.sin(angle) * WIGGLE_RADIUS
+    )
+  }
 }
 
 type State = {
   nodes: Record<CourseCode, Node>
 }
-
+function simulate (state: State, timeStep: number): void {
+  const nodes = Object.values(state.nodes)
+  for (const node of nodes) {
+    node.x.acceleration = 0
+    node.y.acceleration = 0
+  }
+  for (const [i, node] of nodes.entries()) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      node.interact(nodes[j])
+    }
+  }
+  for (const node of nodes) {
+    node.move(timeStep)
+  }
+}
 const FONT =
   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
 function draw (
@@ -224,11 +282,16 @@ function Tree ({ prereqs, courses }: TreeProps) {
     canvasRef.current.height = size.height
 
     const context = canvasRef.current.getContext('2d')!
-    context.scale(size.scale, size.scale)
     context.translate(size.width / 2, size.height / 2)
+    context.scale(size.scale, size.scale)
 
     let id: number
+    let lastTime = 0
     const render = () => {
+      const time = Date.now()
+      const timeStep = Math.min(time - lastTime, 100)
+      lastTime = time
+      simulate(stateRef.current, timeStep)
       draw(
         context,
         stateRef.current,
@@ -248,9 +311,10 @@ function Tree ({ prereqs, courses }: TreeProps) {
     stateRef.current.nodes = Object.fromEntries(
       courses.map(course => [
         course,
-        stateRef.current.nodes[course] ?? new Node(course, 0, 0)
+        stateRef.current.nodes[course] ?? Node.spawn(course)
       ])
     )
+    console.log(stateRef.current.nodes)
   }, [courses])
 
   return (
