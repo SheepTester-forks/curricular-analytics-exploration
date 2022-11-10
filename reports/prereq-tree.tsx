@@ -26,60 +26,60 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
     courseCodes.includes(courseCode) && !selected.includes(courseCode)
 
   return (
-    <div class='course-adder'>
-      <ul class='added-courses'>
-        {selected.map(courseCode => (
-          <li key={courseCode} class='added-course'>
-            {courseCode}
-            <button
-              class='remove-course'
-              onClick={() => {
-                onSelected(selected.filter(code => code !== courseCode))
-              }}
-            >
-              ×
-            </button>
-          </li>
-        ))}
-      </ul>
-      <form
-        class='course-adder-form'
-        onSubmit={e => {
-          const courseCode = query.toUpperCase().trim().replace(/\s+/, ' ')
-          if (courseCodes.includes(courseCode)) {
-            if (!selected.includes(courseCode)) {
-              onSelected([...selected, courseCode])
+    <ul class='course-adder'>
+      {selected.map(courseCode => (
+        <li key={courseCode} class='added-course'>
+          {courseCode}
+          <button
+            class='remove-course'
+            onClick={() => {
+              onSelected(selected.filter(code => code !== courseCode))
+            }}
+          >
+            ×
+          </button>
+        </li>
+      ))}
+      <li>
+        <form
+          class='course-adder-form'
+          onSubmit={e => {
+            const courseCode = query.toUpperCase().trim().replace(/\s+/, ' ')
+            if (courseCodes.includes(courseCode)) {
+              if (!selected.includes(courseCode)) {
+                onSelected([...selected, courseCode])
+              }
+              setQuery('')
             }
-            setQuery('')
-          }
-          e.preventDefault()
-        }}
-      >
-        <input
-          class='add-course'
-          type='search'
-          name='course-code'
-          list='courses'
-          placeholder='Search for a course'
-          autofocus
-          value={query}
-          onInput={e => {
-            setQuery(e.currentTarget.value)
+            e.preventDefault()
           }}
-        />
-        <input
-          class='add-btn'
-          type='submit'
-          value='Add'
-          disabled={!queryValid}
-        />
-      </form>
-      <datalist id='courses'>
-        {courseCodes.map(code => (
-          <option value={code} key={code} />
-        ))}
-      </datalist>
-    </div>
+        >
+          <input
+            class='add-course'
+            type='search'
+            name='course-code'
+            list='courses'
+            placeholder='Search for a course'
+            autofocus
+            value={query}
+            onInput={e => {
+              setQuery(e.currentTarget.value)
+            }}
+          />
+          <input
+            class='add-btn'
+            type='submit'
+            value='Add'
+            disabled={!queryValid}
+          />
+        </form>
+        <datalist id='courses'>
+          {courseCodes.map(code => (
+            <option value={code} key={code} />
+          ))}
+        </datalist>
+      </li>
+    </ul>
   )
 }
 
@@ -314,7 +314,6 @@ function Tree ({ prereqs, courses }: TreeProps) {
         stateRef.current.nodes[course] ?? Node.spawn(course)
       ])
     )
-    console.log(stateRef.current.nodes)
   }, [courses])
 
   return (
