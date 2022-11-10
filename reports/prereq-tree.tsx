@@ -131,21 +131,27 @@ function friction (param: Parameter, reduction: number): void {
   }
 }
 
+const RADIUS = 30
+const SPACING = 10
+const REPULSION_RADIUS = RADIUS * 2 + SPACING
+
+const REPULSION = 0.02
+const FRICTION = 0.02
+
+const FILL = '#fbbf24'
+const TEXT = 'black'
+const FONT_FAMILY =
+  "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
+const FONT = `16px ${FONT_FAMILY}`
+
 class Node {
-  static #RADIUS = 40
-  static #SPACING = 10
-  static #REPULSION_RADIUS = Node.#RADIUS * 2 + Node.#SPACING
-
-  static #REPULSION = 0.02
-  static #FRICTION = 0.02
-
-  name: CourseCode
+  code: CourseCode
   x: Parameter
   y: Parameter
   connections: CourseCode[] = []
 
-  constructor (name: CourseCode, x: number, y: number) {
-    this.name = name
+  constructor (code: CourseCode, x: number, y: number) {
+    this.code = code
     this.x = { position: x, velocity: 0, acceleration: 0 }
     this.y = { position: y, velocity: 0, acceleration: 0 }
   }
@@ -157,10 +163,10 @@ class Node {
     // Normalized vector. Arbitrarily make <0, 0> -> <1, 0>
     const ux = distance === 0 ? 1 : dx / distance
     const uy = distance === 0 ? 0 : dy / distance
-    if (distance < Node.#REPULSION_RADIUS) {
+    if (distance < REPULSION_RADIUS) {
       // Apply repelling force proportional to distance to center
-      const strength = 1 - distance / Node.#REPULSION_RADIUS
-      const force = strength * Node.#REPULSION
+      const strength = 1 - distance / REPULSION_RADIUS
+      const force = strength * REPULSION
       this.x.acceleration += force * ux
       this.y.acceleration += force * uy
       other.x.acceleration -= force * ux
@@ -172,31 +178,32 @@ class Node {
     this.x.position +=
       (this.x.acceleration * time * time) / 2 + this.x.velocity * time
     this.x.velocity += this.x.acceleration * time
-    friction(this.x, time * Node.#FRICTION)
+    friction(this.x, time * FRICTION)
     this.y.position +=
       (this.y.acceleration * time * time) / 2 + this.y.velocity * time
     this.y.velocity += this.y.acceleration * time
-    friction(this.y, time * Node.#FRICTION)
+    friction(this.y, time * FRICTION)
   }
 
   drawNode (context: CanvasRenderingContext2D): void {
     context.beginPath()
-    context.moveTo(this.x.position + Node.#RADIUS, this.y.position)
-    context.arc(this.x.position, this.y.position, Node.#RADIUS, 0, Math.PI * 2)
-    context.fillStyle = '#0891b2'
+    context.moveTo(this.x.position + RADIUS, this.y.position)
+    context.arc(this.x.position, this.y.position, RADIUS, 0, Math.PI * 2)
+    context.fillStyle = FILL
     context.fill()
-    context.stroke()
-    context.fillStyle = 'white'
-    context.fillText(this.name, this.x.position, this.y.position)
+    context.fillStyle = TEXT
+    const [subject, number] = this.code.split(' ')
+    context.fillText(subject, this.x.position, this.y.position - 6)
+    context.fillText(number, this.x.position, this.y.position + 10)
   }
 
   drawEdges (context: CanvasRenderingContext2D): void {}
 
-  static spawn (name: CourseCode): Node {
+  static spawn (code: CourseCode): Node {
     const WIGGLE_RADIUS = 5
     const angle = Math.random() * Math.PI * 2
     return new Node(
-      name,
+      code,
       Math.cos(angle) * WIGGLE_RADIUS,
       Math.sin(angle) * WIGGLE_RADIUS
     )
@@ -221,8 +228,6 @@ function simulate (state: State, timeStep: number): void {
     node.move(timeStep)
   }
 }
-const FONT =
-  "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
 function draw (
   context: CanvasRenderingContext2D,
   state: State,
@@ -231,11 +236,9 @@ function draw (
 ): void {
   context.clearRect(-width / 2, -height / 2, width, height)
 
-  context.font = `16px ${FONT}`
+  context.font = FONT
   context.textAlign = 'center'
   context.textBaseline = 'middle'
-  context.strokeStyle = '#164e63'
-  context.lineWidth = 3
   for (const node of Object.values(state.nodes)) {
     node.drawNode(context)
   }
