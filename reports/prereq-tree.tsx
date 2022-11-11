@@ -84,15 +84,14 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
 }
 
 function courseUnlocked (reqs: CourseCode[][], taken: CourseCode[]): boolean {
-  reqs: for (const req of reqs) {
+  for (const req of reqs) {
     for (const alt of req) {
       if (taken.includes(alt)) {
-        continue reqs
+        return true
       }
     }
-    return false
   }
-  return true
+  return false
 }
 
 function getUnlockedCourses (
@@ -149,6 +148,7 @@ class Node {
   x: Parameter
   y: Parameter
   connections: CourseCode[] = []
+  hovered = false
 
   constructor (code: CourseCode, x: number, y: number) {
     this.code = code
@@ -191,6 +191,9 @@ class Node {
     context.arc(this.x.position, this.y.position, RADIUS, 0, Math.PI * 2)
     context.fillStyle = FILL
     context.fill()
+    if (this.hovered) {
+      context.stroke()
+    }
     context.fillStyle = TEXT
     const [subject, number] = this.code.split(' ')
     context.fillText(subject, this.x.position, this.y.position - 6)
@@ -212,6 +215,7 @@ class Node {
 
 type State = {
   nodes: Record<CourseCode, Node>
+  hovered: Node | null
 }
 function simulate (state: State, timeStep: number): void {
   const nodes = Object.values(state.nodes)
@@ -239,6 +243,8 @@ function draw (
   context.font = FONT
   context.textAlign = 'center'
   context.textBaseline = 'middle'
+  context.strokeStyle = 'black'
+  context.lineWidth = 2
   for (const node of Object.values(state.nodes)) {
     node.drawNode(context)
   }
@@ -266,7 +272,8 @@ function Tree ({ prereqs, courses }: TreeProps) {
     })
   )
   const stateRef = useRef<State>({
-    nodes: {}
+    nodes: {},
+    hovered: null
   })
 
   const levels = [courses]
@@ -292,7 +299,7 @@ function Tree ({ prereqs, courses }: TreeProps) {
     let lastTime = 0
     const render = () => {
       const time = Date.now()
-      const timeStep = Math.min(time - lastTime, 100)
+      const timeStep = Math.min(time - lastTime, 50)
       lastTime = time
       simulate(stateRef.current, timeStep)
       draw(
@@ -331,7 +338,35 @@ function Tree ({ prereqs, courses }: TreeProps) {
         ))}
       </ol>
       <div class='canvas-wrapper'>
-        <canvas class='canvas' ref={canvasRef} />
+        <canvas
+          class='canvas'
+          ref={canvasRef}
+          onMouseMove={event => {
+            const mouse = {
+              x: event.clientX - window.innerWidth / 2,
+              y: event.clientY - window.innerHeight / 2
+            }
+            if (stateRef.current.hovered) {
+              stateRef.current.hovered.hovered = false
+            }
+            for (const node of Object.values(
+              stateRef.current.nodes
+            ).reverse()) {
+              if (
+                (mouse.x - node.x.position) ** 2 +
+                  (mouse.y - node.y.position) ** 2 <=
+                RADIUS ** 2
+              ) {
+                stateRef.current.hovered = node
+                node.hovered = true
+                event.currentTarget.style.cursor = 'pointer'
+                return
+              }
+            }
+            stateRef.current.hovered = null
+            event.currentTarget.style.cursor = ''
+          }}
+        />
       </div>
     </>
   )
