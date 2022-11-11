@@ -130,12 +130,26 @@ function friction (param: Parameter, reduction: number): void {
   }
 }
 
+function normalize (
+  x: number,
+  y: number
+): { x: number; y: number; length: number } {
+  const length = Math.hypot(x, y)
+  // Arbitrarily make <0, 0> -> <1, 0>
+  return {
+    x: length === 0 ? 1 : x / length,
+    y: length === 0 ? 0 : y / length,
+    length
+  }
+}
+
 const RADIUS = 30
 const SPACING = 10
 const REPULSION_RADIUS = RADIUS * 2 + SPACING
 
 const REPULSION = 0.02
 const FRICTION = 0.02
+const WALL_REPULSION = 0.02
 
 const FILL = '#fbbf24'
 const TEXT = 'black'
@@ -156,33 +170,84 @@ class Node {
     this.y = { position: y, velocity: 0, acceleration: 0 }
   }
 
-  interact (other: Node): void {
-    const dx = this.x.position - other.x.position
-    const dy = this.y.position - other.y.position
-    const distance = Math.hypot(dx, dy)
-    // Normalized vector. Arbitrarily make <0, 0> -> <1, 0>
-    const ux = distance === 0 ? 1 : dx / distance
-    const uy = distance === 0 ? 0 : dy / distance
-    if (distance < REPULSION_RADIUS) {
-      // Apply repelling force proportional to distance to center
-      const strength = 1 - distance / REPULSION_RADIUS
-      const force = strength * REPULSION
-      this.x.acceleration += force * ux
-      this.y.acceleration += force * uy
-      other.x.acceleration -= force * ux
-      other.y.acceleration -= force * uy
+  simulate (bounds: Bounds): void {
+    this.x.acceleration = 0
+    this.y.acceleration = 0
+
+    const { x, y, length } = normalize(
+      Math.min(this.x.position - (-bounds.width / 2 + RADIUS + SPACING), 0) +
+        Math.max(this.x.position - (bounds.width / 2 - RADIUS - SPACING), 0),
+      Math.min(this.y.position - (-bounds.height / 2 + RADIUS + SPACING), 0) +
+        Math.max(this.y.position - (bounds.height / 2 - RADIUS - SPACING), 0)
+    )
+    if (length > 0) {
+      const strength = length / SPACING
+      this.x.acceleration -= strength * WALL_REPULSION * x
+      this.y.acceleration -= strength * WALL_REPULSION * y
     }
   }
 
-  move (time: number): void {
+  interact (other: Node): void {
+    const { x, y, length } = normalize(
+      this.x.position - other.x.position,
+      this.y.position - other.y.position
+    )
+    if (length < REPULSION_RADIUS) {
+      // Apply repelling force proportional to distance to center
+      const strength = 1 - length / REPULSION_RADIUS
+      const force = strength * REPULSION
+      this.x.acceleration += force * x
+      this.y.acceleration += force * y
+      other.x.acceleration -= force * x
+      other.y.acceleration -= force * y
+    }
+    if (
+      !Number.isFinite(this.x.acceleration) ||
+      !Number.isFinite(this.y.acceleration)
+    ) {
+      throw new RangeError('Acceleration is non-finite 😭')
+    }
+  }
+
+  move (time: number, bounds: Bounds): void {
     this.x.position +=
       (this.x.acceleration * time * time) / 2 + this.x.velocity * time
     this.x.velocity += this.x.acceleration * time
     friction(this.x, time * FRICTION)
+    if (this.x.position < -bounds.width / 2 + RADIUS) {
+      this.x.position = -bounds.width / 2 + RADIUS
+      if (this.x.velocity < 0) {
+        this.x.velocity = 0
+      }
+    } else if (this.x.position > bounds.width / 2 - RADIUS) {
+      this.x.position = bounds.width / 2 - RADIUS
+      if (this.x.velocity > 0) {
+        this.x.velocity = 0
+      }
+    }
+
     this.y.position +=
       (this.y.acceleration * time * time) / 2 + this.y.velocity * time
     this.y.velocity += this.y.acceleration * time
     friction(this.y, time * FRICTION)
+    if (this.y.position < -bounds.height / 2 + RADIUS) {
+      this.y.position = -bounds.height / 2 + RADIUS
+      if (this.y.velocity < 0) {
+        this.y.velocity = 0
+      }
+    } else if (this.y.position > bounds.height / 2 - RADIUS) {
+      this.y.position = bounds.height / 2 - RADIUS
+      if (this.y.velocity > 0) {
+        this.y.velocity = 0
+      }
+    }
+
+    if (
+      !Number.isFinite(this.x.position) ||
+      !Number.isFinite(this.y.position)
+    ) {
+      throw new RangeError('Position is non-finite 😭')
+    }
   }
 
   drawNode (context: CanvasRenderingContext2D): void {
@@ -213,15 +278,15 @@ class Node {
   }
 }
 
+type Bounds = { width: number; height: number }
 type State = {
   nodes: Record<CourseCode, Node>
   hovered: Node | null
 }
-function simulate (state: State, timeStep: number): void {
+function simulate (state: State, timeStep: number, bounds: Bounds): void {
   const nodes = Object.values(state.nodes)
   for (const node of nodes) {
-    node.x.acceleration = 0
-    node.y.acceleration = 0
+    node.simulate(bounds)
   }
   for (const [i, node] of nodes.entries()) {
     for (let j = i + 1; j < nodes.length; j++) {
@@ -229,7 +294,7 @@ function simulate (state: State, timeStep: number): void {
     }
   }
   for (const node of nodes) {
-    node.move(timeStep)
+    node.move(timeStep, bounds)
   }
 }
 function draw (
@@ -276,11 +341,6 @@ function Tree ({ prereqs, courses }: TreeProps) {
     hovered: null
   })
 
-  const levels = [courses]
-  while (levels[levels.length - 1].length > 0) {
-    levels.push(getUnlockedCourses(prereqs, levels.flat()))
-  }
-
   useEffect(() => {
     if (!canvasRef.current) return
     observerRef.current.observe(canvasRef.current.parentElement!)
@@ -301,7 +361,10 @@ function Tree ({ prereqs, courses }: TreeProps) {
       const time = Date.now()
       const timeStep = Math.min(time - lastTime, 50)
       lastTime = time
-      simulate(stateRef.current, timeStep)
+      simulate(stateRef.current, timeStep, {
+        width: size.width / size.scale,
+        height: size.height / size.scale
+      })
       draw(
         context,
         stateRef.current,
@@ -318,8 +381,16 @@ function Tree ({ prereqs, courses }: TreeProps) {
   }, [canvasRef.current, size])
 
   useEffect(() => {
+    const nodes = [...courses]
+    let added = true
+    while (added) {
+      const unlocked = getUnlockedCourses(prereqs, nodes)
+      added = unlocked.length > 0
+      nodes.push(...unlocked)
+    }
+
     stateRef.current.nodes = Object.fromEntries(
-      courses.map(course => [
+      nodes.map(course => [
         course,
         stateRef.current.nodes[course] ?? Node.spawn(course)
       ])
@@ -328,15 +399,6 @@ function Tree ({ prereqs, courses }: TreeProps) {
 
   return (
     <>
-      <ol>
-        {levels.map((level, i) => (
-          <li key={i}>
-            {level.map(course => (
-              <span key={course}> &middot; {course}</span>
-            ))}
-          </li>
-        ))}
-      </ol>
       <div class='canvas-wrapper'>
         <canvas
           class='canvas'
