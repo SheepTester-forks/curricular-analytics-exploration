@@ -229,7 +229,7 @@ function ForceGraph (
 
   // Construct the forces.
   const forceNode = d3.forceManyBody()
-  const forceLink = d3.forceLink(linksMut).id(({ index: i }) => nodeIds[i]!)
+  const forceLink = d3.forceLink(linksMut).id(({ index: i }) => nodeIds[i!])
   if (nodeStrength !== undefined) forceNode.strength(nodeStrength)
   if (linkStrength !== undefined) forceLink.strength(linkStrength)
 
@@ -267,7 +267,7 @@ function ForceGraph (
     .attr('stroke-opacity', nodeStrokeOpacity)
     .attr('stroke-width', nodeStrokeWidth)
     .selectAll('circle') as d3.Selection<
-    SVGCircleElement,
+    Element,
     unknown,
     SVGElement,
     undefined
@@ -295,7 +295,7 @@ function ForceGraph (
   }
 
   function drag (): d3.DragBehavior<
-    d3.BaseType | Element,
+    Element,
     d3.SimulationNodeDatum,
     d3.SimulationNodeDatum
   > {
