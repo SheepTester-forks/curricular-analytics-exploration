@@ -9,6 +9,7 @@ import {
   useRef,
   useState
 } from 'https://esm.sh/preact@10.11.2/hooks'
+import * as d3 from 'https://cdn.skypack.dev/d3@7.6.1?dts'
 
 type CourseCode = string
 type Prereqs = Record<CourseCode, CourseCode[][]>
@@ -111,275 +112,159 @@ function getUnlockedCourses (
   return newCourses
 }
 
-type Parameter = {
-  position: number
-  velocity: number
-  acceleration: number
-}
-function friction (param: Parameter, reduction: number): void {
-  if (param.velocity > 0) {
-    param.velocity -= reduction
-    if (param.velocity < 0) {
-      param.velocity = 0
-    }
-  } else {
-    param.velocity += reduction
-    if (param.velocity > 0) {
-      param.velocity = 0
-    }
-  }
-}
+// Copyright 2021 Observable, Inc.
+// Released under the ISC license.
+// https://observablehq.com/@d3/force-directed-graph
+function ForceGraph (
+  {
+    nodes, // an iterable of node objects (typically [{id}, …])
+    links // an iterable of link objects (typically [{source, target}, …])
+  },
+  {
+    nodeId = d => d.id, // given d in nodes, returns a unique identifier (string)
+    nodeGroup, // given d in nodes, returns an (ordinal) value for color
+    nodeGroups, // an array of ordinal values representing the node groups
+    nodeTitle, // given d in nodes, a title string
+    nodeFill = 'currentColor', // node stroke fill (if not using a group color encoding)
+    nodeStroke = '#fff', // node stroke color
+    nodeStrokeWidth = 1.5, // node stroke width, in pixels
+    nodeStrokeOpacity = 1, // node stroke opacity
+    nodeRadius = 5, // node radius, in pixels
+    nodeStrength,
+    linkSource = ({ source }) => source, // given d in links, returns a node identifier string
+    linkTarget = ({ target }) => target, // given d in links, returns a node identifier string
+    linkStroke = '#999', // link stroke color
+    linkStrokeOpacity = 0.6, // link stroke opacity
+    linkStrokeWidth = 1.5, // given d in links, returns a stroke width in pixels
+    linkStrokeLinecap = 'round', // link stroke linecap
+    linkStrength,
+    colors = d3.schemeTableau10, // an array of color strings, for the node groups
+    width = 640, // outer width, in pixels
+    height = 400, // outer height, in pixels
+    invalidation // when this promise resolves, stop the simulation
+  } = {}
+) {
+  // Compute values.
+  const N = d3.map(nodes, nodeId).map(intern)
+  const LS = d3.map(links, linkSource).map(intern)
+  const LT = d3.map(links, linkTarget).map(intern)
+  if (nodeTitle === undefined) nodeTitle = (_, i) => N[i]
+  const T = nodeTitle == null ? null : d3.map(nodes, nodeTitle)
+  const G = nodeGroup == null ? null : d3.map(nodes, nodeGroup).map(intern)
+  const W =
+    typeof linkStrokeWidth !== 'function'
+      ? null
+      : d3.map(links, linkStrokeWidth)
+  const L = typeof linkStroke !== 'function' ? null : d3.map(links, linkStroke)
 
-function normalize (
-  x: number,
-  y: number
-): { x: number; y: number; length: number } {
-  const length = Math.hypot(x, y)
-  // Arbitrarily make <0, 0> -> <1, 0>
-  return {
-    x: length === 0 ? 1 : x / length,
-    y: length === 0 ? 0 : y / length,
-    length
-  }
-}
+  // Replace the input nodes and links with mutable objects for the simulation.
+  nodes = d3.map(nodes, (_, i) => ({ id: N[i] }))
+  links = d3.map(links, (_, i) => ({ source: LS[i], target: LT[i] }))
 
-const RADIUS = 30
-const SPACING = 10
-const REPULSION_RADIUS = RADIUS * 2 + SPACING
+  // Compute default domains.
+  if (G && nodeGroups === undefined) nodeGroups = d3.sort(G)
 
-const REPULSION = 0.02
-const FRICTION = 0.02
-const WALL_REPULSION = 0.02
+  // Construct the scales.
+  const color = nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors)
 
-const FILL = '#fbbf24'
-const TEXT = 'black'
-const FONT_FAMILY =
-  "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
-const FONT = `16px ${FONT_FAMILY}`
+  // Construct the forces.
+  const forceNode = d3.forceManyBody()
+  const forceLink = d3.forceLink(links).id(({ index: i }) => N[i])
+  if (nodeStrength !== undefined) forceNode.strength(nodeStrength)
+  if (linkStrength !== undefined) forceLink.strength(linkStrength)
 
-class Node {
-  code: CourseCode
-  x: Parameter
-  y: Parameter
-  connections: CourseCode[] = []
-  hovered = false
+  const simulation = d3
+    .forceSimulation(nodes)
+    .force('link', forceLink)
+    .force('charge', forceNode)
+    .force('center', d3.forceCenter())
+    .on('tick', ticked)
 
-  constructor (code: CourseCode, x: number, y: number) {
-    this.code = code
-    this.x = { position: x, velocity: 0, acceleration: 0 }
-    this.y = { position: y, velocity: 0, acceleration: 0 }
-  }
+  const svg = d3
+    .create('svg')
+    .attr('width', width)
+    .attr('height', height)
+    .attr('viewBox', [-width / 2, -height / 2, width, height])
+    .attr('style', 'max-width: 100%; height: auto; height: intrinsic;')
 
-  simulate (bounds: Bounds): void {
-    this.x.acceleration = 0
-    this.y.acceleration = 0
-
-    const { x, y, length } = normalize(
-      Math.min(this.x.position - (-bounds.width / 2 + RADIUS + SPACING), 0) +
-        Math.max(this.x.position - (bounds.width / 2 - RADIUS - SPACING), 0),
-      Math.min(this.y.position - (-bounds.height / 2 + RADIUS + SPACING), 0) +
-        Math.max(this.y.position - (bounds.height / 2 - RADIUS - SPACING), 0)
+  const link = svg
+    .append('g')
+    .attr('stroke', typeof linkStroke !== 'function' ? linkStroke : null)
+    .attr('stroke-opacity', linkStrokeOpacity)
+    .attr(
+      'stroke-width',
+      typeof linkStrokeWidth !== 'function' ? linkStrokeWidth : null
     )
-    if (length > 0) {
-      const strength = length / SPACING
-      this.x.acceleration -= strength * WALL_REPULSION * x
-      this.y.acceleration -= strength * WALL_REPULSION * y
-    }
+    .attr('stroke-linecap', linkStrokeLinecap)
+    .selectAll('line')
+    .data(links)
+    .join('line')
+
+  const node = svg
+    .append('g')
+    .attr('fill', nodeFill)
+    .attr('stroke', nodeStroke)
+    .attr('stroke-opacity', nodeStrokeOpacity)
+    .attr('stroke-width', nodeStrokeWidth)
+    .selectAll('circle')
+    .data(nodes)
+    .join('circle')
+    .attr('r', nodeRadius)
+    .call(drag(simulation))
+
+  if (W) link.attr('stroke-width', ({ index: i }) => W[i])
+  if (L) link.attr('stroke', ({ index: i }) => L[i])
+  if (G) node.attr('fill', ({ index: i }) => color(G[i]))
+  if (T) node.append('title').text(({ index: i }) => T[i])
+  if (invalidation != null) invalidation.then(() => simulation.stop())
+
+  function intern (value) {
+    return value !== null && typeof value === 'object' ? value.valueOf() : value
   }
 
-  interact (other: Node): void {
-    const { x, y, length } = normalize(
-      this.x.position - other.x.position,
-      this.y.position - other.y.position
-    )
-    if (length < REPULSION_RADIUS) {
-      // Apply repelling force proportional to distance to center
-      const strength = 1 - length / REPULSION_RADIUS
-      const force = strength * REPULSION
-      this.x.acceleration += force * x
-      this.y.acceleration += force * y
-      other.x.acceleration -= force * x
-      other.y.acceleration -= force * y
-    }
-    if (
-      !Number.isFinite(this.x.acceleration) ||
-      !Number.isFinite(this.y.acceleration)
-    ) {
-      throw new RangeError('Acceleration is non-finite 😭')
-    }
+  function ticked () {
+    link
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y)
+
+    node.attr('cx', d => d.x).attr('cy', d => d.y)
   }
 
-  move (time: number, bounds: Bounds): void {
-    this.x.position +=
-      (this.x.acceleration * time * time) / 2 + this.x.velocity * time
-    this.x.velocity += this.x.acceleration * time
-    friction(this.x, time * FRICTION)
-    if (this.x.position < -bounds.width / 2 + RADIUS) {
-      this.x.position = -bounds.width / 2 + RADIUS
-      if (this.x.velocity < 0) {
-        this.x.velocity = 0
-      }
-    } else if (this.x.position > bounds.width / 2 - RADIUS) {
-      this.x.position = bounds.width / 2 - RADIUS
-      if (this.x.velocity > 0) {
-        this.x.velocity = 0
-      }
+  function drag (simulation) {
+    function dragstarted (event) {
+      if (!event.active) simulation.alphaTarget(0.3).restart()
+      event.subject.fx = event.subject.x
+      event.subject.fy = event.subject.y
     }
 
-    this.y.position +=
-      (this.y.acceleration * time * time) / 2 + this.y.velocity * time
-    this.y.velocity += this.y.acceleration * time
-    friction(this.y, time * FRICTION)
-    if (this.y.position < -bounds.height / 2 + RADIUS) {
-      this.y.position = -bounds.height / 2 + RADIUS
-      if (this.y.velocity < 0) {
-        this.y.velocity = 0
-      }
-    } else if (this.y.position > bounds.height / 2 - RADIUS) {
-      this.y.position = bounds.height / 2 - RADIUS
-      if (this.y.velocity > 0) {
-        this.y.velocity = 0
-      }
+    function dragged (event) {
+      event.subject.fx = event.x
+      event.subject.fy = event.y
     }
 
-    if (
-      !Number.isFinite(this.x.position) ||
-      !Number.isFinite(this.y.position)
-    ) {
-      throw new RangeError('Position is non-finite 😭')
+    function dragended (event) {
+      if (!event.active) simulation.alphaTarget(0)
+      event.subject.fx = null
+      event.subject.fy = null
     }
+
+    return d3
+      .drag()
+      .on('start', dragstarted)
+      .on('drag', dragged)
+      .on('end', dragended)
   }
 
-  drawNode (context: CanvasRenderingContext2D): void {
-    context.beginPath()
-    context.moveTo(this.x.position + RADIUS, this.y.position)
-    context.arc(this.x.position, this.y.position, RADIUS, 0, Math.PI * 2)
-    context.fillStyle = FILL
-    context.fill()
-    if (this.hovered) {
-      context.stroke()
-    }
-    context.fillStyle = TEXT
-    const [subject, number] = this.code.split(' ')
-    context.fillText(subject, this.x.position, this.y.position - 6)
-    context.fillText(number, this.x.position, this.y.position + 10)
-  }
-
-  drawEdges (context: CanvasRenderingContext2D): void {}
-
-  static spawn (code: CourseCode): Node {
-    const WIGGLE_RADIUS = 5
-    const angle = Math.random() * Math.PI * 2
-    return new Node(
-      code,
-      Math.cos(angle) * WIGGLE_RADIUS,
-      Math.sin(angle) * WIGGLE_RADIUS
-    )
-  }
+  return Object.assign(svg.node(), { scales: { color } })
 }
 
-type Bounds = { width: number; height: number }
-type State = {
-  nodes: Record<CourseCode, Node>
-  hovered: Node | null
-}
-function simulate (state: State, timeStep: number, bounds: Bounds): void {
-  const nodes = Object.values(state.nodes)
-  for (const node of nodes) {
-    node.simulate(bounds)
-  }
-  for (const [i, node] of nodes.entries()) {
-    for (let j = i + 1; j < nodes.length; j++) {
-      node.interact(nodes[j])
-    }
-  }
-  for (const node of nodes) {
-    node.move(timeStep, bounds)
-  }
-}
-function draw (
-  context: CanvasRenderingContext2D,
-  state: State,
-  width: number,
-  height: number
-): void {
-  context.clearRect(-width / 2, -height / 2, width, height)
-
-  context.font = FONT
-  context.textAlign = 'center'
-  context.textBaseline = 'middle'
-  context.strokeStyle = 'black'
-  context.lineWidth = 2
-  for (const node of Object.values(state.nodes)) {
-    node.drawNode(context)
-  }
-}
-
-type Size = {
-  width: number
-  height: number
-  scale: number
-}
 type TreeProps = {
   prereqs: Prereqs
   courses: CourseCode[]
 }
 function Tree ({ prereqs, courses }: TreeProps) {
-  const [size, setSize] = useState<Size | null>(null)
-
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const observerRef = useRef(
-    new ResizeObserver(entries => {
-      const { inlineSize: contentWidth } = entries[0].contentBoxSize[0]
-      const { blockSize: height, inlineSize: width } =
-        entries[0].devicePixelContentBoxSize[0]
-      setSize({ width, height, scale: width / contentWidth })
-    })
-  )
-  const stateRef = useRef<State>({
-    nodes: {},
-    hovered: null
-  })
-
-  useEffect(() => {
-    if (!canvasRef.current) return
-    observerRef.current.observe(canvasRef.current.parentElement!)
-  }, [canvasRef.current])
-
-  useEffect(() => {
-    if (!canvasRef.current || !size) return
-    canvasRef.current.width = size.width
-    canvasRef.current.height = size.height
-
-    const context = canvasRef.current.getContext('2d')!
-    context.translate(size.width / 2, size.height / 2)
-    context.scale(size.scale, size.scale)
-
-    let id: number
-    let lastTime = 0
-    const render = () => {
-      const time = Date.now()
-      const timeStep = Math.min(time - lastTime, 50)
-      lastTime = time
-      simulate(stateRef.current, timeStep, {
-        width: size.width / size.scale,
-        height: size.height / size.scale
-      })
-      draw(
-        context,
-        stateRef.current,
-        size.width / size.scale,
-        size.height / size.scale
-      )
-
-      id = requestAnimationFrame(render)
-    }
-    render()
-    return () => {
-      cancelAnimationFrame(id)
-    }
-  }, [canvasRef.current, size])
-
   useEffect(() => {
     const nodes = [...courses]
     let added = true
@@ -389,47 +274,12 @@ function Tree ({ prereqs, courses }: TreeProps) {
       nodes.push(...unlocked)
     }
 
-    stateRef.current.nodes = Object.fromEntries(
-      nodes.map(course => [
-        course,
-        stateRef.current.nodes[course] ?? Node.spawn(course)
-      ])
-    )
+    //
   }, [courses])
 
   return (
     <>
-      <div class='canvas-wrapper'>
-        <canvas
-          class='canvas'
-          ref={canvasRef}
-          onMouseMove={event => {
-            const mouse = {
-              x: event.clientX - window.innerWidth / 2,
-              y: event.clientY - window.innerHeight / 2
-            }
-            if (stateRef.current.hovered) {
-              stateRef.current.hovered.hovered = false
-            }
-            for (const node of Object.values(
-              stateRef.current.nodes
-            ).reverse()) {
-              if (
-                (mouse.x - node.x.position) ** 2 +
-                  (mouse.y - node.y.position) ** 2 <=
-                RADIUS ** 2
-              ) {
-                stateRef.current.hovered = node
-                node.hovered = true
-                event.currentTarget.style.cursor = 'pointer'
-                return
-              }
-            }
-            stateRef.current.hovered = null
-            event.currentTarget.style.cursor = ''
-          }}
-        />
-      </div>
+      <div class='canvas-wrapper'></div>
     </>
   )
 }
