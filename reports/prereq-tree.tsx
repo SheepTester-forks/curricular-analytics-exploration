@@ -127,162 +127,100 @@ type ForceGraphArgs = {
   /** an iterable of link objects (typically [{source, target}, …]) */
   links: Link[]
 }
-type ForceGraphOptions = {
-  /** given d in nodes, returns a unique identifier (string) */
-  nodeId: (d: Node, index: number) => string
-  /** given d in nodes, returns an (ordinal) value for color */
-  nodeGroup: (d: Node, index: number) => number
-  /** an array of ordinal values representing the node groups */
-  nodeGroups: number[]
-  /** given d in nodes, a title string */
-  nodeTitle: (d: Node, index: number) => string
-  /** node stroke fill (if not using a group color encoding) */
-  nodeFill: string
-  /** node stroke color */
-  nodeStroke: string
-  /** node stroke width, in pixels */
-  nodeStrokeWidth: number
-  /** node stroke opacity */
-  nodeStrokeOpacity: number
-  /** node radius, in pixels */
-  nodeRadius: number
-  nodeStrength: number
-  /** given d in links, returns a node identifier string */
-  linkSource: (d: Link, index: number) => string
-  /** given d in links, returns a node identifier string */
-  linkTarget: (d: Link, index: number) => string
-  /** link stroke color */
-  linkStroke: string | ((d: Link, index: number) => string)
-  /** link stroke opacity */
-  linkStrokeOpacity: number
-  /** given d in links, returns a stroke width in pixels */
-  linkStrokeWidth: number | ((d: Link, index: number) => number)
-  /** link stroke linecap */
-  linkStrokeLinecap: string
-  linkStrength: number
-  /** an array of color strings, for the node groups */
-  colors: readonly string[]
-  /** outer width, in pixels */
-  width: number
-  /** outer height, in pixels */
-  height: number
-  /** when this promise resolves, stop the simulation */
-  invalidation: Promise<void>
-}
 
 /**
  * Copyright 2021 Observable, Inc.
  * Released under the ISC license.
  * https://observablehq.com/@d3/force-directed-graph
  */
-function ForceGraph (
-  { nodes, links }: ForceGraphArgs,
-  {
-    nodeId = d => d.id,
-    nodeGroup,
-    nodeGroups = [],
-    nodeTitle,
-    nodeFill = 'currentColor',
-    nodeStroke = '#fff',
-    nodeStrokeWidth = 1.5,
-    nodeStrokeOpacity = 1,
-    nodeRadius = 5,
-    nodeStrength,
-    linkSource = ({ source }) => source,
-    linkTarget = ({ target }) => target,
-    linkStroke = '#999',
-    linkStrokeOpacity = 0.6,
-    linkStrokeWidth = 1.5,
-    linkStrokeLinecap = 'round',
-    linkStrength,
-    colors = d3.schemeTableau10,
-    width = 640,
-    height = 400,
-    invalidation
-  }: Partial<ForceGraphOptions> = {}
-) {
+function ForceGraph ({ nodes, links }: ForceGraphArgs) {
   // Compute values.
-  const nodeIds = d3.map(nodes, nodeId)
-  const sources = d3.map(links, linkSource)
-  const targets = d3.map(links, linkTarget)
-  if (nodeTitle === undefined) nodeTitle = (_, i) => nodeIds[i]
-  const titles = nodeTitle == null ? null : d3.map(nodes, nodeTitle)
-  const groups = nodeGroup == null ? null : d3.map(nodes, nodeGroup)
-  const widths =
-    typeof linkStrokeWidth !== 'function'
-      ? null
-      : d3.map(links, linkStrokeWidth)
-  const L = typeof linkStroke !== 'function' ? null : d3.map(links, linkStroke)
+  const nodeIds = nodes.map(d => d.id)
+  const sources = links.map(({ source }) => source)
+  const targets = links.map(({ target }) => target)
+  const groups = nodes.map(d => d.group)
 
+  type SimNode = d3.SimulationNodeDatum & { id: string }
   // Replace the input nodes and links with mutable objects for the simulation.
-  const nodesMut = d3.map(nodes, (_, i) => ({ id: nodeIds[i] }))
-  const linksMut = d3.map(links, (_, i) => ({
+  const nodesMut: SimNode[] = nodes.map((_, i) => ({ id: nodeIds[i] }))
+  const linksMut: d3.SimulationLinkDatum<SimNode>[] = links.map((_, i) => ({
     source: sources[i],
     target: targets[i]
   }))
 
-  // Compute default domains.
-  if (groups && nodeGroups === undefined) nodeGroups = d3.sort(groups)
-
   // Construct the scales.
-  const color = nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors)
-
-  // Construct the forces.
-  const forceNode = d3.forceManyBody()
-  const forceLink = d3.forceLink(linksMut).id(({ index: i }) => nodeIds[i!])
-  if (nodeStrength !== undefined) forceNode.strength(nodeStrength)
-  if (linkStrength !== undefined) forceLink.strength(linkStrength)
+  const color = d3.scaleOrdinal(d3.sort(groups), d3.schemeTableau10)
 
   const simulation = d3
-    .forceSimulation(nodesMut as d3.SimulationNodeDatum[])
-    .force('link', forceLink)
-    .force('charge', forceNode)
+    .forceSimulation(nodesMut)
+    .force(
+      'link',
+      d3.forceLink(linksMut).id(({ index: i }) => nodeIds[i!])
+    )
+    .force('charge', d3.forceManyBody())
     .force('center', d3.forceCenter())
     .on('tick', ticked)
 
-  const svg = d3
-    .create('svg')
-    .attr('width', width)
-    .attr('height', height)
-    .attr('viewBox', [-width / 2, -height / 2, width, height].join(' '))
-    .attr('style', 'max-width: 100%; height: auto; height: intrinsic;')
+  const svg = d3.create('svg')
+
+  function resize () {
+    const width = window.innerWidth
+    const height = window.innerHeight
+    svg
+      .attr('width', width)
+      .attr('height', height)
+      .attr('viewBox', [-width / 2, -height / 2, width, height].join(' '))
+  }
+  resize()
+  self.addEventListener('resize', resize)
 
   const link = svg
     .append('g')
-    .attr('stroke', typeof linkStroke !== 'function' ? linkStroke : '')
-    .attr('stroke-opacity', linkStrokeOpacity)
-    .attr(
-      'stroke-width',
-      typeof linkStrokeWidth !== 'function' ? linkStrokeWidth : ''
-    )
-    .attr('stroke-linecap', linkStrokeLinecap)
+    .attr('stroke', '#999')
+    .attr('stroke-opacity', 0.6)
+    .attr('stroke-width', 1.5)
+    .attr('stroke-linecap', 'round')
     .selectAll('line')
-    .data(linksMut as d3.SimulationLinkDatum<d3.SimulationNodeDatum>[])
+    .data(linksMut)
     .join('line')
 
   const temp = svg
     .append('g')
-    .attr('fill', nodeFill)
-    .attr('stroke', nodeStroke)
-    .attr('stroke-opacity', nodeStrokeOpacity)
-    .attr('stroke-width', nodeStrokeWidth)
+    .attr('fill', 'currentColor')
+    .attr('stroke', '#fff')
+    .attr('stroke-opacity', 1)
+    .attr('stroke-width', 1.5)
     .selectAll('circle') as d3.Selection<
     Element,
     unknown,
     SVGElement,
     undefined
   >
+  type DragEvent = d3.D3DragEvent<Element, unknown, SimNode>
   const node = temp
-    .data(nodesMut as d3.SimulationNodeDatum[])
+    .data(nodesMut)
     .join('circle')
-    .attr('r', nodeRadius)
-    .call(drag())
+    .attr('r', 5)
+    .call(
+      d3
+        .drag<Element, SimNode>()
+        .on('start', (event: DragEvent) => {
+          if (!event.active) simulation.alphaTarget(0.3).restart()
+          event.subject.fx = event.subject.x
+          event.subject.fy = event.subject.y
+        })
+        .on('drag', (event: DragEvent) => {
+          event.subject.fx = event.x
+          event.subject.fy = event.y
+        })
+        .on('end', (event: DragEvent) => {
+          if (!event.active) simulation.alphaTarget(0)
+          event.subject.fx = null
+          event.subject.fy = null
+        })
+    )
 
-  if (widths) link.attr('stroke-width', ({ index: i }) => widths[i!])
-  if (L) link.attr('stroke', ({ index: i }) => L[i!])
   if (groups && color) node.attr('fill', ({ index: i }) => color(groups[i!]))
-  if (titles) node.append('title').text(({ index: i }) => titles[i!])
-  if (invalidation != null) invalidation.then(() => simulation.stop())
 
   function ticked () {
     link
@@ -292,37 +230,6 @@ function ForceGraph (
       .attr('y2', d => (typeof d.target === 'object' ? d.target.y! : ''))
 
     node.attr('cx', d => d.x!).attr('cy', d => d.y!)
-  }
-
-  function drag (): d3.DragBehavior<
-    Element,
-    d3.SimulationNodeDatum,
-    d3.SimulationNodeDatum
-  > {
-    type DragEvent = d3.D3DragEvent<Element, unknown, d3.SimulationNodeDatum>
-
-    function dragstarted (event: DragEvent) {
-      if (!event.active) simulation.alphaTarget(0.3).restart()
-      event.subject.fx = event.subject.x
-      event.subject.fy = event.subject.y
-    }
-
-    function dragged (event: DragEvent) {
-      event.subject.fx = event.x
-      event.subject.fy = event.y
-    }
-
-    function dragended (event: DragEvent) {
-      if (!event.active) simulation.alphaTarget(0)
-      event.subject.fx = null
-      event.subject.fy = null
-    }
-
-    return d3
-      .drag<Element, d3.SimulationNodeDatum>()
-      .on('start', dragstarted)
-      .on('drag', dragged)
-      .on('end', dragended)
   }
 
   return Object.assign(svg.node()!, { scales: { color } })
@@ -341,15 +248,7 @@ function Tree ({ prereqs, courses }: TreeProps) {
     if (!wrapperRef.current) {
       return
     }
-    const chart = ForceGraph(miserables, {
-      nodeId: d => d.id,
-      nodeGroup: d => d.group,
-      nodeTitle: d => `${d.id}\n${d.group}`,
-      linkStrokeWidth: l => Math.sqrt(l.value),
-      // width,
-      height: 600,
-      invalidation: new Promise(() => {})
-    })
+    const chart = ForceGraph(miserables)
     wrapperRef.current.append(chart)
     return () => {
       chart.remove()
