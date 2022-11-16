@@ -134,32 +134,37 @@ type ForceGraphArgs = {
  * https://observablehq.com/@d3/force-directed-graph
  */
 function ForceGraph ({ nodes, links }: ForceGraphArgs) {
-  // Compute values.
-  const nodeIds = nodes.map(d => d.id)
-  const sources = links.map(({ source }) => source)
-  const targets = links.map(({ target }) => target)
-  const groups = nodes.map(d => d.group)
-
   type SimNode = d3.SimulationNodeDatum & { id: string }
   // Replace the input nodes and links with mutable objects for the simulation.
-  const nodesMut: SimNode[] = nodes.map((_, i) => ({ id: nodeIds[i] }))
+  const nodesMut: SimNode[] = nodes.map((_, i) => ({ id: nodes[i].id }))
   const linksMut: d3.SimulationLinkDatum<SimNode>[] = links.map((_, i) => ({
-    source: sources[i],
-    target: targets[i]
+    source: links[i].source,
+    target: links[i].target
   }))
 
   // Construct the scales.
-  const color = d3.scaleOrdinal(d3.sort(groups), d3.schemeTableau10)
+  const color = d3.scaleOrdinal(
+    d3.sort(nodes.map(d => d.group)),
+    d3.schemeTableau10
+  )
 
   const simulation = d3
     .forceSimulation(nodesMut)
     .force(
       'link',
-      d3.forceLink(linksMut).id(({ index: i }) => nodeIds[i!])
+      d3.forceLink(linksMut).id(({ index: i }) => nodes[i!].id)
     )
     .force('charge', d3.forceManyBody())
     .force('center', d3.forceCenter())
-    .on('tick', ticked)
+    .on('tick', () => {
+      link
+        .attr('x1', d => (typeof d.source === 'object' ? d.source.x! : ''))
+        .attr('y1', d => (typeof d.source === 'object' ? d.source.y! : ''))
+        .attr('x2', d => (typeof d.target === 'object' ? d.target.x! : ''))
+        .attr('y2', d => (typeof d.target === 'object' ? d.target.y! : ''))
+
+      node.attr('cx', d => d.x!).attr('cy', d => d.y!)
+    })
 
   const svg = d3.create('svg')
 
@@ -184,53 +189,36 @@ function ForceGraph ({ nodes, links }: ForceGraphArgs) {
     .data(linksMut)
     .join('line')
 
-  const temp = svg
+  type DragEvent = d3.D3DragEvent<Element, unknown, SimNode>
+  const drag = d3
+    .drag<Element, SimNode>()
+    .on('start', (event: DragEvent) => {
+      if (!event.active) simulation.alphaTarget(0.3).restart()
+      event.subject.fx = event.subject.x
+      event.subject.fy = event.subject.y
+    })
+    .on('drag', (event: DragEvent) => {
+      event.subject.fx = event.x
+      event.subject.fy = event.y
+    })
+    .on('end', (event: DragEvent) => {
+      if (!event.active) simulation.alphaTarget(0)
+      event.subject.fx = null
+      event.subject.fy = null
+    })
+  const node = svg
     .append('g')
     .attr('fill', 'currentColor')
     .attr('stroke', '#fff')
     .attr('stroke-opacity', 1)
     .attr('stroke-width', 1.5)
-    .selectAll('circle') as d3.Selection<
-    Element,
-    unknown,
-    SVGElement,
-    undefined
-  >
-  type DragEvent = d3.D3DragEvent<Element, unknown, SimNode>
-  const node = temp
+    .selectAll<Element, SimNode>('circle')
     .data(nodesMut)
     .join('circle')
     .attr('r', 5)
-    .call(
-      d3
-        .drag<Element, SimNode>()
-        .on('start', (event: DragEvent) => {
-          if (!event.active) simulation.alphaTarget(0.3).restart()
-          event.subject.fx = event.subject.x
-          event.subject.fy = event.subject.y
-        })
-        .on('drag', (event: DragEvent) => {
-          event.subject.fx = event.x
-          event.subject.fy = event.y
-        })
-        .on('end', (event: DragEvent) => {
-          if (!event.active) simulation.alphaTarget(0)
-          event.subject.fx = null
-          event.subject.fy = null
-        })
-    )
+    .call(drag)
 
-  if (groups && color) node.attr('fill', ({ index: i }) => color(groups[i!]))
-
-  function ticked () {
-    link
-      .attr('x1', d => (typeof d.source === 'object' ? d.source.x! : ''))
-      .attr('y1', d => (typeof d.source === 'object' ? d.source.y! : ''))
-      .attr('x2', d => (typeof d.target === 'object' ? d.target.x! : ''))
-      .attr('y2', d => (typeof d.target === 'object' ? d.target.y! : ''))
-
-    node.attr('cx', d => d.x!).attr('cy', d => d.y!)
-  }
+  node.attr('fill', ({ index: i }) => color(nodes[i!].group))
 
   return Object.assign(svg.node()!, { scales: { color } })
 }
