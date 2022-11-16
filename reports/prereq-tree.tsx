@@ -123,24 +123,20 @@ type DragEvent = d3.D3DragEvent<Element, unknown, CourseNode>
  * Updating nodes: https://observablehq.com/@d3/build-your-own-graph
  */
 function createGraph (wrapper: ParentNode): () => void {
-  const nodes: CourseNode[] = ['CSE 11', 'MATH 20A', 'CSE 12', 'MATH 20B'].map(
-    course => ({ course })
-  )
-  const links: CourseLink[] = [
-    {
-      source: 'CSE 11',
-      target: 'CSE 12'
-    },
-    {
-      source: 'CSE 11',
-      target: 'MATH 20B'
-    },
-    {
-      source: 'MATH 20A',
-      target: 'CSE 12'
-    },
-    { source: 'MATH 20A', target: 'MATH 20B' }
-  ]
+  const nodes: CourseNode[] = []
+  const links: CourseLink[] = []
+  for (let i = 50; i--; ) {
+    nodes.push({
+      course: `${['CSE', 'MATH', 'PHYS', 'ECE'][i % 4]} ${(i / 4) | 0}`
+    })
+  }
+  for (let i = 30; i--; ) {
+    links.push({
+      source: nodes[(Math.random() * 50) | 0].course,
+      target: nodes[(Math.random() * 50) | 0].course
+    })
+  }
+  // TODO: prevent nodes from going off screen
 
   const color = d3.scaleOrdinal(
     d3.sort(nodes.map(({ course }) => course.split(' ')[0])),
@@ -189,9 +185,7 @@ function createGraph (wrapper: ParentNode): () => void {
 
   const node = svg
     .append('g')
-    .attr('fill', 'currentColor')
     .attr('stroke', '#fff')
-    .attr('stroke-opacity', 1)
     .attr('stroke-width', 1.5)
     .selectAll<Element, CourseNode>('circle')
     .data(nodes)
