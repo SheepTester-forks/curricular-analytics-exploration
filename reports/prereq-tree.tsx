@@ -114,6 +114,7 @@ function getUnlockedCourses (
 
 type CourseNode = d3.SimulationNodeDatum & { course: CourseCode }
 type CourseLink = d3.SimulationLinkDatum<CourseNode>
+type DragEvent = d3.D3DragEvent<Element, unknown, CourseNode>
 
 /**
  * Copyright 2021 Observable, Inc.
@@ -175,23 +176,17 @@ function createGraph (wrapper: ParentNode): () => void {
   resize()
   self.addEventListener('resize', resize)
 
-  type DragEvent = d3.D3DragEvent<Element, unknown, CourseNode>
-  const drag = d3
-    .drag<Element, CourseNode>()
-    .on('start', (event: DragEvent) => {
-      if (!event.active) simulation.alphaTarget(0.3).restart()
-      event.subject.fx = event.subject.x
-      event.subject.fy = event.subject.y
-    })
-    .on('drag', (event: DragEvent) => {
-      event.subject.fx = event.x
-      event.subject.fy = event.y
-    })
-    .on('end', (event: DragEvent) => {
-      if (!event.active) simulation.alphaTarget(0)
-      event.subject.fx = null
-      event.subject.fy = null
-    })
+  // Links first so the nodes are on top
+  const link = svg
+    .append('g')
+    .attr('stroke', '#999')
+    .attr('stroke-opacity', 0.6)
+    .attr('stroke-width', 1.5)
+    .attr('stroke-linecap', 'round')
+    .selectAll('line')
+    .data(links)
+    .join('line')
+
   const node = svg
     .append('g')
     .attr('fill', 'currentColor')
@@ -203,21 +198,31 @@ function createGraph (wrapper: ParentNode): () => void {
     .join('circle')
     .attr('r', 5)
     .attr('fill', ({ course }) => color(course.split(' ')[0]))
-    .call(drag)
+    .call(
+      d3
+        .drag<Element, CourseNode>()
+        .on('start', (event: DragEvent) => {
+          if (!event.active) simulation.alphaTarget(0.3).restart()
+          event.subject.fx = event.subject.x
+          event.subject.fy = event.subject.y
+        })
+        .on('drag', (event: DragEvent) => {
+          event.subject.fx = event.x
+          event.subject.fy = event.y
+        })
+        .on('end', (event: DragEvent) => {
+          if (!event.active) simulation.alphaTarget(0)
+          event.subject.fx = null
+          event.subject.fy = null
+        })
+    )
   node.append('title').text(({ course }) => course)
-
-  const link = svg
-    .append('g')
-    .attr('stroke', '#999')
-    .attr('stroke-opacity', 0.6)
-    .attr('stroke-width', 1.5)
-    .attr('stroke-linecap', 'round')
-    .selectAll('line')
-    .data(links)
-    .join('line')
 
   const chart = Object.assign(svg.node()!, { scales: { color } })
   wrapper.append(chart)
+
+  // TODO: Update
+  const update = () => {}
 
   return () => {
     self.removeEventListener('resize', resize)
