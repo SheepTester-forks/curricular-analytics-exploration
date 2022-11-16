@@ -112,62 +112,58 @@ function getUnlockedCourses (
   return newCourses
 }
 
-type Node = {
-  id: string
-  group: number
-}
-type Link = {
-  source: string
-  target: string
-  value: number
-}
-type ForceGraphArgs = {
-  /** an iterable of node objects (typically [{id}, …]) */
-  nodes: Node[]
-  /** an iterable of link objects (typically [{source, target}, …]) */
-  links: Link[]
-}
+type CourseNode = d3.SimulationNodeDatum & { course: CourseCode }
+type CourseLink = d3.SimulationLinkDatum<CourseNode>
 
 /**
  * Copyright 2021 Observable, Inc.
  * Released under the ISC license.
  * https://observablehq.com/@d3/force-directed-graph
+ * Updating nodes: https://observablehq.com/@d3/build-your-own-graph
  */
-function ForceGraph ({ nodes, links }: ForceGraphArgs) {
-  type SimNode = d3.SimulationNodeDatum & { id: string }
-  // Replace the input nodes and links with mutable objects for the simulation.
-  const nodesMut: SimNode[] = nodes.map((_, i) => ({ id: nodes[i].id }))
-  const linksMut: d3.SimulationLinkDatum<SimNode>[] = links.map((_, i) => ({
-    source: links[i].source,
-    target: links[i].target
-  }))
+function createGraph (wrapper: ParentNode): () => void {
+  const nodes: CourseNode[] = ['CSE 11', 'MATH 20A', 'CSE 12', 'MATH 20B'].map(
+    course => ({ course })
+  )
+  const links: CourseLink[] = [
+    {
+      source: 'CSE 11',
+      target: 'CSE 12'
+    },
+    {
+      source: 'CSE 11',
+      target: 'MATH 20B'
+    },
+    {
+      source: 'MATH 20A',
+      target: 'CSE 12'
+    },
+    { source: 'MATH 20A', target: 'MATH 20B' }
+  ]
 
-  // Construct the scales.
   const color = d3.scaleOrdinal(
-    d3.sort(nodes.map(d => d.group)),
+    d3.sort(nodes.map(({ course }) => course.split(' ')[0])),
     d3.schemeTableau10
   )
 
   const simulation = d3
-    .forceSimulation(nodesMut)
+    .forceSimulation(nodes)
     .force(
       'link',
-      d3.forceLink(linksMut).id(({ index: i }) => nodes[i!].id)
+      d3.forceLink<CourseNode, CourseLink>(links).id(({ course }) => course)
     )
     .force('charge', d3.forceManyBody())
     .force('center', d3.forceCenter())
     .on('tick', () => {
+      node.attr('cx', d => d.x!).attr('cy', d => d.y!)
       link
         .attr('x1', d => (typeof d.source === 'object' ? d.source.x! : ''))
         .attr('y1', d => (typeof d.source === 'object' ? d.source.y! : ''))
         .attr('x2', d => (typeof d.target === 'object' ? d.target.x! : ''))
         .attr('y2', d => (typeof d.target === 'object' ? d.target.y! : ''))
-
-      node.attr('cx', d => d.x!).attr('cy', d => d.y!)
     })
 
   const svg = d3.create('svg')
-
   function resize () {
     const width = window.innerWidth
     const height = window.innerHeight
@@ -179,19 +175,9 @@ function ForceGraph ({ nodes, links }: ForceGraphArgs) {
   resize()
   self.addEventListener('resize', resize)
 
-  const link = svg
-    .append('g')
-    .attr('stroke', '#999')
-    .attr('stroke-opacity', 0.6)
-    .attr('stroke-width', 1.5)
-    .attr('stroke-linecap', 'round')
-    .selectAll('line')
-    .data(linksMut)
-    .join('line')
-
-  type DragEvent = d3.D3DragEvent<Element, unknown, SimNode>
+  type DragEvent = d3.D3DragEvent<Element, unknown, CourseNode>
   const drag = d3
-    .drag<Element, SimNode>()
+    .drag<Element, CourseNode>()
     .on('start', (event: DragEvent) => {
       if (!event.active) simulation.alphaTarget(0.3).restart()
       event.subject.fx = event.subject.x
@@ -212,18 +198,33 @@ function ForceGraph ({ nodes, links }: ForceGraphArgs) {
     .attr('stroke', '#fff')
     .attr('stroke-opacity', 1)
     .attr('stroke-width', 1.5)
-    .selectAll<Element, SimNode>('circle')
-    .data(nodesMut)
+    .selectAll<Element, CourseNode>('circle')
+    .data(nodes)
     .join('circle')
     .attr('r', 5)
+    .attr('fill', ({ course }) => color(course.split(' ')[0]))
     .call(drag)
+  node.append('title').text(({ course }) => course)
 
-  node.attr('fill', ({ index: i }) => color(nodes[i!].group))
+  const link = svg
+    .append('g')
+    .attr('stroke', '#999')
+    .attr('stroke-opacity', 0.6)
+    .attr('stroke-width', 1.5)
+    .attr('stroke-linecap', 'round')
+    .selectAll('line')
+    .data(links)
+    .join('line')
 
-  return Object.assign(svg.node()!, { scales: { color } })
+  const chart = Object.assign(svg.node()!, { scales: { color } })
+  wrapper.append(chart)
+
+  return () => {
+    self.removeEventListener('resize', resize)
+    chart.remove()
+    simulation.stop()
+  }
 }
-
-import miserables from '/mnt/c/Users/seant/Downloads/miserables.json' assert { type: 'json' }
 
 type TreeProps = {
   prereqs: Prereqs
@@ -236,12 +237,8 @@ function Tree ({ prereqs, courses }: TreeProps) {
     if (!wrapperRef.current) {
       return
     }
-    const chart = ForceGraph(miserables)
-    wrapperRef.current.append(chart)
-    return () => {
-      chart.remove()
-    }
-  })
+    return createGraph(wrapperRef.current)
+  }, [wrapperRef.current])
 
   useEffect(() => {
     const nodes = [...courses]
