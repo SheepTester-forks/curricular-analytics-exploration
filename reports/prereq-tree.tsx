@@ -202,30 +202,33 @@ function createGraph (wrapper: ParentNode): {
     .selectAll<SVGCircleElement, CourseNode>('circle')
 
   const update = (nodes: CourseNode[], links: CourseLink[]) => {
-    link = link.data(links).join(
-      enter =>
-        enter
-          .append('line')
-          .attr('stroke-width', 0)
-          .call(enter => enter.transition().attr('stroke-width', 1.5)),
-      update => update,
-      exit => exit.remove()
-    )
-
-    node = node.data(nodes).join(
-      enter => {
-        const node = enter
-          .append('circle')
-          .attr('fill', ({ course }) => color(course.split(' ')[0]))
-          .attr('r', 0)
-          .call(enter => enter.transition().attr('r', 5))
-          .call(drag)
-        node.append('title').text(({ course }) => course)
-        return node
-      },
-      update => update,
-      exit => exit.remove()
-    )
+    node = node
+      .data(nodes, ({ course }) => course)
+      .join(
+        enter => {
+          const node = enter
+            .append('circle')
+            .attr('fill', ({ course }) => color(course.split(' ')[0]))
+            .attr('r', 0)
+            .call(enter => enter.transition().attr('r', 5))
+            .call(drag)
+          node.append('title').text(({ course }) => course)
+          return node
+        },
+        update => update,
+        exit => exit.remove()
+      )
+    link = link
+      .data(links, ({ source, target }) => `${source}-${target}`)
+      .join(
+        enter =>
+          enter
+            .append('line')
+            .attr('stroke-width', 0)
+            .call(enter => enter.transition().attr('stroke-width', 1.5)),
+        update => update,
+        exit => exit.remove()
+      )
 
     simulation.nodes(nodes)
     simulation.force<d3.ForceLink<CourseNode, CourseLink>>('link')?.links(links)
@@ -255,8 +258,8 @@ function Tree ({ prereqs, courses }: TreeProps) {
       return
     }
     const { update, destroy } = createGraph(wrapperRef.current)
-    const nodes: CourseNode[] = []
-    const links: CourseLink[] = []
+    let nodes: CourseNode[] = []
+    let links: CourseLink[] = []
     for (let i = 50; i--; ) {
       nodes.push({
         course: `${['CSE', 'MATH', 'PHYS', 'ECE', 'CHEM'][i % 5]} ${
@@ -271,6 +274,12 @@ function Tree ({ prereqs, courses }: TreeProps) {
       })
     }
     update(nodes, links)
+    setTimeout(() => {
+      nodes = nodes.map(({ course }) => ({ course }))
+      links = links.map(({ source, target }) => ({ source, target }))
+      update(nodes, links)
+      console.log(nodes, links)
+    }, 1000)
     return destroy
   }, [wrapperRef.current])
 
