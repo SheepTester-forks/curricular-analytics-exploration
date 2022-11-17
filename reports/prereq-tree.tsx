@@ -11,6 +11,19 @@ import {
 } from 'https://esm.sh/preact@10.11.2/hooks'
 import * as d3 from 'https://cdn.skypack.dev/d3@7.6.1?dts'
 
+// HACK to allow Selection.transition()
+import type { Selection } from 'https://cdn.skypack.dev/-/d3-selection@v3.0.0-sAmQ3giCT8irML5wz1T1/dist=es2019,mode=types/index.d.ts'
+declare module 'https://cdn.skypack.dev/-/d3-selection@v3.0.0-sAmQ3giCT8irML5wz1T1/dist=es2019,mode=types/index.d.ts' {
+  interface Selection<
+    GElement extends d3.BaseType,
+    Datum,
+    PElement extends d3.BaseType,
+    PDatum
+  > {
+    transition(name?: string): d3.Transition<GElement, Datum, PElement, PDatum>
+  }
+}
+
 type CourseCode = string
 type Prereqs = Record<CourseCode, CourseCode[][]>
 
@@ -114,7 +127,7 @@ function getUnlockedCourses (
 
 type CourseNode = d3.SimulationNodeDatum & { course: CourseCode }
 type CourseLink = d3.SimulationLinkDatum<CourseNode>
-type DragEvent = d3.D3DragEvent<Element, unknown, CourseNode>
+type DragEvent = d3.D3DragEvent<SVGCircleElement, unknown, CourseNode>
 
 /**
  * Copyright 2021 Observable, Inc.
@@ -173,50 +186,65 @@ function createGraph (wrapper: ParentNode): () => void {
   self.addEventListener('resize', resize)
 
   // Links first so the nodes are on top
-  const link = svg
+  let link = svg
     .append('g')
     .attr('stroke', '#999')
     .attr('stroke-opacity', 0.6)
     .attr('stroke-width', 1.5)
     .attr('stroke-linecap', 'round')
-    .selectAll('line')
-    .data(links)
-    .join('line')
+    .selectAll<SVGLineElement, CourseLink>('line')
 
-  const node = svg
+  const drag = d3
+    .drag<SVGCircleElement, CourseNode>()
+    .on('start', (event: DragEvent) => {
+      if (!event.active) simulation.alphaTarget(0.3).restart()
+      event.subject.fx = event.subject.x
+      event.subject.fy = event.subject.y
+    })
+    .on('drag', (event: DragEvent) => {
+      event.subject.fx = event.x
+      event.subject.fy = event.y
+    })
+    .on('end', (event: DragEvent) => {
+      if (!event.active) simulation.alphaTarget(0)
+      event.subject.fx = null
+      event.subject.fy = null
+    })
+  let node = svg
     .append('g')
     .attr('stroke', '#fff')
     .attr('stroke-width', 1.5)
-    .selectAll<Element, CourseNode>('circle')
-    .data(nodes)
-    .join('circle')
-    .attr('r', 5)
-    .attr('fill', ({ course }) => color(course.split(' ')[0]))
-    .call(
-      d3
-        .drag<Element, CourseNode>()
-        .on('start', (event: DragEvent) => {
-          if (!event.active) simulation.alphaTarget(0.3).restart()
-          event.subject.fx = event.subject.x
-          event.subject.fy = event.subject.y
-        })
-        .on('drag', (event: DragEvent) => {
-          event.subject.fx = event.x
-          event.subject.fy = event.y
-        })
-        .on('end', (event: DragEvent) => {
-          if (!event.active) simulation.alphaTarget(0)
-          event.subject.fx = null
-          event.subject.fy = null
-        })
-    )
+    .selectAll<SVGCircleElement, CourseNode>('circle')
   node.append('title').text(({ course }) => course)
 
   const chart = Object.assign(svg.node()!, { scales: { color } })
   wrapper.append(chart)
 
   // TODO: Update
-  const update = () => {}
+  const update = () => {
+    link = link.data(links).join('line')
+
+    node = node.data(nodes).join(
+      enter =>
+        enter
+          .append('circle')
+          .attr('r', 0)
+          .call(enter =>
+            enter
+              .transition()
+              .attr('r', 5)
+              .attr('fill', ({ course }) => color(course.split(' ')[0]))
+          )
+          .call(drag),
+      update => update,
+      exit => exit.remove()
+    )
+
+    simulation.nodes(nodes)
+    simulation.force<d3.ForceLink<CourseNode, CourseLink>>('link')?.links(links)
+    simulation.alpha(1).restart()
+  }
+  update()
 
   return () => {
     self.removeEventListener('resize', resize)
