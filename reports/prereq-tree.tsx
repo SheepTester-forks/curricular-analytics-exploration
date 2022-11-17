@@ -143,7 +143,6 @@ function createGraph (wrapper: ParentNode): {
   update: (nodes: CourseCode[], links: CourseCodeLink[]) => void
   destroy: () => void
 } {
-  // TODO: prevent nodes from going off screen
   let nodes: CourseNode[] = []
   let links: CourseLink[] = []
 
@@ -156,7 +155,10 @@ function createGraph (wrapper: ParentNode): {
       d3.forceLink<CourseNode, CourseLink>([]).id(({ course }) => course)
     )
     .force('charge', d3.forceManyBody())
-    .force('center', d3.forceCenter())
+    // .force('center', d3.forceCenter())
+    // https://observablehq.com/@d3/temporal-force-directed-graph
+    .force('x', d3.forceX())
+    .force('y', d3.forceY())
     .on('tick', () => {
       node.attr('cx', d => d.x!).attr('cy', d => d.y!)
       link
@@ -233,17 +235,10 @@ function createGraph (wrapper: ParentNode): {
       exit => exit.remove()
     )
 
-    const linkMap: Record<string, CourseLink> = {}
-    for (const link of links) {
-      const { source, target } = link
-      if (typeof source === 'object' && typeof target === 'object') {
-        linkMap[`${source.course}-${target.course}`] = link
-      }
-    }
-    links = newLinks.map(
-      ({ source, target }) =>
-        linkMap[`${source}-${target}`] ?? { source, target }
-    )
+    links = newLinks.map(({ source, target }) => ({
+      source: nodeMap[source],
+      target: nodeMap[target]
+    }))
     link = link.data(links).join(
       enter =>
         enter
@@ -299,7 +294,7 @@ function Tree ({ prereqs, courses }: TreeProps) {
     setTimeout(() => {
       for (let i = 10; i--; ) {
         nodes.push(
-          `${['CSE', 'MATH', 'PHYS', 'ECE', 'CHEM'][i % 5]} ${(i / 5) | 0}`
+          `${['CSE', 'MATH', 'PHYS', 'ECE', 'CHEM'][i % 5]} ${(i / 5 + 10) | 0}`
         )
       }
       update(nodes, links)
