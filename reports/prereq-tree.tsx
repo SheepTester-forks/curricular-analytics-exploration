@@ -132,6 +132,7 @@ type CourseCodeLink = {
   target: CourseCode
 }
 type DragEvent = d3.D3DragEvent<SVGCircleElement, unknown, CourseNode>
+type NodeUpdater = (nodes: CourseCode[], links: CourseCodeLink[]) => void
 
 /**
  * Copyright 2021 Observable, Inc.
@@ -140,7 +141,7 @@ type DragEvent = d3.D3DragEvent<SVGCircleElement, unknown, CourseNode>
  * Updating nodes: https://observablehq.com/@d3/build-your-own-graph
  */
 function createGraph (wrapper: ParentNode): {
-  update: (nodes: CourseCode[], links: CourseCodeLink[]) => void
+  update: NodeUpdater
   destroy: () => void
 } {
   let nodes: CourseNode[] = []
@@ -271,48 +272,51 @@ type TreeProps = {
 }
 function Tree ({ prereqs, courses }: TreeProps) {
   const wrapperRef = useRef<HTMLDivElement>(null)
+  const updateRef = useRef<NodeUpdater>()
 
   useEffect(() => {
     if (!wrapperRef.current) {
       return
     }
     const { update, destroy } = createGraph(wrapperRef.current)
-    const nodes: CourseCode[] = []
-    const links: CourseCodeLink[] = []
-    for (let i = 50; i--; ) {
-      nodes.push(
-        `${['CSE', 'MATH', 'PHYS', 'ECE', 'CHEM'][i % 5]} ${(i / 5) | 0}`
-      )
-    }
-    for (let i = 30; i--; ) {
-      links.push({
-        source: nodes[(Math.random() * 50) | 0],
-        target: nodes[(Math.random() * 50) | 0]
-      })
-    }
-    update(nodes, links)
-    setTimeout(() => {
-      for (let i = 10; i--; ) {
-        nodes.push(
-          `${['CSE', 'MATH', 'PHYS', 'ECE', 'CHEM'][i % 5]} ${(i / 5 + 10) | 0}`
-        )
-      }
-      update(nodes, links)
-    }, 1000)
+    updateRef.current = update
     return destroy
   }, [wrapperRef.current])
 
   useEffect(() => {
-    const nodes = [...courses]
-    let added = true
-    while (added) {
-      const unlocked = getUnlockedCourses(prereqs, nodes)
-      added = unlocked.length > 0
-      nodes.push(...unlocked)
+    if (!updateRef.current) {
+      return
     }
 
-    //
-  }, [courses])
+    const nodes = [...courses]
+    const links: CourseCodeLink[] = []
+    let newNodes: CourseCode[]
+    do {
+      newNodes = []
+      for (const [courseCode, reqs] of Object.entries(prereqs)) {
+        // Skip classes that are unlocked by default
+        if (reqs.length === 0 || nodes.includes(courseCode)) {
+          continue
+        }
+        let added = false
+        for (const req of reqs) {
+          for (const alt of req) {
+            if (nodes.includes(alt)) {
+              links.push({ source: alt, target: courseCode })
+              if (!added) {
+                newNodes.push(courseCode)
+                added = true
+              }
+              break
+            }
+          }
+        }
+      }
+      nodes.push(...newNodes)
+    } while (newNodes.length > 0)
+
+    updateRef.current(nodes, links)
+  }, [updateRef.current, courses])
 
   return (
     <>
