@@ -127,6 +127,10 @@ function getUnlockedCourses (
 
 type CourseNode = d3.SimulationNodeDatum & { course: CourseCode }
 type CourseLink = d3.SimulationLinkDatum<CourseNode>
+type CourseCodeLink = {
+  source: CourseCode
+  target: CourseCode
+}
 type DragEvent = d3.D3DragEvent<SVGCircleElement, unknown, CourseNode>
 
 /**
@@ -136,10 +140,12 @@ type DragEvent = d3.D3DragEvent<SVGCircleElement, unknown, CourseNode>
  * Updating nodes: https://observablehq.com/@d3/build-your-own-graph
  */
 function createGraph (wrapper: ParentNode): {
-  update: (nodes: CourseNode[], links: CourseLink[]) => void
+  update: (nodes: CourseCode[], links: CourseCodeLink[]) => void
   destroy: () => void
 } {
   // TODO: prevent nodes from going off screen
+  let nodes: CourseNode[] = []
+  let links: CourseLink[] = []
 
   const color = d3.scaleOrdinal<string, string>([], d3.schemeTableau10)
 
@@ -201,34 +207,52 @@ function createGraph (wrapper: ParentNode): {
     .attr('stroke-width', 1.5)
     .selectAll<SVGCircleElement, CourseNode>('circle')
 
-  const update = (nodes: CourseNode[], links: CourseLink[]) => {
-    node = node
-      .data(nodes, ({ course }) => course)
-      .join(
-        enter => {
-          const node = enter
-            .append('circle')
-            .attr('fill', ({ course }) => color(course.split(' ')[0]))
-            .attr('r', 0)
-            .call(enter => enter.transition().attr('r', 5))
-            .call(drag)
-          node.append('title').text(({ course }) => course)
-          return node
-        },
-        update => update,
-        exit => exit.remove()
-      )
-    link = link
-      .data(links, ({ source, target }) => `${source}-${target}`)
-      .join(
-        enter =>
-          enter
-            .append('line')
-            .attr('stroke-width', 0)
-            .call(enter => enter.transition().attr('stroke-width', 1.5)),
-        update => update,
-        exit => exit.remove()
-      )
+  const update = (newNodes: CourseCode[], newLinks: CourseCodeLink[]) => {
+    const nodeMap: Record<CourseCode, CourseNode> = {}
+    for (const node of nodes) {
+      nodeMap[node.course] = node
+    }
+    nodes = newNodes.map(course => {
+      if (!nodeMap[course]) {
+        nodeMap[course] = { course }
+      }
+      return nodeMap[course]
+    })
+    node = node.data(nodes).join(
+      enter => {
+        const node = enter
+          .append('circle')
+          .attr('fill', ({ course }) => color(course.split(' ')[0]))
+          .attr('r', 0)
+          .call(enter => enter.transition().attr('r', 5))
+          .call(drag)
+        node.append('title').text(({ course }) => course)
+        return node
+      },
+      update => update,
+      exit => exit.remove()
+    )
+
+    const linkMap: Record<string, CourseLink> = {}
+    for (const link of links) {
+      const { source, target } = link
+      if (typeof source === 'object' && typeof target === 'object') {
+        linkMap[`${source.course}-${target.course}`] = link
+      }
+    }
+    links = newLinks.map(
+      ({ source, target }) =>
+        linkMap[`${source}-${target}`] ?? { source, target }
+    )
+    link = link.data(links).join(
+      enter =>
+        enter
+          .append('line')
+          .attr('stroke-width', 0)
+          .call(enter => enter.transition().attr('stroke-width', 1.5)),
+      update => update,
+      exit => exit.remove()
+    )
 
     simulation.nodes(nodes)
     simulation.force<d3.ForceLink<CourseNode, CourseLink>>('link')?.links(links)
@@ -258,27 +282,27 @@ function Tree ({ prereqs, courses }: TreeProps) {
       return
     }
     const { update, destroy } = createGraph(wrapperRef.current)
-    let nodes: CourseNode[] = []
-    let links: CourseLink[] = []
+    const nodes: CourseCode[] = []
+    const links: CourseCodeLink[] = []
     for (let i = 50; i--; ) {
-      nodes.push({
-        course: `${['CSE', 'MATH', 'PHYS', 'ECE', 'CHEM'][i % 5]} ${
-          (i / 5) | 0
-        }`
-      })
+      nodes.push(
+        `${['CSE', 'MATH', 'PHYS', 'ECE', 'CHEM'][i % 5]} ${(i / 5) | 0}`
+      )
     }
     for (let i = 30; i--; ) {
       links.push({
-        source: nodes[(Math.random() * 50) | 0].course,
-        target: nodes[(Math.random() * 50) | 0].course
+        source: nodes[(Math.random() * 50) | 0],
+        target: nodes[(Math.random() * 50) | 0]
       })
     }
     update(nodes, links)
     setTimeout(() => {
-      nodes = nodes.map(({ course }) => ({ course }))
-      links = links.map(({ source, target }) => ({ source, target }))
+      for (let i = 10; i--; ) {
+        nodes.push(
+          `${['CSE', 'MATH', 'PHYS', 'ECE', 'CHEM'][i % 5]} ${(i / 5) | 0}`
+        )
+      }
       update(nodes, links)
-      console.log(nodes, links)
     }, 1000)
     return destroy
   }, [wrapperRef.current])
