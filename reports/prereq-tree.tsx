@@ -168,12 +168,29 @@ function createGraph (wrapper: ParentNode): {
   }
   resize()
 
+  // http://thenewcode.com/1068/Making-Arrows-in-SVG
+  svg
+    .append('defs')
+    .append('marker')
+    .attr('id', 'arrowhead')
+    .attr('markerWidth', 5)
+    .attr('markerHeight', 5)
+    .attr('refX', 5 + 5 / 2 + 1.5 / 2)
+    .attr('refY', 2.5)
+    .attr('orient', 'auto')
+    .append('path')
+    .attr('d', 'M 0.5 0.5 L 4.5 2.5 L 0.5 4.5')
+    .attr('stroke', '#999')
+    .attr('stroke-opacity', 0.6)
+    .attr('fill', 'none')
+
   // Links first so the nodes are on top
   let link = svg
     .append('g')
     .attr('stroke', '#999')
     .attr('stroke-opacity', 0.6)
     .attr('stroke-linecap', 'round')
+    .attr('marker-end', 'url(#arrowhead)')
     .selectAll<SVGLineElement, CourseLink>('line')
 
   const drag = d3
@@ -291,9 +308,9 @@ function Tree ({ prereqs, courses }: TreeProps) {
         for (const req of reqs) {
           for (const alt of req) {
             if (nodes.includes(alt)) {
-              if (!linked.includes(courseCode)) {
+              if (!linked.includes(alt)) {
                 links.push({ source: alt, target: courseCode })
-                linked.push(courseCode)
+                linked.push(alt)
               }
               if (!added) {
                 newNodes.push(courseCode)
