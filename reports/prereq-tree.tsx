@@ -34,6 +34,8 @@ type CourseAdderProps = {
 }
 function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
   const [query, setQuery] = useState('')
+  const lastCourseRef = useRef<HTMLButtonElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const courseCode = query.toUpperCase().trim().replace(/\s+/, ' ')
   const queryValid =
@@ -41,13 +43,20 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
 
   return (
     <ul class='course-adder'>
-      {selected.map(courseCode => (
+      {selected.map((courseCode, i) => (
         <li key={courseCode} class='added-course'>
           {courseCode}
           <button
             class='remove-course'
+            ref={i === selected.length - 1 ? lastCourseRef : null}
             onClick={() => {
               onSelected(selected.filter(code => code !== courseCode))
+            }}
+            onKeyDown={e => {
+              if (e.key === 'Backspace') {
+                inputRef.current?.focus()
+                onSelected(selected.filter(code => code !== courseCode))
+              }
             }}
           >
             ×
@@ -76,8 +85,15 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
             placeholder='Search for a course'
             autofocus
             value={query}
+            ref={inputRef}
             onInput={e => {
               setQuery(e.currentTarget.value)
+            }}
+            onKeyDown={e => {
+              if (e.currentTarget.value === '' && e.key === 'Backspace') {
+                lastCourseRef.current?.focus()
+                console.log(document.activeElement)
+              }
             }}
           />
           <input
@@ -95,34 +111,6 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
       </li>
     </ul>
   )
-}
-
-function courseUnlocked (reqs: CourseCode[][], taken: CourseCode[]): boolean {
-  for (const req of reqs) {
-    for (const alt of req) {
-      if (taken.includes(alt)) {
-        return true
-      }
-    }
-  }
-  return false
-}
-
-function getUnlockedCourses (
-  prereqs: Prereqs,
-  taken: CourseCode[]
-): CourseCode[] {
-  const newCourses: CourseCode[] = []
-  for (const [courseCode, reqs] of Object.entries(prereqs)) {
-    // Skip classes that are unlocked by default
-    if (reqs.length === 0) {
-      continue
-    }
-    if (!taken.includes(courseCode) && courseUnlocked(reqs, taken)) {
-      newCourses.push(courseCode)
-    }
-  }
-  return newCourses
 }
 
 type CourseNode = d3.SimulationNodeDatum & { course: CourseCode }
