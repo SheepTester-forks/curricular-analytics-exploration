@@ -238,7 +238,7 @@ function createGraph (wrapper: ParentNode): {
         return node
       },
       update => update,
-      exit => exit.remove()
+      exit => exit.call(exit => exit.transition().attr('r', 0).remove())
     )
 
     links = newLinks.map(({ source, target }) => ({
@@ -252,7 +252,8 @@ function createGraph (wrapper: ParentNode): {
           .attr('stroke-width', 0)
           .call(enter => enter.transition().attr('stroke-width', 1.5)),
       update => update,
-      exit => exit.remove()
+      exit =>
+        exit.call(exit => exit.transition().attr('stroke-width', 0).remove())
     )
 
     simulation.nodes(nodes)
