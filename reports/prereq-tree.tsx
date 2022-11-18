@@ -286,11 +286,15 @@ function Tree ({ prereqs, courses }: TreeProps) {
         if (reqs.length === 0 || nodes.includes(courseCode)) {
           continue
         }
+        const linked: CourseCode[] = []
         let added = false
         for (const req of reqs) {
           for (const alt of req) {
             if (nodes.includes(alt)) {
-              links.push({ source: alt, target: courseCode })
+              if (!linked.includes(courseCode)) {
+                links.push({ source: alt, target: courseCode })
+                linked.push(courseCode)
+              }
               if (!added) {
                 newNodes.push(courseCode)
                 added = true
