@@ -95,12 +95,24 @@
         right: 0;
         bottom: 0;
       }
-      .canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+      .line {
+        fill: none;
+        stroke: #999;
+        stroke-opacity: 0.6;
+        stroke-linecap: round;
+        marker-end: url(#arrowhead);
+      }
+      .node {
+        stroke: #fff;
+        stroke-width: 1.5;
+        cx: 0;
+        cy: 0;
+      }
+      .node-label {
+        fill: black;
+        /* text-anchor: middle; */
+        alignment-baseline: middle;
+        pointer-events: none;
       }
     </style>
   </head>

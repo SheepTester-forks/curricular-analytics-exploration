@@ -149,7 +149,7 @@ function createGraph (wrapper: ParentNode): {
     .force('x', d3.forceX())
     .force('y', d3.forceY())
     .on('tick', () => {
-      node.attr('cx', d => d.x!).attr('cy', d => d.y!)
+      node.style('transform', d => `translate(${d.x}px, ${d.y}px)`)
       link
         .attr('x1', d => (typeof d.source === 'object' ? d.source.x! : ''))
         .attr('y1', d => (typeof d.source === 'object' ? d.source.y! : ''))
@@ -180,21 +180,17 @@ function createGraph (wrapper: ParentNode): {
     .attr('orient', 'auto')
     .append('path')
     .attr('d', 'M 0.5 0.5 L 4.5 2.5 L 0.5 4.5')
-    .attr('stroke', '#999')
-    .attr('stroke-opacity', 0.6)
-    .attr('fill', 'none')
+    .attr('class', 'line')
 
   // Links first so the nodes are on top
   let link = svg
     .append('g')
-    .attr('stroke', '#999')
-    .attr('stroke-opacity', 0.6)
-    .attr('stroke-linecap', 'round')
-    .attr('marker-end', 'url(#arrowhead)')
+    .style('cx', 0)
+    .style('cy', 0)
     .selectAll<SVGLineElement, CourseLink>('line')
 
   const drag = d3
-    .drag<SVGCircleElement, CourseNode>()
+    .drag<SVGGElement, CourseNode>()
     .on('start', (event: DragEvent) => {
       if (!event.active) simulation.alphaTarget(0.3).restart()
       event.subject.fx = event.subject.x
@@ -209,11 +205,7 @@ function createGraph (wrapper: ParentNode): {
       event.subject.fx = null
       event.subject.fy = null
     })
-  let node = svg
-    .append('g')
-    .attr('stroke', '#fff')
-    .attr('stroke-width', 1.5)
-    .selectAll<SVGCircleElement, CourseNode>('circle')
+  let node = svg.append('g').selectAll<SVGGElement, CourseNode>('g')
 
   const update = (newNodes: CourseCode[], newLinks: CourseCodeLink[]) => {
     const nodeMap: Record<CourseCode, CourseNode> = {}
@@ -229,16 +221,45 @@ function createGraph (wrapper: ParentNode): {
     node = node.data(nodes).join(
       enter => {
         const node = enter
-          .append('circle')
+          .append('g')
           .attr('fill', ({ course }) => color(course.split(' ')[0]))
+          .call(drag)
+          .on('mouseover', function () {
+            d3.select(this)
+              .select('text')
+              .attr('fill-opacity', 0)
+              .attr('x', 0)
+              .transition()
+              .attr('fill-opacity', 1)
+              .attr('x', 5)
+          })
+          .on('mouseout', function () {
+            d3.select<SVGGElement, CourseNode>(this)
+              .select('text')
+              .attr('fill-opacity', 1)
+              .attr('x', 5)
+              .transition()
+              .attr('fill-opacity', 0)
+              .attr('x', 0)
+          })
+        node
+          .append('circle')
+          .attr('class', 'node')
           .attr('r', 0)
           .call(enter => enter.transition().attr('r', 5))
-          .call(drag)
         node.append('title').text(({ course }) => course)
+        node
+          .append('text')
+          .attr('class', 'node-label')
+          .attr('fill-opacity', 0)
+          .text(({ course }) => course.replace(' ', '\n'))
         return node
       },
       update => update,
-      exit => exit.call(exit => exit.transition().attr('r', 0).remove())
+      exit =>
+        exit
+          .select('circle')
+          .call(exit => exit.transition().attr('r', 0).remove())
     )
 
     links = newLinks.map(({ source, target }) => ({
@@ -249,6 +270,7 @@ function createGraph (wrapper: ParentNode): {
       enter =>
         enter
           .append('line')
+          .attr('class', 'line')
           .attr('stroke-width', 0)
           .call(enter => enter.transition().attr('stroke-width', 1.5)),
       update => update,
