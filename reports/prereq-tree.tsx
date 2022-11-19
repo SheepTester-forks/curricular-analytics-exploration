@@ -157,7 +157,8 @@ function createGraph (wrapper: ParentNode): {
         .attr('y2', d => (typeof d.target === 'object' ? d.target.y! : ''))
     })
 
-  const svg = d3.create('svg')
+  const svg = d3.create('svg').attr('class', 'svg')
+  const legendSvg = d3.create('svg').attr('class', 'svg')
   function resize () {
     const width = window.innerWidth
     const height = window.innerHeight
@@ -165,6 +166,10 @@ function createGraph (wrapper: ParentNode): {
       .attr('width', width)
       .attr('height', height)
       .attr('viewBox', [-width / 2, -height / 2, width, height].join(' '))
+    legendSvg
+      .attr('width', width)
+      .attr('height', height)
+      .attr('viewBox', [0, -height, width, height].join(' '))
   }
   resize()
 
@@ -207,6 +212,8 @@ function createGraph (wrapper: ParentNode): {
     })
   let node = svg.append('g').selectAll<SVGGElement, CourseNode>('g')
 
+  let legendNode = legendSvg.append('g').selectAll<SVGGElement, CourseCode>('g')
+
   const update = (newNodes: CourseCode[], newLinks: CourseCodeLink[]) => {
     const nodeMap: Record<CourseCode, CourseNode> = {}
     for (const node of nodes) {
@@ -231,13 +238,13 @@ function createGraph (wrapper: ParentNode): {
               .attr('x', 0)
               .transition()
               .attr('fill-opacity', 1)
-              .attr('x', 5)
+              .attr('x', 10)
           })
           .on('mouseout', function () {
             d3.select<SVGGElement, CourseNode>(this)
               .select('text')
               .attr('fill-opacity', 1)
-              .attr('x', 5)
+              .attr('x', 10)
               .transition()
               .attr('fill-opacity', 0)
               .attr('x', 0)
@@ -278,15 +285,45 @@ function createGraph (wrapper: ParentNode): {
         exit.call(exit => exit.transition().attr('stroke-width', 0).remove())
     )
 
+    const subjects = [
+      ...new Set(newNodes.map(course => course.split(' ')[0]))
+    ].sort()
+    legendNode = legendNode.data(subjects).join(
+      enter => {
+        const node = enter
+          .append('g')
+          .attr('fill', subject => color(subject))
+          .style(
+            'transform',
+            (_, i) => `translate(10px, ${-(subjects.length - i) * 20 + 5}px)`
+          )
+        node.append('circle').attr('class', 'node').attr('r', 5)
+        node
+          .append('text')
+          .attr('class', 'node-label')
+          .attr('x', 10)
+          .text(subject => subject)
+        return node
+      },
+      update =>
+        update.style(
+          'transform',
+          (_, i) => `translateY(${-(subjects.length - i) * 20}px)`
+        ),
+      exit => exit.remove()
+    )
+
     simulation.nodes(nodes)
     simulation.force<d3.ForceLink<CourseNode, CourseLink>>('link')?.links(links)
     simulation.alpha(1).restart()
   }
 
   self.addEventListener('resize', resize)
+  wrapper.append(legendSvg.node()!)
   wrapper.append(svg.node()!)
   const destroy = () => {
     self.removeEventListener('resize', resize)
+    legendSvg.remove()
     svg.remove()
     simulation.stop()
   }
