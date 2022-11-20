@@ -293,24 +293,35 @@ function createGraph (wrapper: ParentNode): {
         const node = enter
           .append('g')
           .attr('fill', subject => color(subject))
-          .style(
+          .attr('opacity', 0)
+          .attr(
             'transform',
-            (_, i) => `translate(10px, ${-(subjects.length - i) * 20 + 5}px)`
+            (_, i) => `translate(0, ${-(subjects.length - i) * 20 + 5})`
           )
-        node.append('circle').attr('class', 'node').attr('r', 5)
+          .call(enter => enter.transition().attr('opacity', 1))
+        node
+          .append('circle')
+          .attr('class', 'node')
+          .attr('r', 5)
+          .attr('cx', 10)
+          .attr('cy', 0)
         node
           .append('text')
           .attr('class', 'node-label')
-          .attr('x', 10)
+          .attr('x', 20)
           .text(subject => subject)
         return node
       },
       update =>
-        update.style(
-          'transform',
-          (_, i) => `translateY(${-(subjects.length - i) * 20}px)`
+        update.call(update =>
+          update
+            .transition()
+            .attr(
+              'transform',
+              (_, i) => `translate(0, ${-(subjects.length - i) * 20 + 5})`
+            )
         ),
-      exit => exit.remove()
+      exit => exit.call(exit => exit.transition().attr('opacity', 0).remove())
     )
 
     simulation.nodes(nodes)
