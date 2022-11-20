@@ -149,7 +149,7 @@ function createGraph (wrapper: ParentNode): {
     .force('x', d3.forceX())
     .force('y', d3.forceY())
     .on('tick', () => {
-      node.style('transform', d => `translate(${d.x}px, ${d.y}px)`)
+      node.attr('transform', d => `translate(${d.x}, ${d.y})`)
       link
         .attr('x1', d => (typeof d.source === 'object' ? d.source.x! : ''))
         .attr('y1', d => (typeof d.source === 'object' ? d.source.y! : ''))
@@ -219,15 +219,16 @@ function createGraph (wrapper: ParentNode): {
     for (const node of nodes) {
       nodeMap[node.course] = node
     }
-    nodes = newNodes.map(course => {
+    nodes = newNodes.map((course, i) => {
       if (!nodeMap[course]) {
         nodeMap[course] = { course }
       }
+      nodeMap[course].index = i
       return nodeMap[course]
     })
     node = node.data(nodes).join(
-      enter => {
-        const node = enter
+      enter =>
+        enter
           .append('g')
           .attr('fill', ({ course }) => color(course.split(' ')[0]))
           .call(drag)
@@ -249,19 +250,21 @@ function createGraph (wrapper: ParentNode): {
               .attr('fill-opacity', 0)
               .attr('x', 0)
           })
-        node
-          .append('circle')
-          .attr('class', 'node')
-          .attr('r', 0)
-          .call(enter => enter.transition().attr('r', 5))
-        node.append('title').text(({ course }) => course)
-        node
-          .append('text')
-          .attr('class', 'node-label')
-          .attr('fill-opacity', 0)
-          .text(({ course }) => course.replace(' ', '\n'))
-        return node
-      },
+          .call(enter =>
+            enter
+              .append('circle')
+              .attr('class', 'node')
+              .attr('r', 0)
+              .call(enter => enter.transition().attr('r', 5))
+          )
+          .call(enter => enter.append('title').text(({ course }) => course))
+          .call(enter =>
+            enter
+              .append('text')
+              .attr('class', 'node-label')
+              .attr('fill-opacity', 0)
+              .text(({ course }) => course.replace(' ', '\n'))
+          ),
       update => update,
       exit =>
         exit
@@ -285,40 +288,43 @@ function createGraph (wrapper: ParentNode): {
         exit.call(exit => exit.transition().attr('stroke-width', 0).remove())
     )
 
-    const subjects = [
-      ...new Set(newNodes.map(course => course.split(' ')[0]))
-    ].sort()
+    const subjects = new Set(newNodes.map(course => course.split(' ')[0]))
     legendNode = legendNode.data(subjects).join(
       enter => {
         const node = enter
           .append('g')
           .attr('fill', subject => color(subject))
-          .attr('opacity', 0)
           .attr(
             'transform',
-            (_, i) => `translate(0, ${-(subjects.length - i) * 20 + 5})`
+            (_, i) => `translate(0, ${(subjects.size - i) * -20 + 5})`
           )
+          .attr('opacity', 0)
           .call(enter => enter.transition().attr('opacity', 1))
-        node
-          .append('circle')
-          .attr('class', 'node')
-          .attr('r', 5)
-          .attr('cx', 10)
-          .attr('cy', 0)
-        node
-          .append('text')
-          .attr('class', 'node-label')
-          .attr('x', 20)
-          .text(subject => subject)
+          .call(enter =>
+            enter
+              .append('circle')
+              .attr('class', 'node')
+              .attr('r', 5)
+              .attr('cx', 10)
+              .attr('cy', 0)
+          )
+          .call(enter =>
+            enter
+              .append('text')
+              .attr('class', 'node-label')
+              .attr('x', 20)
+              .text(subject => subject)
+          )
         return node
       },
       update =>
         update.call(update =>
           update
             .transition()
+            .attr('fill', subject => color(subject))
             .attr(
               'transform',
-              (_, i) => `translate(0, ${-(subjects.length - i) * 20 + 5})`
+              (_, i) => `translate(0, ${(subjects.size - i) * -20 + 5})`
             )
         ),
       exit => exit.call(exit => exit.transition().attr('opacity', 0).remove())
@@ -396,6 +402,12 @@ function Tree ({ prereqs, courses }: TreeProps) {
     } while (newNodes.length > 0)
 
     updateRef.current(nodes, links)
+
+    Object.assign(self, {
+      wow: () => {
+        updateRef.current?.(nodes.reverse(), links)
+      }
+    })
   }, [updateRef.current, courses])
 
   return (
