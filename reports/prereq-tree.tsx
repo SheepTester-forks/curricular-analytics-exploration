@@ -92,7 +92,6 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
             onKeyDown={e => {
               if (e.currentTarget.value === '' && e.key === 'Backspace') {
                 lastCourseRef.current?.focus()
-                console.log(document.activeElement)
               }
             }}
           />
@@ -219,58 +218,59 @@ function createGraph (wrapper: ParentNode): {
     for (const node of nodes) {
       nodeMap[node.course] = node
     }
-    nodes = newNodes.map((course, i) => {
+    nodes = newNodes.map(course => {
       if (!nodeMap[course]) {
         nodeMap[course] = { course }
       }
-      nodeMap[course].index = i
       return nodeMap[course]
     })
-    node = node.data(nodes).join(
-      enter =>
-        enter
-          .append('g')
-          .attr('fill', ({ course }) => color(course.split(' ')[0]))
-          .call(drag)
-          .on('mouseover', function () {
-            d3.select(this)
-              .select('text')
-              .attr('fill-opacity', 0)
-              .attr('x', 0)
-              .transition()
-              .attr('fill-opacity', 1)
-              .attr('x', 10)
-          })
-          .on('mouseout', function () {
-            d3.select<SVGGElement, CourseNode>(this)
-              .select('text')
-              .attr('fill-opacity', 1)
-              .attr('x', 10)
-              .transition()
-              .attr('fill-opacity', 0)
-              .attr('x', 0)
-          })
-          .call(enter =>
-            enter
-              .append('circle')
-              .attr('class', 'node')
-              .attr('r', 0)
-              .call(enter => enter.transition().attr('r', 5))
-          )
-          .call(enter => enter.append('title').text(({ course }) => course))
-          .call(enter =>
-            enter
-              .append('text')
-              .attr('class', 'node-label')
-              .attr('fill-opacity', 0)
-              .text(({ course }) => course.replace(' ', '\n'))
-          ),
-      update => update,
-      exit =>
-        exit
-          .select('circle')
-          .call(exit => exit.transition().attr('r', 0).remove())
-    )
+    node = node
+      .data(nodes, ({ course }) => course)
+      .join(
+        enter =>
+          enter
+            .append('g')
+            .attr('fill', ({ course }) => color(course.split(' ')[0]))
+            .call(drag)
+            .on('mouseover', function () {
+              d3.select(this)
+                .select('text')
+                .attr('fill-opacity', 0)
+                .attr('x', 0)
+                .transition()
+                .attr('fill-opacity', 1)
+                .attr('x', 10)
+            })
+            .on('mouseout', function () {
+              d3.select<SVGGElement, CourseNode>(this)
+                .select('text')
+                .attr('fill-opacity', 1)
+                .attr('x', 10)
+                .transition()
+                .attr('fill-opacity', 0)
+                .attr('x', 0)
+            })
+            .call(enter =>
+              enter
+                .append('circle')
+                .attr('class', 'node')
+                .attr('r', 0)
+                .call(enter => enter.transition().attr('r', 5))
+            )
+            .call(enter => enter.append('title').text(({ course }) => course))
+            .call(enter =>
+              enter
+                .append('text')
+                .attr('class', 'node-label')
+                .attr('fill-opacity', 0)
+                .text(({ course }) => course.replace(' ', '\n'))
+            ),
+        update => update,
+        exit =>
+          exit
+            .select('circle')
+            .call(exit => exit.transition().attr('r', 0).remove())
+      )
 
     links = newLinks.map(({ source, target }) => ({
       source: nodeMap[source],
@@ -288,47 +288,51 @@ function createGraph (wrapper: ParentNode): {
         exit.call(exit => exit.transition().attr('stroke-width', 0).remove())
     )
 
-    const subjects = new Set(newNodes.map(course => course.split(' ')[0]))
-    legendNode = legendNode.data(subjects).join(
-      enter => {
-        const node = enter
-          .append('g')
-          .attr('fill', subject => color(subject))
-          .attr(
-            'transform',
-            (_, i) => `translate(0, ${(subjects.size - i) * -20 + 5})`
-          )
-          .attr('opacity', 0)
-          .call(enter => enter.transition().attr('opacity', 1))
-          .call(enter =>
-            enter
-              .append('circle')
-              .attr('class', 'node')
-              .attr('r', 5)
-              .attr('cx', 10)
-              .attr('cy', 0)
-          )
-          .call(enter =>
-            enter
-              .append('text')
-              .attr('class', 'node-label')
-              .attr('x', 20)
-              .text(subject => subject)
-          )
-        return node
-      },
-      update =>
-        update.call(update =>
-          update
-            .transition()
+    const subjects = [
+      ...new Set(newNodes.map(course => course.split(' ')[0]))
+    ].sort()
+    legendNode = legendNode
+      .data(subjects, subject => subject)
+      .join(
+        enter => {
+          const node = enter
+            .append('g')
             .attr('fill', subject => color(subject))
             .attr(
               'transform',
-              (_, i) => `translate(0, ${(subjects.size - i) * -20 + 5})`
+              (_, i) => `translate(0, ${(subjects.length - i) * -20 + 5})`
             )
-        ),
-      exit => exit.call(exit => exit.transition().attr('opacity', 0).remove())
-    )
+            .attr('opacity', 0)
+            .call(enter => enter.transition().attr('opacity', 1))
+            .call(enter =>
+              enter
+                .append('circle')
+                .attr('class', 'node')
+                .attr('r', 5)
+                .attr('cx', 10)
+                .attr('cy', 0)
+            )
+            .call(enter =>
+              enter
+                .append('text')
+                .attr('class', 'node-label')
+                .attr('x', 20)
+                .text(subject => subject)
+            )
+          return node
+        },
+        update =>
+          update.call(update =>
+            update
+              .transition()
+              .attr('fill', subject => color(subject))
+              .attr(
+                'transform',
+                (_, i) => `translate(0, ${(subjects.length - i) * -20 + 5})`
+              )
+          ),
+        exit => exit.call(exit => exit.transition().attr('opacity', 0).remove())
+      )
 
     simulation.nodes(nodes)
     simulation.force<d3.ForceLink<CourseNode, CourseLink>>('link')?.links(links)
