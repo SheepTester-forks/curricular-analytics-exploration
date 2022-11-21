@@ -54,8 +54,13 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
             }}
             onKeyDown={e => {
               if (e.key === 'Backspace') {
-                inputRef.current?.focus()
                 onSelected(selected.filter(code => code !== courseCode))
+                inputRef.current?.focus()
+                // Input loses focus immediately if deleting last non-first
+                // course for some reason. Force it to focus.
+                requestAnimationFrame(() => {
+                  inputRef.current?.focus()
+                })
               }
             }}
           >
