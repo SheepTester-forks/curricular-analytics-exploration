@@ -117,14 +117,18 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
   )
 }
 
-type CourseNode = d3.SimulationNodeDatum & { course: CourseCode }
-type CourseLink = d3.SimulationLinkDatum<CourseNode>
+type CourseCodeNode = {
+  course: CourseCode
+  selected: boolean
+}
 type CourseCodeLink = {
   source: CourseCode
   target: CourseCode
 }
+type CourseNode = d3.SimulationNodeDatum & CourseCodeNode
+type CourseLink = d3.SimulationLinkDatum<CourseNode>
 type DragEvent = d3.D3DragEvent<SVGCircleElement, unknown, CourseNode>
-type NodeUpdater = (nodes: CourseCode[], links: CourseCodeLink[]) => void
+type NodeUpdater = (nodes: CourseCodeNode[], links: CourseCodeLink[]) => void
 type Hovered = {
   node: CourseNode
 }
@@ -224,16 +228,18 @@ function createGraph (wrapper: ParentNode): {
 
   let legendNode = legendSvg.append('g').selectAll<SVGGElement, CourseCode>('g')
 
-  const update = (newNodes: CourseCode[], newLinks: CourseCodeLink[]) => {
+  const update = (newNodes: CourseCodeNode[], newLinks: CourseCodeLink[]) => {
     const nodeMap: Record<CourseCode, CourseNode> = {}
     for (const node of nodes) {
       nodeMap[node.course] = node
     }
     nodes = newNodes.map(course => {
-      if (!nodeMap[course]) {
-        nodeMap[course] = { course }
+      if (nodeMap[course.course]) {
+        Object.assign(nodeMap[course.course], course)
+      } else {
+        nodeMap[course.course] = course
       }
-      return nodeMap[course]
+      return nodeMap[course.course]
     })
     node = node
       .data(nodes, ({ course }) => course)
@@ -241,6 +247,7 @@ function createGraph (wrapper: ParentNode): {
         enter =>
           enter
             .append('g')
+            .attr('class', ({ selected }) => (selected ? 'selected' : ''))
             .attr('fill', ({ course }) => color(course.split(' ')[0]))
             .call(drag)
             .on('mouseover', function (_: MouseEvent, node: CourseNode) {
@@ -256,6 +263,7 @@ function createGraph (wrapper: ParentNode): {
             .on('mouseout', function () {
               d3.select<SVGGElement, CourseNode>(this)
                 .select('text')
+                .attr('stroke-opacity', 0)
                 .attr('fill-opacity', 1)
                 .attr('x', 10)
                 .transition()
@@ -278,7 +286,10 @@ function createGraph (wrapper: ParentNode): {
                 .attr('fill-opacity', 0)
                 .text(({ course }) => course.replace(' ', '\n'))
             ),
-        update => update,
+        update =>
+          update.attr('class', ({ selected }) =>
+            selected ? 'selected' : 'wow'
+          ),
         exit =>
           exit
             .select('circle')
@@ -302,7 +313,7 @@ function createGraph (wrapper: ParentNode): {
     )
 
     const subjects = [
-      ...new Set(newNodes.map(course => course.split(' ')[0]))
+      ...new Set(newNodes.map(course => course.course.split(' ')[0]))
     ].sort()
     legendNode = legendNode
       .data(subjects, subject => subject)
@@ -387,27 +398,27 @@ function Tree ({ prereqs, courses }: TreeProps) {
       return
     }
 
-    const nodes = [...courses]
+    const taken = [...courses]
     const links: CourseCodeLink[] = []
-    let newNodes: CourseCode[]
+    let newCourses: CourseCode[]
     do {
-      newNodes = []
+      newCourses = []
       for (const [courseCode, reqs] of Object.entries(prereqs)) {
         // Skip classes that are unlocked by default
-        if (reqs.length === 0 || nodes.includes(courseCode)) {
+        if (reqs.length === 0 || taken.includes(courseCode)) {
           continue
         }
         const linked: CourseCode[] = []
         let added = false
         for (const req of reqs) {
           for (const alt of req) {
-            if (nodes.includes(alt)) {
+            if (taken.includes(alt)) {
               if (!linked.includes(alt)) {
                 links.push({ source: alt, target: courseCode })
                 linked.push(alt)
               }
               if (!added) {
-                newNodes.push(courseCode)
+                newCourses.push(courseCode)
                 added = true
               }
               break
@@ -415,16 +426,13 @@ function Tree ({ prereqs, courses }: TreeProps) {
           }
         }
       }
-      nodes.push(...newNodes)
-    } while (newNodes.length > 0)
+      taken.push(...newCourses)
+    } while (newCourses.length > 0)
 
-    updateRef.current(nodes, links)
-
-    Object.assign(self, {
-      wow: () => {
-        updateRef.current?.(nodes.reverse(), links)
-      }
-    })
+    updateRef.current(
+      taken.map(course => ({ course, selected: courses.includes(course) })),
+      links
+    )
   }, [updateRef.current, courses])
 
   return (
