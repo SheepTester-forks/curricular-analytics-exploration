@@ -125,6 +125,9 @@ type CourseCodeLink = {
 }
 type DragEvent = d3.D3DragEvent<SVGCircleElement, unknown, CourseNode>
 type NodeUpdater = (nodes: CourseCode[], links: CourseCodeLink[]) => void
+type Hovered = {
+  node: CourseNode
+}
 
 /**
  * Copyright 2021 Observable, Inc.
@@ -140,6 +143,8 @@ function createGraph (wrapper: ParentNode): {
   let links: CourseLink[] = []
 
   const color = d3.scaleOrdinal<string, string>([], d3.schemeTableau10)
+
+  let hovered: Hovered | null = null
 
   const simulation = d3
     .forceSimulation<CourseNode>([])
@@ -159,6 +164,7 @@ function createGraph (wrapper: ParentNode): {
         .attr('y1', d => (typeof d.source === 'object' ? d.source.y! : ''))
         .attr('x2', d => (typeof d.target === 'object' ? d.target.x! : ''))
         .attr('y2', d => (typeof d.target === 'object' ? d.target.y! : ''))
+        .attr('opacity', d => (d.target === hovered?.node ? 1 : 0.6))
     })
 
   const svg = d3.create('svg').attr('class', 'svg')
@@ -237,7 +243,7 @@ function createGraph (wrapper: ParentNode): {
             .append('g')
             .attr('fill', ({ course }) => color(course.split(' ')[0]))
             .call(drag)
-            .on('mouseover', function () {
+            .on('mouseover', function (_: MouseEvent, node: CourseNode) {
               d3.select(this)
                 .select('text')
                 .attr('fill-opacity', 0)
@@ -245,6 +251,7 @@ function createGraph (wrapper: ParentNode): {
                 .transition()
                 .attr('fill-opacity', 1)
                 .attr('x', 10)
+              hovered = { node }
             })
             .on('mouseout', function () {
               d3.select<SVGGElement, CourseNode>(this)
@@ -254,6 +261,7 @@ function createGraph (wrapper: ParentNode): {
                 .transition()
                 .attr('fill-opacity', 0)
                 .attr('x', 0)
+              hovered = null
             })
             .call(enter =>
               enter
