@@ -157,7 +157,6 @@ function createGraph (wrapper: ParentNode): {
       d3.forceLink<CourseNode, CourseLink>([]).id(({ course }) => course)
     )
     .force('charge', d3.forceManyBody())
-    // .force('center', d3.forceCenter())
     // https://observablehq.com/@d3/temporal-force-directed-graph
     .force('x', d3.forceX())
     .force('y', d3.forceY())
@@ -209,7 +208,7 @@ function createGraph (wrapper: ParentNode): {
     .selectAll<SVGLineElement, CourseLink>('line')
 
   const drag = d3
-    .drag<SVGGElement, CourseNode>()
+    .drag<SVGCircleElement, CourseNode>()
     .on('start', (event: DragEvent) => {
       if (!event.active) simulation.alphaTarget(0.3).restart()
       event.subject.fx = event.subject.x
@@ -224,7 +223,9 @@ function createGraph (wrapper: ParentNode): {
       event.subject.fx = null
       event.subject.fy = null
     })
-  let node = svg.append('g').selectAll<SVGGElement, CourseNode>('g')
+  let node = svg.append('g').selectAll<SVGCircleElement, CourseNode>('circle')
+
+  let labels = svg.append('g')
 
   let legendNode = legendSvg.append('g').selectAll<SVGGElement, CourseCode>('g')
 
@@ -246,54 +247,36 @@ function createGraph (wrapper: ParentNode): {
       .join(
         enter =>
           enter
-            .append('g')
-            .attr('class', ({ selected }) => (selected ? 'selected' : ''))
+            .append('circle')
+            .attr('class', ({ selected }) =>
+              selected ? 'node selected' : 'node'
+            )
             .attr('fill', ({ course }) => color(course.split(' ')[0]))
-            .call(drag)
+            .attr('r', 0)
             .on('mouseover', function (_: MouseEvent, node: CourseNode) {
-              d3.select(this)
-                .select('text')
-                .attr('fill-opacity', 0)
-                .attr('x', 0)
-                .transition()
-                .attr('fill-opacity', 1)
-                .attr('x', 10)
+              labels
+                // .selectAll<SVGGElement, CourseCode>('g')
+                .append('g')
+                .attr('data-course', node.course)
+                .append('text')
+                .text(node.course)
               hovered = { node }
             })
-            .on('mouseout', function () {
-              d3.select<SVGGElement, CourseNode>(this)
-                .select('text')
-                .attr('stroke-opacity', 0)
-                .attr('fill-opacity', 1)
-                .attr('x', 10)
-                .transition()
-                .attr('fill-opacity', 0)
-                .attr('x', 0)
+            .on('mouseout', function (_: MouseEvent, node: CourseNode) {
+              labels
+                .selectAll<SVGGElement, CourseCode>(
+                  `g[data-course="${node.course}"]`
+                )
+                .remove()
               hovered = null
             })
-            .call(enter =>
-              enter
-                .append('circle')
-                .attr('class', 'node')
-                .attr('r', 0)
-                .call(enter => enter.transition().attr('r', 5))
-            )
-            .call(enter => enter.append('title').text(({ course }) => course))
-            .call(enter =>
-              enter
-                .append('text')
-                .attr('class', 'node-label')
-                .attr('fill-opacity', 0)
-                .text(({ course }) => course.replace(' ', '\n'))
-            ),
+            .call(drag)
+            .call(enter => enter.transition().attr('r', 5)),
         update =>
           update.attr('class', ({ selected }) =>
             selected ? 'selected' : 'wow'
           ),
-        exit =>
-          exit
-            .select('circle')
-            .call(exit => exit.transition().attr('r', 0).remove())
+        exit => exit.call(exit => exit.transition().attr('r', 0).remove())
       )
 
     links = newLinks.map(({ source, target }) => ({
