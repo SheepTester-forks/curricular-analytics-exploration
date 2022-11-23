@@ -129,9 +129,6 @@ type CourseNode = d3.SimulationNodeDatum & CourseCodeNode
 type CourseLink = d3.SimulationLinkDatum<CourseNode>
 type DragEvent = d3.D3DragEvent<SVGCircleElement, unknown, CourseNode>
 type NodeUpdater = (nodes: CourseCodeNode[], links: CourseCodeLink[]) => void
-type Hovered = {
-  node: CourseNode
-}
 
 /**
  * Copyright 2021 Observable, Inc.
@@ -148,7 +145,43 @@ function createGraph (wrapper: ParentNode): {
 
   const color = d3.scaleOrdinal<string, string>([], d3.schemeTableau10)
 
-  let hovered: Hovered | null = null
+  const svg = d3.create('svg').attr('class', 'svg')
+  const legendSvg = d3.create('svg').attr('class', 'svg')
+  const resize = () => {
+    const width = window.innerWidth
+    const height = window.innerHeight
+    svg
+      .attr('width', width)
+      .attr('height', height)
+      .attr('viewBox', [-width / 2, -height / 2, width, height].join(' '))
+    legendSvg
+      .attr('width', width)
+      .attr('height', height)
+      .attr('viewBox', [0, -height, width, height].join(' '))
+  }
+  resize()
+  // http://thenewcode.com/1068/Making-Arrows-in-SVG
+  svg
+    .append('defs')
+    .append('marker')
+    .attr('id', 'arrowhead')
+    .attr('markerWidth', 5)
+    .attr('markerHeight', 5)
+    .attr('refX', 5 + 5 / 2 + 1.5 / 2)
+    .attr('refY', 2.5)
+    .attr('orient', 'auto')
+    .append('path')
+    .attr('d', 'M 0.5 0.5 L 4.5 2.5 L 0.5 4.5')
+    .attr('class', 'line')
+  // Links first so the nodes are on top
+  let link = svg
+    .append('g')
+    .style('cx', 0)
+    .style('cy', 0)
+    .selectAll<SVGLineElement, CourseLink>('line')
+  let node = svg.append('g').selectAll<SVGCircleElement, CourseNode>('circle')
+  let labels = svg.append('g').selectAll<SVGGElement, CourseNode>('g')
+  let legendNode = legendSvg.append('g').selectAll<SVGGElement, CourseCode>('g')
 
   const simulation = d3
     .forceSimulation<CourseNode>([])
@@ -167,45 +200,9 @@ function createGraph (wrapper: ParentNode): {
         .attr('y1', d => (typeof d.source === 'object' ? d.source.y! : ''))
         .attr('x2', d => (typeof d.target === 'object' ? d.target.x! : ''))
         .attr('y2', d => (typeof d.target === 'object' ? d.target.y! : ''))
-        .attr('opacity', d => (d.target === hovered?.node ? 1 : 0.6))
+
+      labels.attr('transform', d => `translate(${d.x}, ${d.y})`)
     })
-
-  const svg = d3.create('svg').attr('class', 'svg')
-  const legendSvg = d3.create('svg').attr('class', 'svg')
-  function resize () {
-    const width = window.innerWidth
-    const height = window.innerHeight
-    svg
-      .attr('width', width)
-      .attr('height', height)
-      .attr('viewBox', [-width / 2, -height / 2, width, height].join(' '))
-    legendSvg
-      .attr('width', width)
-      .attr('height', height)
-      .attr('viewBox', [0, -height, width, height].join(' '))
-  }
-  resize()
-
-  // http://thenewcode.com/1068/Making-Arrows-in-SVG
-  svg
-    .append('defs')
-    .append('marker')
-    .attr('id', 'arrowhead')
-    .attr('markerWidth', 5)
-    .attr('markerHeight', 5)
-    .attr('refX', 5 + 5 / 2 + 1.5 / 2)
-    .attr('refY', 2.5)
-    .attr('orient', 'auto')
-    .append('path')
-    .attr('d', 'M 0.5 0.5 L 4.5 2.5 L 0.5 4.5')
-    .attr('class', 'line')
-
-  // Links first so the nodes are on top
-  let link = svg
-    .append('g')
-    .style('cx', 0)
-    .style('cy', 0)
-    .selectAll<SVGLineElement, CourseLink>('line')
 
   const drag = d3
     .drag<SVGCircleElement, CourseNode>()
@@ -223,11 +220,6 @@ function createGraph (wrapper: ParentNode): {
       event.subject.fx = null
       event.subject.fy = null
     })
-  let node = svg.append('g').selectAll<SVGCircleElement, CourseNode>('circle')
-
-  let labels = svg.append('g')
-
-  let legendNode = legendSvg.append('g').selectAll<SVGGElement, CourseCode>('g')
 
   const update = (newNodes: CourseCodeNode[], newLinks: CourseCodeLink[]) => {
     const nodeMap: Record<CourseCode, CourseNode> = {}
@@ -254,21 +246,27 @@ function createGraph (wrapper: ParentNode): {
             .attr('fill', ({ course }) => color(course.split(' ')[0]))
             .attr('r', 0)
             .on('mouseover', function (_: MouseEvent, node: CourseNode) {
-              labels
-                // .selectAll<SVGGElement, CourseCode>('g')
+              labels = labels
+                .data([node])
+                .enter()
                 .append('g')
-                .attr('data-course', node.course)
-                .append('text')
-                .text(node.course)
-              hovered = { node }
+                .attr('class', 'node-label')
+                .attr('transform', d => `translate(${d.x}, ${d.y})`)
+                .call(enter =>
+                  enter
+                    .append('text')
+                    .attr('class', 'text')
+                    .text(course => course.course)
+                )
+
+              link.attr('opacity', d => (d.target === node ? 1 : 0.6))
             })
             .on('mouseout', function (_: MouseEvent, node: CourseNode) {
-              labels
-                .selectAll<SVGGElement, CourseCode>(
-                  `g[data-course="${node.course}"]`
-                )
+              labels = labels
+                .filter(label => label.course === node.course)
                 .remove()
-              hovered = null
+
+              link.attr('opacity', 0.6)
             })
             .call(drag)
             .call(enter => enter.transition().attr('r', 5)),
@@ -288,6 +286,7 @@ function createGraph (wrapper: ParentNode): {
         enter
           .append('line')
           .attr('class', 'line')
+          .attr('opacity', 0.6)
           .attr('stroke-width', 0)
           .call(enter => enter.transition().attr('stroke-width', 1.5)),
       update => update,
@@ -322,7 +321,7 @@ function createGraph (wrapper: ParentNode): {
             .call(enter =>
               enter
                 .append('text')
-                .attr('class', 'node-label')
+                .attr('class', 'text')
                 .attr('x', 20)
                 .text(subject => subject)
             )
