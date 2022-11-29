@@ -219,12 +219,14 @@ function createGraph (wrapper: ParentNode): {
       }
     })
 
+  let dragging = false
   const drag = d3
     .drag<SVGCircleElement, CourseNode>()
     .on('start', (event: DragEvent) => {
       if (!event.active) simulation.alphaTarget(0.3).restart()
       event.subject.fx = event.subject.x
       event.subject.fy = event.subject.y
+      dragging = true
     })
     .on('drag', (event: DragEvent) => {
       event.subject.fx = event.x
@@ -234,6 +236,7 @@ function createGraph (wrapper: ParentNode): {
       if (!event.active) simulation.alphaTarget(0)
       event.subject.fx = null
       event.subject.fy = null
+      dragging = false
     })
 
   const update = (newNodes: CourseCodeNode[], newLinks: CourseCodeLink[]) => {
@@ -257,6 +260,9 @@ function createGraph (wrapper: ParentNode): {
             .append('circle')
             .attr('r', 0)
             .on('mouseover', function (_: MouseEvent, node: CourseNode) {
+              if (dragging) {
+                return
+              }
               tooltipNode = node
               tooltipCourse.text(node.course)
               tooltip
@@ -269,6 +275,9 @@ function createGraph (wrapper: ParentNode): {
               link.attr('opacity', d => (d.target === node ? 1 : 0.6))
             })
             .on('mouseout', function (_: MouseEvent) {
+              if (dragging) {
+                return
+              }
               tooltipNode = null
               tooltip.attr('display', 'none')
 
