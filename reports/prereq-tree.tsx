@@ -240,14 +240,10 @@ function createGraph (wrapper: ParentNode): {
         enter =>
           enter
             .append('circle')
-            .attr('class', ({ selected }) =>
-              selected ? 'node selected' : 'node'
-            )
-            .attr('fill', ({ course }) => color(course.split(' ')[0]))
             .attr('r', 0)
             .on('mouseover', function (_: MouseEvent, node: CourseNode) {
               labels = labels
-                .data([node])
+                .data([...labels.data(), node])
                 .enter()
                 .append('g')
                 .attr('class', 'node-label')
@@ -263,19 +259,20 @@ function createGraph (wrapper: ParentNode): {
             })
             .on('mouseout', function (_: MouseEvent, node: CourseNode) {
               labels = labels
-                .filter(label => label.course === node.course)
-                .remove()
+                .data(
+                  labels.data().filter(({ course }) => course !== node.course)
+                )
+                .join('g')
 
               link.attr('opacity', 0.6)
             })
             .call(drag)
             .call(enter => enter.transition().attr('r', 5)),
-        update =>
-          update.attr('class', ({ selected }) =>
-            selected ? 'selected' : 'wow'
-          ),
-        exit => exit.call(exit => exit.transition().attr('r', 0).remove())
+        update => update,
+        exit => exit.call(exit => exit.transition().remove().attr('r', 0))
       )
+      .attr('fill', ({ course }) => color(course.split(' ')[0]))
+      .attr('class', ({ selected }) => (selected ? 'node selected' : 'node'))
 
     links = newLinks.map(({ source, target }) => ({
       source: nodeMap[source],
@@ -291,7 +288,7 @@ function createGraph (wrapper: ParentNode): {
           .call(enter => enter.transition().attr('stroke-width', 1.5)),
       update => update,
       exit =>
-        exit.call(exit => exit.transition().attr('stroke-width', 0).remove())
+        exit.call(exit => exit.transition().remove().attr('stroke-width', 0))
     )
 
     const subjects = [
@@ -303,13 +300,7 @@ function createGraph (wrapper: ParentNode): {
         enter => {
           const node = enter
             .append('g')
-            .attr('fill', subject => color(subject))
-            .attr(
-              'transform',
-              (_, i) => `translate(0, ${(subjects.length - i) * -20 + 5})`
-            )
             .attr('opacity', 0)
-            .call(enter => enter.transition().attr('opacity', 1))
             .call(enter =>
               enter
                 .append('circle')
@@ -327,17 +318,18 @@ function createGraph (wrapper: ParentNode): {
             )
           return node
         },
-        update =>
-          update.call(update =>
-            update
-              .transition()
-              .attr('fill', subject => color(subject))
-              .attr(
-                'transform',
-                (_, i) => `translate(0, ${(subjects.length - i) * -20 + 5})`
-              )
-          ),
-        exit => exit.call(exit => exit.transition().attr('opacity', 0).remove())
+        update => update,
+        exit => exit.call(exit => exit.transition().remove().attr('opacity', 0))
+      )
+      .call(node =>
+        node
+          .transition()
+          .attr('opacity', 1)
+          .attr('fill', subject => color(subject))
+          .attr(
+            'transform',
+            (_, i) => `translate(0, ${(subjects.length - i) * -20 + 5})`
+          )
       )
 
     simulation.nodes(nodes)
