@@ -180,8 +180,19 @@ function createGraph (wrapper: ParentNode): {
     .style('cy', 0)
     .selectAll<SVGLineElement, CourseLink>('line')
   let node = svg.append('g').selectAll<SVGCircleElement, CourseNode>('circle')
-  let labels = svg.append('g').selectAll<SVGGElement, CourseNode>('g')
   let legendNode = legendSvg.append('g').selectAll<SVGGElement, CourseCode>('g')
+
+  const tooltip = svg
+    .append('g')
+    .attr('class', 'tooltip')
+    .attr('display', 'none')
+  const tooltipCourse = tooltip
+    .append('text')
+    .attr('class', 'text tooltip-text')
+    .attr('x', 10)
+    .attr('y', 0)
+  let tooltipNode: CourseNode | null = null
+  tooltip.append('circle').attr('class', 'tooltip-circle')
 
   const simulation = d3
     .forceSimulation<CourseNode>([])
@@ -196,12 +207,16 @@ function createGraph (wrapper: ParentNode): {
     .on('tick', () => {
       node.attr('transform', d => `translate(${d.x}, ${d.y})`)
       link
-        .attr('x1', d => (typeof d.source === 'object' ? d.source.x! : ''))
-        .attr('y1', d => (typeof d.source === 'object' ? d.source.y! : ''))
-        .attr('x2', d => (typeof d.target === 'object' ? d.target.x! : ''))
-        .attr('y2', d => (typeof d.target === 'object' ? d.target.y! : ''))
-
-      labels.attr('transform', d => `translate(${d.x}, ${d.y})`)
+        .attr('x1', d => (typeof d.source === 'object' ? d.source.x! : null))
+        .attr('y1', d => (typeof d.source === 'object' ? d.source.y! : null))
+        .attr('x2', d => (typeof d.target === 'object' ? d.target.x! : null))
+        .attr('y2', d => (typeof d.target === 'object' ? d.target.y! : null))
+      if (tooltipNode) {
+        tooltip.attr(
+          'transform',
+          `translate(${tooltipNode.x}, ${tooltipNode.y})`
+        )
+      }
     })
 
   const drag = d3
@@ -242,27 +257,20 @@ function createGraph (wrapper: ParentNode): {
             .append('circle')
             .attr('r', 0)
             .on('mouseover', function (_: MouseEvent, node: CourseNode) {
-              labels = labels
-                .data([...labels.data(), node])
-                .enter()
-                .append('g')
-                .attr('class', 'node-label')
-                .attr('transform', d => `translate(${d.x}, ${d.y})`)
-                .call(enter =>
-                  enter
-                    .append('text')
-                    .attr('class', 'text')
-                    .text(course => course.course)
+              tooltipNode = node
+              tooltipCourse.text(node.course)
+              tooltip
+                .attr('display', null)
+                .attr(
+                  'transform',
+                  `translate(${tooltipNode.x}, ${tooltipNode.y})`
                 )
 
               link.attr('opacity', d => (d.target === node ? 1 : 0.6))
             })
-            .on('mouseout', function (_: MouseEvent, node: CourseNode) {
-              labels = labels
-                .data(
-                  labels.data().filter(({ course }) => course !== node.course)
-                )
-                .join('g')
+            .on('mouseout', function (_: MouseEvent) {
+              tooltipNode = null
+              tooltip.attr('display', 'none')
 
               link.attr('opacity', 0.6)
             })

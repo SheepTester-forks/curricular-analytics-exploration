@@ -121,6 +121,20 @@
         alignment-baseline: middle;
         pointer-events: none;
       }
+      .tooltip {
+        pointer-events: none;
+      }
+      .tooltip-text {
+        stroke: white;
+        stroke-width: 3;
+        /* https://www.stefanjudis.com/today-i-learned/paint-order-of-svg-elements-is-configurable/ */
+        paint-order: stroke;
+      }
+      .tooltip-circle {
+        stroke: black;
+        fill: none;
+        r: 6;
+      }
     </style>
   </head>
   <body>
