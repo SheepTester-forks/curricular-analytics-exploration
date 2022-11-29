@@ -146,7 +146,6 @@ function createGraph (wrapper: ParentNode): {
   const color = d3.scaleOrdinal<string, string>([], d3.schemeTableau10)
 
   const svg = d3.create('svg').attr('class', 'svg')
-  const legendSvg = d3.create('svg').attr('class', 'svg')
   const resize = () => {
     const width = window.innerWidth
     const height = window.innerHeight
@@ -154,12 +153,8 @@ function createGraph (wrapper: ParentNode): {
       .attr('width', width)
       .attr('height', height)
       .attr('viewBox', [-width / 2, -height / 2, width, height].join(' '))
-    legendSvg
-      .attr('width', width)
-      .attr('height', height)
-      .attr('viewBox', [0, -height, width, height].join(' '))
+    legend.attr('transform', `translate(${-width / 2}, ${height / 2})`)
   }
-  resize()
   // http://thenewcode.com/1068/Making-Arrows-in-SVG
   svg
     .append('defs')
@@ -180,7 +175,8 @@ function createGraph (wrapper: ParentNode): {
     .style('cy', 0)
     .selectAll<SVGLineElement, CourseLink>('line')
   let node = svg.append('g').selectAll<SVGCircleElement, CourseNode>('circle')
-  let legendNode = legendSvg.append('g').selectAll<SVGGElement, CourseCode>('g')
+  const legend = svg.append('g')
+  let legendNode = legend.selectAll<SVGGElement, CourseCode>('g')
 
   const tooltip = svg
     .append('g')
@@ -188,7 +184,7 @@ function createGraph (wrapper: ParentNode): {
     .attr('display', 'none')
   const tooltipCourse = tooltip
     .append('text')
-    .attr('class', 'text tooltip-text')
+    .attr('class', 'text')
     .attr('x', 10)
     .attr('y', 0)
   let tooltipNode: CourseNode | null = null
@@ -354,12 +350,11 @@ function createGraph (wrapper: ParentNode): {
     simulation.alpha(1).restart()
   }
 
+  resize()
   self.addEventListener('resize', resize)
-  wrapper.append(legendSvg.node()!)
   wrapper.append(svg.node()!)
   const destroy = () => {
     self.removeEventListener('resize', resize)
-    legendSvg.remove()
     svg.remove()
     simulation.stop()
   }
