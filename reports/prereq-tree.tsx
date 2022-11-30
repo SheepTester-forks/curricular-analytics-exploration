@@ -124,12 +124,14 @@ function Options ({ options, onOptions }: OptionsProps) {
     <div class='options'>
       <label class='option'>
         <input
+          class='toggle-checkbox'
           type='checkbox'
           onChange={e =>
             onOptions({ ...options, unlockedOnly: e.currentTarget.checked })
           }
           checked={options.unlockedOnly}
         />{' '}
+        <span class='toggle-shape'></span>
         Only show fully unlocked courses
       </label>
     </div>

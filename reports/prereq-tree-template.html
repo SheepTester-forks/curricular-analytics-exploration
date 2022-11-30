@@ -50,6 +50,10 @@
         z-index: 10;
         gap: 5px;
       }
+      .course-adder:focus-within {
+        box-shadow: 0 0 0 3px rgba(2, 136, 253, 0.3),
+          0 3px 10px rgba(0, 0, 0, 0.2);
+      }
       .added-course {
         display: flex;
         align-items: center;
@@ -76,6 +80,9 @@
         height: 100%;
         padding: 0 15px;
       }
+      .add-course:focus {
+        outline: none;
+      }
       .add-btn {
         color: #0288fd;
         font-weight: bold;
@@ -93,6 +100,51 @@
         top: 0;
         right: 0;
         z-index: 5;
+        display: flex;
+        flex-direction: column;
+        margin: 20px;
+        gap: 20px;
+      }
+      .option {
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+      .toggle-checkbox {
+        position: absolute;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      .toggle-shape {
+        display: flex;
+        margin-right: 10px;
+        width: 30px;
+        height: 14px;
+        padding: 3px;
+        border-radius: 20px;
+        background-color: rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+        transform: background-color 0.2s;
+      }
+      .toggle-shape::before {
+        content: '';
+        display: block;
+        width: 14px;
+        border-radius: 20px;
+        background-color: white;
+        transition: margin-left 0.2s;
+      }
+      .toggle-checkbox:checked + .toggle-shape {
+        background-color: #0288fd;
+      }
+      .toggle-checkbox:checked + .toggle-shape:before {
+        margin-left: 14px;
+      }
+      .toggle-checkbox:focus {
+        outline: none;
+      }
+      .toggle-checkbox:focus-visible + .toggle-shape {
+        box-shadow: 0 0 0 3px rgba(2, 136, 253, 0.3);
       }
 
       .canvas-wrapper {
