@@ -156,18 +156,23 @@ function createGraph (wrapper: ParentNode): {
     legend.attr('transform', `translate(${-width / 2}, ${height / 2})`)
   }
   // http://thenewcode.com/1068/Making-Arrows-in-SVG
-  svg
-    .append('defs')
-    .append('marker')
-    .attr('id', 'arrowhead')
-    .attr('markerWidth', 5)
-    .attr('markerHeight', 5)
-    .attr('refX', 5 + 5 / 2 + 1.5 / 2)
-    .attr('refY', 2.5)
-    .attr('orient', 'auto')
-    .append('path')
-    .attr('d', 'M 0.5 0.5 L 4.5 2.5 L 0.5 4.5')
-    .attr('class', 'line')
+  const defs = svg.append('defs')
+  for (const [id, className] of [
+    ['arrowhead', 'line'],
+    ['arrowhead-selected', 'line line-selected']
+  ]) {
+    defs
+      .append('marker')
+      .attr('id', id)
+      .attr('markerWidth', 5)
+      .attr('markerHeight', 5)
+      .attr('refX', 5 + 5 / 2 + 1.5 / 2)
+      .attr('refY', 2.5)
+      .attr('orient', 'auto')
+      .append('path')
+      .attr('d', 'M 0.5 0.5 L 4.5 2.5 L 0.5 4.5')
+      .attr('class', className)
+  }
   // Links first so the nodes are on top
   let link = svg
     .append('g')
@@ -268,7 +273,13 @@ function createGraph (wrapper: ParentNode): {
                   `translate(${tooltipNode.x}, ${tooltipNode.y})`
                 )
 
-              link.attr('opacity', d => (d.target === node ? 1 : 0.6))
+              link.attr(
+                'class',
+                d =>
+                  `line dep ${
+                    d.target === node ? 'line-selected dep-selected' : ''
+                  }`
+              )
             })
             .on('mouseout', function (_: MouseEvent) {
               if (dragging) {
@@ -277,7 +288,7 @@ function createGraph (wrapper: ParentNode): {
               tooltipNode = null
               tooltip.attr('display', 'none')
 
-              link.attr('opacity', 0.6)
+              link.attr('class', 'line dep')
             })
             .call(drag)
             .call(enter => enter.transition().attr('r', 5)),
@@ -295,8 +306,7 @@ function createGraph (wrapper: ParentNode): {
       enter =>
         enter
           .append('line')
-          .attr('class', 'line')
-          .attr('opacity', 0.6)
+          .attr('class', 'line dep')
           .attr('stroke-width', 0)
           .call(enter => enter.transition().attr('stroke-width', 1.5)),
       update => update,

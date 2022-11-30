@@ -103,8 +103,18 @@
       .line {
         fill: none;
         stroke: #999;
+        stroke-opacity: 0.6;
         stroke-linecap: round;
+      }
+      .line-selected {
+        stroke: black;
+        stroke-opacity: 1;
+      }
+      .dep {
         marker-end: url(#arrowhead);
+      }
+      .dep-selected {
+        marker-end: url(#arrowhead-selected);
       }
       .node {
         stroke: white;
