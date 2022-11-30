@@ -410,8 +410,9 @@ function createGraph (wrapper: ParentNode): {
 type TreeProps = {
   prereqs: Prereqs
   courses: CourseCode[]
+  options: Options
 }
-function Tree ({ prereqs, courses }: TreeProps) {
+function Tree ({ prereqs, courses, options }: TreeProps) {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const updateRef = useRef<NodeUpdater>()
 
@@ -443,27 +444,28 @@ function Tree ({ prereqs, courses }: TreeProps) {
         if (reqs.length === 0 || taken.includes(courseCode)) {
           continue
         }
-        const linked: CourseCode[] = []
+        const linked: Set<CourseCode> = new Set()
         let satisfied = 0
         for (const req of reqs) {
           for (const alt of req) {
             if (taken.includes(alt)) {
-              // The same course may satisfy two requirements, but that
-              // shouldn't create two arrows
-              if (!linked.includes(alt)) {
-                links.push({ source: alt, target: courseCode })
-                linked.push(alt)
-              }
+              linked.add(alt)
               satisfied++
               break
             }
           }
         }
-        if (satisfied > 0) {
+        if (options.unlockedOnly ? satisfied === reqs.length : satisfied > 0) {
           newCourses.push({
             course: courseCode,
             reqs: { satisfied, total: reqs.length }
           })
+          links.push(
+            ...Array.from(linked, course => ({
+              source: course,
+              target: courseCode
+            }))
+          )
         }
       }
       allCourses.push(...newCourses)
@@ -471,7 +473,7 @@ function Tree ({ prereqs, courses }: TreeProps) {
     } while (newCourses.length > 0)
 
     updateRef.current(allCourses, links)
-  }, [updateRef.current, courses])
+  }, [updateRef.current, courses, options])
 
   return (
     <>
@@ -495,7 +497,7 @@ function App ({ prereqs }: AppProps) {
         onSelected={setCourses}
       />
       <Options options={options} onOptions={setOptions} />
-      <Tree prereqs={prereqs} courses={courses} />
+      <Tree prereqs={prereqs} courses={courses} options={options} />
     </>
   )
 }
