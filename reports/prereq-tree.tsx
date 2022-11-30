@@ -117,6 +117,25 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
   )
 }
 
+type Options = { unlockedOnly: boolean }
+type OptionsProps = { options: Options; onOptions: (options: Options) => void }
+function Options ({ options, onOptions }: OptionsProps) {
+  return (
+    <div class='options'>
+      <label class='option'>
+        <input
+          type='checkbox'
+          onChange={e =>
+            onOptions({ ...options, unlockedOnly: e.currentTarget.checked })
+          }
+          checked={options.unlockedOnly}
+        />{' '}
+        Only show fully unlocked courses
+      </label>
+    </div>
+  )
+}
+
 type CourseCodeNode = {
   course: CourseCode
   // If null, it's selected
@@ -466,6 +485,7 @@ type AppProps = {
 }
 function App ({ prereqs }: AppProps) {
   const [courses, setCourses] = useState<string[]>([])
+  const [options, setOptions] = useState<Options>({ unlockedOnly: false })
 
   return (
     <>
@@ -474,6 +494,7 @@ function App ({ prereqs }: AppProps) {
         selected={courses}
         onSelected={setCourses}
       />
+      <Options options={options} onOptions={setOptions} />
       <Tree prereqs={prereqs} courses={courses} />
     </>
   )
