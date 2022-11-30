@@ -119,7 +119,11 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
 
 type CourseCodeNode = {
   course: CourseCode
-  selected: boolean
+  // If null, it's selected
+  reqs: {
+    satisfied: number
+    total: number
+  } | null
 }
 type CourseCodeLink = {
   source: CourseCode
@@ -192,6 +196,11 @@ function createGraph (wrapper: ParentNode): {
     .attr('class', 'text')
     .attr('x', 10)
     .attr('y', 0)
+  const tooltipReqs = tooltip
+    .append('text')
+    .attr('class', 'text small')
+    .attr('x', 10)
+    .attr('y', 15)
   let tooltipNode: CourseNode | null = null
   tooltip.append('circle').attr('class', 'tooltip-circle')
 
@@ -266,6 +275,13 @@ function createGraph (wrapper: ParentNode): {
               }
               tooltipNode = node
               tooltipCourse.text(node.course)
+              tooltipReqs.text(
+                node.reqs
+                  ? `${node.reqs.satisfied}/${node.reqs.total} prerequisite${
+                      node.reqs.total === 1 ? '' : 's'
+                    } satisfied`
+                  : 'Already taken'
+              )
               tooltip
                 .attr('display', null)
                 .attr(
@@ -296,7 +312,7 @@ function createGraph (wrapper: ParentNode): {
         exit => exit.call(exit => exit.transition().remove().attr('r', 0))
       )
       .attr('fill', ({ course }) => color(course.split(' ')[0]))
-      .attr('class', ({ selected }) => (selected ? 'node selected' : 'node'))
+      .attr('class', ({ reqs }) => (reqs ? 'node' : 'node selected'))
 
     links = newLinks.map(({ source, target }) => ({
       source: nodeMap[source],
@@ -394,9 +410,13 @@ function Tree ({ prereqs, courses }: TreeProps) {
       return
     }
 
+    const allCourses: CourseCodeNode[] = courses.map(course => ({
+      course,
+      reqs: null
+    }))
     const taken = [...courses]
     const links: CourseCodeLink[] = []
-    let newCourses: CourseCode[]
+    let newCourses: CourseCodeNode[]
     do {
       newCourses = []
       for (const [courseCode, reqs] of Object.entries(prereqs)) {
@@ -405,30 +425,33 @@ function Tree ({ prereqs, courses }: TreeProps) {
           continue
         }
         const linked: CourseCode[] = []
-        let added = false
+        let satisfied = 0
         for (const req of reqs) {
           for (const alt of req) {
             if (taken.includes(alt)) {
+              // The same course may satisfy two requirements, but that
+              // shouldn't create two arrows
               if (!linked.includes(alt)) {
                 links.push({ source: alt, target: courseCode })
                 linked.push(alt)
               }
-              if (!added) {
-                newCourses.push(courseCode)
-                added = true
-              }
+              satisfied++
               break
             }
           }
         }
+        if (satisfied > 0) {
+          newCourses.push({
+            course: courseCode,
+            reqs: { satisfied, total: reqs.length }
+          })
+        }
       }
-      taken.push(...newCourses)
+      allCourses.push(...newCourses)
+      taken.push(...newCourses.map(({ course }) => course))
     } while (newCourses.length > 0)
 
-    updateRef.current(
-      taken.map(course => ({ course, selected: courses.includes(course) })),
-      links
-    )
+    updateRef.current(allCourses, links)
   }, [updateRef.current, courses])
 
   return (
