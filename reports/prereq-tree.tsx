@@ -340,15 +340,9 @@ function createGraph (wrapper: ParentNode): {
       target: nodeMap[target]
     }))
     link = link.data(links).join(
-      enter =>
-        enter
-          .append('line')
-          .attr('class', 'line dep')
-          .attr('stroke-width', 0)
-          .call(enter => enter.transition().attr('stroke-width', 1.5)),
+      enter => enter.append('line').attr('class', 'line dep'),
       update => update,
-      exit =>
-        exit.call(exit => exit.transition().remove().attr('stroke-width', 0))
+      exit => exit.remove()
     )
 
     const subjects = [
