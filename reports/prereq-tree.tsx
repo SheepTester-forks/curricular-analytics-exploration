@@ -290,7 +290,7 @@ function createGraph (wrapper: ParentNode): {
           enter
             .append('circle')
             .attr('r', 0)
-            .on('mouseover', function (_: MouseEvent, node: CourseNode) {
+            .on('mouseover', (_: MouseEvent, node: CourseNode) => {
               if (dragging) {
                 return
               }
@@ -318,7 +318,7 @@ function createGraph (wrapper: ParentNode): {
                   }`
               )
             })
-            .on('mouseout', function (_: MouseEvent) {
+            .on('mouseout', () => {
               if (dragging) {
                 return
               }
@@ -357,10 +357,26 @@ function createGraph (wrapper: ParentNode): {
     legendNode = legendNode
       .data(subjects, subject => subject)
       .join(
-        enter => {
-          const node = enter
+        enter =>
+          enter
             .append('g')
             .attr('opacity', 0)
+            .on('mouseover', (_: MouseEvent, subject: string) => {
+              if (dragging) {
+                return
+              }
+              node.attr('opacity', ({ course }) =>
+                course.split(' ')[0] === subject ? 1 : 0.1
+              )
+              link.attr('opacity', 0.1)
+            })
+            .on('mouseout', () => {
+              if (dragging) {
+                return
+              }
+              node.attr('opacity', null)
+              link.attr('opacity', null)
+            })
             .call(enter =>
               enter
                 .append('circle')
@@ -375,9 +391,7 @@ function createGraph (wrapper: ParentNode): {
                 .attr('class', 'text')
                 .attr('x', 20)
                 .text(subject => subject)
-            )
-          return node
-        },
+            ),
         update => update,
         exit => exit.call(exit => exit.transition().remove().attr('opacity', 0))
       )
