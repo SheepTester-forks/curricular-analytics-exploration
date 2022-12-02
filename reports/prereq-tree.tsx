@@ -108,9 +108,9 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
           />
         </form>
         <datalist id='courses'>
-          {courseCodes.map(code => (
-            <option value={code} key={code} />
-          ))}
+          {courseCodes.map(code =>
+            selected.includes(code) ? null : <option value={code} key={code} />
+          )}
         </datalist>
       </li>
     </ul>
