@@ -120,6 +120,7 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
 type Options = {
   unlockedOnly: boolean
   forwards: boolean
+  allAlts: boolean
 }
 type OptionsProps = { options: Options; onOptions: (options: Options) => void }
 function Options ({ options, onOptions }: OptionsProps) {
@@ -137,18 +138,34 @@ function Options ({ options, onOptions }: OptionsProps) {
         <span class='toggle-shape'></span>
         Show unlocked courses
       </label>
-      <label class='option'>
-        <input
-          class='toggle-checkbox'
-          type='checkbox'
-          onChange={e =>
-            onOptions({ ...options, unlockedOnly: e.currentTarget.checked })
-          }
-          checked={options.unlockedOnly}
-        />{' '}
-        <span class='toggle-shape'></span>
-        Only show fully unlocked courses
-      </label>
+      {options.forwards && (
+        <label class='option'>
+          <input
+            class='toggle-checkbox'
+            type='checkbox'
+            onChange={e =>
+              onOptions({ ...options, unlockedOnly: e.currentTarget.checked })
+            }
+            checked={options.unlockedOnly}
+          />{' '}
+          <span class='toggle-shape'></span>
+          Only show fully unlocked courses
+        </label>
+      )}
+      {!options.forwards && (
+        <label class='option'>
+          <input
+            class='toggle-checkbox'
+            type='checkbox'
+            onChange={e =>
+              onOptions({ ...options, allAlts: e.currentTarget.checked })
+            }
+            checked={options.allAlts}
+          />{' '}
+          <span class='toggle-shape'></span>
+          Show all alternate prerequisites
+        </label>
+      )}
     </div>
   )
 }
@@ -482,7 +499,7 @@ function getUnlockedCourses ({ prereqs, courses, options }: TreeProps): Graph {
   } while (newCourses.length > 0)
   return { nodes: allCourses, links }
 }
-function getCoursePrereqs ({ prereqs, courses }: TreeProps): Graph {
+function getCoursePrereqs ({ prereqs, courses, options }: TreeProps): Graph {
   const nodes: CourseCodeNode[] = courses.map(course => ({
     course,
     reqs: null
@@ -498,7 +515,7 @@ function getCoursePrereqs ({ prereqs, courses }: TreeProps): Graph {
         continue
       }
       for (const req of prereqs[course]) {
-        for (const alt of req) {
+        for (const alt of options.allAlts ? req : [req[0]]) {
           if (!included.has(alt)) {
             nextCourses.push(alt)
             included.add(alt)
@@ -555,7 +572,8 @@ function App ({ prereqs }: AppProps) {
   const [courses, setCourses] = useState<string[]>([])
   const [options, setOptions] = useState<Options>({
     unlockedOnly: false,
-    forwards: true
+    forwards: true,
+    allAlts: true
   })
 
   return (
