@@ -117,11 +117,26 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
   )
 }
 
-type Options = { unlockedOnly: boolean }
+type Options = {
+  unlockedOnly: boolean
+  forwards: boolean
+}
 type OptionsProps = { options: Options; onOptions: (options: Options) => void }
 function Options ({ options, onOptions }: OptionsProps) {
   return (
     <div class='options'>
+      <label class='option'>
+        <input
+          class='toggle-checkbox'
+          type='checkbox'
+          onChange={e =>
+            onOptions({ ...options, forwards: e.currentTarget.checked })
+          }
+          checked={options.forwards}
+        />{' '}
+        <span class='toggle-shape'></span>
+        Show unlocked courses
+      </label>
       <label class='option'>
         <input
           class='toggle-checkbox'
@@ -417,12 +432,93 @@ function createGraph (wrapper: ParentNode): {
   return { update, destroy }
 }
 
+type Graph = {
+  nodes: CourseCodeNode[]
+  links: CourseCodeLink[]
+}
+function getUnlockedCourses ({ prereqs, courses, options }: TreeProps): Graph {
+  const allCourses: CourseCodeNode[] = courses.map(course => ({
+    course,
+    reqs: null
+  }))
+  const taken = new Set(courses)
+  const links: CourseCodeLink[] = []
+  let newCourses: CourseCodeNode[]
+  do {
+    newCourses = []
+    for (const [courseCode, reqs] of Object.entries(prereqs)) {
+      // Skip classes that are unlocked by default
+      if (reqs.length === 0 || taken.has(courseCode)) {
+        continue
+      }
+      const linked: Set<CourseCode> = new Set()
+      let satisfied = 0
+      for (const req of reqs) {
+        for (const alt of req) {
+          if (taken.has(alt)) {
+            linked.add(alt)
+            satisfied++
+            break
+          }
+        }
+      }
+      if (options.unlockedOnly ? satisfied === reqs.length : satisfied > 0) {
+        newCourses.push({
+          course: courseCode,
+          reqs: { satisfied, total: reqs.length }
+        })
+        links.push(
+          ...Array.from(linked, course => ({
+            source: course,
+            target: courseCode
+          }))
+        )
+      }
+    }
+    allCourses.push(...newCourses)
+    for (const { course } of newCourses) {
+      taken.add(course)
+    }
+  } while (newCourses.length > 0)
+  return { nodes: allCourses, links }
+}
+function getCoursePrereqs ({ prereqs, courses }: TreeProps): Graph {
+  const nodes: CourseCodeNode[] = courses.map(course => ({
+    course,
+    reqs: null
+  }))
+  const links: CourseCodeLink[] = []
+  const included = new Set(courses)
+  let nextCourses = [...courses]
+  do {
+    const toIter = nextCourses
+    nextCourses = []
+    for (const course of toIter) {
+      if (!prereqs[course]) {
+        continue
+      }
+      for (const req of prereqs[course]) {
+        for (const alt of req) {
+          if (!included.has(alt)) {
+            nextCourses.push(alt)
+            included.add(alt)
+            nodes.push({ course: alt, reqs: { satisfied: 0, total: 0 } })
+          }
+          links.push({ source: alt, target: course })
+        }
+      }
+    }
+  } while (nextCourses.length > 0)
+  return { nodes, links }
+}
+
 type TreeProps = {
   prereqs: Prereqs
   courses: CourseCode[]
   options: Options
 }
-function Tree ({ prereqs, courses, options }: TreeProps) {
+function Tree (props: TreeProps) {
+  const { courses, options } = props
   const wrapperRef = useRef<HTMLDivElement>(null)
   const updateRef = useRef<NodeUpdater>()
 
@@ -439,50 +535,10 @@ function Tree ({ prereqs, courses, options }: TreeProps) {
     if (!updateRef.current) {
       return
     }
-
-    const allCourses: CourseCodeNode[] = courses.map(course => ({
-      course,
-      reqs: null
-    }))
-    const taken = [...courses]
-    const links: CourseCodeLink[] = []
-    let newCourses: CourseCodeNode[]
-    do {
-      newCourses = []
-      for (const [courseCode, reqs] of Object.entries(prereqs)) {
-        // Skip classes that are unlocked by default
-        if (reqs.length === 0 || taken.includes(courseCode)) {
-          continue
-        }
-        const linked: Set<CourseCode> = new Set()
-        let satisfied = 0
-        for (const req of reqs) {
-          for (const alt of req) {
-            if (taken.includes(alt)) {
-              linked.add(alt)
-              satisfied++
-              break
-            }
-          }
-        }
-        if (options.unlockedOnly ? satisfied === reqs.length : satisfied > 0) {
-          newCourses.push({
-            course: courseCode,
-            reqs: { satisfied, total: reqs.length }
-          })
-          links.push(
-            ...Array.from(linked, course => ({
-              source: course,
-              target: courseCode
-            }))
-          )
-        }
-      }
-      allCourses.push(...newCourses)
-      taken.push(...newCourses.map(({ course }) => course))
-    } while (newCourses.length > 0)
-
-    updateRef.current(allCourses, links)
+    const { nodes, links } = options.forwards
+      ? getUnlockedCourses(props)
+      : getCoursePrereqs(props)
+    updateRef.current(nodes, links)
   }, [updateRef.current, courses, options])
 
   return (
@@ -497,7 +553,10 @@ type AppProps = {
 }
 function App ({ prereqs }: AppProps) {
   const [courses, setCourses] = useState<string[]>([])
-  const [options, setOptions] = useState<Options>({ unlockedOnly: false })
+  const [options, setOptions] = useState<Options>({
+    unlockedOnly: false,
+    forwards: true
+  })
 
   return (
     <>
