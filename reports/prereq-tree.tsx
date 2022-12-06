@@ -172,11 +172,17 @@ function Options ({ options, onOptions }: OptionsProps) {
 
 type CourseCodeNode = {
   course: CourseCode
-  // If null, it's selected
-  reqs: {
-    satisfied: number
-    total: number
-  } | null
+  selected?: boolean
+  note?:
+    | {
+        type: 'satisfied'
+        satisfied: number
+        total: number
+      }
+    | { type: 'taken' }
+    | { type: 'reqs'; count: number }
+    | { type: 'omitted-alts'; count: number }
+    | null
 }
 type CourseCodeLink = {
   source: CourseCode
@@ -329,11 +335,21 @@ function createGraph (wrapper: ParentNode): {
               tooltipNode = node
               tooltipCourse.text(node.course)
               tooltipReqs.text(
-                node.reqs
-                  ? `${node.reqs.satisfied}/${node.reqs.total} prerequisite${
-                      node.reqs.total === 1 ? '' : 's'
+                node.note?.type === 'taken'
+                  ? 'Already taken'
+                  : node.note?.type === 'satisfied'
+                  ? `${node.note.satisfied}/${node.note.total} prerequisite${
+                      node.note.total === 1 ? '' : 's'
                     } satisfied`
-                  : 'Already taken'
+                  : node.note?.type === 'reqs'
+                  ? `Minimum ${node.note.count} course${
+                      node.note.count === 1 ? '' : 's'
+                    } required`
+                  : node.note?.type === 'omitted-alts'
+                  ? `${node.note.count} alternative${
+                      node.note.count === 1 ? '' : 's'
+                    } not shown`
+                  : ''
               )
               tooltip
                 .attr('display', null)
@@ -365,7 +381,7 @@ function createGraph (wrapper: ParentNode): {
         exit => exit.call(exit => exit.transition().remove().attr('r', 0))
       )
       .attr('fill', ({ course }) => color(course.split(' ')[0]))
-      .attr('class', ({ reqs }) => (reqs ? 'node' : 'node selected'))
+      .attr('class', ({ selected }) => (selected ? 'node selected' : 'node'))
 
     links = newLinks.map(({ source, target }) => ({
       source: nodeMap[source],
@@ -456,7 +472,8 @@ type Graph = {
 function getUnlockedCourses ({ prereqs, courses, options }: TreeProps): Graph {
   const allCourses: CourseCodeNode[] = courses.map(course => ({
     course,
-    reqs: null
+    selected: true,
+    note: options.unlockedOnly ? null : { type: 'taken' }
   }))
   const taken = new Set(courses)
   const links: CourseCodeLink[] = []
@@ -482,7 +499,9 @@ function getUnlockedCourses ({ prereqs, courses, options }: TreeProps): Graph {
       if (options.unlockedOnly ? satisfied === reqs.length : satisfied > 0) {
         newCourses.push({
           course: courseCode,
-          reqs: { satisfied, total: reqs.length }
+          note: options.unlockedOnly
+            ? null
+            : { type: 'satisfied', satisfied, total: reqs.length }
         })
         links.push(
           ...Array.from(linked, course => ({
@@ -500,10 +519,19 @@ function getUnlockedCourses ({ prereqs, courses, options }: TreeProps): Graph {
   return { nodes: allCourses, links }
 }
 function getCoursePrereqs ({ prereqs, courses, options }: TreeProps): Graph {
-  const nodes: CourseCodeNode[] = courses.map(course => ({
-    course,
-    reqs: null
-  }))
+  const nodes: CourseCodeNode[] = courses.map(course => {
+    const reqs = prereqs[course] ?? []
+    return {
+      course,
+      selected: true,
+      note: options.allAlts
+        ? { type: 'reqs', count: reqs.length ?? 0 }
+        : {
+            type: 'omitted-alts',
+            count: (reqs.flat().length ?? 0) - (reqs.length ?? 0)
+          }
+    }
+  })
   const links: CourseCodeLink[] = []
   const included = new Set(courses)
   let nextCourses = [...courses]
@@ -519,7 +547,16 @@ function getCoursePrereqs ({ prereqs, courses, options }: TreeProps): Graph {
           if (!included.has(alt)) {
             nextCourses.push(alt)
             included.add(alt)
-            nodes.push({ course: alt, reqs: { satisfied: 0, total: 0 } })
+            const reqs = prereqs[alt] ?? []
+            nodes.push({
+              course: alt,
+              note: options.allAlts
+                ? { type: 'reqs', count: reqs.length ?? 0 }
+                : {
+                    type: 'omitted-alts',
+                    count: (reqs.flat().length ?? 0) - (reqs.length ?? 0)
+                  }
+            })
           }
           links.push({ source: alt, target: course })
         }
