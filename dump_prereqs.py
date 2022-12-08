@@ -40,10 +40,10 @@ def blocking_table(all_reqs: Prereqs) -> None:
     """
     Creates a CSV listing how many courses each course blocks.
     """
-    print("Course,Number of courses blocked by the course")
+    print("Course,Courses blocked")
 
     # Not efficient, but more closely mimics the algorithm that prereq-tree uses
-    for blocker in all_reqs.keys():
+    for blocker in sorted(all_reqs.keys()):
         taken: Set[CourseCode] = {blocker}
         while True:
             new_courses: Set[CourseCode] = set()
@@ -56,7 +56,7 @@ def blocking_table(all_reqs: Prereqs) -> None:
                 taken |= new_courses
             else:
                 break
-        print(f"{blocker},{len(taken)}")
+        print(f"{blocker},{len(taken) - 1}")
 
 
 if __name__ == "__main__":

@@ -25,6 +25,7 @@ class TermCode(str):
             return self.year() < other.year()
 
 
+@total_ordering
 class CourseCode(NamedTuple):
     subject: str
     number: str
@@ -45,6 +46,11 @@ class CourseCode(NamedTuple):
 
     def __str__(self) -> str:
         return f"{self.subject} {self.number}"
+
+    def __lt__(self, other: Tuple[object, ...]) -> bool:
+        if not isinstance(other, CourseCode):
+            raise NotImplemented
+        return self.parts() < other.parts()
 
 
 class Prerequisite(NamedTuple):
