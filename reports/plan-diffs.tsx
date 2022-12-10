@@ -55,8 +55,6 @@ type Diffs = {
   }
 }
 
-type Diff = { name: string; diff: PlanDiffs }
-
 const collegeNames = [
   'Revelle',
   'Muir',
@@ -93,7 +91,7 @@ const getMetric = {
 type TableProps = {
   diffs: Diffs
   selected?: string
-  onSelect: (diff: Diff) => void
+  onSelect: (diff: DiffProps) => void
 }
 function Table ({ diffs, selected, onSelect }: TableProps) {
   const [metric, setMetric] = useState<keyof typeof getMetric>('maxUnitChange')
@@ -171,7 +169,10 @@ function Table ({ diffs, selected, onSelect }: TableProps) {
                                 onClick={() =>
                                   onSelect({
                                     name: `${major} / ${college}`,
-                                    diff: colleges[college]
+                                    diff: colleges[college],
+                                    link:
+                                      '?' +
+                                      new URLSearchParams({ major, college })
                                   })
                                 }
                               >
@@ -341,10 +342,23 @@ function YearDiff ({ year, url, units, complexity, changes }: YearDiff) {
   )
 }
 
-function Diff ({ name, diff }: Diff) {
+type DiffProps = {
+  name: string
+  diff: PlanDiffs
+  link?: string
+}
+function Diff ({ name, diff, link }: DiffProps) {
   return (
     <div>
-      <h1>{name}</h1>
+      <h1>
+        {name}
+        {link && (
+          <>
+            {' '}
+            <a href={link}>#</a>
+          </>
+        )}
+      </h1>
       <p>
         <em>
           Starts in <a href={diff.first.url}>{diff.first.year}</a>.
@@ -359,16 +373,21 @@ function Diff ({ name, diff }: Diff) {
 
 type AppProps = {
   diffs: Diffs
+  showDiff?: DiffProps
 }
-function App ({ diffs }: AppProps) {
-  const [diff, setDiff] = useState<Diff | null>(null)
+function App ({ diffs, showDiff }: AppProps) {
+  const [diff, setDiff] = useState<DiffProps | null>(null)
   return (
     <>
-      <div class='side'>
-        <Table diffs={diffs} selected={diff?.name} onSelect={setDiff} />
-      </div>
+      {!showDiff && (
+        <div class='side'>
+          <Table diffs={diffs} selected={diff?.name} onSelect={setDiff} />
+        </div>
+      )}
       <div class='side diff'>
-        {diff ? (
+        {showDiff ? (
+          <Diff {...showDiff} />
+        ) : diff ? (
           <Diff {...diff} />
         ) : (
           <p>
@@ -380,7 +399,30 @@ function App ({ diffs }: AppProps) {
   )
 }
 
-render(
-  <App diffs={JSON.parse(document.getElementById('diffs')!.textContent!)} />,
-  document.getElementById('root')!
-)
+{
+  const diffs: Diffs = JSON.parse(
+    document.getElementById('diffs')!.textContent!
+  )
+  const root = document.getElementById('root')!
+
+  const params = new URL(window.location.href).searchParams
+  const major = params.get('major')
+  const college = params.get('college')
+  let showDiff: DiffProps | undefined
+  if (major && college) {
+    top: for (const departments of Object.values(diffs)) {
+      for (const majors of Object.values(departments)) {
+        for (const [majorCode, colleges] of Object.entries(majors)) {
+          if (majorCode.startsWith(major)) {
+            showDiff = {
+              name: `${majorCode} / ${college}`,
+              diff: colleges[college]
+            }
+            break top
+          }
+        }
+      }
+    }
+  }
+  render(<App diffs={diffs} showDiff={showDiff} />, root)
+}
