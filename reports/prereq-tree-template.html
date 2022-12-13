@@ -8,11 +8,15 @@
     <meta name="description" content="Work in progress!" />
 
     <style>
+      :root {
+        --background: white;
+      }
       body {
         margin: 0;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
           'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
           'Segoe UI Emoji', 'Segoe UI Symbol';
+        background-color: var(--background);
       }
       noscript {
         color: red;
@@ -124,7 +128,7 @@
         border-radius: 20px;
         background-color: rgba(0, 0, 0, 0.5);
         cursor: pointer;
-        transform: background-color 0.2s;
+        transition: background-color 0.2s;
       }
       .toggle-shape::before {
         content: '';
@@ -179,7 +183,7 @@
         marker-end: url(#arrowhead-selected);
       }
       .node {
-        stroke: white;
+        stroke: var(--background);
         stroke-width: 1.5;
       }
       .selected {
@@ -188,7 +192,7 @@
       .text {
         fill: black;
         alignment-baseline: middle;
-        stroke: white;
+        stroke: var(--background);
         stroke-width: 3;
         /* https://www.stefanjudis.com/today-i-learned/paint-order-of-svg-elements-is-configurable/ */
         paint-order: stroke;
@@ -203,6 +207,30 @@
         stroke: black;
         fill: none;
         r: 6;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          color-scheme: dark;
+          --background: #090c10;
+        }
+        .course-adder {
+          background-color: #191d23;
+        }
+        .added-course {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+        .toggle-shape {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+        .line-selected,
+        .selected,
+        .tooltip-circle {
+          stroke: white;
+        }
+        .text {
+          fill: white;
+        }
       }
     </style>
   </head>

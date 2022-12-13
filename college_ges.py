@@ -72,7 +72,7 @@ class ColorScale:
             else cls._interpolate(t * 2 - 1, cls._YELLOW[i], cls._RED[i])
             for i in range(3)
         )
-        return f"rgb({channels})"
+        return f"rgb({channels}, var(--fill-opacity))"
 
 
 if html:

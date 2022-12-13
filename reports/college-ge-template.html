@@ -13,6 +13,7 @@
     <style>
       :root {
         scroll-padding-block-start: 25px;
+        --fill-opacity: 1;
       }
       body {
         margin: 0;
@@ -74,15 +75,19 @@
         text-align: right;
         background-color: var(--color);
       }
+      .header,
+      .average {
+        border-color: rgba(0, 0, 0, 0.1);
+      }
       .header {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid;
         background-color: white;
         position: sticky;
         top: 0;
         z-index: 2;
       }
       .average {
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        border-top: 1px solid;
       }
       .college-header {
         display: flex;
@@ -122,6 +127,32 @@
       }
       button:not(:disabled) {
         cursor: pointer;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          color-scheme: dark;
+          --fill-opacity: 0.5;
+        }
+        .row:target {
+          background-color: #424200;
+        }
+        @media (hover: hover) {
+          .row:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+          }
+          .college-header-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+          }
+        }
+        .header {
+          background-color: black;
+        }
+        .header,
+        .average {
+          border-color: rgba(255, 255, 255, 0.2);
+        }
       }
     </style>
   </head>
