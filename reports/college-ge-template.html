@@ -11,17 +11,24 @@
     />
 
     <style>
+      :root {
+        scroll-padding-block-start: 25px;
+      }
       body {
         margin: 0;
       }
       table {
         width: 100%;
+        border-collapse: collapse;
       }
       tr {
         display: flex;
       }
       .row {
         position: relative;
+      }
+      .row:target {
+        background-color: #ffffa6;
       }
       @media (hover: hover) {
         .row:hover {

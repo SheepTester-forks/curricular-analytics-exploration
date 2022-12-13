@@ -99,7 +99,7 @@ for major_code in major_plans(2022).keys():
         continue
     major_count += 1
     if html:
-        print('<tr class="row"><th scope="col" class="major">')
+        print(f'<tr class="row" id="{major_code}"><th scope="col" class="major">')
         print(
             f'<span class="major-code">{major_code}</span><span class="major-name">: {major_codes()[major_code].name}</span></th>'
         )
