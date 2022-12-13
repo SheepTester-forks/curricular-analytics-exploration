@@ -245,6 +245,17 @@ function createGraph (wrapper: ParentNode): {
   let node = svg.append('g').selectAll<SVGCircleElement, CourseNode>('circle')
   const legend = svg.append('g')
   let legendNode = legend.selectAll<SVGGElement, CourseCode>('g')
+  const legendTitle = legend
+    .append('text')
+    .attr('class', 'text legend-title')
+    .text('Subjects')
+    .attr('x', 5)
+    .attr('y', -35)
+  const legendCount = legend
+    .append('text')
+    .attr('class', 'text')
+    .attr('x', 5)
+    .attr('y', -15)
 
   const tooltip = svg
     .append('g')
@@ -444,9 +455,11 @@ function createGraph (wrapper: ParentNode): {
           .attr('fill', subject => color(subject))
           .attr(
             'transform',
-            (_, i) => `translate(0, ${(subjects.length - i) * -20 + 5})`
+            (_, i) => `translate(0, ${(subjects.length - i) * -20 - 15})`
           )
       )
+    legendTitle.transition().attr('y', subjects.length * -20 - 35)
+    legendCount.text(`${nodes.length} total courses shown`)
 
     simulation.nodes(nodes)
     simulation.force<d3.ForceLink<CourseNode, CourseLink>>('link')?.links(links)
