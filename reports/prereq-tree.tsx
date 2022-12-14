@@ -126,7 +126,7 @@ type OptionsProps = { options: Options; onOptions: (options: Options) => void }
 function Options ({ options, onOptions }: OptionsProps) {
   return (
     <div class='options'>
-      <label class='option'>
+      <label class='option' style={{ display: 'none' }}>
         <input
           class='toggle-checkbox'
           type='checkbox'
