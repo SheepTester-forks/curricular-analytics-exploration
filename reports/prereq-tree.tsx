@@ -266,11 +266,16 @@ function createGraph (wrapper: ParentNode): {
     .attr('class', 'text')
     .attr('x', 10)
     .attr('y', 0)
-  const tooltipReqs = tooltip
+  const tooltipLine1 = tooltip
     .append('text')
     .attr('class', 'text small')
     .attr('x', 10)
     .attr('y', 15)
+  const tooltipLine2 = tooltip
+    .append('text')
+    .attr('class', 'text small')
+    .attr('x', 10)
+    .attr('y', 30)
   let tooltipNode: CourseNode | null = null
   tooltip.append('circle').attr('class', 'tooltip-circle')
 
@@ -345,9 +350,9 @@ function createGraph (wrapper: ParentNode): {
               }
               tooltipNode = node
               tooltipCourse.text(node.course)
-              tooltipReqs.text(
+              tooltipLine1.text(
                 node.note?.type === 'taken'
-                  ? 'Already taken'
+                  ? 'Added by you'
                   : node.note?.type === 'satisfied'
                   ? `${node.note.satisfied}/${node.note.total} prerequisite${
                       node.note.total === 1 ? '' : 's'
@@ -362,6 +367,9 @@ function createGraph (wrapper: ParentNode): {
                     } not shown`
                   : ''
               )
+              // tooltipLine2.text(
+              //   node.note?.type === 'satisfied' ? 'nth degree' : ''
+              // )
               tooltip
                 .attr('display', null)
                 .attr(

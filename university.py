@@ -105,7 +105,7 @@ def clean_course_title(title: str) -> str:
 QUARTERS = ["FA", "WI", "SP"]
 
 
-class UCSD:
+class _UCSD:
     name = "University of California, San Diego"
     term_type = "Quarter"
 
@@ -180,7 +180,7 @@ class UCSD:
         )
 
     def quarter_name(self, quarter: int) -> str:
-        return ['FA', 'WI', 'SP', 'SU'][quarter]
+        return ["FA", "WI", "SP", "SU"][quarter]
 
 
-university = UCSD()
+university = _UCSD()

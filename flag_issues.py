@@ -1,6 +1,6 @@
 """
 python3 units_per_course.py json > units_per_course.json
-python3 flag_issues.py > files/flagged_issues.txt
+python3 flag_issues.py > files/flagged_issues.html
 """
 
 import json
@@ -71,17 +71,30 @@ with open("./units_per_course.json") as file:
 
 
 class Issues:
-    multiple_options: List[str] = []
-    duplicate_courses: List[str] = []
-    missing_ges: List[str] = []
-    wrong_units: List[str] = []
-    miscategorized_courses: List[str] = []
-    curriculum_deviances: List[str] = []
-    early_upper_division: List[str] = []
+    multiple_options: List[str]
+    duplicate_courses: List[str]
+    missing_ges: List[str]
+    wrong_units: List[str]
+    miscategorized_courses: List[str]
+    curriculum_deviances: List[str]
+    early_upper_division: List[str]
+
+    def __init__(self) -> None:
+        self.multiple_options = []
+        self.duplicate_courses = []
+        self.missing_ges = []
+        self.wrong_units = []
+        self.miscategorized_courses = []
+        self.curriculum_deviances = []
+        self.early_upper_division = []
 
 
 def check_plan(
-    name: str, curriculum: Set[str], plan: List[ProcessedCourse], college: str
+    name: str,
+    curriculum: Set[str],
+    plan: List[ProcessedCourse],
+    college: str,
+    issues: Issues,
 ) -> None:
     course_codes = [course.course_code for course in plan if course.course_code]
     courses = {course.course_code: course for course in plan if course.course_code}
@@ -89,20 +102,20 @@ def check_plan(
         if code in course_codes[0:i]:
             title = courses[code].raw.course_title
             if any(char in title for char in ["/", "or", "OR", "-"]):
-                Issues.multiple_options.append(
+                issues.multiple_options.append(
                     f"[{name}] multiple options for {code} “{title}”"
                 )
             else:
-                Issues.duplicate_courses.append(
+                issues.duplicate_courses.append(
                     f"[{name}] duplicate course {code} “{title}”"
                 )
     for code in ges[college]:
         if code not in course_codes:
-            Issues.missing_ges.append(
+            issues.missing_ges.append(
                 f"[{name}] missing {university.college_names[college]} GE {code}"
             )
         elif courses[code].raw.type != "COLLEGE":
-            Issues.miscategorized_courses.append(
+            issues.miscategorized_courses.append(
                 f"[{name}] {code} is marked as a department course (it's a college GE)"
             )
     for course in plan:
@@ -111,7 +124,7 @@ def check_plan(
             course.units != course.raw.units
             and course.course_title == course.raw.course_title
         ):
-            Issues.wrong_units.append(
+            issues.wrong_units.append(
                 f"[{name}] “{course.course_title}” should be {course.units} units but is {course.raw.units} units"
             )
         elif (
@@ -119,17 +132,17 @@ def check_plan(
             and course.course_code not in consensus_wrong
             and consensus_units[course.course_code] != course.units
         ):
-            Issues.wrong_units.append(
+            issues.wrong_units.append(
                 f"[{name}] “{course.course_title}” should be {consensus_units[course.course_code]} units (by consensus) but is {course.units} units"
             )
         if course.course_title in curriculum:
             if not course.for_major:
-                Issues.miscategorized_courses.append(
+                issues.miscategorized_courses.append(
                     f"[{name}] Curriculum course “{course.course_title}” marked as GE"
                 )
         else:
             if course.for_major:
-                Issues.curriculum_deviances.append(
+                issues.curriculum_deviances.append(
                     f"[{name}] “{course.course_title}” differs from curriculum"
                 )
         if (
@@ -138,45 +151,56 @@ def check_plan(
             and course.course_code.parts()[1] >= 100
         ):
             quarter = ["fall", "winter", "spring"][course.term_index % 3]
-            Issues.early_upper_division.append(
+            issues.early_upper_division.append(
                 f"[{name}] “{course.course_title}” is taken in year {course.term_index // 3 + 1} {quarter} quarter"
             )
 
 
-for major_code, plans in major_plans(year).items():
-    curriculum = {course.course_title for course in plans.curriculum()}
-
-    for college_code in plans.colleges:
-        check_plan(
-            f"{major_code} {college_code}",
-            curriculum,
-            plans.plan(college_code),
-            college_code,
-        )
-
-
 def print_issues(issues: List[str], description: str) -> None:
-    print(description)
+    if not issues:
+        return
+    print(f"<h2>{description}</h2>")
     for issue in issues:
-        print(issue)
+        print(f"<p>{issue}</p>")
     print()
 
 
-print_issues(
-    Issues.miscategorized_courses,
-    "College GE courses marked as major/department courses",
-)
-print_issues(Issues.missing_ges, "Missing college GE")
-print_issues(Issues.wrong_units, "Wrong unit numbers")
-print_issues(Issues.duplicate_courses, "Duplicate courses")
-print_issues(
-    Issues.multiple_options, "Courses with multiple options listed multiple times"
-)
-print_issues(
-    Issues.curriculum_deviances,
-    "Course names marked as for the major not present in other colleges' curricula",
-)
-print_issues(
-    Issues.early_upper_division,
-    "Upper division courses taken before junior year",
-)
+def main() -> None:
+    for college_code, college_name in university.college_names.items():
+        issues = Issues()
+        for major_code, plans in major_plans(year).items():
+            if college_code not in plans.colleges:
+                continue
+            curriculum = {course.course_title for course in plans.curriculum()}
+            check_plan(
+                major_code,
+                curriculum,
+                plans.plan(college_code),
+                college_code,
+                issues,
+            )
+
+        print(f"<h1>{college_name}</h1>")
+        print_issues(issues.duplicate_courses, "Duplicate courses")
+        print_issues(
+            issues.miscategorized_courses,
+            "College GE courses marked as major/department courses",
+        )
+        print_issues(issues.missing_ges, "Missing college GE")
+        print_issues(issues.wrong_units, "Wrong unit numbers")
+        print_issues(
+            issues.early_upper_division,
+            "Upper division courses taken before junior year",
+        )
+        print_issues(
+            issues.multiple_options,
+            "Courses with multiple options listed multiple times",
+        )
+        print_issues(
+            issues.curriculum_deviances,
+            "Course names marked as for the major not present in other colleges' curricula",
+        )
+
+
+if __name__ == "__main__":
+    main()
