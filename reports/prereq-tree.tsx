@@ -356,7 +356,7 @@ function createGraph (wrapper: ParentNode): {
                   : node.note?.type === 'satisfied'
                   ? `${node.note.satisfied}/${node.note.total} prerequisite${
                       node.note.total === 1 ? '' : 's'
-                    } satisfied`
+                    } shown`
                   : node.note?.type === 'reqs'
                   ? `Minimum ${node.note.count} course${
                       node.note.count === 1 ? '' : 's'

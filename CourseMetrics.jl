@@ -3,7 +3,7 @@ module CourseMetrics
 include("Output.jl")
 include("Utils.jl")
 
-import CurricularAnalytics: centrality, complexity, Curriculum
+import CurricularAnalytics: blocking_factor, centrality, complexity, Curriculum, delay_factor
 import .Output: output, plans, termname
 import .Utils: convert, writerow
 
@@ -15,6 +15,8 @@ open("./files/courses_fa12.csv", "w") do file
     "Complexity",
     "Centrality",
     "Year taken in plan",
+    "Blocking factor",
+    "Delay factor",
   ])
 
   for year in 2015:2050
@@ -43,6 +45,8 @@ open("./files/courses_fa12.csv", "w") do file
           # Use the curriculum college's year, even though it could vary between
           # colleges
           string((findfirst(course ∈ term.courses for term in degree_plans[curriculum_college].terms) - 1) ÷ 3 + 1),
+          string(blocking_factor(curriculum, i)), # Blocking factor
+          string(delay_factor(curriculum, i)), # Delay factor
         ])
       end
     end
