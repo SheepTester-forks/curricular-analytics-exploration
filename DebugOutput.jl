@@ -1,0 +1,49 @@
+"""
+Output a JSON file with the specified curriculum to stdout.
+
+julia DebugOutput.jl 2016 BI29
+julia DebugOutput.jl 2016 BI29 SI
+"""
+module DebugOutput
+
+include("Output.jl")
+
+import JSON
+import .Output: colleges, output, plans, termname
+
+is_curriculum = length(ARGS) == 2
+
+degree_plan = if is_curriculum
+  year, major = ARGS
+  degree_plans = output(parse(Int, year), major)
+  curriculum_college = first(
+    college
+    for college in ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
+    if college ∈ keys(degree_plans) && !(college == "SN" && year < 2020)
+  )
+  degree_plans[curriculum_college]
+else
+  year, major, college = ARGS
+  output(Int(year), major)[college]
+end
+
+println(JSON.json(Dict(
+  "type" => if is_curriculum
+    "curriculum"
+  else
+    "degree_plan"
+  end,
+  "terms" => [
+    [
+      Dict(
+        "course_name" => course.name,
+        "subject" => course.prefix,
+        "number" => course.num,
+      )
+      for course in term.courses
+    ]
+    for term in degree_plan.terms
+  ],
+)))
+
+end
