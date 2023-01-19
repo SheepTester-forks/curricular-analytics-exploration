@@ -62,7 +62,7 @@ println(JSON.json(Dict(
       elseif type == co
         "coreq"
       else
-        type
+        "other"
       end,
     )
     for (course_id, course) in courses

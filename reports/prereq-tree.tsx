@@ -126,7 +126,7 @@ type OptionsProps = { options: Options; onOptions: (options: Options) => void }
 function Options ({ options, onOptions }: OptionsProps) {
   return (
     <div class='options'>
-      <label class='option' style={{ display: 'none' }}>
+      <label class='option'>
         <input
           class='toggle-checkbox'
           type='checkbox'
@@ -172,8 +172,8 @@ function Options ({ options, onOptions }: OptionsProps) {
 
 type CourseCodeNode = {
   course: CourseCode
-  selected?: boolean
-  note?:
+  selected: boolean
+  note:
     | {
         type: 'satisfied'
         satisfied: number
@@ -520,6 +520,7 @@ function getUnlockedCourses ({ prereqs, courses, options }: TreeProps): Graph {
       if (options.unlockedOnly ? satisfied === reqs.length : satisfied > 0) {
         newCourses.push({
           course: courseCode,
+          selected: false,
           note: options.unlockedOnly
             ? null
             : { type: 'satisfied', satisfied, total: reqs.length }
@@ -571,6 +572,7 @@ function getCoursePrereqs ({ prereqs, courses, options }: TreeProps): Graph {
             const reqs = prereqs[alt] ?? []
             nodes.push({
               course: alt,
+              selected: false,
               note: options.allAlts
                 ? { type: 'reqs', count: reqs.length ?? 0 }
                 : {
