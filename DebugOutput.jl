@@ -8,6 +8,7 @@ module DebugOutput
 
 include("Output.jl")
 
+import CurricularAnalytics: pre, co
 import JSON
 import .Output: colleges, output, plans, termname
 
@@ -27,6 +28,12 @@ else
   output(Int(year), major)[college]
 end
 
+courses = Dict(
+  course.id => course
+  for term in degree_plan.terms
+  for course in term.courses
+  if !is_curriculum || course.prefix == "" || course.institution != "DEPARTMENT"
+)
 println(JSON.json(Dict(
   "type" => if is_curriculum
     "curriculum"
@@ -39,10 +46,28 @@ println(JSON.json(Dict(
         "course_name" => course.name,
         "subject" => course.prefix,
         "number" => course.num,
+        "units" => course.credit_hours,
       )
       for course in term.courses
+      if !is_curriculum || course.prefix == "" || course.institution != "DEPARTMENT"
     ]
     for term in degree_plan.terms
+  ],
+  "prereqs" => [
+    Dict(
+      "requisite" => courses[prereq].name,
+      "satisfies" => course.name,
+      "type" => if type == pre
+        "prereq"
+      elseif type == co
+        "coreq"
+      else
+        type
+      end,
+    )
+    for (course_id, course) in courses
+    for (prereq, type) in course.requisites
+    if prereq ∈ keys(courses)
   ],
 )))
 
