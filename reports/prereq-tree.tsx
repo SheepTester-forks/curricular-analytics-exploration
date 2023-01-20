@@ -24,6 +24,41 @@ declare module 'https://cdn.skypack.dev/-/d3-selection@v3.0.0-sAmQ3giCT8irML5wz1
   }
 }
 
+type IVector2 = { x: number; y: number }
+class Vector2 {
+  x: number
+  y: number
+
+  constructor ({ x = 0, y = 0 }: Partial<IVector2> = {}) {
+    this.x = x
+    this.y = y
+  }
+
+  add ({ x, y }: IVector2): Vector2 {
+    return new Vector2({ x: this.x + x, y: this.y + y })
+  }
+
+  sub ({ x, y }: IVector2): Vector2 {
+    return new Vector2({ x: this.x - x, y: this.y - y })
+  }
+
+  scaled (factor: number): Vector2 {
+    return new Vector2({ x: this.x * factor, y: this.y * factor })
+  }
+
+  get length (): number {
+    return Math.hypot(this.x, this.y)
+  }
+
+  normalized (): Vector2 {
+    return this.scaled(1 / this.length)
+  }
+
+  toString (): string {
+    return [this.x, this.y].join(' ')
+  }
+}
+
 type CourseCode = string
 type Prereqs = Record<CourseCode, CourseCode[][]>
 
@@ -159,34 +194,30 @@ function Options ({ options, onOptions }: OptionsProps) {
           <span class='select-button'>Prerequisites</span>
         </label>
       </div>
-      <div class='options'>
-        {options.mode === 'blocked' && (
-          <label class='option'>
-            <input
-              class='toggle-checkbox'
-              type='checkbox'
-              onChange={e =>
-                onOptions({ unlockedOnly: e.currentTarget.checked })
-              }
-              checked={options.unlockedOnly}
-            />{' '}
-            <span class='toggle-shape'></span>
-            Only show fully unlocked courses
-          </label>
-        )}
-        {options.mode === 'prereqs' && (
-          <label class='option'>
-            <input
-              class='toggle-checkbox'
-              type='checkbox'
-              onChange={e => onOptions({ allAlts: e.currentTarget.checked })}
-              checked={options.allAlts}
-            />{' '}
-            <span class='toggle-shape'></span>
-            Show all alternate prerequisites
-          </label>
-        )}
-      </div>
+      {options.mode === 'blocked' && (
+        <label class='option'>
+          <input
+            class='toggle-checkbox'
+            type='checkbox'
+            onChange={e => onOptions({ unlockedOnly: e.currentTarget.checked })}
+            checked={options.unlockedOnly}
+          />{' '}
+          <span class='toggle-shape'></span>
+          Only show fully unlocked courses
+        </label>
+      )}
+      {options.mode === 'prereqs' && (
+        <label class='option'>
+          <input
+            class='toggle-checkbox'
+            type='checkbox'
+            onChange={e => onOptions({ allAlts: e.currentTarget.checked })}
+            checked={options.allAlts}
+          />{' '}
+          <span class='toggle-shape'></span>
+          Show all alternate prerequisites
+        </label>
+      )}
     </div>
   )
 }
@@ -227,7 +258,8 @@ function createGraph (wrapper: ParentNode): {
   let nodes: CourseNode[] = []
   let links: CourseLink[] = []
 
-  const color = d3.scaleOrdinal<string, string>([], d3.schemeTableau10)
+  const nodeColor = d3.scaleOrdinal<string, string>([], d3.schemeTableau10)
+  const linkColor = d3.scaleOrdinal<number, string>([], d3.schemeTableau10)
 
   const svg = d3.create('svg').attr('class', 'svg')
   const resize = () => {
@@ -239,30 +271,12 @@ function createGraph (wrapper: ParentNode): {
       .attr('viewBox', [-width / 2, -height / 2, width, height].join(' '))
     legend.attr('transform', `translate(${-width / 2}, ${height / 2})`)
   }
-  // http://thenewcode.com/1068/Making-Arrows-in-SVG
-  const defs = svg.append('defs')
-  for (const [id, className] of [
-    ['arrowhead', 'line'],
-    ['arrowhead-selected', 'line line-selected']
-  ]) {
-    defs
-      .append('marker')
-      .attr('id', id)
-      .attr('markerWidth', 5)
-      .attr('markerHeight', 5)
-      .attr('refX', 5 + 5 / 2 + 1.5 / 2)
-      .attr('refY', 2.5)
-      .attr('orient', 'auto')
-      .append('path')
-      .attr('d', 'M 0.5 0.5 L 4.5 2.5 L 0.5 4.5')
-      .attr('class', className)
-  }
   // Links first so the nodes are on top
   let link = svg
     .append('g')
     .style('cx', 0)
     .style('cy', 0)
-    .selectAll<SVGLineElement, CourseLink>('line')
+    .selectAll<SVGPathElement, CourseLink>('path')
   let node = svg.append('g').selectAll<SVGCircleElement, CourseNode>('circle')
   const legend = svg.append('g')
   let legendNode = legend.selectAll<SVGGElement, CourseCode>('g')
@@ -312,11 +326,23 @@ function createGraph (wrapper: ParentNode): {
     .force('y', d3.forceY())
     .on('tick', () => {
       node.attr('transform', d => `translate(${d.x}, ${d.y})`)
-      link
-        .attr('x1', d => (typeof d.source === 'object' ? d.source.x! : null))
-        .attr('y1', d => (typeof d.source === 'object' ? d.source.y! : null))
-        .attr('x2', d => (typeof d.target === 'object' ? d.target.x! : null))
-        .attr('y2', d => (typeof d.target === 'object' ? d.target.y! : null))
+      link.attr('d', d => {
+        if (typeof d.source !== 'object' || typeof d.target !== 'object') {
+          return null
+        }
+        const source = new Vector2(d.source)
+        const target = new Vector2(d.target)
+        const para = target.sub(source).normalized()
+        const perp = new Vector2({ x: -para.y, y: para.x })
+        return (
+          `M${source} L${target} ` +
+          `M${target
+            .add(para.scaled(-11.75))
+            .add(perp.scaled(-3))} L${target.add(para.scaled(-5.75))} L${target
+            .add(para.scaled(-11.75))
+            .add(perp.scaled(3))}`
+        )
+      })
       if (tooltipNode) {
         tooltip.attr(
           'transform',
@@ -400,10 +426,7 @@ function createGraph (wrapper: ParentNode): {
 
               link.attr(
                 'class',
-                d =>
-                  `line dep ${
-                    d.target === node ? 'line-selected dep-selected' : ''
-                  }`
+                d => `line ${d.target === node ? 'line-selected' : ''}`
               )
             })
             .on('mouseout', () => {
@@ -413,14 +436,14 @@ function createGraph (wrapper: ParentNode): {
               tooltipNode = null
               tooltip.attr('display', 'none')
 
-              link.attr('class', 'line dep')
+              link.attr('class', 'line')
             })
             .call(drag)
             .call(enter => enter.transition().attr('r', 5)),
         update => update,
         exit => exit.call(exit => exit.transition().remove().attr('r', 0))
       )
-      .attr('fill', ({ course }) => color(course.split(' ')[0]))
+      .attr('fill', ({ course }) => nodeColor(course.split(' ')[0]))
       .attr('class', ({ selected }) => (selected ? 'node selected' : 'node'))
 
     links = newLinks.map(({ source, target }) => ({
@@ -428,7 +451,7 @@ function createGraph (wrapper: ParentNode): {
       target: nodeMap[target]
     }))
     link = link.data(links).join(
-      enter => enter.append('line').attr('class', 'line dep'),
+      enter => enter.append('path').attr('class', 'line'),
       update => update,
       exit => exit.remove()
     )
@@ -481,7 +504,7 @@ function createGraph (wrapper: ParentNode): {
         node
           .transition()
           .attr('opacity', 1)
-          .attr('fill', subject => color(subject))
+          .attr('fill', subject => nodeColor(subject))
           .attr(
             'transform',
             (_, i) => `translate(0, ${(subjects.length - i) * -20 - 15})`

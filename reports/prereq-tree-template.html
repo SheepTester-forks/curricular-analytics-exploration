@@ -108,15 +108,8 @@
         z-index: 5;
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
         margin: 20px;
         gap: 20px;
-      }
-      .options {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        width: 290px;
       }
       .option {
         display: flex;
@@ -214,19 +207,11 @@
         stroke: #999;
         stroke-opacity: 0.6;
         stroke-linecap: round;
-        /* For the arrowhead, which is relative to the parent stroke width */
-        stroke-width: 1;
+        stroke-width: 1.5;
       }
       .line-selected {
         stroke: black;
         stroke-opacity: 1;
-      }
-      .dep {
-        stroke-width: 1.5;
-        marker-end: url(#arrowhead);
-      }
-      .dep-selected {
-        marker-end: url(#arrowhead-selected);
       }
       .node {
         stroke: var(--background);
