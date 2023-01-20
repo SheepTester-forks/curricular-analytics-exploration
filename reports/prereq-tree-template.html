@@ -37,6 +37,14 @@
         opacity: 0.5;
       }
 
+      .course-adder,
+      .select-one-wrapper {
+        border-radius: 10px;
+        background-color: white;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        display: flex;
+        z-index: 10;
+      }
       .course-adder {
         position: fixed;
         top: 0;
@@ -44,13 +52,8 @@
         margin: 20px;
         padding: 5px;
         list-style: none;
-        border-radius: 10px;
-        background-color: white;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-        display: flex;
         flex-wrap: wrap;
         align-items: stretch;
-        z-index: 10;
         gap: 5px;
       }
       .course-adder:focus-within {
@@ -98,14 +101,20 @@
         opacity: 0.5;
       }
 
-      .options {
+      .controls {
         position: fixed;
         top: 0;
         right: 0;
         z-index: 5;
         display: flex;
         flex-direction: column;
+        align-items: flex-end;
         margin: 20px;
+        gap: 20px;
+      }
+      .options {
+        display: flex;
+        flex-direction: column;
         gap: 20px;
         width: 290px;
       }
@@ -114,7 +123,8 @@
         align-items: center;
         position: relative;
       }
-      .toggle-checkbox {
+      .toggle-checkbox,
+      .select-radio {
         position: absolute;
         -webkit-appearance: none;
         appearance: none;
@@ -144,11 +154,47 @@
       .toggle-checkbox:checked + .toggle-shape:before {
         margin-left: 14px;
       }
-      .toggle-checkbox:focus {
+      .toggle-checkbox:focus,
+      .select-radio:focus {
         outline: none;
       }
-      .toggle-checkbox:focus-visible + .toggle-shape {
+      .toggle-checkbox:focus-visible + .toggle-shape,
+      .select-radio:focus-visible + .select-button {
         box-shadow: 0 0 0 3px rgba(2, 136, 253, 0.3);
+      }
+      .select-one-wrapper {
+        height: 40px;
+        align-items: center;
+        padding-right: 5px;
+        gap: 5px;
+      }
+      .select-one-label {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8em;
+        margin-left: 10px;
+        margin-right: 5px;
+      }
+      .select-button-wrapper {
+        display: flex;
+        align-self: stretch;
+        margin: 5px 0;
+      }
+      .select-button {
+        white-space: nowrap;
+        color: #0288fd;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        padding: 0 5px;
+      }
+      .select-button:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+      }
+      .select-radio:checked + .select-button {
+        background-color: #0288fd;
+        color: white;
       }
 
       .canvas-wrapper {

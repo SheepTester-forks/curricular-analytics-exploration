@@ -118,54 +118,75 @@ function CourseAdder ({ courseCodes, selected, onSelected }: CourseAdderProps) {
 }
 
 type Options = {
+  mode: 'blocked' | 'prereqs'
   unlockedOnly: boolean
-  forwards: boolean
   allAlts: boolean
 }
-type OptionsProps = { options: Options; onOptions: (options: Options) => void }
+type OptionsProps = {
+  options: Options
+  onOptions: (options: Partial<Options>) => void
+}
 function Options ({ options, onOptions }: OptionsProps) {
   return (
-    <div class='options'>
-      <label class='option'>
-        <input
-          class='toggle-checkbox'
-          type='checkbox'
-          onChange={e =>
-            onOptions({ ...options, forwards: e.currentTarget.checked })
-          }
-          checked={options.forwards}
-        />{' '}
-        <span class='toggle-shape'></span>
-        Show unlocked courses
-      </label>
-      {options.forwards && (
-        <label class='option'>
+    <div class='controls'>
+      {/* https://stackoverflow.com/a/45677146; <fieldset> can't be display: flex */}
+      <div
+        class='select-one-wrapper'
+        role='radiogroup'
+        aria-labelledby='mode-label'
+      >
+        <span class='select-one-label' id='mode-label'>
+          Mode
+        </span>
+        <label class='select-button-wrapper'>
           <input
-            class='toggle-checkbox'
-            type='checkbox'
-            onChange={e =>
-              onOptions({ ...options, unlockedOnly: e.currentTarget.checked })
-            }
-            checked={options.unlockedOnly}
-          />{' '}
-          <span class='toggle-shape'></span>
-          Only show fully unlocked courses
+            class='select-radio'
+            type='radio'
+            name='mode'
+            checked={options.mode === 'blocked'}
+            onChange={() => onOptions({ mode: 'blocked' })}
+          />
+          <span class='select-button'>Blocked courses</span>
         </label>
-      )}
-      {!options.forwards && (
-        <label class='option'>
+        <label class='select-button-wrapper'>
           <input
-            class='toggle-checkbox'
-            type='checkbox'
-            onChange={e =>
-              onOptions({ ...options, allAlts: e.currentTarget.checked })
-            }
-            checked={options.allAlts}
-          />{' '}
-          <span class='toggle-shape'></span>
-          Show all alternate prerequisites
+            class='select-radio'
+            type='radio'
+            name='mode'
+            checked={options.mode === 'prereqs'}
+            onChange={() => onOptions({ mode: 'prereqs' })}
+          />
+          <span class='select-button'>Prerequisites</span>
         </label>
-      )}
+      </div>
+      <div class='options'>
+        {options.mode === 'blocked' && (
+          <label class='option'>
+            <input
+              class='toggle-checkbox'
+              type='checkbox'
+              onChange={e =>
+                onOptions({ unlockedOnly: e.currentTarget.checked })
+              }
+              checked={options.unlockedOnly}
+            />{' '}
+            <span class='toggle-shape'></span>
+            Only show fully unlocked courses
+          </label>
+        )}
+        {options.mode === 'prereqs' && (
+          <label class='option'>
+            <input
+              class='toggle-checkbox'
+              type='checkbox'
+              onChange={e => onOptions({ allAlts: e.currentTarget.checked })}
+              checked={options.allAlts}
+            />{' '}
+            <span class='toggle-shape'></span>
+            Show all alternate prerequisites
+          </label>
+        )}
+      </div>
     </div>
   )
 }
@@ -612,9 +633,10 @@ function Tree (props: TreeProps) {
     if (!updateRef.current) {
       return
     }
-    const { nodes, links } = options.forwards
-      ? getUnlockedCourses(props)
-      : getCoursePrereqs(props)
+    const { nodes, links } =
+      options.mode === 'blocked'
+        ? getUnlockedCourses(props)
+        : getCoursePrereqs(props)
     updateRef.current(nodes, links)
   }, [updateRef.current, courses, options])
 
@@ -631,8 +653,8 @@ type AppProps = {
 function App ({ prereqs }: AppProps) {
   const [courses, setCourses] = useState<string[]>([])
   const [options, setOptions] = useState<Options>({
+    mode: 'blocked',
     unlockedOnly: false,
-    forwards: true,
     allAlts: true
   })
 
@@ -643,7 +665,12 @@ function App ({ prereqs }: AppProps) {
         selected={courses}
         onSelected={setCourses}
       />
-      <Options options={options} onOptions={setOptions} />
+      <Options
+        options={options}
+        onOptions={newOptions =>
+          setOptions(options => ({ ...options, ...newOptions }))
+        }
+      />
       <Tree prereqs={prereqs} courses={courses} options={options} />
     </>
   )
