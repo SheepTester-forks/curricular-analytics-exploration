@@ -239,9 +239,12 @@ type CourseCodeNode = {
 type CourseCodeLink = {
   source: CourseCode
   target: CourseCode
+  group?: number
 }
 type CourseNode = d3.SimulationNodeDatum & CourseCodeNode
-type CourseLink = d3.SimulationLinkDatum<CourseNode>
+type CourseLink = d3.SimulationLinkDatum<CourseNode> & {
+  group?: number
+}
 type DragEvent = d3.D3DragEvent<SVGCircleElement, unknown, CourseNode>
 type NodeUpdater = (nodes: CourseCodeNode[], links: CourseCodeLink[]) => void
 
@@ -259,7 +262,10 @@ function createGraph (wrapper: ParentNode): {
   let links: CourseLink[] = []
 
   const nodeColor = d3.scaleOrdinal<string, string>([], d3.schemeTableau10)
-  const linkColor = d3.scaleOrdinal<number, string>([], d3.schemeTableau10)
+  const linkColor = d3.scaleOrdinal<number, string>(
+    [],
+    ['#999', ...d3.schemeTableau10]
+  )
 
   const svg = d3.create('svg').attr('class', 'svg')
   const resize = () => {
@@ -276,6 +282,7 @@ function createGraph (wrapper: ParentNode): {
     .append('g')
     .style('cx', 0)
     .style('cy', 0)
+    .attr('class', 'line')
     .selectAll<SVGPathElement, CourseLink>('path')
   let node = svg.append('g').selectAll<SVGCircleElement, CourseNode>('circle')
   const legend = svg.append('g')
@@ -424,9 +431,12 @@ function createGraph (wrapper: ParentNode): {
                   `translate(${tooltipNode.x}, ${tooltipNode.y})`
                 )
 
-              link.attr(
-                'class',
-                d => `line ${d.target === node ? 'line-selected' : ''}`
+              link.attr('class', d =>
+                d.target === node
+                  ? d.group === undefined
+                    ? 'line-selected-grey'
+                    : 'line-selected'
+                  : null
               )
             })
             .on('mouseout', () => {
@@ -436,7 +446,7 @@ function createGraph (wrapper: ParentNode): {
               tooltipNode = null
               tooltip.attr('display', 'none')
 
-              link.attr('class', 'line')
+              link.attr('class', null)
             })
             .call(drag)
             .call(enter => enter.transition().attr('r', 5)),
@@ -446,15 +456,19 @@ function createGraph (wrapper: ParentNode): {
       .attr('fill', ({ course }) => nodeColor(course.split(' ')[0]))
       .attr('class', ({ selected }) => (selected ? 'node selected' : 'node'))
 
-    links = newLinks.map(({ source, target }) => ({
+    links = newLinks.map(({ source, target, group }) => ({
       source: nodeMap[source],
-      target: nodeMap[target]
+      target: nodeMap[target],
+      group
     }))
-    link = link.data(links).join(
-      enter => enter.append('path').attr('class', 'line'),
-      update => update,
-      exit => exit.remove()
-    )
+    link = link
+      .data(links)
+      .join(
+        enter => enter.append('path'),
+        update => update,
+        exit => exit.remove()
+      )
+      .attr('stroke', d => (d.group === undefined ? null : linkColor(d.group)))
 
     const subjects = [
       ...new Set(newNodes.map(course => course.course.split(' ')[0]))
@@ -608,7 +622,7 @@ function getCoursePrereqs ({ prereqs, courses, options }: TreeProps): Graph {
       if (!prereqs[course]) {
         continue
       }
-      for (const req of prereqs[course]) {
+      for (const [i, req] of prereqs[course].entries()) {
         for (const alt of options.allAlts ? req : [req[0]]) {
           if (!included.has(alt)) {
             nextCourses.push(alt)
@@ -625,7 +639,7 @@ function getCoursePrereqs ({ prereqs, courses, options }: TreeProps): Graph {
                   }
             })
           }
-          links.push({ source: alt, target: course })
+          links.push({ source: alt, target: course, group: i })
         }
       }
     }
