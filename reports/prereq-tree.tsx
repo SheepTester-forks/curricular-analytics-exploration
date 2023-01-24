@@ -207,7 +207,7 @@ function Options ({ options, onOptions }: OptionsProps) {
         </label>
       )}
       {options.mode === 'prereqs' && (
-        <label class='option'>
+        <label class='option' style={{ display: 'none' }}>
           <input
             class='toggle-checkbox'
             type='checkbox'
