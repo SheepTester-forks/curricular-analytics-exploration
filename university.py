@@ -23,6 +23,8 @@ course_code_overrides: Dict[str, ParsedCourseCodes] = {
     "JWSP 1": [(CourseCode("JWSP", "1"), 5)],
     "JWSP 2": [(CourseCode("JWSP", "2"), 5)],
     "JWSP 3": [(CourseCode("JWSP", "3"), 5)],
+    "MUIR WRITING 1": [(CourseCode("MCWP", "40"), 4)],
+    "MUIR WRITING 2": [(CourseCode("MCWP", "50"), 4)],
 }
 
 
@@ -32,7 +34,8 @@ def parse_course_name(
 ) -> ParsedCourseCodes:
     """
     Attempts to parse course name strings such as "MATH 10A/20A" into the course
-    subject, which Curricular Analytics calls the prefix, and number.
+    subject, which Curricular Analytics calls the prefix, and number. `name`
+    should be passed through `clean_course_title` first.
 
     Returns a tuple of the prefix, number, and either L/X if the course is
     actually two courses and needs to be split as a physics lab or language

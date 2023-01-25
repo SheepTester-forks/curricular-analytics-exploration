@@ -87,11 +87,11 @@ _prereq_cache: Dict[TermCode, Dict[CourseCode, List[List[Prerequisite]]]] = {}
 def prereqs(term: str) -> Dict[CourseCode, List[List[Prerequisite]]]:
     global _prereq_cache
     term = TermCode(term)
+    if term < terms()[0]:
+        term = terms()[0]
+    elif term > terms()[-1]:
+        term = terms()[-1]
     if term not in _prereq_cache:
-        if term < terms()[0]:
-            term = terms()[0]
-        elif term > terms()[-1]:
-            term = terms()[-1]
         with open(university.prereqs_file, newline="") as file:
             reader = csv.reader(file)
             next(reader)  # Skip header
@@ -127,14 +127,13 @@ class MajorPlans:
 
     def add_raw_course(self, college_code: str, course: RawCourse) -> None:
         if college_code not in self.colleges:
-            self.colleges.add(college_code)
+            if university.keep_plan(self.year, college_code):
+                self.colleges.add(college_code)
             self.raw_plans[college_code] = []
         self.raw_plans[college_code].append(course)
 
     def plan(self, college: str) -> List[ProcessedCourse]:
-        if college not in self._parsed_plans and university.keep_plan(
-            self.year, college
-        ):
+        if college not in self._parsed_plans:
             self._parsed_plans[college] = university.process_plan(
                 self.raw_plans[college]
             )
