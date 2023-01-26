@@ -23,8 +23,6 @@ course_code_overrides: Dict[str, ParsedCourseCodes] = {
     "JWSP 1": [(CourseCode("JWSP", "1"), 5)],
     "JWSP 2": [(CourseCode("JWSP", "2"), 5)],
     "JWSP 3": [(CourseCode("JWSP", "3"), 5)],
-    "MUIR WRITING 1": [(CourseCode("MCWP", "40"), 4)],
-    "MUIR WRITING 2": [(CourseCode("MCWP", "50"), 4)],
 }
 
 

@@ -1,4 +1,4 @@
-all: academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree
+all: academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree plan-editor
 
 # Reports
 academic-plan-diffs: reports/output/academic-plan-diffs.html
@@ -6,6 +6,7 @@ prereq-diffs: reports/output/prereq-diffs.html
 prereq-timeline: reports/output/prereq-timeline.html
 college-ge-units: reports/output/college-ge-units.html
 prereq-tree: reports/output/prereq-tree.html
+plan-editor: reports/output/plan-editor.html
 
 # Plan diffs
 
@@ -67,3 +68,11 @@ reports/output/prereq-tree.html: reports/prereq-tree-template.html reports/outpu
 	echo '<script type="module">' >> reports/output/prereq-tree.html
 	deno bundle reports/prereq-tree.tsx >> reports/output/prereq-tree.html
 	echo '</script></body></html>' >> reports/output/prereq-tree.html
+
+# Plan editor
+
+reports/output/plan-editor.html: reports/plan-editor-template.html reports/plan-editor.tsx
+	head -n -2 < reports/plan-editor-template.html > reports/output/plan-editor.html
+	echo '<script type="module">' >> reports/output/plan-editor.html
+	deno bundle reports/plan-editor.tsx >> reports/output/plan-editor.html
+	echo '</script></body></html>' >> reports/output/plan-editor.html
