@@ -10,6 +10,9 @@ import {
   useState
 } from 'https://esm.sh/preact@10.11.2/hooks'
 
+type CourseCode = string
+type Prereqs = Record<CourseCode, CourseCode[][]>
+
 type Course = {
   title: string
   units: string
@@ -37,8 +40,10 @@ function Course ({ course, onCourse, new: isNew }: CourseProps) {
       <input
         class='course-field course-title'
         type='text'
+        list='courses'
         value={course.title}
         onInput={e => onCourse({ ...course, title: e.currentTarget.value })}
+        placeholder={isNew ? 'Add a course' : 'Course name'}
       />
       {!isNew && (
         <input
@@ -46,6 +51,16 @@ function Course ({ course, onCourse, new: isNew }: CourseProps) {
           type='text'
           value={course.units}
           onInput={e => onCourse({ ...course, units: e.currentTarget.value })}
+          onChange={e =>
+            onCourse({
+              ...course,
+              units: Number.isFinite(+e.currentTarget.value)
+                ? +e.currentTarget.value < 0
+                  ? '0'
+                  : `${+e.currentTarget.value}`
+                : '4'
+            })
+          }
         />
       )}
     </li>
@@ -59,8 +74,16 @@ type TermProps = {
 }
 function Term ({ name, plan, onPlan }: TermProps) {
   return (
-    <div class='term-editor'>
-      <h3>{name}</h3>
+    <section class='term-editor'>
+      <h3 class='heading term-heading'>
+        {name}{' '}
+        <span class='total-units'>
+          Units:{' '}
+          <span class='units'>
+            {plan.reduce((cum, curr) => cum + +curr.units, 0)}
+          </span>
+        </span>
+      </h3>
       <ul class='courses'>
         {[
           ...plan,
@@ -86,7 +109,7 @@ function Term ({ name, plan, onPlan }: TermProps) {
           />
         ))}
       </ul>
-    </div>
+    </section>
   )
 }
 
@@ -99,9 +122,19 @@ type YearProps = {
 }
 function Year ({ planStartYear, index, plan, onPlan }: YearProps) {
   return (
-    <div class='year-editor'>
-      <h2>
-        Year {index + 1}: {planStartYear + index}–{planStartYear + index + 1}
+    <section class='year-editor'>
+      <h2 class='heading year-heading'>
+        Year {index + 1}: {planStartYear + index}–{planStartYear + index + 1}{' '}
+        <span class='total-units'>
+          Annual units:{' '}
+          <span class='units'>
+            {plan.reduce(
+              (cum, curr) =>
+                cum + curr.reduce((cum, curr) => cum + +curr.units, 0),
+              0
+            )}
+          </span>
+        </span>
       </h2>
       <div class='terms'>
         {plan.map((term, i) => (
@@ -115,7 +148,7 @@ function Year ({ planStartYear, index, plan, onPlan }: YearProps) {
           />
         ))}
       </div>
-    </div>
+    </section>
   )
 }
 
@@ -147,16 +180,27 @@ function Editor ({ plan, onPlan }: EditorProps) {
 }
 
 type AppProps = {
+  prereqs: Prereqs
   initPlan: AcademicPlan
 }
-function App ({ initPlan }: AppProps) {
+function App ({ prereqs, initPlan }: AppProps) {
   const [plan, setPlan] = useState(initPlan)
 
-  return <Editor plan={plan} onPlan={setPlan} />
+  return (
+    <>
+      <Editor plan={plan} onPlan={setPlan} />
+      <datalist id='courses'>
+        {Object.keys(prereqs).map(code => (
+          <option value={code} key={code} />
+        ))}
+      </datalist>
+    </>
+  )
 }
 
 render(
   <App
+    prereqs={JSON.parse(document.getElementById('prereqs')!.textContent!)}
     initPlan={{
       startYear: 2021,
       type: '4-year',

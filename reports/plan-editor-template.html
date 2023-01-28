@@ -4,12 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Prerequisite tree</title>
+    <title>Plan editor</title>
     <meta name="description" content="Work in progress!" />
 
     <style>
       :root {
         --background: white;
+        font-size: 14px;
       }
       body {
         margin: 0;
@@ -35,15 +36,53 @@
       ::placeholder {
         color: inherit;
         opacity: 0.5;
+        font-style: italic;
       }
 
+      .heading {
+        display: flex;
+        margin: 0;
+        font-weight: normal;
+        font-size: 1em;
+      }
+      .year-heading {
+        background-color: #428bca;
+        color: white;
+        padding: 10px 20px;
+      }
+      .term-heading {
+        background-color: #d9edf7;
+        color: #31708f;
+        padding: 5px 10px;
+      }
+      .total-units {
+        margin-left: auto;
+      }
       .terms {
         display: flex;
+        padding: 20px;
+        gap: 20px;
+      }
+      .term-editor {
+        flex: 1 0 0;
       }
       .courses {
         list-style: none;
         margin: 0;
         padding: 0;
+      }
+      .course-editor {
+        display: flex;
+      }
+      .course-field {
+        padding: 5px 10px;
+      }
+      .course-title {
+        flex: auto;
+      }
+      .course-units {
+        width: 2ch;
+        text-align: right;
       }
     </style>
   </head>
