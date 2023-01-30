@@ -90,14 +90,27 @@ type TermProps = {
   onPlan: (plan: TermPlan) => void
 }
 function Term ({ name, plan, onPlan }: TermProps) {
+  const termUnits = plan.reduce((cum, curr) => cum + +curr.units, 0)
   return (
     <section class='term-editor'>
-      <h3 class='heading term-heading'>
+      <h3
+        class={`heading term-heading ${
+          termUnits < 12
+            ? 'term-units-error'
+            : termUnits > 18
+            ? 'term-units-warning'
+            : ''
+        }`}
+      >
         {name}{' '}
         <span class='total-units term-units'>
           Units:{' '}
-          <span class='units'>
-            {plan.reduce((cum, curr) => cum + +curr.units, 0)}
+          <span
+            class={
+              termUnits < 12 || termUnits > 18 ? 'units units-bad' : 'units'
+            }
+          >
+            {termUnits}
           </span>
         </span>
         <button
