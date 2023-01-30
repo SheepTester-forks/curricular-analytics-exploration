@@ -25,6 +25,7 @@
       button,
       input {
         border: none;
+        padding: 0;
         background: none;
         color: inherit;
         font: inherit;
@@ -53,7 +54,7 @@
       .term-heading {
         background-color: #d9edf7;
         color: #31708f;
-        padding: 5px 10px;
+        padding-left: 10px;
       }
       .total-units {
         margin-left: auto;
@@ -71,18 +72,40 @@
         margin: 0;
         padding: 0;
       }
+      .term-heading,
+      .course-editor {
+        height: 30px;
+        align-items: center;
+      }
       .course-editor {
         display: flex;
       }
       .course-field {
-        padding: 5px 10px;
+        align-self: stretch;
       }
       .course-title {
+        padding: 0 10px;
         flex: auto;
       }
       .course-units {
-        width: 2ch;
+        width: 3ch;
         text-align: right;
+      }
+      .term-units {
+        padding-right: 5px;
+      }
+      .term-icon-btn {
+        font-weight: bold;
+        align-self: stretch;
+        width: 20px;
+        margin-right: 5px;
+        text-align: center;
+      }
+      .add-course-btn:hover {
+        color: black;
+      }
+      .remove-btn:hover {
+        color: #fd022c;
       }
     </style>
   </head>

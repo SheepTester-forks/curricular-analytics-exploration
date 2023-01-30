@@ -32,9 +32,10 @@ type AcademicPlan = {
 type CourseProps = {
   course: Course
   onCourse: (course: Course) => void
+  onRemove: () => void
   new?: boolean
 }
-function Course ({ course, onCourse, new: isNew }: CourseProps) {
+function Course ({ course, onCourse, onRemove, new: isNew }: CourseProps) {
   return (
     <li class={`course-editor ${isNew ? 'add-course' : ''}`}>
       <input
@@ -47,8 +48,10 @@ function Course ({ course, onCourse, new: isNew }: CourseProps) {
       />
       {!isNew && (
         <input
-          class='course-field course-units'
+          class='course-field course-units term-units'
           type='text'
+          inputMode='numeric'
+          pattern='[0-9]*'
           value={course.units}
           onInput={e => onCourse({ ...course, units: e.currentTarget.value })}
           onChange={e =>
@@ -63,10 +66,24 @@ function Course ({ course, onCourse, new: isNew }: CourseProps) {
           }
         />
       )}
+      {!isNew && (
+        <button
+          class='term-icon-btn remove-btn'
+          title='Remove course'
+          onClick={onRemove}
+        >
+          ×
+        </button>
+      )}
     </li>
   )
 }
 
+const emptyCourse = {
+  title: '',
+  units: '4',
+  requirement: { college: false, major: false }
+}
 type TermProps = {
   name: string
   plan: TermPlan
@@ -77,22 +94,22 @@ function Term ({ name, plan, onPlan }: TermProps) {
     <section class='term-editor'>
       <h3 class='heading term-heading'>
         {name}{' '}
-        <span class='total-units'>
+        <span class='total-units term-units'>
           Units:{' '}
           <span class='units'>
             {plan.reduce((cum, curr) => cum + +curr.units, 0)}
           </span>
         </span>
+        <button
+          class='term-icon-btn add-course-btn'
+          title='Add course'
+          onClick={() => onPlan([...plan, emptyCourse])}
+        >
+          +
+        </button>
       </h3>
       <ul class='courses'>
-        {[
-          ...plan,
-          {
-            title: '',
-            units: '4',
-            requirement: { college: false, major: false }
-          }
-        ].map((course, i) => (
+        {[...plan, emptyCourse].map((course, i) => (
           <Course
             course={course}
             onCourse={newCourse =>
@@ -104,6 +121,7 @@ function Term ({ name, plan, onPlan }: TermProps) {
                     )
               )
             }
+            onRemove={() => onPlan(plan.filter((_, index) => i !== index))}
             new={i === plan.length}
             key={i}
           />
@@ -124,7 +142,8 @@ function Year ({ planStartYear, index, plan, onPlan }: YearProps) {
   return (
     <section class='year-editor'>
       <h2 class='heading year-heading'>
-        Year {index + 1}: {planStartYear + index}–{planStartYear + index + 1}{' '}
+        <strong>Year {index + 1}</strong>: {planStartYear + index}–
+        {planStartYear + index + 1}{' '}
         <span class='total-units'>
           Annual units:{' '}
           <span class='units'>
