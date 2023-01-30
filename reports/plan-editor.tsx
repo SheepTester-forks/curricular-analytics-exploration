@@ -150,13 +150,33 @@ type YearProps = {
   index: number
   plan: YearPlan
   onPlan: (plan: YearPlan) => void
+  onYear?: ((year: number) => void) | null
 }
-function Year ({ planStartYear, index, plan, onPlan }: YearProps) {
+function Year ({ planStartYear, index, plan, onPlan, onYear }: YearProps) {
   return (
     <section class='year-editor'>
       <h2 class='heading year-heading'>
-        <strong>Year {index + 1}</strong>: {planStartYear + index}–
-        {planStartYear + index + 1}{' '}
+        <strong>Year {index + 1}</strong>:{' '}
+        {onYear ? (
+          <input
+            class='start-year'
+            type='text'
+            inputMode='numeric'
+            pattern='[0-9]*'
+            defaultValue={String(planStartYear)}
+            onInput={e => {
+              onYear(+e.currentTarget.value)
+            }}
+            onChange={e => {
+              if (!/[0-9]+/.test(e.currentTarget.value)) {
+                onYear(planStartYear)
+              }
+            }}
+          />
+        ) : (
+          planStartYear + index
+        )}
+        –{planStartYear + index + 1}{' '}
         <span class='total-units'>
           Annual units:{' '}
           <span class='units'>
@@ -204,6 +224,7 @@ function Editor ({ plan, onPlan }: EditorProps) {
               )
             })
           }
+          onYear={i === 0 ? startYear => onPlan({ ...plan, startYear }) : null}
           key={i}
         />
       ))}
