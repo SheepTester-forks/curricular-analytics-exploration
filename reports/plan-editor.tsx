@@ -24,9 +24,10 @@ type Course = {
 type TermPlan = Course[]
 type YearPlan = TermPlan[]
 type AcademicPlan = {
-  startYear: number
+  startYear: string
   type: '4-year' | 'transfer'
   years: YearPlan[]
+  name: string
 }
 
 type CourseProps = {
@@ -60,7 +61,7 @@ function Course ({ course, onCourse, onRemove, new: isNew }: CourseProps) {
               units: Number.isFinite(+e.currentTarget.value)
                 ? +e.currentTarget.value < 0
                   ? '0'
-                  : `${+e.currentTarget.value}`
+                  : String(+e.currentTarget.value)
                 : '4'
             })
           }
@@ -146,37 +147,41 @@ function Term ({ name, plan, onPlan }: TermProps) {
 
 const termNames = ['Fall', 'Winter', 'Spring']
 type YearProps = {
-  planStartYear: number
+  planStartYear: string
   index: number
   plan: YearPlan
   onPlan: (plan: YearPlan) => void
-  onYear?: ((year: number) => void) | null
+  onYear?: ((year: string) => void) | null
 }
 function Year ({ planStartYear, index, plan, onPlan, onYear }: YearProps) {
   return (
     <section class='year-editor'>
       <h2 class='heading year-heading'>
         <strong>Year {index + 1}</strong>:{' '}
+        {/* TODO: Move the start year input elsewhere. It's kind of unintuitive where it is now */}
         {onYear ? (
           <input
             class='start-year'
             type='text'
             inputMode='numeric'
             pattern='[0-9]*'
-            defaultValue={String(planStartYear)}
+            aria-label='Starting year'
+            value={planStartYear}
             onInput={e => {
-              onYear(+e.currentTarget.value)
+              onYear(e.currentTarget.value)
             }}
             onChange={e => {
-              if (!/[0-9]+/.test(e.currentTarget.value)) {
-                onYear(planStartYear)
-              }
+              onYear(
+                Number.isFinite(+e.currentTarget.value)
+                  ? String(Math.trunc(+e.currentTarget.value))
+                  : String(new Date().getFullYear())
+              )
             }}
           />
         ) : (
-          planStartYear + index
+          +planStartYear + index
         )}
-        –{planStartYear + index + 1}{' '}
+        –{+planStartYear + index + 1}{' '}
         <span class='total-units'>
           Annual units:{' '}
           <span class='units'>
@@ -241,6 +246,31 @@ function App ({ prereqs, initPlan }: AppProps) {
 
   return (
     <>
+      <div class='info'>
+        <input
+          class='plan-name'
+          type='text'
+          placeholder='Plan name'
+          aria-label='Plan name'
+          value={plan.name}
+          onInput={e => setPlan({ ...plan, name: e.currentTarget.value })}
+        />
+        <span class='total-units plan-units'>
+          Total units:{' '}
+          <span class='units'>
+            {plan.years.reduce(
+              (cum, curr) =>
+                cum +
+                curr.reduce(
+                  (cum, curr) =>
+                    cum + curr.reduce((cum, curr) => cum + +curr.units, 0),
+                  0
+                ),
+              0
+            )}
+          </span>
+        </span>
+      </div>
       <Editor plan={plan} onPlan={setPlan} />
       <datalist id='courses'>
         {Object.keys(prereqs).map(code => (
@@ -255,7 +285,7 @@ render(
   <App
     prereqs={JSON.parse(document.getElementById('prereqs')!.textContent!)}
     initPlan={{
-      startYear: 2021,
+      startYear: '2021',
       type: '4-year',
       years: [
         [
@@ -520,7 +550,8 @@ render(
             }
           ]
         ]
-      ]
+      ],
+      name: '2021 CS25-Computer Engineering/Sixth'
     }}
   />,
   document.getElementById('root')!
