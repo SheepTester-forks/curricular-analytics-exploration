@@ -9,6 +9,7 @@ import {
   useRef,
   useState
 } from 'https://esm.sh/preact@10.11.2/hooks'
+import type { JSX } from 'https://esm.sh/preact@10.11.2/jsx-runtime'
 
 type CourseCode = string
 type Prereqs = Record<CourseCode, CourseCode[][]>
@@ -30,6 +31,15 @@ type AcademicPlan = {
   name: string
 }
 
+type DragState = {
+  pointerId: number
+  width: number
+  height: number
+  offsetX: number
+  offsetY: number
+  pointerX: number
+  pointerY: number
+}
 type CourseProps = {
   course: Course
   onCourse: (course: Course) => void
@@ -37,8 +47,30 @@ type CourseProps = {
   new?: boolean
 }
 function Course ({ course, onCourse, onRemove, new: isNew }: CourseProps) {
+  const [dragState, setDragState] = useState<DragState | null>(null)
+
+  const onPointerEnd = (e: JSX.TargetedPointerEvent<HTMLElement>) => {
+    if (e.pointerId === dragState?.pointerId) {
+      setDragState(null)
+    }
+  }
+
   return (
-    <li class={`course-editor ${isNew ? 'add-course' : ''}`}>
+    <li
+      class={`course-editor ${isNew ? 'add-course' : ''} ${
+        dragState ? 'dragged' : ''
+      }`}
+      style={
+        dragState
+          ? {
+              left: `${dragState.pointerX - dragState.offsetX}px`,
+              top: `${dragState.pointerY - dragState.offsetY}px`,
+              width: `${dragState.width}px`,
+              height: `${dragState.height}px`
+            }
+          : {}
+      }
+    >
       <input
         class='course-field course-title'
         type='text'
@@ -68,13 +100,39 @@ function Course ({ course, onCourse, onRemove, new: isNew }: CourseProps) {
         />
       )}
       {!isNew && (
-        <button
-          class='term-icon-btn remove-btn'
-          title='Remove course'
-          onClick={onRemove}
+        <span
+          class='term-icon-btn drag-btn'
+          title='Move course'
+          onPointerDown={e => {
+            if (!dragState) {
+              e.currentTarget.setPointerCapture(e.pointerId)
+              const rect =
+                e.currentTarget.parentElement!.getBoundingClientRect()
+              setDragState({
+                pointerId: e.pointerId,
+                width: rect.width,
+                height: rect.height,
+                offsetX: e.clientX - rect.left,
+                offsetY: e.clientY - rect.top,
+                pointerX: e.clientX,
+                pointerY: e.clientY
+              })
+            }
+          }}
+          onPointerMove={e => {
+            if (e.pointerId === dragState?.pointerId) {
+              setDragState({
+                ...dragState,
+                pointerX: e.clientX,
+                pointerY: e.clientY
+              })
+            }
+          }}
+          onPointerUp={onPointerEnd}
+          onPointerCancel={onPointerEnd}
         >
-          ×
-        </button>
+          ⠿
+        </span>
       )}
     </li>
   )
