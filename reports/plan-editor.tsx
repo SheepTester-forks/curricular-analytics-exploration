@@ -3,9 +3,11 @@
 /// <reference lib="dom" />
 /// <reference lib="deno.ns" />
 
-import { render } from 'https://esm.sh/preact@10.11.2'
+import { createContext, render } from 'https://esm.sh/preact@10.11.2'
 import {
+  useContext,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from 'https://esm.sh/preact@10.11.2/hooks'
@@ -32,41 +34,52 @@ type AcademicPlan = {
 }
 
 type DragState = {
+  course: Course
   pointerId: number
   width: number
-  height: number
   offsetX: number
   offsetY: number
   pointerX: number
   pointerY: number
 }
+const DragContext = createContext<DragState | null>(null)
+
+// 1. move non-down drag events out to Editor (pass props by spread)
+// 2. for all the terms, useEffect get their rects, determine whether CURSOR
+//    (can change to box center later) is inside term box, then figure out
+//    position from hardcoded height values
+// 3. Course accepts a dragged prop that sets its position and dragged class
+// 4. term will insert a placeholder with a keyed Fragment
+
 type CourseProps = {
   course: Course
-  onCourse: (course: Course) => void
-  onRemove: () => void
+  onCourse?: (course: Course) => void
   new?: boolean
-}
-function Course ({ course, onCourse, onRemove, new: isNew }: CourseProps) {
-  const [dragState, setDragState] = useState<DragState | null>(null)
-
-  const onPointerEnd = (e: JSX.TargetedPointerEvent<HTMLElement>) => {
-    if (e.pointerId === dragState?.pointerId) {
-      setDragState(null)
-    }
+  dragged?: {
+    width: number
+    x: number
+    y: number
   }
-
+  onDrag?: (event: JSX.TargetedPointerEvent<HTMLElement>) => void
+}
+function Course ({
+  course,
+  onCourse,
+  new: isNew,
+  dragged,
+  onDrag
+}: CourseProps) {
   return (
     <li
       class={`course-editor ${isNew ? 'add-course' : ''} ${
-        dragState ? 'dragged' : ''
+        dragged ? 'dragged' : ''
       }`}
       style={
-        dragState
+        dragged
           ? {
-              left: `${dragState.pointerX - dragState.offsetX}px`,
-              top: `${dragState.pointerY - dragState.offsetY}px`,
-              width: `${dragState.width}px`,
-              height: `${dragState.height}px`
+              left: `${dragged.x}px`,
+              top: `${dragged.y}px`,
+              width: `${dragged.width}px`
             }
           : {}
       }
@@ -76,8 +89,12 @@ function Course ({ course, onCourse, onRemove, new: isNew }: CourseProps) {
         type='text'
         list='courses'
         value={course.title}
-        onInput={e => onCourse({ ...course, title: e.currentTarget.value })}
+        onInput={
+          onCourse &&
+          (e => onCourse({ ...course, title: e.currentTarget.value }))
+        }
         placeholder={isNew ? 'Add a course' : 'Course name'}
+        disabled={!onCourse}
       />
       {!isNew && (
         <input
@@ -86,50 +103,30 @@ function Course ({ course, onCourse, onRemove, new: isNew }: CourseProps) {
           inputMode='numeric'
           pattern='[0-9]*'
           value={course.units}
-          onInput={e => onCourse({ ...course, units: e.currentTarget.value })}
-          onChange={e =>
-            onCourse({
-              ...course,
-              units: Number.isFinite(+e.currentTarget.value)
-                ? +e.currentTarget.value < 0
-                  ? '0'
-                  : String(+e.currentTarget.value)
-                : '4'
-            })
+          onInput={
+            onCourse &&
+            (e => onCourse({ ...course, units: e.currentTarget.value }))
           }
+          onChange={
+            onCourse &&
+            (e =>
+              onCourse({
+                ...course,
+                units: Number.isFinite(+e.currentTarget.value)
+                  ? +e.currentTarget.value < 0
+                    ? '0'
+                    : String(+e.currentTarget.value)
+                  : '4'
+              }))
+          }
+          disabled={!onCourse}
         />
       )}
       {!isNew && (
         <span
           class='term-icon-btn drag-btn'
           title='Move course'
-          onPointerDown={e => {
-            if (!dragState) {
-              e.currentTarget.setPointerCapture(e.pointerId)
-              const rect =
-                e.currentTarget.parentElement!.getBoundingClientRect()
-              setDragState({
-                pointerId: e.pointerId,
-                width: rect.width,
-                height: rect.height,
-                offsetX: e.clientX - rect.left,
-                offsetY: e.clientY - rect.top,
-                pointerX: e.clientX,
-                pointerY: e.clientY
-              })
-            }
-          }}
-          onPointerMove={e => {
-            if (e.pointerId === dragState?.pointerId) {
-              setDragState({
-                ...dragState,
-                pointerX: e.clientX,
-                pointerY: e.clientY
-              })
-            }
-          }}
-          onPointerUp={onPointerEnd}
-          onPointerCancel={onPointerEnd}
+          onPointerDown={onDrag}
         >
           ⠿
         </span>
@@ -147,8 +144,12 @@ type TermProps = {
   name: string
   plan: TermPlan
   onPlan: (plan: TermPlan) => void
+  onDrag?: (
+    event: JSX.TargetedPointerEvent<HTMLElement>,
+    course: Course
+  ) => void
 }
-function Term ({ name, plan, onPlan }: TermProps) {
+function Term ({ name, plan, onPlan, onDrag }: TermProps) {
   const termUnits = plan.reduce((cum, curr) => cum + +curr.units, 0)
   return (
     <section class='term-editor'>
@@ -193,8 +194,8 @@ function Term ({ name, plan, onPlan }: TermProps) {
                     )
               )
             }
-            onRemove={() => onPlan(plan.filter((_, index) => i !== index))}
             new={i === plan.length}
+            onDrag={onDrag && (e => onDrag(e, course))}
             key={i}
           />
         ))}
@@ -210,8 +211,19 @@ type YearProps = {
   plan: YearPlan
   onPlan: (plan: YearPlan) => void
   onYear?: ((year: string) => void) | null
+  onDrag?: (
+    event: JSX.TargetedPointerEvent<HTMLElement>,
+    course: Course
+  ) => void
 }
-function Year ({ planStartYear, index, plan, onPlan, onYear }: YearProps) {
+function Year ({
+  planStartYear,
+  index,
+  plan,
+  onPlan,
+  onYear,
+  onDrag
+}: YearProps) {
   return (
     <section class='year-editor'>
       <h2 class='heading year-heading'>
@@ -259,6 +271,7 @@ function Year ({ planStartYear, index, plan, onPlan, onYear }: YearProps) {
             onPlan={newPlan =>
               onPlan(plan.map((term, index) => (index === i ? newPlan : term)))
             }
+            onDrag={onDrag}
             key={i}
           />
         ))}
@@ -272,25 +285,77 @@ type EditorProps = {
   onPlan: (plan: AcademicPlan) => void
 }
 function Editor ({ plan, onPlan }: EditorProps) {
+  const element = useRef<HTMLDivElement>(null)
+  const [dragState, setDragState] = useState<DragState | null>(null)
+  const onPointerEnd = (e: JSX.TargetedPointerEvent<HTMLElement>) => {
+    if (e.pointerId === dragState?.pointerId) {
+      setDragState(null)
+    }
+  }
+
   return (
-    <div class='plan-editor'>
-      {plan.years.map((year, i) => (
-        <Year
-          planStartYear={plan.startYear}
-          index={i}
-          plan={year}
-          onPlan={newPlan =>
-            onPlan({
-              ...plan,
-              years: plan.years.map((year, index) =>
-                index === i ? newPlan : year
-              )
-            })
-          }
-          onYear={i === 0 ? startYear => onPlan({ ...plan, startYear }) : null}
-          key={i}
+    <div
+      class='plan-editor'
+      onPointerMove={e => {
+        if (e.pointerId === dragState?.pointerId) {
+          setDragState({
+            ...dragState,
+            pointerX: e.clientX,
+            pointerY: e.clientY
+          })
+        }
+      }}
+      onPointerUp={onPointerEnd}
+      onPointerCancel={onPointerEnd}
+      ref={element}
+    >
+      <DragContext.Provider value={dragState}>
+        {plan.years.map((year, i) => (
+          <Year
+            planStartYear={plan.startYear}
+            index={i}
+            plan={year}
+            onPlan={newPlan =>
+              onPlan({
+                ...plan,
+                years: plan.years.map((year, index) =>
+                  index === i ? newPlan : year
+                )
+              })
+            }
+            onYear={
+              i === 0 ? startYear => onPlan({ ...plan, startYear }) : null
+            }
+            onDrag={(e, course) => {
+              if (!dragState) {
+                element.current?.setPointerCapture(e.pointerId)
+                const rect =
+                  e.currentTarget.parentElement!.getBoundingClientRect()
+                setDragState({
+                  course,
+                  pointerId: e.pointerId,
+                  width: rect.width,
+                  offsetX: e.clientX - rect.left,
+                  offsetY: e.clientY - rect.top,
+                  pointerX: e.clientX,
+                  pointerY: e.clientY
+                })
+              }
+            }}
+            key={i}
+          />
+        ))}
+      </DragContext.Provider>
+      {dragState && (
+        <Course
+          course={dragState.course}
+          dragged={{
+            width: dragState.width,
+            x: dragState.pointerX - dragState.offsetX,
+            y: dragState.pointerY - dragState.offsetY
+          }}
         />
-      ))}
+      )}
     </div>
   )
 }

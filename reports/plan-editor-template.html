@@ -108,6 +108,7 @@
       }
       .course-editor {
         display: flex;
+        background-color: white;
       }
       .course-field {
         align-self: stretch;
@@ -138,11 +139,14 @@
         touch-action: none;
         user-select: none;
       }
-      .term-icon-btn:hover {
+      .term-icon-btn:hover,
+      .dragged .term-icon-btn {
         color: black;
       }
       .dragged {
         position: fixed;
+        opacity: 0.5;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
       }
     </style>
   </head>
