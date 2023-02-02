@@ -40,7 +40,7 @@ type DropLocation = {
 }
 type DragState = {
   course: Course
-  source: DropLocation
+  originalPlan: AcademicPlan
   pointerId: number
   width: number
   offsetX: number
@@ -334,29 +334,38 @@ type EditorProps = {
 }
 function Editor ({ plan, onPlan }: EditorProps) {
   const element = useRef<HTMLDivElement>(null)
+  // Ref needed for event handlers
+  const dragStateRef = useRef<DragState | null>(null)
+  // State needed to rerender
   const [dragState, setDragState] = useState<DragState | null>(null)
   const dropLocation = useRef<DropLocation | null>(null)
 
   const onPointerEnd = (e: JSX.TargetedPointerEvent<HTMLElement>) => {
+    const dragState = dragStateRef.current
     if (e.pointerId === dragState?.pointerId) {
-      const dropLoc = dropLocation.current ?? dragState.source
-      onPlan({
-        ...plan,
-        years: plan.years.map((year, i) =>
-          i === dropLoc.yearIndex
-            ? year.map((term, j) =>
-                j === dropLoc.termIndex
-                  ? [
-                      ...term.slice(0, dropLoc.courseIndex),
-                      dragState.course,
-                      ...term.slice(dropLoc.courseIndex)
-                    ]
-                  : term
+      const dropLoc = dropLocation.current
+      onPlan(
+        dropLoc
+          ? {
+              ...plan,
+              years: plan.years.map((year, i) =>
+                i === dropLoc.yearIndex
+                  ? year.map((term, j) =>
+                      j === dropLoc.termIndex
+                        ? [
+                            ...term.slice(0, dropLoc.courseIndex),
+                            dragState.course,
+                            ...term.slice(dropLoc.courseIndex)
+                          ]
+                        : term
+                    )
+                  : year
               )
-            : year
-        )
-      })
+            }
+          : dragState.originalPlan
+      )
       setDragState(null)
+      dragStateRef.current = null
     }
   }
 
@@ -364,9 +373,9 @@ function Editor ({ plan, onPlan }: EditorProps) {
     <div
       class='plan-editor'
       onPointerMove={e => {
-        if (e.pointerId === dragState?.pointerId) {
+        if (e.pointerId === dragStateRef.current?.pointerId) {
           setDragState({
-            ...dragState,
+            ...dragStateRef.current,
             pointerX: e.clientX,
             pointerY: e.clientY
           })
@@ -400,16 +409,17 @@ function Editor ({ plan, onPlan }: EditorProps) {
                 element.current?.setPointerCapture(e.pointerId)
                 const rect =
                   e.currentTarget.parentElement!.getBoundingClientRect()
-                setDragState({
+                dragStateRef.current = {
                   course: plan.years[yearIndex][termIndex][courseIndex],
-                  source: { yearIndex, termIndex, courseIndex },
+                  originalPlan: plan,
                   pointerId: e.pointerId,
                   width: rect.width,
                   offsetX: e.clientX - rect.left,
                   offsetY: e.clientY - rect.top,
                   pointerX: e.clientX,
                   pointerY: e.clientY
-                })
+                }
+                setDragState(dragStateRef.current)
                 // Remove course
                 onPlan({
                   ...plan,
