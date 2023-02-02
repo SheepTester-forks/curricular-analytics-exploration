@@ -3,7 +3,7 @@
 /// <reference lib="dom" />
 /// <reference lib="deno.ns" />
 
-import { createContext, render } from 'https://esm.sh/preact@10.11.2'
+import { createContext, Fragment, render } from 'https://esm.sh/preact@10.11.2'
 import {
   useContext,
   useEffect,
@@ -135,6 +135,9 @@ function Course ({
   )
 }
 
+const Placeholder = () => <li class='placeholder-course'></li>
+
+const COURSE_HEIGHT = 30
 const emptyCourse = {
   title: '',
   units: '4',
@@ -150,9 +153,31 @@ type TermProps = {
   ) => void
 }
 function Term ({ name, plan, onPlan, onDrag }: TermProps) {
+  const dragState = useContext(DragContext)
+  const element = useRef<HTMLElement>(null)
+  const placeholderIndex = useMemo(() => {
+    if (!element.current || !dragState) {
+      return null
+    }
+    const rect = element.current.getBoundingClientRect()
+    if (
+      dragState.pointerX >= rect.left &&
+      dragState.pointerY >= rect.top &&
+      dragState.pointerX < rect.right &&
+      dragState.pointerY < rect.bottom
+    ) {
+      const index =
+        Math.floor((dragState.pointerY - rect.top) / COURSE_HEIGHT) - 1
+      return index < 0 ? 0 : index > plan.length ? plan.length : index
+    } else {
+      return null
+    }
+  }, [element.current, dragState?.pointerX, dragState?.pointerY])
+
   const termUnits = plan.reduce((cum, curr) => cum + +curr.units, 0)
+
   return (
-    <section class='term-editor'>
+    <section class='term-editor' ref={element}>
       <h3
         class={`heading term-heading ${
           termUnits < 12
@@ -183,21 +208,25 @@ function Term ({ name, plan, onPlan, onDrag }: TermProps) {
       </h3>
       <ul class='courses'>
         {[...plan, emptyCourse].map((course, i) => (
-          <Course
-            course={course}
-            onCourse={newCourse =>
-              onPlan(
-                i === plan.length
-                  ? [...plan, newCourse]
-                  : plan.map((course, index) =>
-                      index === i ? newCourse : course
-                    )
-              )
-            }
-            new={i === plan.length}
-            onDrag={onDrag && (e => onDrag(e, course))}
-            key={i}
-          />
+          <Fragment key={i}>
+            {i === placeholderIndex && <Placeholder />}
+            {!(placeholderIndex !== null && i === plan.length) && (
+              <Course
+                course={course}
+                onCourse={newCourse =>
+                  onPlan(
+                    i === plan.length
+                      ? [...plan, newCourse]
+                      : plan.map((course, index) =>
+                          index === i ? newCourse : course
+                        )
+                  )
+                }
+                new={i === plan.length}
+                onDrag={onDrag && (e => onDrag(e, course))}
+              />
+            )}
+          </Fragment>
         ))}
       </ul>
     </section>
