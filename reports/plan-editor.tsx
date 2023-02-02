@@ -33,8 +33,14 @@ type AcademicPlan = {
   name: string
 }
 
+type DropLocation = {
+  yearIndex: number
+  termIndex: number
+  courseIndex: number
+}
 type DragState = {
   course: Course
+  source: DropLocation
   pointerId: number
   width: number
   offsetX: number
@@ -149,29 +155,36 @@ type TermProps = {
   onPlan: (plan: TermPlan) => void
   onDrag?: (
     event: JSX.TargetedPointerEvent<HTMLElement>,
-    course: Course
+    course: number
   ) => void
+  onDropLocation?: (index: number | null) => void
 }
-function Term ({ name, plan, onPlan, onDrag }: TermProps) {
+function Term ({ name, plan, onPlan, onDrag, onDropLocation }: TermProps) {
   const dragState = useContext(DragContext)
   const element = useRef<HTMLElement>(null)
   const placeholderIndex = useMemo(() => {
-    if (!element.current || !dragState) {
-      return null
+    let index: number | null = null
+    if (element.current && dragState) {
+      const rect = element.current.getBoundingClientRect()
+      if (
+        dragState.pointerX >= rect.left &&
+        dragState.pointerY >= rect.top &&
+        dragState.pointerX < rect.right &&
+        dragState.pointerY < rect.bottom
+      ) {
+        index = Math.floor((dragState.pointerY - rect.top) / COURSE_HEIGHT) - 1
+        if (index < 0) {
+          index = 0
+        }
+        if (index > plan.length) {
+          index = plan.length
+        }
+      }
     }
-    const rect = element.current.getBoundingClientRect()
-    if (
-      dragState.pointerX >= rect.left &&
-      dragState.pointerY >= rect.top &&
-      dragState.pointerX < rect.right &&
-      dragState.pointerY < rect.bottom
-    ) {
-      const index =
-        Math.floor((dragState.pointerY - rect.top) / COURSE_HEIGHT) - 1
-      return index < 0 ? 0 : index > plan.length ? plan.length : index
-    } else {
-      return null
+    if (onDropLocation) {
+      onDropLocation(index)
     }
+    return index
   }, [element.current, dragState?.pointerX, dragState?.pointerY])
 
   const termUnits = plan.reduce((cum, curr) => cum + +curr.units, 0)
@@ -223,7 +236,7 @@ function Term ({ name, plan, onPlan, onDrag }: TermProps) {
                   )
                 }
                 new={i === plan.length}
-                onDrag={onDrag && (e => onDrag(e, course))}
+                onDrag={onDrag && (e => onDrag(e, i))}
               />
             )}
           </Fragment>
@@ -242,8 +255,10 @@ type YearProps = {
   onYear?: ((year: string) => void) | null
   onDrag?: (
     event: JSX.TargetedPointerEvent<HTMLElement>,
-    course: Course
+    term: number,
+    course: number
   ) => void
+  onDropLocation?: (term: number, index: number | null) => void
 }
 function Year ({
   planStartYear,
@@ -251,7 +266,8 @@ function Year ({
   plan,
   onPlan,
   onYear,
-  onDrag
+  onDrag,
+  onDropLocation
 }: YearProps) {
   return (
     <section class='year-editor'>
@@ -300,7 +316,10 @@ function Year ({
             onPlan={newPlan =>
               onPlan(plan.map((term, index) => (index === i ? newPlan : term)))
             }
-            onDrag={onDrag}
+            onDrag={onDrag && ((e, course) => onDrag(e, i, course))}
+            onDropLocation={
+              onDropLocation && (index => onDropLocation(i, index))
+            }
             key={i}
           />
         ))}
@@ -316,8 +335,27 @@ type EditorProps = {
 function Editor ({ plan, onPlan }: EditorProps) {
   const element = useRef<HTMLDivElement>(null)
   const [dragState, setDragState] = useState<DragState | null>(null)
+  const dropLocation = useRef<DropLocation | null>(null)
+
   const onPointerEnd = (e: JSX.TargetedPointerEvent<HTMLElement>) => {
     if (e.pointerId === dragState?.pointerId) {
+      const dropLoc = dropLocation.current ?? dragState.source
+      onPlan({
+        ...plan,
+        years: plan.years.map((year, i) =>
+          i === dropLoc.yearIndex
+            ? year.map((term, j) =>
+                j === dropLoc.termIndex
+                  ? [
+                      ...term.slice(0, dropLoc.courseIndex),
+                      dragState.course,
+                      ...term.slice(dropLoc.courseIndex)
+                    ]
+                  : term
+              )
+            : year
+        )
+      })
       setDragState(null)
     }
   }
@@ -339,29 +377,32 @@ function Editor ({ plan, onPlan }: EditorProps) {
       ref={element}
     >
       <DragContext.Provider value={dragState}>
-        {plan.years.map((year, i) => (
+        {plan.years.map((year, yearIndex) => (
           <Year
             planStartYear={plan.startYear}
-            index={i}
+            index={yearIndex}
             plan={year}
             onPlan={newPlan =>
               onPlan({
                 ...plan,
                 years: plan.years.map((year, index) =>
-                  index === i ? newPlan : year
+                  index === yearIndex ? newPlan : year
                 )
               })
             }
             onYear={
-              i === 0 ? startYear => onPlan({ ...plan, startYear }) : null
+              yearIndex === 0
+                ? startYear => onPlan({ ...plan, startYear })
+                : null
             }
-            onDrag={(e, course) => {
+            onDrag={(e, termIndex, courseIndex) => {
               if (!dragState) {
                 element.current?.setPointerCapture(e.pointerId)
                 const rect =
                   e.currentTarget.parentElement!.getBoundingClientRect()
                 setDragState({
-                  course,
+                  course: plan.years[yearIndex][termIndex][courseIndex],
+                  source: { yearIndex, termIndex, courseIndex },
                   pointerId: e.pointerId,
                   width: rect.width,
                   offsetX: e.clientX - rect.left,
@@ -369,9 +410,37 @@ function Editor ({ plan, onPlan }: EditorProps) {
                   pointerX: e.clientX,
                   pointerY: e.clientY
                 })
+                // Remove course
+                onPlan({
+                  ...plan,
+                  years: plan.years.map((year, i) =>
+                    i === yearIndex
+                      ? year.map((term, j) =>
+                          j === termIndex
+                            ? term.filter((_, k) => k !== courseIndex)
+                            : term
+                        )
+                      : year
+                  )
+                })
+                dropLocation.current = null
               }
             }}
-            key={i}
+            onDropLocation={(termIndex, courseIndex) => {
+              if (courseIndex === null) {
+                // Mouse no longer inside term
+                if (
+                  dropLocation.current?.yearIndex === yearIndex &&
+                  dropLocation.current.termIndex === termIndex
+                ) {
+                  // If drop location was in the term, then set it to null
+                  dropLocation.current = null
+                }
+              } else {
+                dropLocation.current = { yearIndex, termIndex, courseIndex }
+              }
+            }}
+            key={yearIndex}
           />
         ))}
       </DragContext.Provider>
