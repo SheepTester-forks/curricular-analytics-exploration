@@ -328,6 +328,33 @@ function Year ({
   )
 }
 
+type RemoveZoneProps = {
+  onDropLocation: (inside: boolean) => void
+}
+function RemoveZone ({ onDropLocation }: RemoveZoneProps) {
+  const dragState = useContext(DragContext)
+  const element = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (element.current && dragState) {
+      const rect = element.current.getBoundingClientRect()
+      onDropLocation(
+        dragState.pointerX >= rect.left &&
+          dragState.pointerY >= rect.top &&
+          dragState.pointerX < rect.right &&
+          dragState.pointerY < rect.bottom
+      )
+    } else {
+      onDropLocation(false)
+    }
+  }, [element.current, dragState?.pointerX, dragState?.pointerY])
+
+  return (
+    <div class='remove-zone' ref={element}>
+      <span>Remove course</span>
+    </div>
+  )
+}
+
 type EditorProps = {
   plan: AcademicPlan
   onPlan: (plan: AcademicPlan) => void
@@ -338,32 +365,34 @@ function Editor ({ plan, onPlan }: EditorProps) {
   const dragStateRef = useRef<DragState | null>(null)
   // State needed to rerender
   const [dragState, setDragState] = useState<DragState | null>(null)
-  const dropLocation = useRef<DropLocation | null>(null)
+  const dropLocation = useRef<DropLocation | 'remove' | null>(null)
 
   const onPointerEnd = (e: JSX.TargetedPointerEvent<HTMLElement>) => {
     const dragState = dragStateRef.current
     if (e.pointerId === dragState?.pointerId) {
       const dropLoc = dropLocation.current
-      onPlan(
-        dropLoc
-          ? {
-              ...plan,
-              years: plan.years.map((year, i) =>
-                i === dropLoc.yearIndex
-                  ? year.map((term, j) =>
-                      j === dropLoc.termIndex
-                        ? [
-                            ...term.slice(0, dropLoc.courseIndex),
-                            dragState.course,
-                            ...term.slice(dropLoc.courseIndex)
-                          ]
-                        : term
-                    )
-                  : year
-              )
-            }
-          : dragState.originalPlan
-      )
+      if (dropLoc !== 'remove') {
+        onPlan(
+          dropLoc
+            ? {
+                ...plan,
+                years: plan.years.map((year, i) =>
+                  i === dropLoc.yearIndex
+                    ? year.map((term, j) =>
+                        j === dropLoc.termIndex
+                          ? [
+                              ...term.slice(0, dropLoc.courseIndex),
+                              dragState.course,
+                              ...term.slice(dropLoc.courseIndex)
+                            ]
+                          : term
+                      )
+                    : year
+                )
+              }
+            : dragState.originalPlan
+        )
+      }
       setDragState(null)
       dragStateRef.current = null
     }
@@ -437,22 +466,32 @@ function Editor ({ plan, onPlan }: EditorProps) {
               }
             }}
             onDropLocation={(termIndex, courseIndex) => {
-              if (courseIndex === null) {
-                // Mouse no longer inside term
-                if (
-                  dropLocation.current?.yearIndex === yearIndex &&
-                  dropLocation.current.termIndex === termIndex
-                ) {
-                  // If drop location was in the term, then set it to null
-                  dropLocation.current = null
-                }
-              } else {
+              if (courseIndex !== null) {
                 dropLocation.current = { yearIndex, termIndex, courseIndex }
+              } else if (
+                dropLocation.current !== 'remove' &&
+                dropLocation.current?.yearIndex === yearIndex &&
+                dropLocation.current.termIndex === termIndex
+              ) {
+                // Mouse no longer inside term. If drop location was in the
+                // term, then set it to null.
+                dropLocation.current = null
               }
             }}
             key={yearIndex}
           />
         ))}
+        {dragState && (
+          <RemoveZone
+            onDropLocation={inside => {
+              if (inside) {
+                dropLocation.current = 'remove'
+              } else if (dropLocation.current === 'remove') {
+                dropLocation.current = null
+              }
+            }}
+          />
+        )}
       </DragContext.Provider>
       {dragState && (
         <Course
