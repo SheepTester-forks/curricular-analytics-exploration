@@ -151,24 +151,31 @@
         position: fixed;
         opacity: 0.5;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        z-index: 5;
       }
       .remove-zone {
-        background-color: rgba(255, 0, 0, 0.5);
+        background-color: rgb(239, 68, 68, 0.2);
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
-        width: 300px;
-        height: 100px;
+        width: 380px;
+        height: 80px;
         margin: 0 auto;
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 5px dashed red;
+        border: 5px dashed rgb(239, 68, 68, 0.5);
         border-bottom: none;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         box-sizing: border-box;
+        transition: background-color 0.2s;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .remove-hover {
+        background-color: rgb(239, 68, 68, 0.5);
       }
     </style>
   </head>

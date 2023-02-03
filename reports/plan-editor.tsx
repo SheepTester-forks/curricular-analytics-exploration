@@ -95,10 +95,7 @@ function Course ({
         type='text'
         list='courses'
         value={course.title}
-        onInput={
-          onCourse &&
-          (e => onCourse({ ...course, title: e.currentTarget.value }))
-        }
+        onInput={e => onCourse?.({ ...course, title: e.currentTarget.value })}
         placeholder={isNew ? 'Add a course' : 'Course name'}
         disabled={!onCourse}
       />
@@ -109,21 +106,16 @@ function Course ({
           inputMode='numeric'
           pattern='[0-9]*'
           value={course.units}
-          onInput={
-            onCourse &&
-            (e => onCourse({ ...course, units: e.currentTarget.value }))
-          }
-          onChange={
-            onCourse &&
-            (e =>
-              onCourse({
-                ...course,
-                units: Number.isFinite(+e.currentTarget.value)
-                  ? +e.currentTarget.value < 0
-                    ? '0'
-                    : String(+e.currentTarget.value)
-                  : '4'
-              }))
+          onInput={e => onCourse?.({ ...course, units: e.currentTarget.value })}
+          onChange={e =>
+            onCourse?.({
+              ...course,
+              units: Number.isFinite(+e.currentTarget.value)
+                ? +e.currentTarget.value < 0
+                  ? '0'
+                  : String(+e.currentTarget.value)
+                : '4'
+            })
           }
           disabled={!onCourse}
         />
@@ -181,9 +173,7 @@ function Term ({ name, plan, onPlan, onDrag, onDropLocation }: TermProps) {
         }
       }
     }
-    if (onDropLocation) {
-      onDropLocation(index)
-    }
+    onDropLocation?.(index)
     return index
   }, [element.current, dragState?.pointerX, dragState?.pointerY])
 
@@ -236,7 +226,7 @@ function Term ({ name, plan, onPlan, onDrag, onDropLocation }: TermProps) {
                   )
                 }
                 new={i === plan.length}
-                onDrag={onDrag && (e => onDrag(e, i))}
+                onDrag={e => onDrag?.(e, i)}
               />
             )}
           </Fragment>
@@ -316,10 +306,8 @@ function Year ({
             onPlan={newPlan =>
               onPlan(plan.map((term, index) => (index === i ? newPlan : term)))
             }
-            onDrag={onDrag && ((e, course) => onDrag(e, i, course))}
-            onDropLocation={
-              onDropLocation && (index => onDropLocation(i, index))
-            }
+            onDrag={(e, course) => onDrag?.(e, i, course)}
+            onDropLocation={index => onDropLocation?.(i, index)}
             key={i}
           />
         ))}
@@ -329,27 +317,34 @@ function Year ({
 }
 
 type RemoveZoneProps = {
-  onDropLocation: (inside: boolean) => void
+  onDropLocation?: (inside: boolean) => void
 }
 function RemoveZone ({ onDropLocation }: RemoveZoneProps) {
   const dragState = useContext(DragContext)
   const element = useRef<HTMLDivElement>(null)
-  useEffect(() => {
+  const inside = useMemo(() => {
     if (element.current && dragState) {
       const rect = element.current.getBoundingClientRect()
-      onDropLocation(
+      onDropLocation?.(
         dragState.pointerX >= rect.left &&
           dragState.pointerY >= rect.top &&
           dragState.pointerX < rect.right &&
           dragState.pointerY < rect.bottom
       )
+      return (
+        dragState.pointerX >= rect.left &&
+        dragState.pointerY >= rect.top &&
+        dragState.pointerX < rect.right &&
+        dragState.pointerY < rect.bottom
+      )
     } else {
-      onDropLocation(false)
+      onDropLocation?.(false)
+      return false
     }
   }, [element.current, dragState?.pointerX, dragState?.pointerY])
 
   return (
-    <div class='remove-zone' ref={element}>
+    <div class={`remove-zone ${inside ? 'remove-hover' : ''}`} ref={element}>
       <span>Remove course</span>
     </div>
   )
