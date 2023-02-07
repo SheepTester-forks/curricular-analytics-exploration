@@ -254,14 +254,20 @@ type NodeUpdater = (nodes: CourseCodeNode[], links: CourseCodeLink[]) => void
  * https://observablehq.com/@d3/force-directed-graph
  * Updating nodes: https://observablehq.com/@d3/build-your-own-graph
  */
-function createGraph (wrapper: ParentNode): {
+function createGraph (
+  wrapper: ParentNode,
+  subjects: string[]
+): {
   update: NodeUpdater
   destroy: () => void
 } {
   let nodes: CourseNode[] = []
   let links: CourseLink[] = []
 
-  const nodeColor = d3.scaleOrdinal<string, string>([], d3.schemeTableau10)
+  const nodeColor = d3.scaleOrdinal<string, string>(
+    subjects,
+    d3.schemeTableau10
+  )
 
   const svg = d3.create('svg').attr('class', 'svg')
   const resize = () => {
@@ -653,7 +659,7 @@ type TreeProps = {
   options: Options
 }
 function Tree (props: TreeProps) {
-  const { courses, options } = props
+  const { prereqs, courses, options } = props
   const wrapperRef = useRef<HTMLDivElement>(null)
   const updateRef = useRef<NodeUpdater>()
 
@@ -661,10 +667,17 @@ function Tree (props: TreeProps) {
     if (!wrapperRef.current) {
       return
     }
-    const { update, destroy } = createGraph(wrapperRef.current)
+    const subjects = [
+      ...new Set(Object.keys(prereqs).map(code => code.split(' ')[0]))
+    ].sort()
+    // Manually shuffling subject codes until I like the colors I get
+    // https://observablehq.com/@d3/color-schemes
+    subjects.push(subjects.shift()!, subjects.shift()!)
+    subjects.unshift('CSE', 'ECE', 'DSC', 'MATH', 'MAE', 'COGS')
+    const { update, destroy } = createGraph(wrapperRef.current, subjects)
     updateRef.current = update
     return destroy
-  }, [wrapperRef.current])
+  }, [wrapperRef.current, prereqs])
 
   useEffect(() => {
     if (!updateRef.current) {
