@@ -542,6 +542,89 @@ function Editor ({ plan, onPlan }: EditorProps) {
   )
 }
 
+const assumedSatisfied: CourseCode[] = [
+  // 'MATH 4C', 'AWP 3', 'AWP 4B'
+]
+type PrereqCheckProps = {
+  code: CourseCode
+  reqs: CourseCode[][]
+  pastTerms: CourseCode[]
+}
+function PrereqCheck ({ code, reqs, pastTerms }: PrereqCheckProps) {
+  return (
+    <li class='course-code-item'>
+      <p class='course-code'>{code}</p>
+      {reqs.length > 0 ? (
+        <ul class='reqs'>
+          {reqs.map((req, i) => {
+            if (req.length === 0) {
+              return null
+            }
+            const satisfied = req.some(
+              alt => assumedSatisfied.includes(alt) || pastTerms.includes(alt)
+            )
+            return (
+              <li class={satisfied ? 'satisfied' : 'missing'} key={i}>
+                {satisfied ? '✅' : '❌'}
+                {req.map((alt, i) => (
+                  <Fragment key={i}>
+                    {i !== 0 ? ' or ' : null}
+                    {assumedSatisfied.includes(alt) ? (
+                      <strong class='assumed' title='Assumed to be satisfied'>
+                        {alt}*
+                      </strong>
+                    ) : pastTerms.includes(alt) ? (
+                      <strong>{alt}</strong>
+                    ) : (
+                      alt
+                    )}
+                  </Fragment>
+                ))}
+              </li>
+            )
+          })}
+        </ul>
+      ) : (
+        <p class='no-prereqs'>No prereqs!</p>
+      )}
+    </li>
+  )
+}
+
+type PrereqSidebarProps = {
+  prereqs: Prereqs
+  plan: AcademicPlan
+}
+function PrereqSidebar ({ prereqs, plan }: PrereqSidebarProps) {
+  const terms = plan.years.flatMap(year =>
+    year.map(term => term.map(course => course.title))
+  )
+
+  return (
+    <aside class='sidebar'>
+      <h2 class='sidebar-heading'>Prerequisites</h2>
+      <ul class='course-codes'>
+        {terms.flatMap((term, i) =>
+          term.map((course, j) => {
+            if (prereqs[course] && !assumedSatisfied.includes(course)) {
+              return (
+                <PrereqCheck
+                  code={course}
+                  reqs={prereqs[course]}
+                  pastTerms={terms.slice(0, i).flat()}
+                  key={`${i} ${j}`}
+                />
+              )
+            } else {
+              return null
+            }
+          })
+        )}
+      </ul>
+    </aside>
+  )
+}
+
 type AppProps = {
   prereqs: Prereqs
   initPlan: AcademicPlan
@@ -551,32 +634,35 @@ function App ({ prereqs, initPlan }: AppProps) {
 
   return (
     <>
-      <div class='info'>
-        <input
-          class='plan-name'
-          type='text'
-          placeholder='Plan name'
-          aria-label='Plan name'
-          value={plan.name}
-          onInput={e => setPlan({ ...plan, name: e.currentTarget.value })}
-        />
-        <span class='total-units plan-units'>
-          Total units:{' '}
-          <span class='units'>
-            {plan.years.reduce(
-              (cum, curr) =>
-                cum +
-                curr.reduce(
-                  (cum, curr) =>
-                    cum + curr.reduce((cum, curr) => cum + +curr.units, 0),
-                  0
-                ),
-              0
-            )}
+      <main class='main'>
+        <div class='info'>
+          <input
+            class='plan-name'
+            type='text'
+            placeholder='Plan name'
+            aria-label='Plan name'
+            value={plan.name}
+            onInput={e => setPlan({ ...plan, name: e.currentTarget.value })}
+          />
+          <span class='total-units plan-units'>
+            Total units:{' '}
+            <span class='units'>
+              {plan.years.reduce(
+                (cum, curr) =>
+                  cum +
+                  curr.reduce(
+                    (cum, curr) =>
+                      cum + curr.reduce((cum, curr) => cum + +curr.units, 0),
+                    0
+                  ),
+                0
+              )}
+            </span>
           </span>
-        </span>
-      </div>
-      <Editor plan={plan} onPlan={setPlan} />
+        </div>
+        <Editor plan={plan} onPlan={setPlan} />
+      </main>
+      <PrereqSidebar prereqs={prereqs} plan={plan} />
       <datalist id='courses'>
         {Object.keys(prereqs).map(code => (
           <option value={code} key={code} />

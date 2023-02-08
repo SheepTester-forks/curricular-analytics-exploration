@@ -28,6 +28,9 @@
         color: inherit;
         font: inherit;
       }
+      input {
+        width: 0;
+      }
       button:not(:disabled),
       input[type='submit']:not(:disabled) {
         cursor: pointer;
@@ -36,6 +39,51 @@
         color: inherit;
         opacity: 0.5;
         font-style: italic;
+      }
+
+      #root {
+        display: flex;
+      }
+      .main {
+        flex: auto;
+      }
+      .sidebar {
+        width: 300px;
+        flex: none;
+        box-sizing: border-box;
+        padding: 20px;
+      }
+      .sidebar-heading {
+        margin: 0;
+        margin-bottom: 20px;
+      }
+      .course-codes,
+      .reqs {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .course-code,
+      .no-prereqs {
+        margin: 0;
+      }
+      .reqs,
+      .no-prereqs {
+        margin-left: 20px;
+      }
+      .no-prereqs {
+        font-style: italic;
+        color: rgba(0, 0, 0, 0.5);
+      }
+      .satisfied {
+        background-color: #dff0d8;
+        color: #3c763d;
+      }
+      .missing {
+        background-color: #f2dede;
+      }
+      .assumed {
+        text-decoration: underline dotted;
       }
 
       .info {
