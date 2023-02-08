@@ -551,43 +551,53 @@ type PrereqCheckProps = {
   pastTerms: CourseCode[]
 }
 function PrereqCheck ({ code, reqs, pastTerms }: PrereqCheckProps) {
+  if (reqs.length === 0) {
+    return (
+      <p class='course-code-line'>
+        {code} — <em class='no-prereqs'>No prerequisites</em>
+      </p>
+    )
+  }
+  const satisfied = reqs.every(
+    req =>
+      req.length === 0 ||
+      req.some(alt => assumedSatisfied.includes(alt) || pastTerms.includes(alt))
+  )
   return (
-    <li class='course-code-item'>
-      <p class='course-code'>{code}</p>
-      {reqs.length > 0 ? (
-        <ul class='reqs'>
-          {reqs.map((req, i) => {
-            if (req.length === 0) {
-              return null
-            }
-            const satisfied = req.some(
-              alt => assumedSatisfied.includes(alt) || pastTerms.includes(alt)
-            )
-            return (
-              <li class={satisfied ? 'satisfied' : 'missing'} key={i}>
-                {satisfied ? '✅' : '❌'}
-                {req.map((alt, i) => (
-                  <Fragment key={i}>
-                    {i !== 0 ? ' or ' : null}
-                    {assumedSatisfied.includes(alt) ? (
-                      <strong class='assumed' title='Assumed to be satisfied'>
-                        {alt}*
-                      </strong>
-                    ) : pastTerms.includes(alt) ? (
-                      <strong>{alt}</strong>
-                    ) : (
-                      alt
-                    )}
-                  </Fragment>
-                ))}
-              </li>
-            )
-          })}
-        </ul>
-      ) : (
-        <p class='no-prereqs'>No prereqs!</p>
-      )}
-    </li>
+    <details class='course-code-item' open={!satisfied}>
+      <summary class={`course-code ${satisfied ? '' : 'missing-prereq'}`}>
+        {code}
+      </summary>
+      <ul class='reqs'>
+        {reqs.map((req, i) => {
+          if (req.length === 0) {
+            return null
+          }
+          const satisfied = req.some(
+            alt => assumedSatisfied.includes(alt) || pastTerms.includes(alt)
+          )
+          return (
+            <li class={satisfied ? 'satisfied' : 'missing'} key={i}>
+              {satisfied ? '✅' : '❌'}
+              {req.map((alt, i) => (
+                <Fragment key={i}>
+                  {i !== 0 ? ' or ' : null}
+                  {assumedSatisfied.includes(alt) ? (
+                    <strong class='assumed' title='Assumed to be satisfied'>
+                      {alt}*
+                    </strong>
+                  ) : pastTerms.includes(alt) ? (
+                    <strong>{alt}</strong>
+                  ) : (
+                    alt
+                  )}
+                </Fragment>
+              ))}
+            </li>
+          )
+        })}
+      </ul>
+    </details>
   )
 }
 
@@ -608,12 +618,13 @@ function PrereqSidebar ({ prereqs, plan }: PrereqSidebarProps) {
           term.map((course, j) => {
             if (prereqs[course] && !assumedSatisfied.includes(course)) {
               return (
-                <PrereqCheck
-                  code={course}
-                  reqs={prereqs[course]}
-                  pastTerms={terms.slice(0, i).flat()}
-                  key={`${i} ${j}`}
-                />
+                <li key={`${i} ${j}`}>
+                  <PrereqCheck
+                    code={course}
+                    reqs={prereqs[course]}
+                    pastTerms={terms.slice(0, i).flat()}
+                  />
+                </li>
               )
             } else {
               return null
