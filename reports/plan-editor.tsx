@@ -542,9 +542,7 @@ function Editor ({ plan, onPlan }: EditorProps) {
   )
 }
 
-const assumedSatisfied: CourseCode[] = [
-  // 'MATH 4C', 'AWP 3', 'AWP 4B'
-]
+const assumedSatisfied: CourseCode[] = ['MATH 4C', 'AWP 3', 'AWP 4B']
 type PrereqCheckProps = {
   code: CourseCode
   reqs: CourseCode[][]
@@ -601,11 +599,18 @@ function PrereqCheck ({ code, reqs, pastTerms }: PrereqCheckProps) {
   )
 }
 
+type CustomCourse = {
+  name: string
+  reqs: string[][]
+}
 type PrereqSidebarProps = {
   prereqs: Prereqs
+  onPrereqs: (newPrereqs: Prereqs) => void
   plan: AcademicPlan
 }
-function PrereqSidebar ({ prereqs, plan }: PrereqSidebarProps) {
+function PrereqSidebar ({ prereqs, onPrereqs, plan }: PrereqSidebarProps) {
+  const [custom, setCustom] = useState<CustomCourse[]>([])
+
   const terms = plan.years.flatMap(year =>
     year.map(term => term.map(course => course.title))
   )
@@ -632,6 +637,19 @@ function PrereqSidebar ({ prereqs, plan }: PrereqSidebarProps) {
           })
         )}
       </ul>
+      <h2 class='sidebar-heading'>
+        Create a course
+        <button
+          class='create-course'
+          onClick={() => setCustom([...custom, { name: '', reqs: [] }])}
+        >
+          +
+        </button>
+      </h2>
+      <p class='description'>
+        For advisors creating a new major or if there's a missing course. Create
+        a course with an existing course code to change its prerequisites.
+      </p>
     </aside>
   )
 }
@@ -640,8 +658,9 @@ type AppProps = {
   prereqs: Prereqs
   initPlan: AcademicPlan
 }
-function App ({ prereqs, initPlan }: AppProps) {
+function App ({ prereqs: initPrereqs, initPlan }: AppProps) {
   const [plan, setPlan] = useState(initPlan)
+  const [prereqs, setPrereqs] = useState(initPrereqs)
 
   return (
     <>
@@ -673,7 +692,7 @@ function App ({ prereqs, initPlan }: AppProps) {
         </div>
         <Editor plan={plan} onPlan={setPlan} />
       </main>
-      <PrereqSidebar prereqs={prereqs} plan={plan} />
+      <PrereqSidebar prereqs={prereqs} onPrereqs={setPrereqs} plan={plan} />
       <datalist id='courses'>
         {Object.keys(prereqs).map(code => (
           <option value={code} key={code} />
