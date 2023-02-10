@@ -599,6 +599,24 @@ function PrereqCheck ({ code, reqs, pastTerms }: PrereqCheckProps) {
   )
 }
 
+type CustomCourseProps = {
+  name: string
+  reqs: string[][]
+  onName: (name: string) => void
+  onReqs: (name: string[][]) => void
+}
+function CustomCourse ({ name, reqs, onName, onReqs }: CustomCourseProps) {
+  return (
+    <li>
+      <input
+        type='text'
+        value={name}
+        onInput={e => onName(e.currentTarget.value)}
+      />
+    </li>
+  )
+}
+
 type CustomCourse = {
   name: string
   reqs: string[][]
@@ -650,6 +668,29 @@ function PrereqSidebar ({ prereqs, onPrereqs, plan }: PrereqSidebarProps) {
         For advisors creating a new major or if there's a missing course. Create
         a course with an existing course code to change its prerequisites.
       </p>
+      <ul>
+        {custom.map(({ name, reqs }, i) => (
+          <CustomCourse
+            name={name}
+            reqs={reqs}
+            onName={name =>
+              setCustom(custom =>
+                custom.map((course, j) =>
+                  i === j ? { name, reqs: course.reqs } : course
+                )
+              )
+            }
+            onReqs={reqs =>
+              setCustom(custom =>
+                custom.map((course, j) =>
+                  i === j ? { name: course.name, reqs } : course
+                )
+              )
+            }
+            key={i}
+          />
+        ))}
+      </ul>
     </aside>
   )
 }
