@@ -671,6 +671,7 @@ function CustomCourse ({
   )
 }
 
+const CUSTOM_COURSE_KEY = 'ei/plan-editor/custom-courses'
 type CustomCourse = {
   name: string
   reqs: string[][]
@@ -681,7 +682,9 @@ type PrereqSidebarProps = {
   plan: AcademicPlan
 }
 function PrereqSidebar ({ prereqs, onPrereqs, plan }: PrereqSidebarProps) {
-  const [custom, setCustom] = useState<CustomCourse[]>([])
+  const [custom, setCustom] = useState<CustomCourse[]>(() =>
+    JSON.parse(localStorage.getItem(CUSTOM_COURSE_KEY) || '[]')
+  )
 
   const terms = plan.years.flatMap(year =>
     year.map(term => term.map(course => course.title))
@@ -700,6 +703,10 @@ function PrereqSidebar ({ prereqs, onPrereqs, plan }: PrereqSidebarProps) {
         ])
       )
     )
+  }, [custom])
+
+  useEffect(() => {
+    localStorage.setItem(CUSTOM_COURSE_KEY, JSON.stringify(custom))
   }, [custom])
 
   return (
