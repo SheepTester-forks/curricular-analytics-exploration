@@ -687,6 +687,21 @@ function PrereqSidebar ({ prereqs, onPrereqs, plan }: PrereqSidebarProps) {
     year.map(term => term.map(course => course.title))
   )
 
+  useEffect(() => {
+    onPrereqs(
+      Object.fromEntries(
+        custom.map(course => [
+          course.name.toUpperCase(),
+          course.reqs
+            .map(alts =>
+              alts.map(alt => alt.toUpperCase()).filter(alt => alt !== '')
+            )
+            .filter(alts => alts.length > 0)
+        ])
+      )
+    )
+  }, [custom])
+
   return (
     <aside class='sidebar'>
       <h2 class='sidebar-heading'>Prerequisites</h2>
@@ -760,7 +775,9 @@ type AppProps = {
 }
 function App ({ prereqs: initPrereqs, initPlan }: AppProps) {
   const [plan, setPlan] = useState(initPlan)
-  const [prereqs, setPrereqs] = useState(initPrereqs)
+  const [customPrereqs, setCustomPrereqs] = useState<Prereqs>({})
+
+  const prereqs = { ...initPrereqs, ...customPrereqs }
 
   return (
     <>
@@ -792,7 +809,11 @@ function App ({ prereqs: initPrereqs, initPlan }: AppProps) {
         </div>
         <Editor plan={plan} onPlan={setPlan} />
       </main>
-      <PrereqSidebar prereqs={prereqs} onPrereqs={setPrereqs} plan={plan} />
+      <PrereqSidebar
+        prereqs={prereqs}
+        onPrereqs={setCustomPrereqs}
+        plan={plan}
+      />
       <datalist id='courses'>
         {Object.keys(prereqs).map(code => (
           <option value={code} key={code} />
