@@ -604,15 +604,57 @@ type CustomCourseProps = {
   reqs: string[][]
   onName: (name: string) => void
   onReqs: (name: string[][]) => void
+  isNew: boolean
 }
-function CustomCourse ({ name, reqs, onName, onReqs }: CustomCourseProps) {
+function CustomCourse ({
+  name,
+  reqs,
+  onName,
+  onReqs,
+  isNew
+}: CustomCourseProps) {
   return (
     <li>
       <input
+        class='custom-course-input'
         type='text'
         value={name}
         onInput={e => onName(e.currentTarget.value)}
       />
+      {!isNew && (
+        <ul>
+          {[...reqs, []].map((alts, i) => (
+            <li key={i}>
+              <ul class='custom-prereq-req'>
+                {[...alts, ''].map((alt, j) => (
+                  <li key={j}>
+                    <input
+                      class='custom-prereq-input'
+                      type='text'
+                      value={alt}
+                      onInput={e =>
+                        onReqs(
+                          i === reqs.length
+                            ? [...reqs, [e.currentTarget.value]]
+                            : reqs.map((req, mi) =>
+                                mi === i
+                                  ? j === alts.length
+                                    ? [...req, e.currentTarget.value]
+                                    : req.map((alt, mj) =>
+                                        mj === j ? e.currentTarget.value : alt
+                                      )
+                                  : req
+                              )
+                        )
+                      }
+                    />
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      )}
     </li>
   )
 }
@@ -669,25 +711,30 @@ function PrereqSidebar ({ prereqs, onPrereqs, plan }: PrereqSidebarProps) {
         a course with an existing course code to change its prerequisites.
       </p>
       <ul>
-        {custom.map(({ name, reqs }, i) => (
+        {[...custom, { name: '', reqs: [] }].map(({ name, reqs }, i) => (
           <CustomCourse
             name={name}
             reqs={reqs}
             onName={name =>
               setCustom(custom =>
-                custom.map((course, j) =>
-                  i === j ? { name, reqs: course.reqs } : course
-                )
+                i === custom.length
+                  ? [...custom, { name, reqs }]
+                  : custom.map((course, j) =>
+                      i === j ? { name, reqs: course.reqs } : course
+                    )
               )
             }
             onReqs={reqs =>
               setCustom(custom =>
-                custom.map((course, j) =>
-                  i === j ? { name: course.name, reqs } : course
-                )
+                i === custom.length
+                  ? [...custom, { name, reqs }]
+                  : custom.map((course, j) =>
+                      i === j ? { name: course.name, reqs } : course
+                    )
               )
             }
             key={i}
+            isNew={i === custom.length}
           />
         ))}
       </ul>
