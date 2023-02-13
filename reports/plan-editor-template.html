@@ -39,6 +39,8 @@
         color: inherit;
         opacity: 0.5;
         font-style: italic;
+        font-weight: normal;
+        text-transform: none;
       }
 
       #root {
@@ -246,13 +248,30 @@
 
       .custom-course-input,
       .custom-prereq-input {
-        width: 100%;
-        border: 1px solid black;
+        text-transform: uppercase;
       }
-      .custom-prereq-req {
+      .custom-course-input {
+        width: 100%;
+        font-weight: bold;
+      }
+      .custom-prereq-input {
+        width: 100px;
+      }
+      .custom-courses,
+      .custom-prereq-alts {
         padding: 0;
         list-style: none;
+      }
+      .custom-course {
+        margin-bottom: 10px;
+      }
+      .custom-course-prereqs {
+        padding-left: 20px;
+      }
+      .custom-prereq-alts {
         display: flex;
+        white-space: pre;
+        flex-wrap: wrap;
       }
     </style>
   </head>
