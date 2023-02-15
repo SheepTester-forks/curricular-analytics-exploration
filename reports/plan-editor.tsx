@@ -13,6 +13,9 @@ import {
 } from 'https://esm.sh/preact@10.11.2/hooks'
 import type { JSX } from 'https://esm.sh/preact@10.11.2/jsx-runtime'
 
+const UNIVERSITY_NAME = 'University of California, San Diego'
+const TERM_TYPE = 'Quarter'
+
 type CourseCode = string
 type Prereqs = Record<CourseCode, CourseCode[][]>
 
@@ -671,6 +674,138 @@ function CustomCourse ({
   )
 }
 
+type CsvRows = {
+  rows: string[][]
+  columns: number
+}
+function toCsv ({ rows, columns }: CsvRows): Blob {
+  const emptyRow = Array.from({ length: columns }, () => '')
+  return new Blob(
+    [
+      rows
+        .map(
+          row =>
+            [...row, ...emptyRow]
+              .slice(0, columns)
+              .map(cell =>
+                /,\n"/.test(cell) ? `"${cell.replaceAll('"', '""')}"` : cell
+              )
+              .join(',') + '\n'
+        )
+        .join('')
+    ],
+    { type: 'text/csv' }
+  )
+}
+function toUcsdPlan (plan: AcademicPlan): CsvRows {
+  return {
+    rows: [
+      [
+        'Department',
+        'Major',
+        'College',
+        'Course',
+        'Units',
+        'Course Type',
+        'GE/Major Overlap',
+        'Start Year',
+        'Year Taken',
+        'Quarter Taken',
+        'Term Taken'
+      ],
+      ...plan.years.flatMap((year, i) =>
+        year.flatMap((term, j) =>
+          term.map(course => [
+            'TODO: Department',
+            'TODO: Major code',
+            'TODO: College',
+            course.title,
+            String(+course.units),
+            course.requirement.major ? 'MAJOR' : 'COLLEGE',
+            course.requirement.major && course.requirement.college ? 'Y' : 'N',
+            String(+plan.startYear),
+            String(i + 1),
+            String(j + 1),
+            'TODO: Term code'
+          ])
+        )
+      )
+    ],
+    columns: 11
+  }
+}
+const COURSE_HEADER = [
+  'Course ID',
+  'Course Name',
+  'Prefix',
+  'Number',
+  'Prerequisites',
+  'Corequisites',
+  'Strict-Corequisites',
+  'Credit Hours',
+  'Institution',
+  'Canonical Name',
+  'Term'
+]
+function toCurrAnalyticsPlan (plan: AcademicPlan, prereqs: Prereqs): CsvRows {
+  const courses = plan.years.flatMap((year, yearIndex) =>
+    year.flatMap((term, termIndex) =>
+      term.map(course => ({ ...course, term: yearIndex * 3 + termIndex + 1 }))
+    )
+  )
+  const courseIdMap = new Map(
+    courses.map((course, i) => [course, String(i + 1)])
+  )
+  const majorCourses: string[][] = []
+  const collegeCourses: string[][] = []
+  for (const course of courses) {
+    const courseCode = course.title.match(/^([A-Z]+) (\d+)$/)
+    const row = [
+      courseIdMap.get(course)!,
+      course.title,
+      courseCode?.[1] ?? '',
+      courseCode?.[2] ?? '',
+      'TODO: Prereqs',
+      '', // Coreqs aren't supported
+      '',
+      String(+course.units),
+      '',
+      '',
+      String(course.term)
+    ]
+    if (course.requirement.major) {
+      majorCourses.push(row)
+    } else {
+      collegeCourses.push(row)
+    }
+  }
+  const rows: string[][] = [
+    ['Curriculum', 'TODO: Major name'],
+    ['Degree Plan', plan.name],
+    ['Institution', UNIVERSITY_NAME],
+    ['Degree Type', 'TODO: Degree type'],
+    ['System Type', TERM_TYPE],
+    ['CIP', 'TODO: CIP code'],
+    ['Courses'],
+    COURSE_HEADER,
+    ...majorCourses,
+    ['Additional Courses'],
+    COURSE_HEADER,
+    ...collegeCourses
+  ]
+  return { rows, columns: 11 }
+}
+function download (blob: Blob, fileName: string) {
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = fileName
+  document.body.append(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
+}
+
 const CUSTOM_COURSE_KEY = 'ei/plan-editor/custom-courses'
 type CustomCourse = {
   name: string
@@ -775,8 +910,25 @@ function PrereqSidebar ({ prereqs, onPrereqs, plan }: PrereqSidebarProps) {
       <div class='download-wrapper'>
         <p class='download-label'>Download the plan as a CSV file for</p>
         <div class='download-btns'>
-          <button class='download-btn'>plans.ucsd.edu</button>
-          <button class='download-btn'>Curricular Analytics</button>
+          <button
+            class='download-btn'
+            onClick={() =>
+              download(toCsv(toUcsdPlan(plan)), `${plan.name}.csv`)
+            }
+          >
+            plans.ucsd.edu
+          </button>
+          <button
+            class='download-btn'
+            onClick={() =>
+              download(
+                toCsv(toCurrAnalyticsPlan(plan, prereqs)),
+                `${plan.name}.csv`
+              )
+            }
+          >
+            Curricular Analytics
+          </button>
         </div>
       </div>
     </aside>
