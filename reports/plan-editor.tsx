@@ -772,6 +772,13 @@ function PrereqSidebar ({ prereqs, onPrereqs, plan }: PrereqSidebarProps) {
           />
         ))}
       </ul>
+      <div class='download-wrapper'>
+        <p class='download-label'>Download the plan as a CSV file for</p>
+        <div class='download-btns'>
+          <button class='download-btn'>plans.ucsd.edu</button>
+          <button class='download-btn'>Curricular Analytics</button>
+        </div>
+      </div>
     </aside>
   )
 }

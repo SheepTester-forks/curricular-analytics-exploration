@@ -53,16 +53,15 @@
         width: 300px;
         flex: none;
         box-sizing: border-box;
-        padding: 20px;
+        padding: 0 20px;
+        display: flex;
+        flex-direction: column;
       }
       .sidebar-heading {
         display: flex;
         justify-content: space-between;
         margin-top: 20px;
         margin-bottom: 10px;
-      }
-      .sidebar-heading:first-child {
-        margin-top: 0;
       }
       .course-codes,
       .reqs {
@@ -96,8 +95,34 @@
         text-decoration: underline dotted;
       }
       .description {
-        margin-top: 0;
+        margin: 0;
         font-style: italic;
+      }
+      .download-wrapper {
+        position: sticky;
+        bottom: 0;
+        margin: 0 -20px;
+        margin-top: auto;
+        background-color: white;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      .download-label {
+        margin: 10px 20px;
+      }
+      .download-btns {
+        display: flex;
+        margin: 10px;
+        gap: 10px;
+        height: 40px;
+      }
+      .download-btn {
+        flex: 1 0 0;
+        background-color: #428bca;
+        color: white;
+        border-radius: 5px;
+      }
+      .download-btn:hover {
+        background-color: #3276b1;
       }
 
       .info {
@@ -148,7 +173,7 @@
         border-radius: 2px;
         padding: 1px 0;
         padding-right: 5px;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08);
       }
       .total-units {
         margin-left: auto;
@@ -158,11 +183,13 @@
       }
       .terms {
         display: flex;
+        justify-content: center;
         padding: 20px;
         gap: 20px;
       }
       .term-editor {
         flex: 1 0 0;
+        max-width: 400px;
       }
       .courses {
         list-style: none;
@@ -277,7 +304,10 @@
   </head>
   <body>
     <noscript>
-      <p>Please enable JavaScript.</p>
+      <p>
+        Please enable JavaScript. The plan editor requires JavaScript for an
+        easy-to-use interactive interface with automatic error checking.
+      </p>
     </noscript>
     <div id="root"></div>
   </body>
