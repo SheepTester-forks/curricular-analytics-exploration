@@ -1,4 +1,5 @@
 {
+  "importMap": "./import_map.json",
   "tasks": {
     "watch:plan-editor": "deno bundle --watch reports/plan-editor.tsx -- reports/output/plan-editor.js",
     "watch:prereq-tree": "deno bundle --watch reports/prereq-tree.tsx -- reports/output/prereq-tree.js"
