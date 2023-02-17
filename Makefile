@@ -60,22 +60,32 @@ reports/output/college-ge-units.html: reports/college-ge-template.html reports/o
 reports/output/prereqs.json: dump_prereqs.py files/prereqs_fa12.csv
 	python3 dump_prereqs.py FA22
 
-reports/output/prereq-tree.html: reports/prereq-tree-template.html reports/output/prereqs.json reports/prereq-tree.tsx
-	head -n -2 < reports/prereq-tree-template.html > reports/output/prereq-tree.html
+reports/output/prereqs.js: reports/output/prereqs.json
+	echo 'window.PREREQS =' > reports/output/prereqs.js
+	cat reports/output/prereqs.json >> reports/output/prereqs.js
+
+reports/output/prereq-tree.js: reports/prereq-tree.tsx
+	deno bundle reports/prereq-tree.tsx -- reports/output/prereq-tree.js
+
+reports/output/prereq-tree.html: reports/prereq-tree-template.html reports/output/prereq-tree.js reports/output/prereqs.json
+	head -n -4 < reports/prereq-tree-template.html > reports/output/prereq-tree.html
 	echo '<script id="prereqs" type="application/json">' >> reports/output/prereq-tree.html
 	cat reports/output/prereqs.json >> reports/output/prereq-tree.html
 	echo '</script>' >> reports/output/prereq-tree.html
 	echo '<script type="module">' >> reports/output/prereq-tree.html
-	deno bundle reports/prereq-tree.tsx >> reports/output/prereq-tree.html
+	cat reports/output/prereq-tree.js >> reports/output/prereq-tree.html
 	echo '</script></body></html>' >> reports/output/prereq-tree.html
 
 # Plan editor
 
-reports/output/plan-editor.html: reports/plan-editor-template.html reports/plan-editor.tsx reports/output/prereqs.json
-	head -n -2 < reports/plan-editor-template.html > reports/output/plan-editor.html
+reports/output/plan-editor.js: reports/plan-editor.tsx
+	deno bundle reports/plan-editor.tsx -- reports/output/plan-editor.js
+
+reports/output/plan-editor.html: reports/plan-editor-template.html reports/output/plan-editor.js reports/output/prereqs.json
+	head -n -4 < reports/plan-editor-template.html > reports/output/plan-editor.html
 	echo '<script id="prereqs" type="application/json">' >> reports/output/plan-editor.html
 	cat reports/output/prereqs.json >> reports/output/plan-editor.html
 	echo '</script>' >> reports/output/plan-editor.html
 	echo '<script type="module">' >> reports/output/plan-editor.html
-	deno bundle reports/plan-editor.tsx >> reports/output/plan-editor.html
+	cat reports/output/plan-editor.js >> reports/output/plan-editor.html
 	echo '</script></body></html>' >> reports/output/plan-editor.html

@@ -271,3 +271,19 @@ Note: "outputs `<file name>`" means the program prints to standard output, which
 **unit_check.py** prints the degree plans with fewer than 180 units.
 
 **unit_per_course.py** outputs `units_per_course.json` and `units_per_course.txt`. Some courses have an incorrect number of units listed in the academic plan. The script goes through each plan and lists the frequency of each number of units per course to determine by majority vote which number of units is most likely to be correct for the course. For example, LTSP 2A is 5 units, but a few plans list it as 4 units.
+
+## Development (prereq tree and plan editor)
+
+```sh
+# Run this first
+$ make
+
+# Watch for changes. Open reports/prereq-tree-template.html or
+# reports/plan-editor-template.html in the browser.
+$ deno task watch:prereq-tree
+$ deno task watch:plan-editor
+
+# Build into a single file for the CMS. Upload reports/output/prereq-tree.html
+# and reports/output/plan-editor.html.
+$ make
+```

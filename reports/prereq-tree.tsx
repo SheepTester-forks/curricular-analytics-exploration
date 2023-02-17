@@ -728,7 +728,11 @@ function App ({ prereqs }: AppProps) {
 
 render(
   <App
-    prereqs={JSON.parse(document.getElementById('prereqs')!.textContent!)}
+    prereqs={
+      JSON.parse(document.getElementById('prereqs')?.textContent ?? 'false') ||
+      // deno-lint-ignore no-explicit-any
+      (window as any)['PREREQS']
+    }
   />,
   document.getElementById('root')!
 )
