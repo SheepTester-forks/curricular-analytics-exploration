@@ -272,18 +272,33 @@ Note: "outputs `<file name>`" means the program prints to standard output, which
 
 **unit_per_course.py** outputs `units_per_course.json` and `units_per_course.txt`. Some courses have an incorrect number of units listed in the academic plan. The script goes through each plan and lists the frequency of each number of units per course to determine by majority vote which number of units is most likely to be correct for the course. For example, LTSP 2A is 5 units, but a few plans list it as 4 units.
 
-## Development (prereq tree and plan editor)
+## Development (plan diff, prereq tree, and plan editor)
+
+Run this first.
 
 ```sh
-# Run this first
-$ make
+$ make reports/output/academic-plan-diffs.js
+$ make reports/output/prereqs.js
+```
 
-# Watch for changes. Open reports/prereq-tree-template.html or
-# reports/plan-editor-template.html in the browser.
+Watch for changes. Open the template file in the browser:
+
+- reports/plan-diffs-template.html
+- reports/prereq-tree-template.html
+- reports/plan-editor-template.html
+
+```sh
+$ deno task watch:plan-diff
 $ deno task watch:prereq-tree
 $ deno task watch:plan-editor
+```
 
-# Build into a single file for the CMS. Upload reports/output/prereq-tree.html
-# and reports/output/plan-editor.html.
+Build a single file. Upload the output file to the CMS.
+
+- reports/output/academic-plan-diffs.html
+- reports/output/prereq-tree.html
+- reports/output/plan-editor.html
+
+```
 $ make
 ```

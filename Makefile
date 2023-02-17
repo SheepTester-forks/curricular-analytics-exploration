@@ -16,13 +16,20 @@ files/metrics_fa12.csv: Metrics.jl files/prereqs_fa12.csv files/academic_plans_f
 reports/output/academic-plan-diffs.json: files/metrics_fa12.csv diff_plan.py files/academic_plans_fa12.csv files/isis_major_code_list.xlsx\ -\ Major\ Codes.csv
 	python3 diff_plan.py > reports/output/academic-plan-diffs.json
 
-reports/output/academic-plan-diffs.html: reports/plan-diffs-template.html reports/output/academic-plan-diffs.json reports/plan-diffs.tsx
+reports/output/academic-plan-diffs.js: reports/output/academic-plan-diffs.json
+	echo 'window.DIFFS =' > reports/output/academic-plan-diffs.js
+	cat reports/output/academic-plan-diffs.json >> reports/output/academic-plan-diffs.js
+
+reports/output/plan-diffs.js: reports/plan-diffs.tsx
+	deno bundle reports/plan-diffs.tsx -- reports/output/plan-diffs.js
+
+reports/output/academic-plan-diffs.html: reports/plan-diffs-template.html reports/output/academic-plan-diffs.json reports/output/plan-diffs.js
 	head -n -2 < reports/plan-diffs-template.html > reports/output/academic-plan-diffs.html
 	echo '<script id="diffs" type="application/json">' >> reports/output/academic-plan-diffs.html
 	cat reports/output/academic-plan-diffs.json >> reports/output/academic-plan-diffs.html
 	echo '</script>' >> reports/output/academic-plan-diffs.html
 	echo '<script type="module">' >> reports/output/academic-plan-diffs.html
-	deno bundle reports/plan-diffs.tsx >> reports/output/academic-plan-diffs.html
+	cat reports/output/plan-diffs.js >> reports/output/academic-plan-diffs.html
 	echo '</script></body></html>' >> reports/output/academic-plan-diffs.html
 
 # Prereq diffs

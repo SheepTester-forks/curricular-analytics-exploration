@@ -9,7 +9,7 @@ import { App } from './plan-editor/components/App.tsx'
 render(
   <App
     prereqs={
-      JSON.parse(document.getElementById('prereqs')?.textContent ?? 'false') ||
+      JSON.parse(document.getElementById('prereqs')?.textContent ?? 'null') ||
       // deno-lint-ignore no-explicit-any
       (window as any)['PREREQS']
     }
