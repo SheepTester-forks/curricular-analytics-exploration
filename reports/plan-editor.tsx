@@ -282,6 +282,7 @@ render(
       ],
       name: '2021 CS25-Computer Engineering/Sixth'
     }}
+    mode='advisor'
   />,
   document.getElementById('root')!
 )

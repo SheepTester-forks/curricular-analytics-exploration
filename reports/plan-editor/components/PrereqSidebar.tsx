@@ -21,11 +21,13 @@ export type PrereqSidebarProps = {
   prereqs: Prereqs
   onPrereqs: (newPrereqs: Prereqs) => void
   plan: AcademicPlan
+  mode: 'student' | 'advisor'
 }
 export function PrereqSidebar ({
   prereqs,
   onPrereqs,
-  plan
+  plan,
+  mode
 }: PrereqSidebarProps) {
   const [custom, setCustom] = useState<CustomCourse[]>(() =>
     JSON.parse(localStorage.getItem(CUSTOM_COURSE_KEY) || '[]')
@@ -85,10 +87,18 @@ export function PrereqSidebar ({
           +
         </button>
       </h2>
-      <p class='description'>
-        For advisors creating a new major or if there's a missing course. Create
-        a course with an existing course code to change its prerequisites.
-      </p>
+      {mode === 'advisor' ? (
+        <p class='description'>
+          For designing a new major. To change a course's prerequisites, create
+          a course with an existing course code.
+        </p>
+      ) : (
+        <p class='description'>
+          For adding missing courses. To fix outdated or incorrect
+          prerequisites, create a course with an existing course code to
+          override its prerequisites.
+        </p>
+      )}
       <ul class='custom-courses'>
         {[...custom, { name: '', reqs: [] }].map(({ name, reqs }, i) => (
           <CustomCourse
@@ -117,30 +127,40 @@ export function PrereqSidebar ({
           />
         ))}
       </ul>
-      <div class='download-wrapper'>
-        <p class='download-label'>Download the plan as a CSV file for</p>
-        <div class='download-btns'>
-          <button
-            class='download-btn'
-            onClick={() =>
-              download(toCsv(toUcsdPlan(plan)), `${plan.name}.csv`)
-            }
-          >
-            plans.ucsd.edu
-          </button>
-          <button
-            class='download-btn'
-            onClick={() =>
-              download(
-                toCsv(toCurrAnalyticsPlan(plan, prereqs)),
-                `${plan.name}.csv`
-              )
-            }
-          >
-            Curricular Analytics
-          </button>
+      {mode === 'advisor' ? (
+        <div class='download-wrapper'>
+          <p class='download-label'>Download the plan as a CSV file for</p>
+          <div class='download-btns'>
+            <button
+              class='download-btn'
+              onClick={() =>
+                download(toCsv(toUcsdPlan(plan)), `${plan.name}.csv`)
+              }
+            >
+              plans.ucsd.edu
+            </button>
+            <button
+              class='download-btn'
+              onClick={() =>
+                download(
+                  toCsv(toCurrAnalyticsPlan(plan, prereqs)),
+                  `${plan.name}.csv`
+                )
+              }
+            >
+              Curricular Analytics
+            </button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div class='download-wrapper'>
+          <div class='download-btns'>
+            <button class='download-btn open-btn' disabled>
+              Open in Curricular Analytics
+            </button>
+          </div>
+        </div>
+      )}
     </aside>
   )
 }

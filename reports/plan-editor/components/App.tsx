@@ -12,8 +12,9 @@ import { PrereqSidebar } from './PrereqSidebar.tsx'
 export type AppProps = {
   prereqs: Prereqs
   initPlan: AcademicPlan
+  mode: 'student' | 'advisor'
 }
-export function App ({ prereqs: initPrereqs, initPlan }: AppProps) {
+export function App ({ prereqs: initPrereqs, initPlan, mode }: AppProps) {
   const [plan, setPlan] = useState(initPlan)
   const [customPrereqs, setCustomPrereqs] = useState<Prereqs>({})
 
@@ -53,6 +54,7 @@ export function App ({ prereqs: initPrereqs, initPlan }: AppProps) {
         prereqs={prereqs}
         onPrereqs={setCustomPrereqs}
         plan={plan}
+        mode={mode}
       />
       <datalist id='courses'>
         {Object.keys(prereqs).map(code => (

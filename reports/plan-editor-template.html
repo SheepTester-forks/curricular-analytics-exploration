@@ -121,8 +121,11 @@
         color: white;
         border-radius: 5px;
       }
-      .download-btn:hover {
+      .download-btn:not(:disabled):hover {
         background-color: #3276b1;
+      }
+      .download-btn:disabled {
+        opacity: 0.65;
       }
 
       .info {
