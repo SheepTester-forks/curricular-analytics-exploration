@@ -7,6 +7,7 @@ import { useState } from 'preact/hooks'
 import { Prereqs } from '../../util/Prereqs.ts'
 import { AcademicPlan } from '../types.ts'
 import { Editor } from './Editor.tsx'
+import { Metadata } from './Metadata.tsx'
 import { PrereqSidebar } from './PrereqSidebar.tsx'
 
 export type AppProps = {
@@ -24,13 +25,9 @@ export function App ({ prereqs: initPrereqs, initPlan, mode }: AppProps) {
     <>
       <main class='main'>
         <div class='info'>
-          <input
-            class='plan-name'
-            type='text'
-            placeholder='Plan name'
-            aria-label='Plan name'
-            value={plan.name}
-            onInput={e => setPlan({ ...plan, name: e.currentTarget.value })}
+          <Metadata
+            plan={plan}
+            onPlan={change => setPlan(plan => ({ ...plan, ...change }))}
           />
           <span class='total-units plan-units'>
             Total units:{' '}

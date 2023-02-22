@@ -56,6 +56,8 @@ export function PrereqSidebar ({
     localStorage.setItem(CUSTOM_COURSE_KEY, JSON.stringify(custom))
   }, [custom])
 
+  const planFileName = `Degree Plan-${plan.collegeName}-${plan.majorCode}.csv`
+
   return (
     <aside class='sidebar'>
       <h2 class='sidebar-heading'>Prerequisites</h2>
@@ -133,9 +135,7 @@ export function PrereqSidebar ({
           <div class='download-btns'>
             <button
               class='download-btn'
-              onClick={() =>
-                download(toCsv(toUcsdPlan(plan)), `${plan.name}.csv`)
-              }
+              onClick={() => download(toCsv(toUcsdPlan(plan)), planFileName)}
             >
               plans.ucsd.edu
             </button>
@@ -144,7 +144,7 @@ export function PrereqSidebar ({
               onClick={() =>
                 download(
                   toCsv(toCurrAnalyticsPlan(plan, prereqs)),
-                  `${plan.name}.csv`
+                  planFileName
                 )
               }
             >

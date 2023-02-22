@@ -24,9 +24,9 @@ export function toUcsdPlan (plan: AcademicPlan): CsvRows {
       ...plan.years.flatMap((year, i) =>
         year.flatMap((term, j) =>
           term.map(course => [
-            'TODO: Department',
-            'TODO: Major code',
-            'TODO: College',
+            plan.departmentCode,
+            plan.majorCode,
+            plan.collegeCode,
             course.title,
             String(+course.units),
             course.requirement.major ? 'MAJOR' : 'COLLEGE',
@@ -91,12 +91,12 @@ export function toCurrAnalyticsPlan (
     }
   }
   const rows: string[][] = [
-    ['Curriculum', 'TODO: Major name'],
-    ['Degree Plan', plan.name],
+    ['Curriculum', `${plan.startYear} ${plan.majorCode}-${plan.majorName}`],
+    ['Degree Plan', `${plan.majorCode}/${plan.collegeName}`],
     ['Institution', UNIVERSITY_NAME],
-    ['Degree Type', 'TODO: Degree type'],
+    ['Degree Type', plan.degreeType],
     ['System Type', TERM_TYPE],
-    ['CIP', 'TODO: CIP code'],
+    ['CIP', plan.cipCode],
     ['Courses'],
     COURSE_HEADER,
     ...majorCourses,

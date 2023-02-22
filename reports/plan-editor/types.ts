@@ -10,7 +10,13 @@ export type TermPlan = Course[]
 export type YearPlan = TermPlan[]
 export type AcademicPlan = {
   startYear: string
-  type: '4-year' | 'transfer'
   years: YearPlan[]
-  name: string
+  departmentCode: string
+  majorName: string
+  majorCode: string
+  cipCode: string
+  collegeCode: string
+  collegeName: string
+  degreeType: string
 }
+export type Metadata = Omit<AcademicPlan, 'years'>

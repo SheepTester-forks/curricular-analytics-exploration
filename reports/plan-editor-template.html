@@ -42,6 +42,9 @@
         font-weight: normal;
         text-transform: none;
       }
+      .flex {
+        flex: auto;
+      }
 
       #root {
         display: flex;
@@ -132,10 +135,17 @@
         display: flex;
         align-items: flex-end;
       }
-      .plan-name {
-        font-size: 30px;
+      .metadata {
         flex: auto;
-        padding: 10px 20px;
+      }
+      .metadata-row {
+        display: flex;
+      }
+      .metadata-field {
+        display: flex;
+      }
+      .metadata-field input {
+        width: 50px;
       }
       .plan-units {
         margin: 10px 20px;

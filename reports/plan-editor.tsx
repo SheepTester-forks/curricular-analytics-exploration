@@ -15,7 +15,6 @@ render(
     }
     initPlan={{
       startYear: '2021',
-      type: '4-year',
       years: [
         [
           [
@@ -280,7 +279,13 @@ render(
           ]
         ]
       ],
-      name: '2021 CS25-Computer Engineering/Sixth'
+      departmentCode: 'CSE',
+      majorName: 'Computer Engineering',
+      majorCode: 'CS25',
+      cipCode: '14.0901',
+      collegeCode: 'SI',
+      collegeName: 'Sixth',
+      degreeType: 'BS'
     }}
     mode='advisor'
   />,
