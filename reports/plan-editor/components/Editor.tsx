@@ -158,6 +158,13 @@ export function Editor ({ plan, onPlan }: EditorProps) {
             key={yearIndex}
           />
         ))}
+        <button
+          onClick={() =>
+            onPlan({ ...plan, years: [...plan.years, [[], [], []]] })
+          }
+        >
+          Add year
+        </button>
         {dragStateVal && (
           <RemoveZone
             onDropLocation={inside => {

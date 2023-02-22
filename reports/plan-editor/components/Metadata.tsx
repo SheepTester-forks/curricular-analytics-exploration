@@ -58,7 +58,7 @@ export function Metadata ({ plan, onPlan }: MetadataProps) {
         College
       </MetadataField>
       <MetadataField property='startYear' plan={plan} onPlan={onPlan}>
-        Start Year
+        Entering Year
       </MetadataField>
     </div>
   )
