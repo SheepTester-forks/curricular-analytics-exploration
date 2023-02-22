@@ -11,17 +11,19 @@ export type MetadataFieldProps = {
   plan: Metadata
   onPlan: (change: Partial<Metadata>) => void
   values?: Record<string, string>
+  class?: string
 }
 export function MetadataField ({
   property,
   children: label,
   plan,
   onPlan,
-  values
+  values,
+  class: className = ''
 }: MetadataFieldProps) {
   return (
-    <label class='metadata-field'>
-      <span class='metadata-label'>{label}</span>
+    <label class={`metadata-field ${className}`}>
+      <p class='metadata-label'>{label}</p>
       {values ? (
         <select
           class='metadata-value'

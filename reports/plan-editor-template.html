@@ -42,9 +42,6 @@
         font-weight: normal;
         text-transform: none;
       }
-      .flex {
-        flex: auto;
-      }
 
       #root {
         display: flex;
@@ -137,15 +134,38 @@
       }
       .metadata {
         flex: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
       }
       .metadata-row {
         display: flex;
+        gap: 10px;
       }
       .metadata-field {
         display: flex;
+        flex-direction: column;
       }
-      .metadata-field input {
+      .metadata-label {
+        margin: 0;
+        font-weight: bold;
+      }
+      .metadata-value {
+        box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+        border-radius: 2px;
+        height: 30px;
+        border: 1px solid #ccc;
+        padding: 0 10px;
+      }
+      input.metadata-value {
         width: 50px;
+      }
+      .lengthy {
+        flex: auto;
+      }
+      .lengthy input.metadata-value {
+        width: unset;
       }
       .plan-units {
         margin: 10px 20px;

@@ -25,14 +25,19 @@ export function Metadata ({ plan, onPlan }: MetadataProps) {
   return (
     <div class='metadata'>
       <div class='metadata-row'>
-        <MetadataField property='majorName' plan={plan} onPlan={onPlan}>
-          Major Name
-        </MetadataField>
         <MetadataField property='majorCode' plan={plan} onPlan={onPlan}>
           ISIS Code
         </MetadataField>
         <MetadataField property='cipCode' plan={plan} onPlan={onPlan}>
           CIP Code
+        </MetadataField>
+        <MetadataField
+          property='majorName'
+          plan={plan}
+          onPlan={onPlan}
+          class='lengthy'
+        >
+          Major Name
         </MetadataField>
       </div>
       <div class='metadata-row'>
