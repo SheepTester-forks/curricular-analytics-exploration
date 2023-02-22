@@ -24,43 +24,42 @@ export type MetadataProps = {
 export function Metadata ({ plan, onPlan }: MetadataProps) {
   return (
     <div class='metadata'>
-      <div class='metadata-row'>
-        <MetadataField property='majorCode' plan={plan} onPlan={onPlan}>
-          ISIS Code
-        </MetadataField>
-        <MetadataField property='cipCode' plan={plan} onPlan={onPlan}>
-          CIP Code
-        </MetadataField>
-        <MetadataField
-          property='majorName'
-          plan={plan}
-          onPlan={onPlan}
-          class='lengthy'
-        >
-          Major Name
-        </MetadataField>
-      </div>
-      <div class='metadata-row'>
-        <MetadataField
-          property='collegeCode'
-          plan={plan}
-          onPlan={onPlan}
-          values={colleges}
-        >
-          College
-        </MetadataField>
-        <MetadataField property='departmentCode' plan={plan} onPlan={onPlan}>
-          Department Code
-        </MetadataField>
-        <MetadataField
-          property='degreeType'
-          plan={plan}
-          onPlan={onPlan}
-          values={degreeTypes}
-        >
-          Degree Type
-        </MetadataField>
-      </div>
+      <MetadataField property='departmentCode' plan={plan} onPlan={onPlan}>
+        Department Code
+      </MetadataField>
+      <MetadataField property='majorCode' plan={plan} onPlan={onPlan}>
+        ISIS Code
+      </MetadataField>
+      <MetadataField
+        property='majorName'
+        plan={plan}
+        onPlan={onPlan}
+        class='lengthy'
+      >
+        Major Name
+      </MetadataField>
+      <MetadataField property='cipCode' plan={plan} onPlan={onPlan}>
+        CIP Code
+      </MetadataField>
+      <MetadataField
+        property='degreeType'
+        plan={plan}
+        onPlan={onPlan}
+        values={degreeTypes}
+      >
+        Degree Type
+      </MetadataField>
+      <MetadataField
+        property='collegeCode'
+        plan={plan}
+        onPlan={onPlan}
+        values={colleges}
+      >
+        College
+      </MetadataField>
+      <MetadataField property='startYear' plan={plan} onPlan={onPlan}>
+        Start Year
+      </MetadataField>
     </div>
   )
 }
