@@ -254,6 +254,7 @@
       .course-editor {
         display: flex;
         background-color: white;
+        position: relative;
       }
       .course-field {
         align-self: stretch;
@@ -268,6 +269,34 @@
       }
       .term-units {
         padding-right: 5px;
+      }
+      .options-wrapper {
+        position: absolute;
+        padding: 20px;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        left: 0;
+        right: 0;
+        top: 100%;
+        z-index: 2;
+        margin: 5px 20px;
+      }
+      .settings-btn-wrapper {
+        position: relative;
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+      }
+      .options-wrapper-arrow {
+        border-bottom: 10px solid white;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        position: absolute;
+        bottom: -5px;
+        margin: 0 -10px;
+        left: 50%;
+        z-index: 3;
       }
       .term-icon-btn {
         display: flex;

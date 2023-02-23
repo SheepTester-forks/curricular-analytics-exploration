@@ -3,6 +3,7 @@
 /// <reference lib="dom" />
 /// <reference lib="deno.ns" />
 
+import { useEffect, useRef, useState } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
 import { Course } from '../types.ts'
 
@@ -24,6 +25,24 @@ export function Course ({
   dragged,
   onDrag
 }: CourseProps) {
+  const ref = useRef<HTMLLIElement>(null)
+  const [showOptions, setShowOptions] = useState(false)
+
+  useEffect(() => {
+    const wrapper = ref.current
+    if (showOptions && wrapper) {
+      const handleClick = (e: MouseEvent) => {
+        if (e.target instanceof Node && !wrapper.contains(e.target)) {
+          setShowOptions(false)
+        }
+      }
+      document.addEventListener('click', handleClick)
+      return () => {
+        document.removeEventListener('click', handleClick)
+      }
+    }
+  }, [ref.current, showOptions])
+
   return (
     <li
       class={`course-editor ${isNew ? 'add-course' : ''} ${
@@ -38,6 +57,7 @@ export function Course ({
             }
           : {}
       }
+      ref={ref}
     >
       <input
         class='course-field course-title'
@@ -49,34 +69,49 @@ export function Course ({
         disabled={!onCourse}
       />
       {!isNew && (
-        <input
-          class='course-field course-units term-units'
-          type='text'
-          inputMode='numeric'
-          pattern='[0-9]*'
-          value={course.units}
-          onInput={e => onCourse?.({ ...course, units: e.currentTarget.value })}
-          onChange={e =>
-            onCourse?.({
-              ...course,
-              units: Number.isFinite(+e.currentTarget.value)
-                ? +e.currentTarget.value < 0
-                  ? '0'
-                  : String(+e.currentTarget.value)
-                : '4'
-            })
-          }
-          disabled={!onCourse}
-        />
-      )}
-      {!isNew && (
-        <span
-          class='term-icon-btn drag-btn'
-          title='Move course'
-          onPointerDown={onDrag}
-        >
-          ⠿
-        </span>
+        <>
+          <div class='settings-btn-wrapper'>
+            <button
+              class='settings-btn'
+              title='Course options'
+              onClick={() => setShowOptions(on => !on)}
+            >
+              ⚙
+            </button>
+            {showOptions && <div class='options-wrapper-arrow' />}
+          </div>
+          {showOptions && (
+            <div class='options-wrapper'>Course options coming soon</div>
+          )}
+          <input
+            class='course-field course-units term-units'
+            type='text'
+            inputMode='numeric'
+            pattern='[0-9]*'
+            value={course.units}
+            onInput={e =>
+              onCourse?.({ ...course, units: e.currentTarget.value })
+            }
+            onChange={e =>
+              onCourse?.({
+                ...course,
+                units: Number.isFinite(+e.currentTarget.value)
+                  ? +e.currentTarget.value < 0
+                    ? '0'
+                    : String(+e.currentTarget.value)
+                  : '4'
+              })
+            }
+            disabled={!onCourse}
+          />
+          <span
+            class='term-icon-btn drag-btn'
+            title='Move course'
+            onPointerDown={onDrag}
+          >
+            ⠿
+          </span>
+        </>
       )}
     </li>
   )

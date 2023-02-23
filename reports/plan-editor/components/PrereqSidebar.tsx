@@ -29,9 +29,13 @@ export function PrereqSidebar ({
   plan,
   mode
 }: PrereqSidebarProps) {
-  const [custom, setCustom] = useState<CustomCourse[]>(() =>
-    JSON.parse(localStorage.getItem(CUSTOM_COURSE_KEY) || '[]')
-  )
+  const [custom, setCustom] = useState<CustomCourse[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem(CUSTOM_COURSE_KEY) || '[]')
+    } catch {
+      return []
+    }
+  })
 
   const terms = plan.years.flatMap(year =>
     year.map(term => term.map(course => course.title))
@@ -53,7 +57,11 @@ export function PrereqSidebar ({
   }, [custom])
 
   useEffect(() => {
-    localStorage.setItem(CUSTOM_COURSE_KEY, JSON.stringify(custom))
+    try {
+      localStorage.setItem(CUSTOM_COURSE_KEY, JSON.stringify(custom))
+    } catch {
+      // Ignore localStorage error
+    }
   }, [custom])
 
   const planFileName = `Degree Plan-${plan.collegeName}-${plan.majorCode}.csv`
