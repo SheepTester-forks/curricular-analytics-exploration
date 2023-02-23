@@ -155,15 +155,22 @@ export function Editor ({ plan, onPlan }: EditorProps) {
               }
               setDragStateVal(dragStateRef.current)
             }}
+            onRemove={() =>
+              onPlan({
+                ...plan,
+                years: plan.years.filter((_, i) => i !== yearIndex)
+              })
+            }
             key={yearIndex}
           />
         ))}
         <button
+          class='add-year'
           onClick={() =>
             onPlan({ ...plan, years: [...plan.years, [[], [], []]] })
           }
         >
-          Add year
+          Add year <strong>+</strong>
         </button>
         {dragStateVal && (
           <RemoveZone

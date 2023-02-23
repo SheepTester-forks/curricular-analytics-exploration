@@ -20,6 +20,7 @@ export type YearProps = {
     course: number
   ) => void
   onDropLocation?: (term: number, index: number | null) => void
+  onRemove: () => void
 }
 export function Year ({
   planStartYear,
@@ -28,8 +29,10 @@ export function Year ({
   onPlan,
   onYear,
   onDrag,
-  onDropLocation
+  onDropLocation,
+  onRemove
 }: YearProps) {
+  const empty = plan.every(term => term.length === 0)
   return (
     <section class='year-editor'>
       <h2 class='heading year-heading'>
@@ -56,7 +59,12 @@ export function Year ({
         ) : (
           +planStartYear + index
         )}
-        –{+planStartYear + index + 1}{' '}
+        –{+planStartYear + index + 1}
+        {empty && (
+          <button class='remove-year' onClick={onRemove}>
+            Remove
+          </button>
+        )}
         <span class='total-units'>
           Annual units:{' '}
           <span class='units'>
