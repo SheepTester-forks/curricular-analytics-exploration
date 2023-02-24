@@ -275,7 +275,8 @@
         padding: 20px;
         background-color: white;
         border-radius: 5px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(0, 0, 0, 0.2);
         left: 0;
         right: 0;
         top: 100%;
@@ -289,12 +290,18 @@
         align-items: center;
       }
       .options-wrapper-arrow {
-        border-bottom: 10px solid white;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
+        width: 16px;
+        height: 16px;
+        transform: rotate(45deg);
+        border-top-left-radius: 5px;
+        box-sizing: border-box;
+        border: 1px solid transparent;
+        border-left-color: rgba(0, 0, 0, 0.2);
+        border-top-color: rgba(0, 0, 0, 0.2);
+        background-color: white;
+        margin: -8px;
         position: absolute;
-        bottom: -5px;
-        margin: 0 -10px;
+        bottom: -5.5px;
         left: 50%;
         z-index: 3;
       }
