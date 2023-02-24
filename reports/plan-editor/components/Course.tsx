@@ -67,6 +67,13 @@ export function Course ({
         onInput={e => onCourse?.({ ...course, title: e.currentTarget.value })}
         placeholder={isNew ? 'Add a course' : 'Course name'}
         disabled={!onCourse}
+        onKeyDown={e => {
+          if (e.key === 'Enter') {
+            e.currentTarget.parentElement?.nextElementSibling
+              ?.querySelector('input')
+              ?.focus()
+          }
+        }}
       />
       {!isNew && (
         <>

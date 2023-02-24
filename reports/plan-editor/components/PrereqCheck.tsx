@@ -6,13 +6,18 @@
 import { Fragment } from 'preact'
 import { CourseCode } from '../../util/Prereqs.ts'
 
-export const assumedSatisfied: CourseCode[] = ['MATH 4C', 'AWP 3', 'AWP 4B']
 export type PrereqCheckProps = {
   code: CourseCode
   reqs: CourseCode[][]
   pastTerms: CourseCode[]
+  assumedSatisfied: CourseCode[]
 }
-export function PrereqCheck ({ code, reqs, pastTerms }: PrereqCheckProps) {
+export function PrereqCheck ({
+  code,
+  reqs,
+  pastTerms,
+  assumedSatisfied
+}: PrereqCheckProps) {
   if (reqs.length === 0) {
     return (
       <p class='course-code-line'>
@@ -20,10 +25,9 @@ export function PrereqCheck ({ code, reqs, pastTerms }: PrereqCheckProps) {
       </p>
     )
   }
+  const taken = [...pastTerms, ...assumedSatisfied]
   const satisfied = reqs.every(
-    req =>
-      req.length === 0 ||
-      req.some(alt => assumedSatisfied.includes(alt) || pastTerms.includes(alt))
+    req => req.length === 0 || req.some(alt => taken.includes(alt))
   )
   return (
     <details class='course-code-item' open={!satisfied}>
@@ -35,9 +39,7 @@ export function PrereqCheck ({ code, reqs, pastTerms }: PrereqCheckProps) {
           if (req.length === 0) {
             return null
           }
-          const satisfied = req.some(
-            alt => assumedSatisfied.includes(alt) || pastTerms.includes(alt)
-          )
+          const satisfied = req.some(alt => taken.includes(alt))
           return (
             <li class={satisfied ? 'satisfied' : 'missing'} key={i}>
               {satisfied ? '✅' : '❌'}
@@ -45,7 +47,7 @@ export function PrereqCheck ({ code, reqs, pastTerms }: PrereqCheckProps) {
                 <Fragment key={i}>
                   {i !== 0 ? ' or ' : null}
                   {assumedSatisfied.includes(alt) ? (
-                    <strong class='assumed' title='Assumed to be satisfied'>
+                    <strong class='assumed' title='Assumed satisfied'>
                       {alt}*
                     </strong>
                   ) : pastTerms.includes(alt) ? (

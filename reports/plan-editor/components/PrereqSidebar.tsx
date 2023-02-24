@@ -6,11 +6,11 @@
 import { useEffect, useState } from 'preact/hooks'
 import { toCsv } from '../../util/csv.ts'
 import { download } from '../../util/download.ts'
-import { Prereqs } from '../../util/Prereqs.ts'
+import { CourseCode, Prereqs } from '../../util/Prereqs.ts'
 import { toUcsdPlan, toCurrAnalyticsPlan } from '../export-plan.ts'
 import { AcademicPlan } from '../types.ts'
 import { CustomCourse } from './CustomCourse.tsx'
-import { assumedSatisfied, PrereqCheck } from './PrereqCheck.tsx'
+import { PrereqCheck } from './PrereqCheck.tsx'
 
 const CUSTOM_COURSE_KEY = 'ei/plan-editor/custom-courses'
 type CustomCourse = {
@@ -29,6 +29,11 @@ export function PrereqSidebar ({
   plan,
   mode
 }: PrereqSidebarProps) {
+  const [assumedSatisfied, setAssumedSatisfied] = useState<CourseCode[]>([
+    'MATH 4C',
+    'AWP 3',
+    'AWP 4B'
+  ])
   const [custom, setCustom] = useState<CustomCourse[]>(() => {
     try {
       return JSON.parse(localStorage.getItem(CUSTOM_COURSE_KEY) || '[]')
@@ -79,6 +84,7 @@ export function PrereqSidebar ({
                     code={course}
                     reqs={prereqs[course]}
                     pastTerms={terms.slice(0, i).flat()}
+                    assumedSatisfied={assumedSatisfied}
                   />
                 </li>
               )
@@ -87,6 +93,43 @@ export function PrereqSidebar ({
             }
           })
         )}
+      </ul>
+      <h2 class='sidebar-heading'>Transferred credit</h2>
+      {mode === 'advisor' ? (
+        <p class='description'>
+          For managing courses that most students are assumed to have credit
+          for.
+        </p>
+      ) : (
+        <p class='description'>
+          Add courses that you already have equivalent credit for here.
+        </p>
+      )}
+      <ul class='custom-courses'>
+        {[...assumedSatisfied, ''].map((name, i) => (
+          <li class='custom-course' key={i}>
+            <input
+              class='custom-course-input'
+              type='text'
+              list='courses'
+              placeholder={
+                i === assumedSatisfied.length
+                  ? 'Type a course code here'
+                  : 'Course code'
+              }
+              value={name}
+              onInput={e =>
+                setAssumedSatisfied(
+                  i === assumedSatisfied.length
+                    ? [...assumedSatisfied, e.currentTarget.value]
+                    : assumedSatisfied.map((course, j) =>
+                        j === i ? e.currentTarget.value : course
+                      )
+                )
+              }
+            />
+          </li>
+        ))}
       </ul>
       <h2 class='sidebar-heading'>
         Create a course
