@@ -45,6 +45,14 @@
         font-weight: normal;
         text-transform: none;
       }
+      input:focus,
+      select:focus {
+        outline: none;
+      }
+      input:focus-visible,
+      select:focus-visible {
+        box-shadow: 0 0 0 3px rgba(102, 175, 233, 0.3);
+      }
 
       #root {
         display: flex;
@@ -157,6 +165,9 @@
         border: 1px solid #ccc;
         padding: 0 10px;
       }
+      .metadata-value:focus {
+        border: 1px solid#66afe9;
+      }
       input.metadata-value {
         width: 70px;
       }
@@ -221,6 +232,9 @@
         padding-right: 5px;
         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08);
       }
+      .start-year:focus-visible {
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+      }
       .total-units {
         margin-left: auto;
       }
@@ -256,8 +270,12 @@
         background-color: white;
         position: relative;
       }
+      .course-editor:focus-within {
+        z-index: 1;
+      }
       .course-field {
         align-self: stretch;
+        border-radius: 2px;
       }
       .course-title {
         padding: 0 10px;
@@ -288,6 +306,9 @@
         align-self: stretch;
         display: flex;
         align-items: center;
+      }
+      .settings-btn {
+        height: 100%;
       }
       .options-wrapper-arrow {
         width: 16px;
@@ -366,6 +387,11 @@
       .custom-prereq-input {
         width: 100px;
       }
+      .custom-course-input,
+      .custom-prereq-input,
+      .assumed-satisfied-input {
+        border-radius: 2px;
+      }
       .custom-courses,
       .custom-prereq-alts {
         padding: 0;
@@ -381,6 +407,16 @@
         display: flex;
         white-space: pre;
         flex-wrap: wrap;
+      }
+      .assumed-satisfied-list {
+        padding-left: 25px;
+        margin: 0;
+      }
+      .assumed-satisfied-new::marker {
+        color: rgba(0, 0, 0, 0.3);
+      }
+      .assumed-satisfied-input {
+        width: 100%;
       }
     </style>
   </head>

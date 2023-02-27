@@ -110,6 +110,7 @@ export function Term ({
                         )
                   )
                 }
+                onRemove={() => onPlan(plan.filter((_, j) => j !== i))}
                 new={i === plan.length}
                 onDrag={e => onDrag?.(e, i)}
               />

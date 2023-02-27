@@ -105,11 +105,16 @@ export function PrereqSidebar ({
           Add courses that you already have equivalent credit for here.
         </p>
       )}
-      <ul class='custom-courses'>
+      <ul class='assumed-satisfied-list'>
         {[...assumedSatisfied, ''].map((name, i) => (
-          <li class='custom-course' key={i}>
+          <li
+            class={`assumed-satisfied ${
+              i === assumedSatisfied.length ? 'assumed-satisfied-new' : ''
+            }`}
+            key={i}
+          >
             <input
-              class='custom-course-input'
+              class='assumed-satisfied-input'
               type='text'
               list='courses'
               placeholder={
@@ -127,6 +132,23 @@ export function PrereqSidebar ({
                       )
                 )
               }
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  e.currentTarget.parentElement?.nextElementSibling
+                    ?.querySelector('input')
+                    ?.focus()
+                } else if (e.key === 'Backspace' && name === '') {
+                  if (i < assumedSatisfied.length) {
+                    setAssumedSatisfied(
+                      assumedSatisfied.filter((_, j) => j !== i)
+                    )
+                  }
+                  e.currentTarget.parentElement?.previousElementSibling
+                    ?.querySelector('input')
+                    ?.focus()
+                  e.preventDefault()
+                }
+              }}
             />
           </li>
         ))}
@@ -175,6 +197,7 @@ export function PrereqSidebar ({
                     )
               )
             }
+            onRemove={() => setCustom(custom.filter((_, j) => j !== i))}
             key={i}
             isNew={i === custom.length}
           />

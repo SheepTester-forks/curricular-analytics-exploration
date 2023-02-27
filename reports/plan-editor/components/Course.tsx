@@ -10,6 +10,7 @@ import { Course } from '../types.ts'
 export type CourseProps = {
   course: Course
   onCourse?: (course: Course) => void
+  onRemove?: () => void
   new?: boolean
   dragged?: {
     width: number
@@ -21,6 +22,7 @@ export type CourseProps = {
 export function Course ({
   course,
   onCourse,
+  onRemove,
   new: isNew,
   dragged,
   onDrag
@@ -72,6 +74,14 @@ export function Course ({
             e.currentTarget.parentElement?.nextElementSibling
               ?.querySelector('input')
               ?.focus()
+          } else if (e.key === 'Backspace' && course.title === '') {
+            if (!isNew) {
+              onRemove?.()
+            }
+            e.currentTarget.parentElement?.previousElementSibling
+              ?.querySelector('input')
+              ?.focus()
+            e.preventDefault()
           }
         }}
       />

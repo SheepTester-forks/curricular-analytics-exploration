@@ -8,6 +8,7 @@ export type CustomCourseProps = {
   reqs: string[][]
   onName: (name: string) => void
   onReqs: (name: string[][]) => void
+  onRemove: () => void
   isNew: boolean
 }
 export function CustomCourse ({
@@ -15,6 +16,7 @@ export function CustomCourse ({
   reqs,
   onName,
   onReqs,
+  onRemove,
   isNew
 }: CustomCourseProps) {
   return (
@@ -25,6 +27,21 @@ export function CustomCourse ({
         placeholder={isNew ? 'Type a course code here' : 'Course code'}
         value={name}
         onInput={e => onName(e.currentTarget.value)}
+        onKeyDown={e => {
+          if (e.key === 'Enter') {
+            e.currentTarget.parentElement?.nextElementSibling
+              ?.querySelector('input')
+              ?.focus()
+          } else if (e.key === 'Backspace' && name === '') {
+            if (!isNew) {
+              onRemove()
+            }
+            e.currentTarget.parentElement?.previousElementSibling
+              ?.querySelector('input')
+              ?.focus()
+            e.preventDefault()
+          }
+        }}
       />
       {!isNew && (
         <ol class='custom-course-prereqs'>
@@ -62,6 +79,41 @@ export function CustomCourse ({
                               )
                         )
                       }
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') {
+                          e.currentTarget.parentElement?.parentElement?.parentElement?.nextElementSibling
+                            ?.querySelector('input')
+                            ?.focus()
+                        } else if (e.key === 'Backspace' && alt === '') {
+                          if (j < alts.length) {
+                            if (alts.length === 1) {
+                              onReqs(reqs.filter((_, mi) => mi !== i))
+                            } else {
+                              onReqs(
+                                reqs.map((req, mi) =>
+                                  mi === i
+                                    ? req.filter((_, mj) => mj !== j)
+                                    : req
+                                )
+                              )
+                            }
+                          }
+                          if (j === 0) {
+                            const element =
+                              e.currentTarget.parentElement?.parentElement?.parentElement?.previousElementSibling?.querySelector(
+                                'li:last-child input'
+                              )
+                            if (element instanceof HTMLInputElement) {
+                              element.focus()
+                            }
+                          } else {
+                            e.currentTarget.parentElement?.previousElementSibling
+                              ?.querySelector('input')
+                              ?.focus()
+                          }
+                          e.preventDefault()
+                        }
+                      }}
                     />
                     {j < alts.length - 1 && ' OR '}
                   </li>
