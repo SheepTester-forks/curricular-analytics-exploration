@@ -7,7 +7,7 @@ import { useRef, useState } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
 import { DragState, DragContext } from '../drag-drop.ts'
 import { AcademicPlan } from '../types.ts'
-import { Course } from './Course.tsx'
+import { PlanCourse } from './PlanCourse.tsx'
 import { RemoveZone } from './RemoveZone.tsx'
 import { Year } from './Year.tsx'
 
@@ -201,7 +201,7 @@ export function Editor ({ plan, onPlan }: EditorProps) {
         )}
       </DragContext.Provider>
       {dragStateVal && (
-        <Course
+        <PlanCourse
           course={dragStateVal.course}
           dragged={{
             width: dragStateVal.width,

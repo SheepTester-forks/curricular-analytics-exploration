@@ -5,6 +5,7 @@ export type Course = {
     college: boolean
     major: boolean
   }
+  id: number
 }
 export type TermPlan = Course[]
 export type YearPlan = TermPlan[]

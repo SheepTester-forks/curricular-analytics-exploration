@@ -6,8 +6,9 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
 import { Course } from '../types.ts'
+import { CourseOptions } from './CourseOptions.tsx'
 
-export type CourseProps = {
+export type PlanCourseProps = {
   course: Course
   onCourse?: (course: Course) => void
   onRemove?: () => void
@@ -19,14 +20,14 @@ export type CourseProps = {
   }
   onDrag?: (event: JSX.TargetedPointerEvent<HTMLElement>) => void
 }
-export function Course ({
+export function PlanCourse ({
   course,
   onCourse,
   onRemove,
   new: isNew,
   dragged,
   onDrag
-}: CourseProps) {
+}: PlanCourseProps) {
   const ref = useRef<HTMLLIElement>(null)
   const [showOptions, setShowOptions] = useState(false)
 
@@ -98,7 +99,11 @@ export function Course ({
             {showOptions && <div class='options-wrapper-arrow' />}
           </div>
           {showOptions && (
-            <div class='options-wrapper'>Course options coming soon</div>
+            <CourseOptions
+              course={course}
+              onCourse={onCourse}
+              onRemove={onRemove}
+            />
           )}
           <input
             class='course-field course-units term-units'

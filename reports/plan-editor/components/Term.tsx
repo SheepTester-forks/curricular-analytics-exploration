@@ -7,13 +7,13 @@ import { Fragment } from 'preact'
 import { useContext, useMemo, useRef } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
 import { DragContext } from '../drag-drop.ts'
-import { TermPlan } from '../types.ts'
-import { Course } from './Course.tsx'
+import { Course, TermPlan } from '../types.ts'
+import { PlanCourse } from './PlanCourse.tsx'
 
 const Placeholder = () => <li class='placeholder-course'></li>
 
 const COURSE_HEIGHT = 30
-const emptyCourse = {
+const emptyCourse: Omit<Course, 'id'> = {
   title: '',
   units: '4',
   requirement: { college: false, major: false }
@@ -59,6 +59,7 @@ export function Term ({
     onDropLocation?.(index)
     return index
   }, [element.current, dragState?.pointerX, dragState?.pointerY])
+  const newCourseId = useMemo(() => Math.random(), [plan.length])
 
   const termUnits = plan.reduce((cum, curr) => cum + +curr.units, 0)
 
@@ -87,19 +88,19 @@ export function Term ({
         <button
           class='term-icon-btn add-course-btn'
           title='Add course'
-          onClick={() => onPlan([...plan, emptyCourse])}
+          onClick={() => onPlan([...plan, { ...emptyCourse, id: newCourseId }])}
         >
           +
         </button>
       </h3>
       <ul class='courses'>
-        {[...plan, emptyCourse].map((course, i) => (
-          <Fragment key={i}>
+        {[...plan, { ...emptyCourse, id: newCourseId }].map((course, i) => (
+          <Fragment key={course.id}>
             {dragState?.dropLocation !== 'remove' && i === placeholderIndex && (
               <Placeholder />
             )}
             {!(placeholderIndex !== null && i === plan.length) && (
-              <Course
+              <PlanCourse
                 course={course}
                 onCourse={newCourse =>
                   onPlan(
