@@ -6,7 +6,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import { toCsv } from '../../util/csv.ts'
 import { download } from '../../util/download.ts'
-import { CourseCode, Prereqs } from '../../util/Prereqs.ts'
+import { cleanCourseCode, CourseCode, Prereqs } from '../../util/Prereqs.ts'
 import { toUcsdPlan, toCurrAnalyticsPlan } from '../export-plan.ts'
 import { AcademicPlan } from '../types.ts'
 import { CustomCourse } from './CustomCourse.tsx'
@@ -106,52 +106,54 @@ export function PrereqSidebar ({
         </p>
       )}
       <ul class='assumed-satisfied-list'>
-        {[...assumedSatisfied, ''].map((name, i) => (
-          <li
-            class={`assumed-satisfied ${
-              i === assumedSatisfied.length ? 'assumed-satisfied-new' : ''
-            }`}
-            key={i}
-          >
-            <input
-              class='assumed-satisfied-input'
-              type='text'
-              list='courses'
-              placeholder={
-                i === assumedSatisfied.length
-                  ? 'Type a course code here'
-                  : 'Course code'
-              }
-              value={name}
-              onInput={e =>
-                setAssumedSatisfied(
-                  i === assumedSatisfied.length
-                    ? [...assumedSatisfied, e.currentTarget.value]
-                    : assumedSatisfied.map((course, j) =>
-                        j === i ? e.currentTarget.value : course
-                      )
-                )
-              }
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  e.currentTarget.parentElement?.nextElementSibling
-                    ?.querySelector('input')
-                    ?.focus()
-                } else if (e.key === 'Backspace' && name === '') {
-                  if (i < assumedSatisfied.length) {
-                    setAssumedSatisfied(
-                      assumedSatisfied.filter((_, j) => j !== i)
-                    )
-                  }
-                  e.currentTarget.parentElement?.previousElementSibling
-                    ?.querySelector('input')
-                    ?.focus()
-                  e.preventDefault()
+        {[...assumedSatisfied, ''].map((name, i) => {
+          const isNew = i === assumedSatisfied.length
+          const handleChange = (value: string) =>
+            setAssumedSatisfied(
+              isNew
+                ? [...assumedSatisfied, value]
+                : assumedSatisfied.map((course, j) =>
+                    j === i ? value : course
+                  )
+            )
+          return (
+            <li
+              class={`assumed-satisfied ${
+                isNew ? 'assumed-satisfied-new' : ''
+              }`}
+              key={i}
+            >
+              <input
+                class='assumed-satisfied-input'
+                type='text'
+                list='courses'
+                placeholder={isNew ? 'Type a course code here' : 'Course code'}
+                value={name}
+                onInput={e => handleChange(e.currentTarget.value)}
+                onChange={e =>
+                  handleChange(cleanCourseCode(e.currentTarget.value))
                 }
-              }}
-            />
-          </li>
-        ))}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    e.currentTarget.parentElement?.nextElementSibling
+                      ?.querySelector('input')
+                      ?.focus()
+                  } else if (e.key === 'Backspace' && name === '') {
+                    if (i < assumedSatisfied.length) {
+                      setAssumedSatisfied(
+                        assumedSatisfied.filter((_, j) => j !== i)
+                      )
+                    }
+                    e.currentTarget.parentElement?.previousElementSibling
+                      ?.querySelector('input')
+                      ?.focus()
+                    e.preventDefault()
+                  }
+                }}
+              />
+            </li>
+          )
+        })}
       </ul>
       <h2 class='sidebar-heading'>
         Create a course
@@ -175,33 +177,36 @@ export function PrereqSidebar ({
         </p>
       )}
       <ul class='custom-courses'>
-        {[...custom, { name: '', reqs: [] }].map(({ name, reqs }, i) => (
-          <CustomCourse
-            name={name}
-            reqs={reqs}
-            onName={name =>
-              setCustom(custom =>
-                i === custom.length
-                  ? [...custom, { name, reqs }]
-                  : custom.map((course, j) =>
-                      i === j ? { name, reqs: course.reqs } : course
-                    )
-              )
-            }
-            onReqs={reqs =>
-              setCustom(custom =>
-                i === custom.length
-                  ? [...custom, { name, reqs }]
-                  : custom.map((course, j) =>
-                      i === j ? { name: course.name, reqs } : course
-                    )
-              )
-            }
-            onRemove={() => setCustom(custom.filter((_, j) => j !== i))}
-            key={i}
-            isNew={i === custom.length}
-          />
-        ))}
+        {[...custom, { name: '', reqs: [] }].map(({ name, reqs }, i) => {
+          const isNew = i === custom.length
+          return (
+            <CustomCourse
+              name={name}
+              reqs={reqs}
+              onName={name =>
+                setCustom(custom =>
+                  isNew
+                    ? [...custom, { name, reqs }]
+                    : custom.map((course, j) =>
+                        i === j ? { name, reqs: course.reqs } : course
+                      )
+                )
+              }
+              onReqs={reqs =>
+                setCustom(custom =>
+                  isNew
+                    ? [...custom, { name, reqs }]
+                    : custom.map((course, j) =>
+                        i === j ? { name: course.name, reqs } : course
+                      )
+                )
+              }
+              onRemove={() => setCustom(custom.filter((_, j) => j !== i))}
+              key={i}
+              isNew={isNew}
+            />
+          )
+        })}
       </ul>
       {mode === 'advisor' ? (
         <div class='download-wrapper'>

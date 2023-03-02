@@ -5,6 +5,7 @@
 
 import { useEffect, useRef, useState } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
+import { cleanCourseCode } from '../../util/Prereqs.ts'
 import { Course } from '../types.ts'
 import { CourseOptions } from './CourseOptions.tsx'
 
@@ -68,6 +69,12 @@ export function PlanCourse ({
         list='courses'
         value={course.title}
         onInput={e => onCourse?.({ ...course, title: e.currentTarget.value })}
+        onChange={e =>
+          onCourse?.({
+            ...course,
+            title: cleanCourseCode(e.currentTarget.value)
+          })
+        }
         placeholder={isNew ? 'Add a course' : 'Course name'}
         disabled={!onCourse}
         onKeyDown={e => {

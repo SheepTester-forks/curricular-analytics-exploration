@@ -1,5 +1,8 @@
 /** @jsxImportSource preact */
 /// <reference no-default-lib="true"/>
+
+import { cleanCourseCode } from '../../util/Prereqs.ts'
+
 /// <reference lib="dom" />
 /// <reference lib="deno.ns" />
 
@@ -27,6 +30,7 @@ export function CustomCourse ({
         placeholder={isNew ? 'Type a course code here' : 'Course code'}
         value={name}
         onInput={e => onName(e.currentTarget.value)}
+        onChange={e => onName(cleanCourseCode(e.currentTarget.value))}
         onKeyDown={e => {
           if (e.key === 'Enter') {
             e.currentTarget.parentElement?.nextElementSibling
@@ -48,76 +52,81 @@ export function CustomCourse ({
           {[...reqs, []].map((alts, i) => (
             <li key={i}>
               <ul class='custom-prereq-alts'>
-                {[...alts, ''].map((alt, j) => (
-                  <li key={j}>
-                    <input
-                      class='custom-prereq-input'
-                      type='text'
-                      list='courses'
-                      placeholder={
-                        i === reqs.length
-                          ? 'New requirement'
-                          : j === 0
-                          ? 'Prerequsite'
-                          : j === alts.length
-                          ? 'Add alternate'
-                          : 'Alternate'
-                      }
-                      value={alt}
-                      onInput={e =>
-                        onReqs(
-                          i === reqs.length
-                            ? [...reqs, [e.currentTarget.value]]
-                            : reqs.map((req, mi) =>
-                                mi === i
-                                  ? j === alts.length
-                                    ? [...req, e.currentTarget.value]
-                                    : req.map((alt, mj) =>
-                                        mj === j ? e.currentTarget.value : alt
-                                      )
-                                  : req
-                              )
-                        )
-                      }
-                      onKeyDown={e => {
-                        if (e.key === 'Enter') {
-                          e.currentTarget.parentElement?.parentElement?.parentElement?.nextElementSibling
-                            ?.querySelector('input')
-                            ?.focus()
-                        } else if (e.key === 'Backspace' && alt === '') {
-                          if (j < alts.length) {
-                            if (alts.length === 1) {
-                              onReqs(reqs.filter((_, mi) => mi !== i))
-                            } else {
-                              onReqs(
-                                reqs.map((req, mi) =>
-                                  mi === i
-                                    ? req.filter((_, mj) => mj !== j)
-                                    : req
-                                )
-                              )
-                            }
-                          }
-                          if (j === 0) {
-                            const element =
-                              e.currentTarget.parentElement?.parentElement?.parentElement?.previousElementSibling?.querySelector(
-                                'li:last-child input'
-                              )
-                            if (element instanceof HTMLInputElement) {
-                              element.focus()
-                            }
-                          } else {
-                            e.currentTarget.parentElement?.previousElementSibling
+                {[...alts, ''].map((alt, j) => {
+                  const newReq = i === reqs.length
+                  const newAlt = j === alts.length
+                  const handleChange = (value: string) =>
+                    onReqs(
+                      newReq
+                        ? [...reqs, [value]]
+                        : reqs.map((req, mi) =>
+                            mi === i
+                              ? newAlt
+                                ? [...req, value]
+                                : req.map((alt, mj) => (mj === j ? value : alt))
+                              : req
+                          )
+                    )
+                  return (
+                    <li key={j}>
+                      <input
+                        class='custom-prereq-input'
+                        type='text'
+                        list='courses'
+                        placeholder={
+                          newReq
+                            ? 'New requirement'
+                            : j === 0
+                            ? 'Prerequsite'
+                            : newAlt
+                            ? 'Add alternate'
+                            : 'Alternate'
+                        }
+                        value={alt}
+                        onInput={e => handleChange(e.currentTarget.value)}
+                        onChange={e =>
+                          handleChange(cleanCourseCode(e.currentTarget.value))
+                        }
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            e.currentTarget.parentElement?.parentElement?.parentElement?.nextElementSibling
                               ?.querySelector('input')
                               ?.focus()
+                          } else if (e.key === 'Backspace' && alt === '') {
+                            if (!newAlt) {
+                              if (alts.length === 1) {
+                                onReqs(reqs.filter((_, mi) => mi !== i))
+                              } else {
+                                onReqs(
+                                  reqs.map((req, mi) =>
+                                    mi === i
+                                      ? req.filter((_, mj) => mj !== j)
+                                      : req
+                                  )
+                                )
+                              }
+                            }
+                            if (j === 0) {
+                              const element =
+                                e.currentTarget.parentElement?.parentElement?.parentElement?.previousElementSibling?.querySelector(
+                                  'li:last-child input'
+                                )
+                              if (element instanceof HTMLInputElement) {
+                                element.focus()
+                              }
+                            } else {
+                              e.currentTarget.parentElement?.previousElementSibling
+                                ?.querySelector('input')
+                                ?.focus()
+                            }
+                            e.preventDefault()
                           }
-                          e.preventDefault()
-                        }
-                      }}
-                    />
-                    {j < alts.length - 1 && ' OR '}
-                  </li>
-                ))}
+                        }}
+                      />
+                      {j < alts.length - 1 && ' OR '}
+                    </li>
+                  )
+                })}
               </ul>
             </li>
           ))}
