@@ -45,7 +45,7 @@ export function App ({ prereqs: initPrereqs, initPlan, mode }: AppProps) {
             </span>
           </span>
         </div>
-        <Editor plan={plan} onPlan={setPlan} />
+        <Editor prereqs={prereqs} plan={plan} onPlan={setPlan} />
       </main>
       <PrereqSidebar
         prereqs={prereqs}

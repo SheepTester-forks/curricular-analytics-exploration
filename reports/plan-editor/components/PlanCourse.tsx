@@ -5,11 +5,12 @@
 
 import { useEffect, useRef, useState } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
-import { cleanCourseCode } from '../../util/Prereqs.ts'
+import { cleanCourseCode, Prereqs } from '../../util/Prereqs.ts'
 import { Course } from '../types.ts'
 import { CourseOptions } from './CourseOptions.tsx'
 
 export type PlanCourseProps = {
+  prereqs?: Prereqs
   course: Course
   onCourse?: (course: Course) => void
   onRemove?: () => void
@@ -22,6 +23,7 @@ export type PlanCourseProps = {
   onDrag?: (event: JSX.TargetedPointerEvent<HTMLElement>) => void
 }
 export function PlanCourse ({
+  prereqs,
   course,
   onCourse,
   onRemove,
@@ -129,6 +131,7 @@ export function PlanCourse ({
           </div>
           {showOptions && (
             <CourseOptions
+              prereqs={prereqs}
               course={course}
               onCourse={onCourse}
               onRemove={onRemove}

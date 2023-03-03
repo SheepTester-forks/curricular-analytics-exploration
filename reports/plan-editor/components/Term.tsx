@@ -6,6 +6,7 @@
 import { Fragment } from 'preact'
 import { useContext, useMemo, useRef } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
+import { Prereqs } from '../../util/Prereqs.ts'
 import { DragContext } from '../drag-drop.ts'
 import { Course, TermPlan } from '../types.ts'
 import { PlanCourse } from './PlanCourse.tsx'
@@ -19,6 +20,7 @@ const emptyCourse: Omit<Course, 'id'> = {
   requirement: { college: false, major: false }
 }
 export type TermProps = {
+  prereqs: Prereqs
   name: string
   plan: TermPlan
   onPlan: (plan: TermPlan) => void
@@ -29,6 +31,7 @@ export type TermProps = {
   onDropLocation?: (index: number | null) => void
 }
 export function Term ({
+  prereqs,
   name,
   plan,
   onPlan,
@@ -101,6 +104,7 @@ export function Term ({
             )}
             {!(placeholderIndex !== null && i === plan.length) && (
               <PlanCourse
+                prereqs={prereqs}
                 course={course}
                 onCourse={newCourse =>
                   onPlan(

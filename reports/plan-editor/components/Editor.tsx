@@ -5,6 +5,7 @@
 
 import { useRef, useState } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
+import { Prereqs } from '../../util/Prereqs.ts'
 import { DragState, DragContext } from '../drag-drop.ts'
 import { AcademicPlan } from '../types.ts'
 import { PlanCourse } from './PlanCourse.tsx'
@@ -12,10 +13,11 @@ import { RemoveZone } from './RemoveZone.tsx'
 import { Year } from './Year.tsx'
 
 export type EditorProps = {
+  prereqs: Prereqs
   plan: AcademicPlan
   onPlan: (plan: AcademicPlan) => void
 }
-export function Editor ({ plan, onPlan }: EditorProps) {
+export function Editor ({ prereqs, plan, onPlan }: EditorProps) {
   const element = useRef<HTMLDivElement>(null)
   // Ref needed for event handlers
   const dragStateRef = useRef<DragState | null>(null)
@@ -73,6 +75,7 @@ export function Editor ({ plan, onPlan }: EditorProps) {
       <DragContext.Provider value={dragStateVal}>
         {plan.years.map((year, yearIndex) => (
           <Year
+            prereqs={prereqs}
             planStartYear={plan.startYear}
             index={yearIndex}
             plan={year}

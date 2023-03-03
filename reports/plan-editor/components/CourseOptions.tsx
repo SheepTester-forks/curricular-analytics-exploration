@@ -3,21 +3,28 @@
 /// <reference lib="dom" />
 /// <reference lib="deno.ns" />
 
+import { Prereqs } from '../../util/Prereqs.ts'
 import { Course } from '../types.ts'
-import { Toggle } from './Toggle.tsx'
 
 export type CourseOptionsProps = {
+  prereqs?: Prereqs
   course: Course
   onCourse?: (course: Course) => void
   onRemove?: () => void
 }
 export function CourseOptions ({
+  prereqs,
   course,
   onCourse,
   onRemove
 }: CourseOptionsProps) {
   return (
     <div class='options-wrapper'>
+      {prereqs?.[course.title] && (
+        <div>
+          <strong>{course.title}</strong> is a valid course code.
+        </div>
+      )}
       <div class='options-body'>
         <label class='toggle-wrapper'>
           <input

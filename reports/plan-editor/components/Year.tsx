@@ -4,11 +4,13 @@
 /// <reference lib="deno.ns" />
 
 import type { JSX } from 'preact/jsx-runtime'
+import { Prereqs } from '../../util/Prereqs.ts'
 import { YearPlan } from '../types.ts'
 import { Term } from './Term.tsx'
 
 const termNames = ['Fall', 'Winter', 'Spring']
 export type YearProps = {
+  prereqs: Prereqs
   planStartYear: string
   index: number
   plan: YearPlan
@@ -23,6 +25,7 @@ export type YearProps = {
   onRemove: () => void
 }
 export function Year ({
+  prereqs,
   planStartYear,
   index,
   plan,
@@ -79,6 +82,7 @@ export function Year ({
       <div class='terms'>
         {plan.map((term, i) => (
           <Term
+            prereqs={prereqs}
             name={termNames[i]}
             plan={term}
             onPlan={newPlan =>
