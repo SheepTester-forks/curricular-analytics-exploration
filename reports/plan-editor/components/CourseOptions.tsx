@@ -21,7 +21,7 @@ export function CourseOptions ({
   return (
     <div class='options-wrapper'>
       {prereqs?.[course.title] && (
-        <div>
+        <div class='valid-course'>
           <strong>{course.title}</strong> is a valid course code.
         </div>
       )}
