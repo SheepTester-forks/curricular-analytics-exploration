@@ -25,7 +25,7 @@ export function Metadata ({ plan, onPlan }: MetadataProps) {
   return (
     <div class='metadata'>
       <MetadataField property='departmentCode' plan={plan} onPlan={onPlan}>
-        Department Code
+        Dept. Code
       </MetadataField>
       <MetadataField property='majorCode' plan={plan} onPlan={onPlan}>
         ISIS Code

@@ -22,7 +22,7 @@
         color: red;
       }
       button,
-      input,
+      input[type='text'],
       select {
         border: none;
         padding: 0;
@@ -31,11 +31,7 @@
         font: inherit;
         box-sizing: border-box;
       }
-      input {
-        width: 0;
-      }
-      button:not(:disabled),
-      input[type='submit']:not(:disabled) {
+      button:not(:disabled) {
         cursor: pointer;
       }
       ::placeholder {
@@ -45,13 +41,16 @@
         font-weight: normal;
         text-transform: none;
       }
-      input:focus,
+      input[type='text']:focus,
       select:focus {
         outline: none;
       }
-      input:focus-visible,
+      input[type='text']:focus-visible,
       select:focus-visible {
         box-shadow: 0 0 0 3px rgba(102, 175, 233, 0.3);
+      }
+      input[type='checkbox'] {
+        margin: 0;
       }
 
       #root {
@@ -159,7 +158,8 @@
         margin: 0;
         font-weight: bold;
       }
-      .metadata-value {
+      .metadata-value,
+      [type='text'].metadata-value {
         border-radius: 2px;
         height: 30px;
         border: 1px solid #ccc;
@@ -168,13 +168,13 @@
       .metadata-value:focus {
         border: 1px solid#66afe9;
       }
-      input.metadata-value {
+      input[type='text'].metadata-value {
         width: 70px;
       }
       .lengthy {
         flex: auto;
       }
-      .lengthy input.metadata-value {
+      .lengthy input[type='text'].metadata-value {
         width: unset;
       }
       .plan-units {
@@ -280,6 +280,7 @@
       .course-title {
         padding: 0 10px;
         flex: auto;
+        width: 0;
       }
       .course-units {
         width: 3ch;
@@ -359,7 +360,19 @@
         align-items: center;
       }
       .settings-btn {
+        width: 20px;
         height: 100%;
+        text-align: center;
+      }
+      .major-req,
+      .college-req {
+        font-weight: bold;
+      }
+      .major-req {
+        color: mediumblue;
+      }
+      .college-req {
+        color: chocolate;
       }
       .options-wrapper-arrow {
         width: 16px;

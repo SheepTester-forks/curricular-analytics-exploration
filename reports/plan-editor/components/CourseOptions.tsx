@@ -20,24 +20,32 @@ export function CourseOptions ({
     <div class='options-wrapper'>
       <div class='options-body'>
         <label class='toggle-wrapper'>
-          <Toggle
+          <input
+            type='checkbox'
             checked={course.requirement.major}
-            onCheck={checked =>
+            onInput={e =>
               onCourse?.({
                 ...course,
-                requirement: { ...course.requirement, major: checked }
+                requirement: {
+                  ...course.requirement,
+                  major: e.currentTarget.checked
+                }
               })
             }
           />
           Major requirement
         </label>
         <label class='toggle-wrapper'>
-          <Toggle
+          <input
+            type='checkbox'
             checked={course.requirement.college}
-            onCheck={checked =>
+            onInput={e =>
               onCourse?.({
                 ...course,
-                requirement: { ...course.requirement, college: checked }
+                requirement: {
+                  ...course.requirement,
+                  college: e.currentTarget.checked
+                }
               })
             }
           />

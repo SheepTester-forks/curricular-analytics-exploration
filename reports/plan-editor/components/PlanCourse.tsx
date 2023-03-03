@@ -97,11 +97,33 @@ export function PlanCourse ({
         <>
           <div class='settings-btn-wrapper'>
             <button
-              class='settings-btn'
-              title='Course options'
+              class={`settings-btn ${
+                course.requirement.major
+                  ? course.requirement.college
+                    ? 'overlap'
+                    : 'major-req'
+                  : course.requirement.college
+                  ? 'college-req'
+                  : ''
+              }`}
+              title={`Course options${
+                course.requirement.major
+                  ? course.requirement.college
+                    ? ': overlaps GE and major requirements'
+                    : ': major requirement'
+                  : course.requirement.college
+                  ? ': GE requirement'
+                  : ''
+              }`}
               onClick={() => setShowOptions(on => !on)}
             >
-              ⚙
+              {course.requirement.major
+                ? course.requirement.college
+                  ? '⇄'
+                  : 'M'
+                : course.requirement.college
+                ? 'C'
+                : '⚙'}
             </button>
             {showOptions && <div class='options-wrapper-arrow' />}
           </div>
