@@ -58,6 +58,19 @@ export function CourseOptions ({
           />
           College GE requirement
         </label>
+        <label class='toggle-wrapper'>
+          <input
+            type='checkbox'
+            checked={course.forCredit}
+            onInput={e =>
+              onCourse?.({
+                ...course,
+                forCredit: e.currentTarget.checked
+              })
+            }
+          />
+          Credit received from this course (uncheck if failed or withdrawn)
+        </label>
       </div>
       <button class='remove-course-btn' onClick={onRemove}>
         Remove

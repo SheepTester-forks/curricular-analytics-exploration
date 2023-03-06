@@ -375,13 +375,20 @@
       .college-req {
         color: chocolate;
       }
-      .valid-course-icon {
-        color: #31708f;
+      .valid-course-icon,
+      .failed-course-icon {
         position: absolute;
         bottom: 0;
-        right: 0;
         font-weight: bold;
         font-size: 0.8em;
+      }
+      .valid-course-icon {
+        color: #31708f;
+        right: 0;
+      }
+      .failed-course-icon {
+        color: #a94442;
+        left: 0;
       }
       .options-wrapper-arrow {
         width: 16px;

@@ -108,15 +108,18 @@ export function PlanCourse ({
                   ? 'college-req'
                   : ''
               }`}
-              title={`Course options${
+              title={[
+                'Course options',
                 course.requirement.major
                   ? course.requirement.college
                     ? ': overlaps GE and major requirements'
                     : ': major requirement'
                   : course.requirement.college
                   ? ': GE requirement'
-                  : ''
-              }${prereqs?.[course.title] ? ' (valid course code)' : ''}`}
+                  : '',
+                prereqs?.[course.title] ? ', valid course code' : '',
+                course.forCredit ? '' : ', no credit received'
+              ].join('')}
               onClick={() => setShowOptions(on => !on)}
             >
               {course.requirement.major
@@ -129,6 +132,7 @@ export function PlanCourse ({
               {prereqs?.[course.title] && (
                 <span class='valid-course-icon'>✓</span>
               )}
+              {!course.forCredit && <span class='failed-course-icon'>F</span>}
             </button>
             {showOptions && (
               <div

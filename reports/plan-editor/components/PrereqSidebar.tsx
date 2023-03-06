@@ -43,7 +43,9 @@ export function PrereqSidebar ({
   })
 
   const terms = plan.years.flatMap(year =>
-    year.map(term => term.map(course => course.title))
+    year.map(term =>
+      term.filter(course => course.forCredit).map(course => course.title)
+    )
   )
 
   useEffect(() => {

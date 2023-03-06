@@ -17,7 +17,8 @@ const COURSE_HEIGHT = 30
 const emptyCourse: Omit<Course, 'id'> = {
   title: '',
   units: '4',
-  requirement: { college: false, major: false }
+  requirement: { college: false, major: false },
+  forCredit: true
 }
 export type TermProps = {
   prereqs: Prereqs
