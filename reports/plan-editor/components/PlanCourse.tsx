@@ -116,7 +116,7 @@ export function PlanCourse ({
                   : course.requirement.college
                   ? ': GE requirement'
                   : ''
-              }`}
+              }${prereqs?.[course.title] ? ' (valid course code)' : ''}`}
               onClick={() => setShowOptions(on => !on)}
             >
               {course.requirement.major
@@ -126,8 +126,17 @@ export function PlanCourse ({
                 : course.requirement.college
                 ? 'C'
                 : '⚙'}
+              {prereqs?.[course.title] && (
+                <span class='valid-course-icon'>✓</span>
+              )}
             </button>
-            {showOptions && <div class='options-wrapper-arrow' />}
+            {showOptions && (
+              <div
+                class={`options-wrapper-arrow ${
+                  prereqs?.[course.title] ? 'for-valid-course' : ''
+                }`}
+              />
+            )}
           </div>
           {showOptions && (
             <CourseOptions

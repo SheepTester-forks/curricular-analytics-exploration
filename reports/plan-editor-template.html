@@ -363,6 +363,7 @@
         width: 20px;
         height: 100%;
         text-align: center;
+        position: relative;
       }
       .major-req,
       .college-req {
@@ -373,6 +374,14 @@
       }
       .college-req {
         color: chocolate;
+      }
+      .valid-course-icon {
+        color: #31708f;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        font-weight: bold;
+        font-size: 0.8em;
       }
       .options-wrapper-arrow {
         width: 16px;
@@ -390,10 +399,13 @@
         left: 50%;
         z-index: 3;
       }
+      .for-valid-course {
+        background-color: #d9edf7;
+      }
       .valid-course {
         background-color: #d9edf7;
         color: #31708f;
-        padding: 20px;
+        padding: 15px 20px;
       }
       .term-icon-btn {
         display: flex;
