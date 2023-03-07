@@ -164,6 +164,15 @@ export function Editor ({ prereqs, plan, onPlan }: EditorProps) {
                 years: plan.years.filter((_, i) => i !== yearIndex)
               })
             }
+            pastCourses={plan.years
+              .slice(0, yearIndex)
+              .flatMap(year =>
+                year.flatMap(term =>
+                  term
+                    .filter(course => course.forCredit)
+                    .map(course => course.title)
+                )
+              )}
             key={yearIndex}
           />
         ))}

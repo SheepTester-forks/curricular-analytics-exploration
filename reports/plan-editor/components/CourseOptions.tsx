@@ -3,35 +3,34 @@
 /// <reference lib="dom" />
 /// <reference lib="deno.ns" />
 
-import { Prereqs } from '../../util/Prereqs.ts'
+import { CourseCode, Prereqs } from '../../util/Prereqs.ts'
 import { Course } from '../types.ts'
 
 export type CourseOptionsProps = {
-  prereqs?: Prereqs
+  prereqs: Prereqs
   course: Course
-  onCourse?: (course: Course) => void
-  onRemove?: () => void
+  onCourse: (course: Course) => void
+  onRemove: () => void
+  pastCourses: CourseCode[]
+  concurrentCourses: CourseCode[]
 }
 export function CourseOptions ({
   prereqs,
   course,
   onCourse,
-  onRemove
+  onRemove,
+  pastCourses,
+  concurrentCourses
 }: CourseOptionsProps) {
   return (
     <div class='options-wrapper'>
-      {prereqs?.[course.title] && (
-        <div class='valid-course'>
-          <strong>{course.title}</strong> is a valid course code.
-        </div>
-      )}
       <div class='options-body'>
         <label class='toggle-wrapper'>
           <input
             type='checkbox'
             checked={course.requirement.major}
             onInput={e =>
-              onCourse?.({
+              onCourse({
                 ...course,
                 requirement: {
                   ...course.requirement,
@@ -47,7 +46,7 @@ export function CourseOptions ({
             type='checkbox'
             checked={course.requirement.college}
             onInput={e =>
-              onCourse?.({
+              onCourse({
                 ...course,
                 requirement: {
                   ...course.requirement,
@@ -63,7 +62,7 @@ export function CourseOptions ({
             type='checkbox'
             checked={course.forCredit}
             onInput={e =>
-              onCourse?.({
+              onCourse({
                 ...course,
                 forCredit: e.currentTarget.checked
               })
@@ -72,6 +71,24 @@ export function CourseOptions ({
           Credit received from this course (uncheck if failed or withdrawn)
         </label>
       </div>
+      {prereqs[course.title] && (
+        <div class='course-note info'>
+          <strong>{course.title}</strong> is a valid course code.
+        </div>
+      )}
+      {concurrentCourses.includes(course.title) && (
+        <div
+          class={`course-note ${prereqs[course.title] ? 'error' : 'warning'}`}
+        >
+          This course is listed multiple times in the same term.
+        </div>
+      )}
+      {concurrentCourses.includes(course.title) && (
+        <div class='course-note warning'>
+          Credit for this course has already been received. If you are retaking
+          this course, uncheck "Credit received" for the earlier course.
+        </div>
+      )}
       <button class='remove-course-btn' onClick={onRemove}>
         Remove
       </button>

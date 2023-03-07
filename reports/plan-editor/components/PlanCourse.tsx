@@ -5,7 +5,7 @@
 
 import { useEffect, useRef, useState } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
-import { cleanCourseCode, Prereqs } from '../../util/Prereqs.ts'
+import { cleanCourseCode, CourseCode, Prereqs } from '../../util/Prereqs.ts'
 import { Course } from '../types.ts'
 import { CourseOptions } from './CourseOptions.tsx'
 
@@ -21,6 +21,8 @@ export type PlanCourseProps = {
     y: number
   }
   onDrag?: (event: JSX.TargetedPointerEvent<HTMLElement>) => void
+  pastCourses?: CourseCode[]
+  concurrentCourses?: CourseCode[]
 }
 export function PlanCourse ({
   prereqs,
@@ -29,7 +31,9 @@ export function PlanCourse ({
   onRemove,
   new: isNew,
   dragged,
-  onDrag
+  onDrag,
+  pastCourses,
+  concurrentCourses
 }: PlanCourseProps) {
   const ref = useRef<HTMLLIElement>(null)
   const [showOptions, setShowOptions] = useState(false)
@@ -137,19 +141,26 @@ export function PlanCourse ({
             {showOptions && (
               <div
                 class={`options-wrapper-arrow ${
-                  prereqs?.[course.title] ? 'for-valid-course' : ''
+                  prereqs?.[course.title] ? 'info' : ''
                 }`}
               />
             )}
           </div>
-          {showOptions && (
-            <CourseOptions
-              prereqs={prereqs}
-              course={course}
-              onCourse={onCourse}
-              onRemove={onRemove}
-            />
-          )}
+          {showOptions &&
+            prereqs &&
+            onCourse &&
+            onRemove &&
+            pastCourses &&
+            concurrentCourses && (
+              <CourseOptions
+                prereqs={prereqs}
+                course={course}
+                onCourse={onCourse}
+                onRemove={onRemove}
+                pastCourses={pastCourses}
+                concurrentCourses={concurrentCourses}
+              />
+            )}
           <input
             class='course-field course-units term-units'
             type='text'

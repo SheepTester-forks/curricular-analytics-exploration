@@ -6,7 +6,7 @@
 import { Fragment } from 'preact'
 import { useContext, useMemo, useRef } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
-import { Prereqs } from '../../util/Prereqs.ts'
+import { CourseCode, Prereqs } from '../../util/Prereqs.ts'
 import { DragContext } from '../drag-drop.ts'
 import { Course, TermPlan } from '../types.ts'
 import { PlanCourse } from './PlanCourse.tsx'
@@ -30,6 +30,7 @@ export type TermProps = {
     course: number
   ) => void
   onDropLocation?: (index: number | null) => void
+  pastCourses: CourseCode[]
 }
 export function Term ({
   prereqs,
@@ -37,7 +38,8 @@ export function Term ({
   plan,
   onPlan,
   onDrag,
-  onDropLocation
+  onDropLocation,
+  pastCourses
 }: TermProps) {
   const dragState = useContext(DragContext)
   const element = useRef<HTMLElement>(null)
@@ -70,12 +72,8 @@ export function Term ({
   return (
     <section class='term-editor' ref={element}>
       <h3
-        class={`heading term-heading ${
-          termUnits < 12
-            ? 'term-units-error'
-            : termUnits > 18
-            ? 'term-units-warning'
-            : ''
+        class={`heading term-heading info ${
+          termUnits < 12 ? 'error' : termUnits > 18 ? 'warning' : ''
         }`}
       >
         {name}{' '}
@@ -119,6 +117,10 @@ export function Term ({
                 onRemove={() => onPlan(plan.filter((_, j) => j !== i))}
                 new={i === plan.length}
                 onDrag={e => onDrag?.(e, i)}
+                pastCourses={pastCourses}
+                concurrentCourses={plan
+                  .filter((course, j) => j !== i && course.forCredit)
+                  .map(course => course.title)}
               />
             )}
           </Fragment>

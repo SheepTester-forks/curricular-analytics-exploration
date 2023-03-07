@@ -24,7 +24,7 @@ export function App ({ prereqs: initPrereqs, initPlan, mode }: AppProps) {
   return (
     <>
       <main class='main'>
-        <div class='info'>
+        <div class='plan-info'>
           <Metadata
             plan={plan}
             onPlan={change => setPlan(plan => ({ ...plan, ...change }))}

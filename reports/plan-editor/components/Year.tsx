@@ -4,7 +4,7 @@
 /// <reference lib="deno.ns" />
 
 import type { JSX } from 'preact/jsx-runtime'
-import { Prereqs } from '../../util/Prereqs.ts'
+import { CourseCode, Prereqs } from '../../util/Prereqs.ts'
 import { YearPlan } from '../types.ts'
 import { Term } from './Term.tsx'
 
@@ -23,6 +23,7 @@ export type YearProps = {
   ) => void
   onDropLocation?: (term: number, index: number | null) => void
   onRemove: () => void
+  pastCourses: CourseCode[]
 }
 export function Year ({
   prereqs,
@@ -33,7 +34,8 @@ export function Year ({
   onYear,
   onDrag,
   onDropLocation,
-  onRemove
+  onRemove,
+  pastCourses
 }: YearProps) {
   const empty = plan.every(term => term.length === 0)
   return (
@@ -90,6 +92,16 @@ export function Year ({
             }
             onDrag={(e, course) => onDrag?.(e, i, course)}
             onDropLocation={index => onDropLocation?.(i, index)}
+            pastCourses={[
+              ...pastCourses,
+              ...plan
+                .slice(0, i)
+                .flatMap(term =>
+                  term
+                    .filter(course => course.forCredit)
+                    .map(course => course.title)
+                )
+            ]}
             key={i}
           />
         ))}
