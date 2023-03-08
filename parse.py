@@ -111,6 +111,7 @@ class MajorPlans:
     """
 
     year: int
+    # TODO: MajorPlan.department vs MajorInfo.department
     department: str
     major_code: str
     colleges: Set[str]
@@ -233,6 +234,7 @@ class MajorInfo(NamedTuple):
 
     isis_code: str
     name: str
+    # TODO: MajorPlan.department vs MajorInfo.department
     department: str
     cip_code: str
     award_types: Set[str]

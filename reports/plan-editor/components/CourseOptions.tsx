@@ -83,7 +83,7 @@ export function CourseOptions ({
           This course is listed multiple times in the same term.
         </div>
       )}
-      {concurrentCourses.includes(course.title) && (
+      {pastCourses.includes(course.title) && (
         <div class='course-note warning'>
           Credit for this course has already been received. If you are retaking
           this course, uncheck "Credit received" for the earlier course.

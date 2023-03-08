@@ -6,6 +6,7 @@ export type Course = {
     major: boolean
   }
   forCredit: boolean
+  /** For use as a React key */
   id: number
 }
 export type TermPlan = Course[]
