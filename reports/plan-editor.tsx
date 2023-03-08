@@ -5,6 +5,73 @@
 
 import { render } from 'preact'
 import { App } from './plan-editor/components/App.tsx'
+import { colleges } from './plan-editor/components/Metadata.tsx'
+import { AcademicPlan } from './plan-editor/types.ts'
+
+const plan: AcademicPlan = {
+  startYear: String(new Date().getFullYear()),
+  years: [
+    [[], [], []],
+    [[], [], []],
+    [[], [], []],
+    [[], [], []]
+  ],
+  departmentCode: '',
+  majorName: '',
+  majorCode: '',
+  cipCode: '',
+  collegeCode: 'RE',
+  collegeName: '',
+  degreeType: 'BS'
+}
+const params = new URL(window.location.href).searchParams
+function fromUrl (
+  key: keyof Omit<AcademicPlan, 'years'>,
+  paramName: string
+): void {
+  const value = params.get(paramName)
+  if (value !== null) {
+    plan[key] = value
+  }
+}
+fromUrl('startYear', 'year')
+fromUrl('departmentCode', 'department')
+fromUrl('majorName', 'major_name')
+fromUrl('majorCode', 'major')
+fromUrl('cipCode', 'cip')
+fromUrl('collegeCode', 'college')
+plan.collegeName = colleges[plan.collegeCode]
+fromUrl('degreeType', 'degree')
+{
+  const coursesJson = params.get('courses')
+  if (coursesJson !== null) {
+    type CourseJson = [
+      title: string,
+      units: number,
+      requirement: number,
+      term: number
+    ]
+    const courses: CourseJson[] = JSON.parse(coursesJson)
+    const terms = courses.reduce((cum, curr) => Math.max(cum, curr[3]), 0)
+    plan.years = Array.from({ length: Math.ceil(terms / 3) }, () => [
+      [],
+      [],
+      []
+    ])
+    for (const [title, units, requirement, term] of courses) {
+      plan.years[Math.floor(term / 3)][term % 3].push({
+        title,
+        units: String(units),
+        requirement: {
+          major: !!(requirement & 0b1),
+          college: !!(requirement & 0b10)
+        },
+        forCredit: true,
+        id: Math.random()
+      })
+    }
+  }
+}
 
 render(
   <App
@@ -13,372 +80,7 @@ render(
       // deno-lint-ignore no-explicit-any
       (window as any)['PREREQS']
     }
-    initPlan={{
-      startYear: '2021',
-      years: [
-        [
-          [
-            {
-              title: 'CSE 8A',
-              units: '4',
-              requirement: { college: true, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'MATH 20A',
-              units: '4',
-              requirement: { college: true, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CAT 1',
-              units: '4',
-              requirement: { college: true, major: false },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'GE',
-              units: '4',
-              requirement: { college: true, major: false },
-              forCredit: true,
-              id: Math.random()
-            }
-          ],
-          [
-            {
-              title: 'CSE 8B',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'MATH 20B',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE 20',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CAT 2',
-              units: '6',
-              requirement: { college: true, major: false },
-              forCredit: true,
-              id: Math.random()
-            }
-          ],
-          [
-            {
-              title: 'PHYS 2A',
-              units: '4',
-              requirement: { college: true, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'MATH 18',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE 12',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE 15L',
-              units: '2',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CAT 3',
-              units: '6',
-              requirement: { college: true, major: false },
-              forCredit: true,
-              id: Math.random()
-            }
-          ]
-        ],
-        [
-          [
-            {
-              title: 'ECE 35',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'PHYS 2B',
-              units: '4',
-              requirement: { college: true, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'MATH 20C',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE 21',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            }
-          ],
-          [
-            {
-              title: 'PHYS 2C',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE 30',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'MATH 20D',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'ECE 45',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            }
-          ],
-          [
-            {
-              title: 'ECE 65',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE 100',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'ECE 109',
-              units: '4',
-              requirement: { college: true, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'GE',
-              units: '4',
-              requirement: { college: true, major: false },
-              forCredit: true,
-              id: Math.random()
-            }
-          ]
-        ],
-        [
-          [
-            {
-              title: 'CSE 110',
-              units: '4',
-              requirement: { college: true, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE / ECE ELECTIVE',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE 101',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CAT 125',
-              units: '4',
-              requirement: { college: true, major: false },
-              forCredit: true,
-              id: Math.random()
-            }
-          ],
-          [
-            {
-              title: 'ECE 101',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE 140L',
-              units: '2',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE 140',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'GE / DEI',
-              units: '4',
-              requirement: { college: true, major: false },
-              forCredit: true,
-              id: Math.random()
-            }
-          ],
-          [
-            {
-              title: 'CSE 141 (OR CSE 142)',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE 141L (OR CSE 142L)',
-              units: '2',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'TECHNICAL ELECTIVE',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'ECE 111 (OR ECE 140B)',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            }
-          ]
-        ],
-        [
-          [
-            {
-              title: 'CSE 120',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE / ECE ELECTIVE',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'GE',
-              units: '4',
-              requirement: { college: true, major: false },
-              forCredit: true,
-              id: Math.random()
-            }
-          ],
-          [
-            {
-              title: 'ECE 108',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE / ECE ELECTIVE',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'GE',
-              units: '4',
-              requirement: { college: true, major: false },
-              forCredit: true,
-              id: Math.random()
-            }
-          ],
-          [
-            {
-              title: 'CSE / ECE ELECTIVE',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'CSE / ECE ELECTIVE',
-              units: '4',
-              requirement: { college: false, major: true },
-              forCredit: true,
-              id: Math.random()
-            },
-            {
-              title: 'GE',
-              units: '4',
-              requirement: { college: true, major: false },
-              forCredit: true,
-              id: Math.random()
-            }
-          ]
-        ]
-      ],
-      departmentCode: 'CSE',
-      majorName: 'Computer Engineering',
-      majorCode: 'CS25',
-      cipCode: '14.0901',
-      collegeCode: 'SI',
-      collegeName: 'Sixth',
-      degreeType: 'BS'
-    }}
+    initPlan={plan}
     mode='advisor'
   />,
   document.getElementById('root')!

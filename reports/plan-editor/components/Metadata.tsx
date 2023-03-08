@@ -6,7 +6,7 @@
 import { Metadata } from '../types.ts'
 import { MetadataField } from './MetadataField.tsx'
 
-const colleges: Record<string, string> = {
+export const colleges: Record<string, string> = {
   RE: 'Revelle',
   MU: 'Muir',
   TH: 'Marshall',
@@ -24,21 +24,37 @@ export type MetadataProps = {
 export function Metadata ({ plan, onPlan }: MetadataProps) {
   return (
     <div class='metadata'>
-      <MetadataField property='departmentCode' plan={plan} onPlan={onPlan}>
+      <MetadataField
+        property='departmentCode'
+        plan={plan}
+        onPlan={onPlan}
+        placeholder='CSE'
+      >
         Dept. Code
       </MetadataField>
-      <MetadataField property='majorCode' plan={plan} onPlan={onPlan}>
+      <MetadataField
+        property='majorCode'
+        plan={plan}
+        onPlan={onPlan}
+        placeholder='CS25'
+      >
         ISIS Code
       </MetadataField>
       <MetadataField
         property='majorName'
         plan={plan}
         onPlan={onPlan}
+        placeholder='Computer Engineering'
         class='lengthy'
       >
         Major Name
       </MetadataField>
-      <MetadataField property='cipCode' plan={plan} onPlan={onPlan}>
+      <MetadataField
+        property='cipCode'
+        placeholder='14.0901'
+        plan={plan}
+        onPlan={onPlan}
+      >
         CIP Code
       </MetadataField>
       <MetadataField
@@ -57,7 +73,12 @@ export function Metadata ({ plan, onPlan }: MetadataProps) {
       >
         College
       </MetadataField>
-      <MetadataField property='startYear' plan={plan} onPlan={onPlan}>
+      <MetadataField
+        property='startYear'
+        plan={plan}
+        onPlan={onPlan}
+        placeholder={String(new Date().getFullYear())}
+      >
         Entering Year
       </MetadataField>
     </div>

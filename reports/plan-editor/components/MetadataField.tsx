@@ -11,6 +11,7 @@ export type MetadataFieldProps = {
   plan: Metadata
   onPlan: (change: Partial<Metadata>) => void
   values?: Record<string, string>
+  placeholder?: string
   class?: string
 }
 export function MetadataField ({
@@ -19,6 +20,7 @@ export function MetadataField ({
   plan,
   onPlan,
   values,
+  placeholder,
   class: className = ''
 }: MetadataFieldProps) {
   return (
@@ -40,6 +42,7 @@ export function MetadataField ({
         <input
           type='text'
           class='metadata-value'
+          placeholder={placeholder}
           value={plan[property]}
           onInput={e => onPlan({ [property]: e.currentTarget.value })}
         />

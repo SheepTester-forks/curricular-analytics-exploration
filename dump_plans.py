@@ -1,5 +1,5 @@
 """
-python3 dump_plans.py 2022
+python3 dump_plans.py 2022 json
 """
 
 
@@ -54,4 +54,5 @@ def dump_plans(year: int) -> None:
 
 
 if __name__ == "__main__":
-    dump_plans(int(sys.argv[1]))
+    if sys.argv[2] == "json":
+        dump_plans(int(sys.argv[1]))
