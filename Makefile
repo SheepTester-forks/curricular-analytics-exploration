@@ -1,4 +1,4 @@
-all: academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree plan-editor
+all: academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree plan-editor plan-editor-index
 
 # Reports
 academic-plan-diffs: reports/output/academic-plan-diffs.html
@@ -7,6 +7,7 @@ prereq-timeline: reports/output/prereq-timeline.html
 college-ge-units: reports/output/college-ge-units.html
 prereq-tree: reports/output/prereq-tree.html
 plan-editor: reports/output/plan-editor.html
+plan-editor-index: reports/output/plan-editor-index.html
 
 # Plan diffs
 
@@ -96,3 +97,13 @@ reports/output/plan-editor.html: reports/plan-editor-template.html reports/outpu
 	echo '<script type="module">' >> reports/output/plan-editor.html
 	cat reports/output/plan-editor.js >> reports/output/plan-editor.html
 	echo '</script></body></html>' >> reports/output/plan-editor.html
+
+# Plan editor index
+
+reports/output/plan-editor-index-fragment.html: dump_plans.py files/academic_plans_fa12.csv
+	python3 dump_plans.py 2022 html > reports/output/plan-editor-index-fragment.html
+
+reports/output/plan-editor-index.html: reports/plan-editor-index-template.html reports/output/plan-editor-index-fragment.html
+	head -n -1 < reports/plan-editor-index-template.html > reports/output/plan-editor-index.html
+	cat reports/output/plan-editor-index-fragment.html >> reports/output/plan-editor-index.html
+	echo '</html>' >> reports/output/plan-editor-index.html

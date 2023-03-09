@@ -1,15 +1,17 @@
 """
 python3 dump_plans.py 2022 json
-python3 dump_plans.py 2022 html > reports/output/dump-plans.html
+python3 dump_plans.py 2022 html > reports/output/plan-editor-index.html
 """
 
 
 import json
 import sys
-from typing import List
+from typing import Dict, List, Optional
 from urllib.parse import urlencode
+from departments import departments, dept_schools
 from parse import major_codes, major_plans
 from parse_defs import ProcessedCourse
+from university import university
 
 
 def to_json(courses: List[ProcessedCourse]):
@@ -58,13 +60,19 @@ def dump_plans(year: int) -> None:
 
 def render_plan_urls(year: int) -> None:
     all_plans = major_plans(year)
-    print("<dl>")
-    for major_plan in all_plans.values():
-        major_info = major_codes()[major_plan.major_code]
-        print(f"<dt>{major_plan.major_code}: {major_info.name}</dt><dd>")
-        for college_code in major_plan.colleges:
-            print(f'<a href="./plan-editor.html?')
-            print(
+    qs_by_dept: Dict[str, Dict[str, Dict[str, Dict[str, Optional[str]]]]] = {}
+    for major_code, major_plan in all_plans.items():
+        major_info = major_codes()[major_code]
+        department = departments[major_codes()[major_code].department]
+        school = dept_schools.get(major_codes()[major_code].department) or ""
+        if school not in qs_by_dept:
+            qs_by_dept[school] = {}
+        if department not in qs_by_dept[school]:
+            qs_by_dept[school][department] = {}
+        if major_code not in qs_by_dept[school][department]:
+            qs_by_dept[school][department][major_code] = {}
+        for college_code in university.college_codes:
+            qs_by_dept[school][department][major_code][college_code] = (
                 urlencode(
                     {
                         "year": year,
@@ -82,10 +90,41 @@ def render_plan_urls(year: int) -> None:
                         ),
                     }
                 )
+                if college_code in major_plan.colleges
+                else None
             )
-            print(f'">{college_code}</a> ')
-        print("</dd>")
-    print("</dl>")
+    print("<table><tr><th>School</th><th>Department</th><th>Major</th>")
+    for college_code in university.college_codes:
+        print(f"<th>{university.college_names[college_code]}</th>")
+    print("</tr>")
+    for school, depts in sorted(qs_by_dept.items(), key=lambda entry: entry[0]):
+        major_count = sum(len(majors) for majors in depts.values())
+        print(f'<tr><th scole="col" rowspan="{major_count}">{school}</th>')
+        for i, (department, majors) in enumerate(
+            sorted(depts.items(), key=lambda entry: entry[0])
+        ):
+            if i > 0:
+                print("<tr>")
+            print(f'<th scole="col" rowspan="{len(majors)}">{department}</th>')
+            for j, (major_code, colleges) in enumerate(
+                sorted(majors.items(), key=lambda entry: entry[0])
+            ):
+                if j > 0:
+                    print("<tr>")
+                print(f"<td><strong>{major_code}</strong>", end="")
+                major_name = major_codes()[major_code].name
+                if major_name:
+                    print(f": {major_name}")
+                print("</td>")
+                for college_code in university.college_codes:
+                    if colleges[college_code] is None:
+                        print("<td></td>")
+                    else:
+                        print(
+                            f'<td><a href="./plan-editor?{colleges[college_code]}">Edit</a></td>'
+                        )
+                print("</tr>")
+    print("</table>")
 
 
 if __name__ == "__main__":
