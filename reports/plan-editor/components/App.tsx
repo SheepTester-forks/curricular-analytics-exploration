@@ -5,18 +5,11 @@
 
 import { useEffect, useState } from 'preact/hooks'
 import { Prereqs } from '../../util/Prereqs.ts'
+import { toSearchParams } from '../save-to-url.ts'
 import { AcademicPlan } from '../types.ts'
 import { Editor } from './Editor.tsx'
 import { Metadata } from './Metadata.tsx'
 import { PrereqSidebar } from './PrereqSidebar.tsx'
-
-export type CourseJson = [
-  title: string,
-  units: number,
-  requirement: number,
-  term: number,
-  forCredit?: number
-]
 
 export type AppProps = {
   prereqs: Prereqs
@@ -35,36 +28,7 @@ export function App ({
 
   useEffect(() => {
     if (updateUrl) {
-      window.history.replaceState(
-        {},
-        '',
-        '?' +
-          new URLSearchParams({
-            year: plan.startYear,
-            department: plan.departmentCode,
-            major_name: plan.majorName,
-            major: plan.majorCode,
-            cip: plan.cipCode,
-            college: plan.collegeCode,
-            degree: plan.degreeType,
-            courses: JSON.stringify(
-              plan.years.flatMap((year, i) =>
-                year.flatMap((term, j) =>
-                  term.map(
-                    (course): CourseJson => [
-                      course.title,
-                      +course.units,
-                      (+course.requirement.college << 1) |
-                        +course.requirement.major,
-                      i * 3 + j,
-                      +course.forCredit
-                    ]
-                  )
-                )
-              )
-            )
-          })
-      )
+      window.history.replaceState({}, '', '?' + toSearchParams(plan))
     }
   }, [updateUrl, plan])
 

@@ -212,7 +212,7 @@ export function PrereqSidebar ({
       </ul>
       {mode === 'advisor' ? (
         <div class='download-wrapper'>
-          <p class='download-label'>Download the plan as a CSV file for</p>
+          <p class='download-label'>Export the plan as a CSV file for</p>
           <div class='download-btns'>
             <button
               class='download-btn'
