@@ -3,9 +3,8 @@
 /// <reference lib="dom" />
 /// <reference lib="deno.ns" />
 
-import { useEffect, useState } from 'preact/hooks'
+import { useState } from 'preact/hooks'
 import { Prereqs } from '../../util/Prereqs.ts'
-import { toSearchParams } from '../save-to-url.ts'
 import { AcademicPlan } from '../types.ts'
 import { Editor } from './Editor.tsx'
 import { Metadata } from './Metadata.tsx'
@@ -15,22 +14,10 @@ export type AppProps = {
   prereqs: Prereqs
   initPlan: AcademicPlan
   mode: 'student' | 'advisor'
-  updateUrl?: boolean
 }
-export function App ({
-  prereqs: initPrereqs,
-  initPlan,
-  mode,
-  updateUrl
-}: AppProps) {
+export function App ({ prereqs: initPrereqs, initPlan, mode }: AppProps) {
   const [plan, setPlan] = useState(initPlan)
   const [customPrereqs, setCustomPrereqs] = useState<Prereqs>({})
-
-  useEffect(() => {
-    if (updateUrl) {
-      window.history.replaceState({}, '', '?' + toSearchParams(plan))
-    }
-  }, [updateUrl, plan])
 
   const prereqs = { ...initPrereqs, ...customPrereqs }
 

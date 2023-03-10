@@ -8,6 +8,7 @@ import { toCsv } from '../../util/csv.ts'
 import { download } from '../../util/download.ts'
 import { cleanCourseCode, CourseCode, Prereqs } from '../../util/Prereqs.ts'
 import { toUcsdPlan, toCurrAnalyticsPlan } from '../export-plan.ts'
+import { toSearchParams } from '../save-to-url.ts'
 import { AcademicPlan } from '../types.ts'
 import { CustomCourse } from './CustomCourse.tsx'
 import { PrereqCheck } from './PrereqCheck.tsx'
@@ -41,6 +42,7 @@ export function PrereqSidebar ({
       return []
     }
   })
+  const [updateUrl, setUpdateUrl] = useState(false)
 
   const terms = plan.years.flatMap(year =>
     year.map(term =>
@@ -71,10 +73,24 @@ export function PrereqSidebar ({
     }
   }, [custom])
 
+  useEffect(() => {
+    if (updateUrl) {
+      window.history.replaceState({}, '', '?' + toSearchParams(plan))
+    }
+  }, [updateUrl, plan])
+
   const planFileName = `Degree Plan-${plan.collegeName}-${plan.majorCode}.csv`
 
   return (
     <aside class='sidebar'>
+      <label>
+        <input
+          type='checkbox'
+          checked={updateUrl}
+          onInput={e => setUpdateUrl(e.currentTarget.checked)}
+        />{' '}
+        Save plan in URL
+      </label>
       <h2 class='sidebar-heading'>Prerequisites</h2>
       <ul class='course-codes'>
         {terms.flatMap((term, i) =>

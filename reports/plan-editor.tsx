@@ -16,7 +16,6 @@ render(
     }
     initPlan={fromSearchParams(new URL(window.location.href).searchParams)}
     mode='advisor'
-    updateUrl={true}
   />,
   document.getElementById('root')!
 )
