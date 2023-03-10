@@ -4,7 +4,7 @@
 /// <reference lib="deno.ns" />
 
 import { render } from 'preact'
-import { App } from './plan-editor/components/App.tsx'
+import { App, CourseJson } from './plan-editor/components/App.tsx'
 import { colleges } from './plan-editor/components/Metadata.tsx'
 import { AcademicPlan } from './plan-editor/types.ts'
 
@@ -45,12 +45,6 @@ fromUrl('degreeType', 'degree')
 {
   const coursesJson = params.get('courses')
   if (coursesJson !== null) {
-    type CourseJson = [
-      title: string,
-      units: number,
-      requirement: number,
-      term: number
-    ]
     const courses: CourseJson[] = JSON.parse(coursesJson)
     const terms = courses.reduce((cum, curr) => Math.max(cum, curr[3]), 0)
     plan.years = Array.from({ length: Math.ceil(terms / 3) }, () => [
@@ -58,7 +52,7 @@ fromUrl('degreeType', 'degree')
       [],
       []
     ])
-    for (const [title, units, requirement, term] of courses) {
+    for (const [title, units, requirement, term, forCredit] of courses) {
       plan.years[Math.floor(term / 3)][term % 3].push({
         title,
         units: String(units),
@@ -66,7 +60,7 @@ fromUrl('degreeType', 'degree')
           major: !!(requirement & 0b1),
           college: !!(requirement & 0b10)
         },
-        forCredit: true,
+        forCredit: forCredit !== 0,
         id: Math.random()
       })
     }
@@ -82,6 +76,7 @@ render(
     }
     initPlan={plan}
     mode='advisor'
+    updateUrl={true}
   />,
   document.getElementById('root')!
 )

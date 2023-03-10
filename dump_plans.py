@@ -79,9 +79,9 @@ def render_plan_urls(year: int) -> None:
                         "department": major_info.department,
                         "major_name": major_info.name,
                         "major": major_plan.major_code,
-                        "cipCode": major_info.cip_code,
-                        "collegeCode": college_code,
-                        "degreeType": list(major_info.award_types)[-1]
+                        "cip": major_info.cip_code,
+                        "college": college_code,
+                        "degree_type": list(major_info.award_types)[-1]
                         if major_info.award_types
                         else "BS",
                         "courses": json.dumps(
@@ -121,7 +121,7 @@ def render_plan_urls(year: int) -> None:
                         print("<td></td>")
                     else:
                         print(
-                            f'<td><a href="./plan-editor?{colleges[college_code]}">Edit</a></td>'
+                            f'<td><a href="./plan-editor.html?{colleges[college_code]}">Edit</a></td>'
                         )
                 print("</tr>")
     print("</table>")

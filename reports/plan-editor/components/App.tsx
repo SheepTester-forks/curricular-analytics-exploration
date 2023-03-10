@@ -3,21 +3,70 @@
 /// <reference lib="dom" />
 /// <reference lib="deno.ns" />
 
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { Prereqs } from '../../util/Prereqs.ts'
 import { AcademicPlan } from '../types.ts'
 import { Editor } from './Editor.tsx'
 import { Metadata } from './Metadata.tsx'
 import { PrereqSidebar } from './PrereqSidebar.tsx'
 
+export type CourseJson = [
+  title: string,
+  units: number,
+  requirement: number,
+  term: number,
+  forCredit?: number
+]
+
 export type AppProps = {
   prereqs: Prereqs
   initPlan: AcademicPlan
   mode: 'student' | 'advisor'
+  updateUrl?: boolean
 }
-export function App ({ prereqs: initPrereqs, initPlan, mode }: AppProps) {
+export function App ({
+  prereqs: initPrereqs,
+  initPlan,
+  mode,
+  updateUrl
+}: AppProps) {
   const [plan, setPlan] = useState(initPlan)
   const [customPrereqs, setCustomPrereqs] = useState<Prereqs>({})
+
+  useEffect(() => {
+    if (updateUrl) {
+      window.history.replaceState(
+        {},
+        '',
+        '?' +
+          new URLSearchParams({
+            year: plan.startYear,
+            department: plan.departmentCode,
+            major_name: plan.majorName,
+            major: plan.majorCode,
+            cip: plan.cipCode,
+            college: plan.collegeCode,
+            degree: plan.degreeType,
+            courses: JSON.stringify(
+              plan.years.flatMap((year, i) =>
+                year.flatMap((term, j) =>
+                  term.map(
+                    (course): CourseJson => [
+                      course.title,
+                      +course.units,
+                      (+course.requirement.college << 1) |
+                        +course.requirement.major,
+                      i * 3 + j,
+                      +course.forCredit
+                    ]
+                  )
+                )
+              )
+            )
+          })
+      )
+    }
+  }, [updateUrl, plan])
 
   const prereqs = { ...initPrereqs, ...customPrereqs }
 
