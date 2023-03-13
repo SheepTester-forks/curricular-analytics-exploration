@@ -83,6 +83,22 @@ export function PrereqSidebar ({
 
   return (
     <aside class='sidebar'>
+      <div class='download-btns save-btns'>
+        <button
+          class='download-btn'
+          onClick={() => {
+            download(
+              new Blob([toSearchParams(plan).toString()]),
+              `${plan.majorCode} ${plan.collegeName}.ucsdplan`
+            )
+          }}
+        >
+          Save <u>↓</u>
+        </button>
+        <button class='download-btn'>
+          Load <u>↑</u>
+        </button>
+      </div>
       <label>
         <input
           type='checkbox'
