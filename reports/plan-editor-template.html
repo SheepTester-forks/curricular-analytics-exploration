@@ -52,6 +52,15 @@
       input[type='checkbox'] {
         margin: 0;
       }
+      .visually-hidden {
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+      }
 
       .info {
         background-color: #d9edf7;
@@ -141,11 +150,13 @@
       .download-btn {
         flex: 1 0 0;
         background-color: #428bca;
+        border: 1px solid #357ebd;
         color: white;
         border-radius: 5px;
       }
       .download-btn:not(:disabled):hover {
         background-color: #3276b1;
+        border-color: #285e8e;
       }
       .download-btn:disabled {
         opacity: 0.65;
@@ -155,6 +166,46 @@
         margin-top: 20px;
         margin-bottom: 10px;
         height: 30px;
+      }
+      .plan-name-wrapper {
+        display: flex;
+      }
+      .plan-btns {
+        display: flex;
+        height: 30px;
+        gap: 10px;
+        margin: 10px 0;
+      }
+      .delete-btn {
+        background-color: #d9534f;
+        border-color: #d43f3a;
+      }
+      .delete-btn:not(:disabled):hover {
+        background-color: #d2322d;
+        border-color: #ac2925;
+      }
+      .duplicate-plan-name {
+        color: #dc3545;
+        margin: 0;
+        margin-top: 10px;
+      }
+      .saved-plans {
+        border: 1px solid #ccc;
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+        margin-bottom: 10px;
+      }
+      .saved-plan {
+        cursor: pointer;
+      }
+      .saved-plan:not(.plan-current):hover,
+      .saved-plan:not(.plan-current):focus-within {
+        background-color: #e6e6e6;
+      }
+      .plan-current {
+        background-color: #428bca;
+        color: white;
       }
 
       .plan-info {
@@ -225,10 +276,12 @@
         background-color: #e6e6e6;
       }
       .remove-year {
-        background-color: #c9302c;
-        border: 1px solid #ac2925;
+        color: #dc3545;
+        border: 1px solid #dc3545;
+        box-shadow: 0 0 0 2px white;
+        background-color: white;
         padding: 1px 5px;
-        border-radius: 2px;
+        border-radius: 5px;
         margin: 0 10px;
       }
       input[type='text'].start-year {

@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import { toCsv } from '../../util/csv.ts'
 import { download } from '../../util/download.ts'
+import { storage } from '../../util/local-storage.ts'
 import { cleanCourseCode, CourseCode, Prereqs } from '../../util/Prereqs.ts'
 import { toUcsdPlan, toCurrAnalyticsPlan } from '../export-plan.ts'
 import { toSearchParams } from '../save-to-url.ts'
@@ -14,6 +15,19 @@ import { CustomCourse } from './CustomCourse.tsx'
 import { PrereqCheck } from './PrereqCheck.tsx'
 
 const CUSTOM_COURSE_KEY = 'ei/plan-editor/custom-courses'
+const SAVED_PLAN_PREFIX = 'ei/plan-editor/plans/'
+
+function getSavedPlans (): string[] {
+  const plans: string[] = []
+  for (let i = 0; i < storage.length; i++) {
+    const key = storage.key(i)
+    if (key?.startsWith(SAVED_PLAN_PREFIX)) {
+      plans.push(key.replace(SAVED_PLAN_PREFIX, ''))
+    }
+  }
+  return plans.sort()
+}
+
 type CustomCourse = {
   name: string
   reqs: string[][]
@@ -35,14 +49,13 @@ export function PrereqSidebar ({
     'AWP 3',
     'AWP 4B'
   ])
-  const [custom, setCustom] = useState<CustomCourse[]>(() => {
-    try {
-      return JSON.parse(localStorage.getItem(CUSTOM_COURSE_KEY) || '[]')
-    } catch {
-      return []
-    }
-  })
+  const [custom, setCustom] = useState<CustomCourse[]>(() =>
+    JSON.parse(storage.getItem(CUSTOM_COURSE_KEY) || '[]')
+  )
+  const [saving, setSaving] = useState(false)
+  const [planName, setPlanName] = useState('')
   const [updateUrl, setUpdateUrl] = useState(false)
+  const [savedPlans, setSavedPlans] = useState<string[]>(getSavedPlans)
 
   const terms = plan.years.flatMap(year =>
     year.map(term =>
@@ -66,11 +79,7 @@ export function PrereqSidebar ({
   }, [custom])
 
   useEffect(() => {
-    try {
-      localStorage.setItem(CUSTOM_COURSE_KEY, JSON.stringify(custom))
-    } catch {
-      // Ignore localStorage error
-    }
+    storage.setItem(CUSTOM_COURSE_KEY, JSON.stringify(custom))
   }, [custom])
 
   useEffect(() => {
@@ -79,24 +88,87 @@ export function PrereqSidebar ({
     }
   }, [updateUrl, plan])
 
+  useEffect(() => {
+    if (saving) {
+      storage.setItem(SAVED_PLAN_PREFIX + planName, JSON.stringify(plan))
+    }
+  }, [saving, plan, planName])
+
+  useEffect(() => {
+    const handleStorage = () => {
+      setSavedPlans(getSavedPlans())
+    }
+    handleStorage()
+    self.addEventListener('storage', handleStorage)
+    return () => {
+      self.removeEventListener('storage', handleStorage)
+    }
+  })
+  useEffect(() => {
+    setSavedPlans(getSavedPlans())
+  }, [planName])
+
   const planFileName = `Degree Plan-${plan.collegeName}-${plan.majorCode}.csv`
 
   return (
     <aside class='sidebar'>
-      <div class='download-btns save-btns'>
-        <button
-          class='download-btn'
-          onClick={() => {
-            download(
-              new Blob([toSearchParams(plan).toString()]),
-              `${plan.majorCode} ${plan.collegeName}.ucsdplan`
-            )
+      <div class='saved-plans'>
+        {savedPlans.map(name => (
+          <label
+            key={name}
+            class={`saved-plan ${
+              saving && name === planName ? 'plan-current' : ''
+            }`}
+          >
+            <input
+              type='radio'
+              name='plan'
+              checked={saving && name === planName}
+              class='visually-hidden'
+            />{' '}
+            {name}
+          </label>
+        ))}
+      </div>
+      <div class='plan-name-wrapper'>
+        <input
+          type='text'
+          class='metadata-value lengthy'
+          aria-label='Plan name'
+          placeholder='To save the plan, name it here.'
+          value={planName}
+          onInput={e => {
+            setPlanName(e.currentTarget.value)
+            if (e.currentTarget.value === '') {
+              if (saving) {
+                storage.removeItem(SAVED_PLAN_PREFIX + planName)
+              }
+              setSaving(false)
+            } else if (planName === '') {
+              setSaving(true)
+            } else {
+              // If the name is already taken, then set saving to false
+              setSaving(
+                storage.getItem(SAVED_PLAN_PREFIX + e.currentTarget.value) ===
+                  null
+              )
+              if (saving) {
+                // Remove old plan name
+                storage.removeItem(SAVED_PLAN_PREFIX + planName)
+              }
+            }
           }}
-        >
-          Save <u>↓</u>
+        />
+      </div>
+      {planName !== '' && !saving && (
+        <p class='duplicate-plan-name'>A plan of this name already exists.</p>
+      )}
+      <div class='plan-btns'>
+        <button class='download-btn' disabled={!saving}>
+          Duplicate
         </button>
-        <button class='download-btn'>
-          Load <u>↑</u>
+        <button class='download-btn delete-btn' disabled={!saving}>
+          Delete
         </button>
       </div>
       <label>

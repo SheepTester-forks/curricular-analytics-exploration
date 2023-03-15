@@ -12,12 +12,7 @@ export type UrlCourseJson = [
 export function fromSearchParams (params: URLSearchParams): AcademicPlan {
   const plan: AcademicPlan = {
     startYear: String(new Date().getFullYear()),
-    years: [
-      [[], [], []],
-      [[], [], []],
-      [[], [], []],
-      [[], [], []]
-    ],
+    years: [],
     departmentCode: '',
     majorName: '',
     majorCode: '',
@@ -43,15 +38,16 @@ export function fromSearchParams (params: URLSearchParams): AcademicPlan {
   urlParam('collegeCode', 'college')
   plan.collegeName = colleges[plan.collegeCode]
   urlParam('degreeType', 'degree')
+  const termCount = params.get('terms')
   const coursesJson = params.get('courses')
-  if (coursesJson !== null) {
-    const courses: UrlCourseJson[] = JSON.parse(coursesJson)
-    const terms = courses.reduce((cum, curr) => Math.max(cum, curr[3]), 0)
-    plan.years = Array.from({ length: Math.ceil(terms / 3) }, () => [
-      [],
-      [],
-      []
-    ])
+  const courses: UrlCourseJson[] | null =
+    coursesJson !== null ? JSON.parse(coursesJson) : null
+  const terms = Math.max(
+    courses?.reduce((cum, curr) => Math.max(cum, curr[3]), 0) ?? 0,
+    termCount !== null ? +termCount : 12
+  )
+  plan.years = Array.from({ length: Math.ceil(terms / 3) }, () => [[], [], []])
+  if (courses) {
     for (const [title, units, requirement, term, forCredit] of courses) {
       plan.years[Math.floor(term / 3)][term % 3].push({
         title,
@@ -77,6 +73,7 @@ export function toSearchParams (plan: AcademicPlan): URLSearchParams {
     cip: plan.cipCode,
     college: plan.collegeCode,
     degree: plan.degreeType,
+    terms: String(plan.years.length * 3),
     courses: JSON.stringify(
       plan.years.flatMap((year, i) =>
         year.flatMap((term, j) =>
