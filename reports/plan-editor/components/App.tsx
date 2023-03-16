@@ -51,6 +51,7 @@ export function App ({ prereqs: initPrereqs, initPlan, mode }: AppProps) {
         prereqs={prereqs}
         onPrereqs={setCustomPrereqs}
         plan={plan}
+        onPlan={setPlan}
         mode={mode}
       />
       <datalist id='courses'>

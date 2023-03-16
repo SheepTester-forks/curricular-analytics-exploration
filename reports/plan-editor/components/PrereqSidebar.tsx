@@ -36,12 +36,14 @@ export type PrereqSidebarProps = {
   prereqs: Prereqs
   onPrereqs: (newPrereqs: Prereqs) => void
   plan: AcademicPlan
+  onPlan: (plan: AcademicPlan) => void
   mode: 'student' | 'advisor'
 }
 export function PrereqSidebar ({
   prereqs,
   onPrereqs,
   plan,
+  onPlan,
   mode
 }: PrereqSidebarProps) {
   const [assumedSatisfied, setAssumedSatisfied] = useState<CourseCode[]>([
@@ -131,6 +133,24 @@ export function PrereqSidebar ({
                   type='radio'
                   name='plan'
                   checked={saving && name === planName}
+                  onClick={() => {
+                    if (!(saving && name === planName)) {
+                      const json = storage.getItem(SAVED_PLAN_PREFIX + name)
+                      if (json === null) {
+                        return
+                      }
+                      onPlan(JSON.parse(json))
+                      setPlanName(name)
+                      setOtherPlans(
+                        saving
+                          ? [
+                              ...otherPlans.filter(plan => plan !== name),
+                              planName
+                            ].sort()
+                          : otherPlans.filter(plan => plan !== name)
+                      )
+                    }
+                  }}
                   class='visually-hidden'
                 />{' '}
                 {name}
@@ -149,11 +169,12 @@ export function PrereqSidebar ({
           onInput={e => {
             const newPlanName = e.currentTarget.value
             setPlanName(oldPlanName => {
-              console.log(oldPlanName, saving ? 'REMOVE' : 'not remove.')
-              storage.setItem(
-                SAVED_PLAN_PREFIX + newPlanName,
-                storage.getItem(SAVED_PLAN_PREFIX + oldPlanName) ?? ''
-              )
+              if (newPlanName !== '' && !otherPlans.includes(newPlanName)) {
+                storage.setItem(
+                  SAVED_PLAN_PREFIX + newPlanName,
+                  storage.getItem(SAVED_PLAN_PREFIX + oldPlanName) ?? ''
+                )
+              }
               if (saving) {
                 storage.removeItem(SAVED_PLAN_PREFIX + oldPlanName)
               }
@@ -166,10 +187,38 @@ export function PrereqSidebar ({
         <p class='duplicate-plan-name'>A plan of this name already exists.</p>
       )}
       <div class='plan-btns'>
-        <button class='download-btn' disabled={!saving}>
+        <button
+          class='download-btn'
+          disabled={!saving}
+          onClick={() => {
+            setPlanName(planName => {
+              let i = 1
+              let newPlanName = `${planName} Copy`
+              while (otherPlans.includes(newPlanName)) {
+                i++
+                newPlanName = `${planName} Copy (${i})`
+              }
+              setOtherPlans([...otherPlans, planName].sort())
+              storage.setItem(
+                SAVED_PLAN_PREFIX + newPlanName,
+                storage.getItem(SAVED_PLAN_PREFIX + planName) ?? ''
+              )
+              return newPlanName
+            })
+          }}
+        >
           Duplicate
         </button>
-        <button class='download-btn delete-btn' disabled={!saving}>
+        <button
+          class='download-btn delete-btn'
+          disabled={!saving}
+          onClick={() => {
+            setPlanName(planName => {
+              storage.removeItem(SAVED_PLAN_PREFIX + planName)
+              return ''
+            })
+          }}
+        >
           Delete
         </button>
       </div>
