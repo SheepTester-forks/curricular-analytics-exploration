@@ -52,10 +52,9 @@ export function PrereqSidebar ({
   const [custom, setCustom] = useState<CustomCourse[]>(() =>
     JSON.parse(storage.getItem(CUSTOM_COURSE_KEY) || '[]')
   )
-  const [saving, setSaving] = useState(false)
   const [planName, setPlanName] = useState('')
   const [updateUrl, setUpdateUrl] = useState(false)
-  const [savedPlans, setSavedPlans] = useState<string[]>(getSavedPlans)
+  const [otherPlans, setOtherPlans] = useState<string[]>(getSavedPlans)
 
   const terms = plan.years.flatMap(year =>
     year.map(term =>
@@ -89,47 +88,57 @@ export function PrereqSidebar ({
   }, [updateUrl, plan])
 
   useEffect(() => {
-    if (saving) {
+    // Due to race conditions (`planName` may be out of date when mashing keys),
+    // only set if there's already something saved there
+    if (storage.getItem(SAVED_PLAN_PREFIX + planName) !== null) {
       storage.setItem(SAVED_PLAN_PREFIX + planName, JSON.stringify(plan))
     }
-  }, [saving, plan, planName])
+  }, [plan, planName])
 
   useEffect(() => {
     const handleStorage = () => {
-      setSavedPlans(getSavedPlans())
+      const planNames = getSavedPlans()
+      setOtherPlans(otherPlans =>
+        otherPlans.includes(planName)
+          ? planNames
+          : planNames.filter(name => name !== planName)
+      )
     }
     handleStorage()
     self.addEventListener('storage', handleStorage)
     return () => {
       self.removeEventListener('storage', handleStorage)
     }
-  })
-  useEffect(() => {
-    setSavedPlans(getSavedPlans())
-  }, [planName])
+  }, [])
 
+  const saving = planName !== '' && !otherPlans.includes(planName)
   const planFileName = `Degree Plan-${plan.collegeName}-${plan.majorCode}.csv`
 
   return (
     <aside class='sidebar'>
-      <div class='saved-plans'>
-        {savedPlans.map(name => (
-          <label
-            key={name}
-            class={`saved-plan ${
-              saving && name === planName ? 'plan-current' : ''
-            }`}
-          >
-            <input
-              type='radio'
-              name='plan'
-              checked={saving && name === planName}
-              class='visually-hidden'
-            />{' '}
-            {name}
-          </label>
-        ))}
-      </div>
+      <h2 class='sidebar-heading'>Saved plans</h2>
+      {(otherPlans.length > 0 || saving) && (
+        <div class='saved-plans'>
+          {(saving ? [...otherPlans, planName].sort() : otherPlans).map(
+            name => (
+              <label
+                key={name}
+                class={`saved-plan ${
+                  saving && name === planName ? 'plan-current' : ''
+                }`}
+              >
+                <input
+                  type='radio'
+                  name='plan'
+                  checked={saving && name === planName}
+                  class='visually-hidden'
+                />{' '}
+                {name}
+              </label>
+            )
+          )}
+        </div>
+      )}
       <div class='plan-name-wrapper'>
         <input
           type='text'
@@ -138,25 +147,18 @@ export function PrereqSidebar ({
           placeholder='To save the plan, name it here.'
           value={planName}
           onInput={e => {
-            setPlanName(e.currentTarget.value)
-            if (e.currentTarget.value === '') {
-              if (saving) {
-                storage.removeItem(SAVED_PLAN_PREFIX + planName)
-              }
-              setSaving(false)
-            } else if (planName === '') {
-              setSaving(true)
-            } else {
-              // If the name is already taken, then set saving to false
-              setSaving(
-                storage.getItem(SAVED_PLAN_PREFIX + e.currentTarget.value) ===
-                  null
+            const newPlanName = e.currentTarget.value
+            setPlanName(oldPlanName => {
+              console.log(oldPlanName, saving ? 'REMOVE' : 'not remove.')
+              storage.setItem(
+                SAVED_PLAN_PREFIX + newPlanName,
+                storage.getItem(SAVED_PLAN_PREFIX + oldPlanName) ?? ''
               )
               if (saving) {
-                // Remove old plan name
-                storage.removeItem(SAVED_PLAN_PREFIX + planName)
+                storage.removeItem(SAVED_PLAN_PREFIX + oldPlanName)
               }
-            }
+              return newPlanName
+            })
           }}
         />
       </div>
