@@ -55,6 +55,7 @@ export function PrereqSidebar ({
     JSON.parse(storage.getItem(CUSTOM_COURSE_KEY) || '[]')
   )
   const [planName, setPlanName] = useState('')
+  const [originalPlan, setOriginalPlan] = useState(plan)
   const [updateUrl, setUpdateUrl] = useState(false)
   const [otherPlans, setOtherPlans] = useState<string[]>(getSavedPlans)
 
@@ -139,7 +140,9 @@ export function PrereqSidebar ({
                       if (json === null) {
                         return
                       }
-                      onPlan(JSON.parse(json))
+                      const plan = JSON.parse(json)
+                      onPlan(plan)
+                      setOriginalPlan(plan)
                       setPlanName(name)
                       setOtherPlans(
                         saving
@@ -213,13 +216,39 @@ export function PrereqSidebar ({
           class='download-btn delete-btn'
           disabled={!saving}
           onClick={() => {
-            setPlanName(planName => {
-              storage.removeItem(SAVED_PLAN_PREFIX + planName)
-              return ''
-            })
+            if (
+              confirm(
+                [
+                  `Are you sure you want to delete your plan "${planName}"?`,
+                  'To restore the plan, give the plan a name again. Otherwise, once you close the tab, the plan will be lost forever.'
+                ].join('\n\n')
+              )
+            ) {
+              setPlanName(planName => {
+                storage.removeItem(SAVED_PLAN_PREFIX + planName)
+                return ''
+              })
+            }
           }}
         >
           Delete
+        </button>
+        <button
+          class='download-btn delete-btn'
+          disabled={JSON.stringify(plan) === JSON.stringify(originalPlan)}
+          onClick={() => {
+            if (
+              confirm(
+                `Are you sure you want to revert all changes${
+                  saving ? ` made since opening your plan "${planName}"` : ''
+                }? This cannot be undone.`
+              )
+            ) {
+              onPlan(originalPlan)
+            }
+          }}
+        >
+          Reset
         </button>
       </div>
       <label>
