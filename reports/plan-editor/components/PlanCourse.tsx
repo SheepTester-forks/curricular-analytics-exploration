@@ -53,6 +53,13 @@ export function PlanCourse ({
     }
   }, [ref.current, showOptions])
 
+  const validCode = !!prereqs?.[course.title]
+  const duplicateCourse = !!concurrentCourses?.includes(course.title)
+  const duplicateCredit = !!pastCourses?.includes(course.title)
+
+  const hasError = duplicateCourse && validCode
+  const hasWarning = (duplicateCourse && !validCode) || duplicateCredit
+
   return (
     <li
       class={`course-editor ${isNew ? 'add-course' : ''} ${
@@ -133,34 +140,24 @@ export function PlanCourse ({
                 : course.requirement.college
                 ? 'C'
                 : '⚙'}
-              {prereqs?.[course.title] && (
-                <span class='valid-course-icon'>✓</span>
-              )}
+              {validCode && <span class='valid-course-icon'>✓</span>}
               {!course.forCredit && <span class='failed-course-icon'>F</span>}
+              {(hasError || hasWarning) && <span class='error-icon'>⚠️</span>}
             </button>
             {showOptions && (
-              <div
-                class={`options-wrapper-arrow ${
-                  prereqs?.[course.title] ? 'info' : ''
-                }`}
-              />
+              <div class={`options-wrapper-arrow ${validCode ? 'info' : ''}`} />
             )}
           </div>
-          {showOptions &&
-            prereqs &&
-            onCourse &&
-            onRemove &&
-            pastCourses &&
-            concurrentCourses && (
-              <CourseOptions
-                prereqs={prereqs}
-                course={course}
-                onCourse={onCourse}
-                onRemove={onRemove}
-                pastCourses={pastCourses}
-                concurrentCourses={concurrentCourses}
-              />
-            )}
+          {showOptions && onCourse && onRemove && (
+            <CourseOptions
+              course={course}
+              onCourse={onCourse}
+              onRemove={onRemove}
+              valid={validCode}
+              duplicateCourse={duplicateCourse}
+              duplicateCredit={duplicateCredit}
+            />
+          )}
           <input
             class='course-field course-units term-units'
             type='text'

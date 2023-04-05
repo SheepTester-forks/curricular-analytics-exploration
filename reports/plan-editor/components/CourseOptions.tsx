@@ -7,20 +7,20 @@ import { CourseCode, Prereqs } from '../../util/Prereqs.ts'
 import { Course } from '../types.ts'
 
 export type CourseOptionsProps = {
-  prereqs: Prereqs
   course: Course
   onCourse: (course: Course) => void
   onRemove: () => void
-  pastCourses: CourseCode[]
-  concurrentCourses: CourseCode[]
+  valid: boolean
+  duplicateCourse: boolean
+  duplicateCredit: boolean
 }
 export function CourseOptions ({
-  prereqs,
   course,
   onCourse,
   onRemove,
-  pastCourses,
-  concurrentCourses
+  valid,
+  duplicateCourse,
+  duplicateCredit
 }: CourseOptionsProps) {
   return (
     <div class='options-wrapper'>
@@ -71,19 +71,17 @@ export function CourseOptions ({
           Credit received from this course (uncheck if failed or withdrawn)
         </label>
       </div>
-      {prereqs[course.title] && (
+      {valid && (
         <div class='course-note info'>
           <strong>{course.title}</strong> is a valid course code.
         </div>
       )}
-      {concurrentCourses.includes(course.title) && (
-        <div
-          class={`course-note ${prereqs[course.title] ? 'error' : 'warning'}`}
-        >
+      {duplicateCourse && (
+        <div class={`course-note ${valid ? 'error' : 'warning'}`}>
           This course is listed multiple times in the same term.
         </div>
       )}
-      {pastCourses.includes(course.title) && (
+      {duplicateCredit && (
         <div class='course-note warning'>
           Credit for this course has already been received. If you are retaking
           this course, uncheck "Credit received" for the earlier course.

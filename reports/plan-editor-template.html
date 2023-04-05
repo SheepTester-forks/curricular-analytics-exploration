@@ -443,11 +443,15 @@
         color: chocolate;
       }
       .valid-course-icon,
-      .failed-course-icon {
+      .failed-course-icon,
+      .error-icon {
         position: absolute;
+        font-size: 0.8em;
+      }
+      .valid-course-icon,
+      .failed-course-icon {
         bottom: 0;
         font-weight: bold;
-        font-size: 0.8em;
       }
       .valid-course-icon {
         color: #31708f;
@@ -456,6 +460,10 @@
       .failed-course-icon {
         color: #a94442;
         left: 0;
+      }
+      .error-icon {
+        top: 0;
+        right: -3px;
       }
       .options-wrapper-arrow {
         width: 16px;
