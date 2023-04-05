@@ -55,7 +55,7 @@ export function PlanCourse ({
 
   const validCode = !!prereqs?.[course.title]
   const duplicateCourse = !!concurrentCourses?.includes(course.title)
-  const duplicateCredit = !!pastCourses?.includes(course.title)
+  const duplicateCredit = validCode && !!pastCourses?.includes(course.title)
 
   const hasError = duplicateCourse && validCode
   const hasWarning = (duplicateCourse && !validCode) || duplicateCredit
@@ -142,7 +142,9 @@ export function PlanCourse ({
                 : '⚙'}
               {validCode && <span class='valid-course-icon'>✓</span>}
               {!course.forCredit && <span class='failed-course-icon'>F</span>}
-              {(hasError || hasWarning) && <span class='error-icon'>⚠️</span>}
+              {(hasError || hasWarning) && (
+                <span class='issue-icon'>{hasError ? '❌' : '⚠️'}</span>
+              )}
             </button>
             {showOptions && (
               <div class={`options-wrapper-arrow ${validCode ? 'info' : ''}`} />
