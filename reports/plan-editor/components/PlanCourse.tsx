@@ -56,8 +56,14 @@ export function PlanCourse ({
   const validCode = !!prereqs?.[course.title]
   const duplicateCourse = !!concurrentCourses?.includes(course.title)
   const duplicateCredit = validCode && !!pastCourses?.includes(course.title)
+  const missingPrereqs =
+    validCode && pastCourses
+      ? prereqs[course.title].filter(
+          req => req.length > 0 && !req.some(alt => pastCourses.includes(alt))
+        )
+      : []
 
-  const hasError = duplicateCourse && validCode
+  const hasError = (duplicateCourse && validCode) || missingPrereqs.length > 0
   const hasWarning = (duplicateCourse && !validCode) || duplicateCredit
 
   return (
@@ -158,6 +164,7 @@ export function PlanCourse ({
               valid={validCode}
               duplicateCourse={duplicateCourse}
               duplicateCredit={duplicateCredit}
+              missingPrereqs={missingPrereqs}
             />
           )}
           <input

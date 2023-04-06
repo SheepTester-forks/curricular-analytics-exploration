@@ -13,6 +13,7 @@ export type CourseOptionsProps = {
   valid: boolean
   duplicateCourse: boolean
   duplicateCredit: boolean
+  missingPrereqs: string[][]
 }
 export function CourseOptions ({
   course,
@@ -20,7 +21,8 @@ export function CourseOptions ({
   onRemove,
   valid,
   duplicateCourse,
-  duplicateCredit
+  duplicateCredit,
+  missingPrereqs
 }: CourseOptionsProps) {
   return (
     <div class='options-wrapper'>
@@ -85,6 +87,16 @@ export function CourseOptions ({
         <div class='course-note warning'>
           Credit for this course has already been received. If you are retaking
           this course, uncheck "Credit received" for the earlier course.
+        </div>
+      )}
+      {missingPrereqs.length > 0 && (
+        <div class='course-note error'>
+          Not all prerequisites have been satisfied:
+          <ul class='missing-prereqs'>
+            {missingPrereqs.map((req, i) => (
+              <li key={i}>{req.join(' or ')}</li>
+            ))}
+          </ul>
         </div>
       )}
       <button class='remove-course-btn' onClick={onRemove}>

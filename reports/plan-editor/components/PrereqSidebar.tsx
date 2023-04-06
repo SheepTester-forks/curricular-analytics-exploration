@@ -35,6 +35,8 @@ type CustomCourse = {
 export type PrereqSidebarProps = {
   prereqs: Prereqs
   onPrereqs: (newPrereqs: Prereqs) => void
+  assumedSatisfied: CourseCode[]
+  onAssumedSatisfied: (newSatisfied: CourseCode[]) => void
   plan: AcademicPlan
   onPlan: (plan: AcademicPlan) => void
   mode: 'student' | 'advisor'
@@ -42,15 +44,12 @@ export type PrereqSidebarProps = {
 export function PrereqSidebar ({
   prereqs,
   onPrereqs,
+  assumedSatisfied,
+  onAssumedSatisfied,
   plan,
   onPlan,
   mode
 }: PrereqSidebarProps) {
-  const [assumedSatisfied, setAssumedSatisfied] = useState<CourseCode[]>([
-    'MATH 4C',
-    'AWP 3',
-    'AWP 4B'
-  ])
   const [custom, setCustom] = useState<CustomCourse[]>(() =>
     JSON.parse(storage.getItem(CUSTOM_COURSE_KEY) || '[]')
   )
@@ -295,7 +294,7 @@ export function PrereqSidebar ({
         {[...assumedSatisfied, ''].map((name, i) => {
           const isNew = i === assumedSatisfied.length
           const handleChange = (value: string) =>
-            setAssumedSatisfied(
+            onAssumedSatisfied(
               isNew
                 ? [...assumedSatisfied, value]
                 : assumedSatisfied.map((course, j) =>
@@ -326,7 +325,7 @@ export function PrereqSidebar ({
                       ?.focus()
                   } else if (e.key === 'Backspace' && name === '') {
                     if (i < assumedSatisfied.length) {
-                      setAssumedSatisfied(
+                      onAssumedSatisfied(
                         assumedSatisfied.filter((_, j) => j !== i)
                       )
                     }

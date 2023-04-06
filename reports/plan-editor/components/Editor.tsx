@@ -5,7 +5,7 @@
 
 import { useRef, useState } from 'preact/hooks'
 import type { JSX } from 'preact/jsx-runtime'
-import { Prereqs } from '../../util/Prereqs.ts'
+import { CourseCode, Prereqs } from '../../util/Prereqs.ts'
 import { DragState, DragContext } from '../drag-drop.ts'
 import { AcademicPlan } from '../types.ts'
 import { PlanCourse } from './PlanCourse.tsx'
@@ -14,10 +14,16 @@ import { Year } from './Year.tsx'
 
 export type EditorProps = {
   prereqs: Prereqs
+  assumedSatisfied: CourseCode[]
   plan: AcademicPlan
   onPlan: (plan: AcademicPlan) => void
 }
-export function Editor ({ prereqs, plan, onPlan }: EditorProps) {
+export function Editor ({
+  prereqs,
+  assumedSatisfied,
+  plan,
+  onPlan
+}: EditorProps) {
   const element = useRef<HTMLDivElement>(null)
   // Ref needed for event handlers
   const dragStateRef = useRef<DragState | null>(null)
@@ -164,15 +170,18 @@ export function Editor ({ prereqs, plan, onPlan }: EditorProps) {
                 years: plan.years.filter((_, i) => i !== yearIndex)
               })
             }
-            pastCourses={plan.years
-              .slice(0, yearIndex)
-              .flatMap(year =>
-                year.flatMap(term =>
-                  term
-                    .filter(course => course.forCredit)
-                    .map(course => course.title)
+            pastCourses={[
+              ...assumedSatisfied,
+              ...plan.years
+                .slice(0, yearIndex)
+                .flatMap(year =>
+                  year.flatMap(term =>
+                    term
+                      .filter(course => course.forCredit)
+                      .map(course => course.title)
+                  )
                 )
-              )}
+            ]}
             key={yearIndex}
           />
         ))}

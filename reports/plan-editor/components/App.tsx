@@ -4,7 +4,7 @@
 /// <reference lib="deno.ns" />
 
 import { useState } from 'preact/hooks'
-import { Prereqs } from '../../util/Prereqs.ts'
+import { CourseCode, Prereqs } from '../../util/Prereqs.ts'
 import { AcademicPlan } from '../types.ts'
 import { Editor } from './Editor.tsx'
 import { Metadata } from './Metadata.tsx'
@@ -18,6 +18,11 @@ export type AppProps = {
 export function App ({ prereqs: initPrereqs, initPlan, mode }: AppProps) {
   const [plan, setPlan] = useState(initPlan)
   const [customPrereqs, setCustomPrereqs] = useState<Prereqs>({})
+  const [assumedSatisfied, setAssumedSatisfied] = useState<CourseCode[]>([
+    'MATH 4C',
+    'AWP 3',
+    'AWP 4B'
+  ])
 
   const prereqs = { ...initPrereqs, ...customPrereqs }
 
@@ -45,11 +50,18 @@ export function App ({ prereqs: initPrereqs, initPlan, mode }: AppProps) {
             </span>
           </span>
         </div>
-        <Editor prereqs={prereqs} plan={plan} onPlan={setPlan} />
+        <Editor
+          prereqs={prereqs}
+          assumedSatisfied={assumedSatisfied}
+          plan={plan}
+          onPlan={setPlan}
+        />
       </main>
       <PrereqSidebar
         prereqs={prereqs}
         onPrereqs={setCustomPrereqs}
+        assumedSatisfied={assumedSatisfied}
+        onAssumedSatisfied={setAssumedSatisfied}
         plan={plan}
         onPlan={setPlan}
         mode={mode}
