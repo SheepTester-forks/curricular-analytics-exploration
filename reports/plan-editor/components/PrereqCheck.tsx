@@ -12,6 +12,9 @@ export type PrereqCheckProps = {
   pastTerms: CourseCode[]
   assumedSatisfied: CourseCode[]
 }
+/**
+ * A list of prereqs for a course in the "Prerequisites" section of the sidebar.
+ */
 export function PrereqCheck ({
   code,
   reqs,

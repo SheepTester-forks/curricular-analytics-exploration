@@ -32,6 +32,10 @@ export type TermProps = {
   onDropLocation?: (index: number | null) => void
   pastCourses: CourseCode[]
 }
+/**
+ * A term (quarter, eg fall, winter, or spring) in a year in the plan editor.
+ * Contains courses (`PlanCourse`).
+ */
 export function Term ({
   prereqs,
   name,

@@ -24,6 +24,9 @@ export type PlanCourseProps = {
   pastCourses?: CourseCode[]
   concurrentCourses?: CourseCode[]
 }
+/**
+ * A draggable course row in the plan editor.
+ */
 export function PlanCourse ({
   prereqs,
   course,

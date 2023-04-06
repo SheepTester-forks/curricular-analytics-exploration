@@ -18,6 +18,11 @@ export type EditorProps = {
   plan: AcademicPlan
   onPlan: (plan: AcademicPlan) => void
 }
+/**
+ * The plan editor itself, excluding the sidebar and the plan metadata at the
+ * top. This just contains a variable number of years (`Year`) and the remove
+ * zone (`RemoveZone`).
+ */
 export function Editor ({
   prereqs,
   assumedSatisfied,

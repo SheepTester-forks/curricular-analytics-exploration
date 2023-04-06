@@ -14,6 +14,10 @@ export type MetadataFieldProps = {
   placeholder?: string
   class?: string
 }
+/**
+ * A convenience and helper component for a text field or dropdown (`<select>`)
+ * field in the plan metadata section.
+ */
 export function MetadataField ({
   property,
   children: label,

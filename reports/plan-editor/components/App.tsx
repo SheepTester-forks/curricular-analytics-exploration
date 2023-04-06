@@ -15,6 +15,10 @@ export type AppProps = {
   initPlan: AcademicPlan
   mode: 'student' | 'advisor'
 }
+/**
+ * The top-level component containing the plan metadata and editor and the
+ * sidebar.
+ */
 export function App ({ prereqs: initPrereqs, initPlan, mode }: AppProps) {
   const [plan, setPlan] = useState(initPlan)
   const [customPrereqs, setCustomPrereqs] = useState<Prereqs>({})

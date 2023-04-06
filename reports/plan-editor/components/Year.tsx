@@ -25,6 +25,9 @@ export type YearProps = {
   onRemove: () => void
   pastCourses: CourseCode[]
 }
+/**
+ * A year in the plan editor. It contains three terms (`Term`).
+ */
 export function Year ({
   prereqs,
   planStartYear,

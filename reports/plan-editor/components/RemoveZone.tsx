@@ -9,6 +9,10 @@ import { DragContext } from '../drag-drop.ts'
 export type RemoveZoneProps = {
   onDropLocation?: (inside: boolean) => void
 }
+/**
+ * A red rectangle that appears as a drop target when dragging a course to
+ * remove the course.
+ */
 export function RemoveZone ({ onDropLocation }: RemoveZoneProps) {
   const dragState = useContext(DragContext)
   const element = useRef<HTMLDivElement>(null)

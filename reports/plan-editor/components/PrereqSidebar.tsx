@@ -41,6 +41,9 @@ export type PrereqSidebarProps = {
   onPlan: (plan: AcademicPlan) => void
   mode: 'student' | 'advisor'
 }
+/**
+ * The sidebar containing everything else other than the plan itself.
+ */
 export function PrereqSidebar ({
   prereqs,
   onPrereqs,

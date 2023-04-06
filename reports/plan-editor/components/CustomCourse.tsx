@@ -14,6 +14,9 @@ export type CustomCourseProps = {
   onRemove: () => void
   isNew: boolean
 }
+/**
+ * A custom course entry in the "Create a course" section of the sidebar.
+ */
 export function CustomCourse ({
   name,
   reqs,

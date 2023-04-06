@@ -21,6 +21,10 @@ export type MetadataProps = {
   plan: Metadata
   onPlan: (change: Partial<Metadata>) => void
 }
+/**
+ * The plan metadata at the top of the plan editor. This includes text fields
+ * for the major code and college.
+ */
 export function Metadata ({ plan, onPlan }: MetadataProps) {
   return (
     <div class='metadata'>

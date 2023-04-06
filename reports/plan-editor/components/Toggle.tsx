@@ -7,6 +7,11 @@ export type ToggleProps = {
   checked?: boolean
   onCheck?: (checked: boolean) => void
 }
+/**
+ * A checkbox that looks like a toggle switch. Stolen from the [Tree of Blocked
+ * Courses](https://educationalinnovation.ucsd.edu/ca-views/prereq-tree.html).
+ * Currently not used anywhere.
+ */
 export function Toggle ({ checked, onCheck }: ToggleProps) {
   return (
     <>

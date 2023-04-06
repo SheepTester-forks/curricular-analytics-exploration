@@ -15,6 +15,10 @@ export type CourseOptionsProps = {
   duplicateCredit: boolean
   missingPrereqs: string[][]
 }
+/**
+ * The pop-up that appears when you click on the settings button for a course in
+ * the plan.
+ */
 export function CourseOptions ({
   course,
   onCourse,
