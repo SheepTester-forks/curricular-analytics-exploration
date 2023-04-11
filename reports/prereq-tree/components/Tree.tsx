@@ -8,9 +8,9 @@ import { CourseCode, Prereqs } from '../../util/Prereqs.ts'
 import {
   CourseCodeLink,
   CourseCodeNode,
-  createGraph,
+  ForceDirectedGraph,
   NodeUpdater
-} from '../createGraph.ts'
+} from '../graphs/ForceDirectedGraph.ts'
 import { Options } from './Options.tsx'
 
 type Graph = {
@@ -141,7 +141,10 @@ export function Tree (props: TreeProps) {
     // https://observablehq.com/@d3/color-schemes
     subjects.push(subjects.shift()!, subjects.shift()!)
     subjects.unshift('CSE', 'ECE', 'DSC', 'MATH', 'MAE', 'COGS')
-    const { update, destroy } = createGraph(wrapperRef.current, subjects)
+    const { update, destroy } = new ForceDirectedGraph(
+      wrapperRef.current,
+      subjects
+    )
     updateRef.current = update
     return destroy
   }, [wrapperRef.current, prereqs])
