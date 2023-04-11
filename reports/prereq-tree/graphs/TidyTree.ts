@@ -1,26 +1,29 @@
+/// <reference no-default-lib="true"/>
+/// <reference lib="dom" />
+/// <reference lib="deno.ns" />
+
 import * as d3 from 'd3'
 
-type FlareNode = { name: string; children: FlareNode[] }
-declare const flare: FlareNode
+/**
+ * Copyright 2021 Observable, Inc.
+ * Released under the ISC license.
+ * https://observablehq.com/@d3/tree
+ */
+export class TidyTree {
+  #nodeColor: d3.ScaleOrdinal<string, string>
 
-export const chart = Tree(flare, {
-  label: d => d.name,
-  title: (d, n) =>
-    `${n
-      .ancestors()
-      .reverse()
-      .map(d => d.data.name)
-      .join('.')}`, // hover text
-  link: (d, n) =>
-    `https://github.com/prefuse/Flare/${
-      n.children ? 'tree' : 'blob'
-    }/master/flare/src/${n
-      .ancestors()
-      .reverse()
-      .map(d => d.data.name)
-      .join('/')}${n.children ? '' : '.as'}`,
-  width: 1152
-})
+  constructor (wrapper: ParentNode, subjects: string[]) {
+    this.#nodeColor = d3.scaleOrdinal<string, string>(
+      subjects,
+      d3.schemeTableau10
+    )
+    this.#tooltip.append('circle').attr('class', 'tooltip-circle')
+
+    this.#resize()
+    self.addEventListener('resize', this.#resize)
+    wrapper.append(this.#svg.node()!)
+  }
+}
 
 type Node = unknown
 type TreeOptions<Node> = {

@@ -131,7 +131,10 @@ export function Tree (props: TreeProps) {
   const updateRef = useRef<NodeUpdater>()
 
   useEffect(() => {
+    console.log(wrapperRef.current, prereqs)
     if (!wrapperRef.current) {
+      console.log('DIE')
+
       return
     }
     const subjects = [
@@ -141,12 +144,13 @@ export function Tree (props: TreeProps) {
     // https://observablehq.com/@d3/color-schemes
     subjects.push(subjects.shift()!, subjects.shift()!)
     subjects.unshift('CSE', 'ECE', 'DSC', 'MATH', 'MAE', 'COGS')
-    const { update, destroy } = new ForceDirectedGraph(
-      wrapperRef.current,
-      subjects
-    )
-    updateRef.current = update
-    return destroy
+    const graph = new ForceDirectedGraph(wrapperRef.current, subjects)
+    console.log(graph)
+
+    updateRef.current = graph.update
+    return () => {
+      graph.destroy()
+    }
   }, [wrapperRef.current, prereqs])
 
   useEffect(() => {

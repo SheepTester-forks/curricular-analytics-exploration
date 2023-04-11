@@ -6,6 +6,7 @@ import * as d3 from 'd3'
 import { CourseCode } from '../../util/Prereqs.ts'
 import { Vector2 } from '../../util/Vector2.ts'
 import '../d3-hack.ts'
+import { GraphCommon } from './GraphCommon.ts'
 
 export type CourseCodeNode = {
   course: CourseCode
@@ -42,38 +43,20 @@ export type NodeUpdater = (
  * https://observablehq.com/@d3/force-directed-graph
  * Updating nodes: https://observablehq.com/@d3/build-your-own-graph
  */
-export class ForceDirectedGraph {
+export class ForceDirectedGraph extends GraphCommon {
   #nodes: CourseNode[] = []
   #links: CourseLink[] = []
 
-  #nodeColor: d3.ScaleOrdinal<string, string>
-
-  #svg = d3.create('svg').attr('class', 'svg')
   // Links first so the nodes are on top
-  #link = this.#svg
+  #link = this.svg
     .append('g')
     .style('cx', 0)
     .style('cy', 0)
     .attr('class', 'line')
     .selectAll<SVGPathElement, CourseLink>('path')
-  #node = this.#svg
-    .append('g')
-    .selectAll<SVGCircleElement, CourseNode>('circle')
-  #legend = this.#svg.append('g')
-  #legendNode = this.#legend.selectAll<SVGGElement, CourseCode>('g')
-  #legendTitle = this.#legend
-    .append('text')
-    .attr('class', 'text legend-title')
-    .text('Subjects')
-    .attr('x', 5)
-    .attr('y', -35)
-  #legendCount = this.#legend
-    .append('text')
-    .attr('class', 'text')
-    .attr('x', 5)
-    .attr('y', -15)
+  #node = this.svg.append('g').selectAll<SVGCircleElement, CourseNode>('circle')
 
-  #tooltip = this.#svg
+  #tooltip = this.svg
     .append('g')
     .attr('class', 'tooltip')
     .attr('display', 'none')
@@ -120,26 +103,14 @@ export class ForceDirectedGraph {
       this.#dragging = false
     })
 
-  constructor (wrapper: ParentNode, subjects: string[]) {
-    this.#nodeColor = d3.scaleOrdinal<string, string>(
-      subjects,
-      d3.schemeTableau10
-    )
+  constructor (wrapper: Element, subjects: string[]) {
+    super(wrapper, subjects)
     this.#tooltip.append('circle').attr('class', 'tooltip-circle')
-
-    this.#resize()
-    self.addEventListener('resize', this.#resize)
-    wrapper.append(this.#svg.node()!)
   }
 
-  #resize = () => {
-    const width = window.innerWidth
-    const height = window.innerHeight
-    this.#svg
-      .attr('width', width)
-      .attr('height', height)
-      .attr('viewBox', [-width / 2, -height / 2, width, height].join(' '))
-    this.#legend.attr('transform', `translate(${-width / 2}, ${height / 2})`)
+  resize (width: number, height: number) {
+    super.resize(width, height)
+    console.log(this)
     this.#simulation.on('tick', this.#onTick)
   }
 
@@ -168,7 +139,23 @@ export class ForceDirectedGraph {
     }
   }
 
+  handleHighlightSubject (subject: string | null): void {
+    if (this.#dragging) {
+      return
+    }
+    if (subject !== null) {
+      this.#node.attr('opacity', ({ course }) =>
+        course.split(' ')[0] === subject ? 1 : 0.1
+      )
+      this.#link.attr('opacity', 0.1)
+    } else {
+      this.#node.attr('opacity', null)
+      this.#link.attr('opacity', null)
+    }
+  }
+
   update = (newNodes: CourseCodeNode[], newLinks: CourseCodeLink[]) => {
+    this.updateCourses(newNodes.map(d => d.course))
     const nodeMap: Record<CourseCode, CourseNode> = {}
     for (const node of this.#nodes) {
       nodeMap[node.course] = node
@@ -243,7 +230,7 @@ export class ForceDirectedGraph {
         update => update,
         exit => exit.call(exit => exit.transition().remove().attr('r', 0))
       )
-      .attr('fill', ({ course }) => this.#nodeColor(course.split(' ')[0]))
+      .attr('fill', ({ course }) => this.nodeColor(course.split(' ')[0]))
       .attr('class', ({ selected }) => (selected ? 'node selected' : 'node'))
 
     this.#links = newLinks.map(({ source, target, required }) => ({
@@ -260,63 +247,6 @@ export class ForceDirectedGraph {
       )
       .attr('stroke', d => (d.required ? '#e15759' : null))
 
-    const subjects = [
-      ...new Set(newNodes.map(course => course.course.split(' ')[0]))
-    ].sort()
-    this.#legendNode = this.#legendNode
-      .data(subjects, subject => subject)
-      .join(
-        enter =>
-          enter
-            .append('g')
-            .attr('opacity', 0)
-            .on('mouseover', (_: MouseEvent, subject: string) => {
-              if (this.#dragging) {
-                return
-              }
-              this.#node.attr('opacity', ({ course }) =>
-                course.split(' ')[0] === subject ? 1 : 0.1
-              )
-              this.#link.attr('opacity', 0.1)
-            })
-            .on('mouseout', () => {
-              if (this.#dragging) {
-                return
-              }
-              this.#node.attr('opacity', null)
-              this.#link.attr('opacity', null)
-            })
-            .call(enter =>
-              enter
-                .append('circle')
-                .attr('class', 'node')
-                .attr('r', 5)
-                .attr('cx', 10)
-                .attr('cy', 0)
-            )
-            .call(enter =>
-              enter
-                .append('text')
-                .attr('class', 'text')
-                .attr('x', 20)
-                .text(subject => subject)
-            ),
-        update => update,
-        exit => exit.call(exit => exit.transition().remove().attr('opacity', 0))
-      )
-      .call(node =>
-        node
-          .transition()
-          .attr('opacity', 1)
-          .attr('fill', subject => this.#nodeColor(subject))
-          .attr(
-            'transform',
-            (_, i) => `translate(0, ${(subjects.length - i) * -20 - 15})`
-          )
-      )
-    this.#legendTitle.transition().attr('y', subjects.length * -20 - 35)
-    this.#legendCount.text(`${this.#nodes.length} total courses shown`)
-
     this.#simulation.nodes(this.#nodes)
     this.#simulation
       .force<d3.ForceLink<CourseNode, CourseLink>>('link')
@@ -324,9 +254,8 @@ export class ForceDirectedGraph {
     this.#simulation.alpha(1).restart()
   }
 
-  destroy = () => {
-    self.removeEventListener('resize', this.#resize)
-    this.#svg.remove()
+  destroy (): void {
+    super.destroy()
     this.#simulation.stop()
   }
 }
