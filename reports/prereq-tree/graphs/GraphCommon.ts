@@ -41,11 +41,15 @@ export abstract class GraphCommon {
     wrapper.append(this.svg.node()!)
   }
 
+  getViewBox (width: number, height: number): [number, number, number, number] {
+    return [-width / 2, -height / 2, width, height]
+  }
+
   resize (width: number, height: number) {
     this.svg
       .attr('width', width)
       .attr('height', height)
-      .attr('viewBox', [-width / 2, -height / 2, width, height].join(' '))
+      .attr('viewBox', this.getViewBox(width, height).join(' '))
     this.#legend.attr('transform', `translate(${-width / 2}, ${height / 2})`)
   }
 
