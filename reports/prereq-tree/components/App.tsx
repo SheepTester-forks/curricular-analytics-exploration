@@ -17,7 +17,8 @@ export function App ({ prereqs }: AppProps) {
   const [options, setOptions] = useState<Options>({
     mode: 'blocked',
     unlockedOnly: false,
-    allAlts: true
+    allAlts: true,
+    tidyTree: false
   })
 
   return (

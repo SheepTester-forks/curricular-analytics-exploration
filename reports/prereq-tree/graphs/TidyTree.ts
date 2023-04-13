@@ -19,33 +19,40 @@ export type Prereq = {
  * https://observablehq.com/@d3/tree
  */
 export class TidyTree extends GraphCommon {
+  #padding = 1
+  #dx = 10
+  #dy = 0
+  #x0 = Infinity
+
   constructor (wrapper: Element, subjects: string[]) {
     super(wrapper, subjects)
   }
 
   getViewBox (width: number, height: number): [number, number, number, number] {
-    // return [(-dy * padding) / 2, x0 - dx, width, height]
-    throw 'todo'
+    return [(-this.#dy * this.#padding) / 2, this.#x0 - this.#dx, width, height]
   }
 
   handleHighlightSubject (_subject: string | null): void {}
 
   update (data: Prereq[]) {
+    if (data.length === 0) {
+      return
+    }
+
     const root = d3
       .stratify<Prereq>()
       .id(d => d.course)
       .parentId(d => d.parent)(data) as d3.HierarchyPointNode<Prereq>
+    console.log(root, data)
 
     const width = 640 // TODO
-    const padding = 1
-    const dx = 10
-    const dy = width / (root.height + padding)
-    const tree = d3.tree<Prereq>().nodeSize([dx, dy])(root)
-    let x0 = Infinity
-    let x1 = -x0
+    this.#dy = width / (root.height + this.#padding)
+    const tree = d3.tree<Prereq>().nodeSize([this.#dx, this.#dy])(root)
+    this.#x0 = Infinity
+    let x1 = -this.#x0
     tree.each(d => {
       if (d.x > x1) x1 = d.x
-      if (d.x < x0) x0 = d.x
+      if (d.x < this.#x0) this.#x0 = d.x
     })
     this.svg
       .append('g')

@@ -7,6 +7,7 @@ export type Options = {
   mode: 'blocked' | 'prereqs'
   unlockedOnly: boolean
   allAlts: boolean
+  tidyTree: boolean
 }
 
 export type OptionsProps = {
@@ -68,6 +69,18 @@ export function Options ({ options, onOptions }: OptionsProps) {
           />{' '}
           <span class='toggle-shape'></span>
           Show all alternate prerequisites
+        </label>
+      )}
+      {options.mode === 'prereqs' && (
+        <label class='option'>
+          <input
+            class='toggle-checkbox'
+            type='checkbox'
+            onChange={e => onOptions({ tidyTree: e.currentTarget.checked })}
+            checked={options.tidyTree}
+          />{' '}
+          <span class='toggle-shape'></span>
+          Flatten tree
         </label>
       )}
     </div>

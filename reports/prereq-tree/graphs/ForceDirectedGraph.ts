@@ -110,7 +110,6 @@ export class ForceDirectedGraph extends GraphCommon {
 
   resize (width: number, height: number) {
     super.resize(width, height)
-    console.log(this)
     this.#simulation.on('tick', this.#onTick)
   }
 

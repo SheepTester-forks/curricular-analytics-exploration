@@ -11,6 +11,7 @@ import {
   ForceDirectedGraph,
   NodeUpdater
 } from '../graphs/ForceDirectedGraph.ts'
+import { TidyTree } from '../graphs/TidyTree.ts'
 import { Options } from './Options.tsx'
 
 type Graph = {
@@ -131,10 +132,7 @@ export function Tree (props: TreeProps) {
   const updateRef = useRef<NodeUpdater>()
 
   useEffect(() => {
-    console.log(wrapperRef.current, prereqs)
     if (!wrapperRef.current) {
-      console.log('DIE')
-
       return
     }
     const subjects = [
@@ -144,14 +142,26 @@ export function Tree (props: TreeProps) {
     // https://observablehq.com/@d3/color-schemes
     subjects.push(subjects.shift()!, subjects.shift()!)
     subjects.unshift('CSE', 'ECE', 'DSC', 'MATH', 'MAE', 'COGS')
-    const graph = new ForceDirectedGraph(wrapperRef.current, subjects)
-    console.log(graph)
-
-    updateRef.current = graph.update
-    return () => {
-      graph.destroy()
+    if (options.mode === 'prereqs' && options.tidyTree) {
+      const graph = new TidyTree(wrapperRef.current, subjects)
+      updateRef.current = (nodes, links) => {
+        graph.update([
+          ...nodes
+            .filter(({ selected }) => selected)
+            .map(({ course }) => ({ course, parent: null })),
+          ...links.map(({ source, target }) => ({
+            course: source,
+            parent: target
+          }))
+        ])
+      }
+      return () => graph.destroy()
+    } else {
+      const graph = new ForceDirectedGraph(wrapperRef.current, subjects)
+      updateRef.current = graph.update
+      return () => graph.destroy()
     }
-  }, [wrapperRef.current, prereqs])
+  }, [wrapperRef.current, prereqs, options.tidyTree])
 
   useEffect(() => {
     if (!updateRef.current) {
