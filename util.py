@@ -5,7 +5,16 @@ that maps keys to lists of values with the same key.
 
 import csv
 from io import StringIO
-from typing import Any, Callable, Dict, Iterator, List, Protocol, Tuple, TypeVar
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Iterable,
+    List,
+    Protocol,
+    Tuple,
+    TypeVar,
+)
 
 
 K = TypeVar("K")
@@ -47,7 +56,7 @@ def add_entry(target: Dict[K, List[V]], key: K, value: V) -> None:
         target[key] = [value]
 
 
-def partition(iterable: Iterator[Tuple[K, V]]) -> Dict[K, List[V]]:
+def partition(iterable: Iterable[Tuple[K, V]]) -> Dict[K, List[V]]:
     """
     Partitions a stream of values based on a key. The result maps keys to lists
     of values with the same key.
