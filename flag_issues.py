@@ -88,6 +88,7 @@ class Issues:
     curriculum_deviances: List[str]
     early_upper_division: List[str]
     missing_prereqs: List[str]
+    dne: List[str]
 
     def __init__(self) -> None:
         self.multiple_options = []
@@ -98,6 +99,7 @@ class Issues:
         self.curriculum_deviances = []
         self.early_upper_division = []
         self.missing_prereqs = []
+        self.dne = []
 
 
 def check_plan(
@@ -169,7 +171,11 @@ def check_plan(
             reqs = prereqs(university.get_term_code(YEAR, course.term_index)).get(
                 course.course_code
             )
-            if reqs:
+            if reqs is None:
+                issues.dne.append(
+                    f"[{name}] “{course.course_title}” ({course.course_code}) does not exist"
+                )
+            else:
                 taken = [
                     past_course.course_code
                     for past_course in plan
@@ -224,6 +230,10 @@ def main() -> None:
             )
 
         print(f"<h1>{college_name}</h1>")
+        print_issues(
+            issues.dne,
+            "Nonexistent courses",
+        )
         print_issues(issues.duplicate_courses, "Duplicate courses")
         print_issues(
             issues.miscategorized_courses,
