@@ -1,8 +1,8 @@
-from functools import total_ordering
 from typing import Literal, NamedTuple, Optional, Tuple
 
+# Cannot use @total_ordering: https://stackoverflow.com/a/68238299
 
-@total_ordering
+
 class TermCode(str):
     quarters = ["WI", "SP", "S1", "S2", "S3", "SU", "FA"]
 
@@ -24,8 +24,16 @@ class TermCode(str):
         else:
             return self.year() < other.year()
 
+    def __le__(self, other: str) -> bool:
+        return self < other or self == other
 
-@total_ordering
+    def __gt__(self, other: str) -> bool:
+        return not self <= other
+
+    def __ge__(self, other: str) -> bool:
+        return not self < other
+
+
 class CourseCode(NamedTuple):
     subject: str
     number: str
@@ -51,6 +59,15 @@ class CourseCode(NamedTuple):
         if not isinstance(other, CourseCode):
             raise NotImplemented
         return self.parts() < other.parts()
+
+    def __le__(self, other: Tuple[object, ...]) -> bool:
+        return self < other or self == other
+
+    def __gt__(self, other: Tuple[object, ...]) -> bool:
+        return not self <= other
+
+    def __ge__(self, other: Tuple[object, ...]) -> bool:
+        return not self < other
 
 
 class Prerequisite(NamedTuple):
