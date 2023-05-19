@@ -1,6 +1,6 @@
 from itertools import chain
 import re
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 
 from parse_defs import CourseCode, Prerequisite, ProcessedCourse, RawCourse, TermCode
 
@@ -24,6 +24,7 @@ course_code_overrides: Dict[str, ParsedCourseCodes] = {
     "JWSP 2": [(CourseCode("JWSP", "2"), 5)],
     "JWSP 3": [(CourseCode("JWSP", "3"), 5)],
 }
+non_subjects: Set[str] = {"IE", "RR", "OR", "TE", "DEPT"}
 
 
 def parse_course_name(
@@ -57,7 +58,7 @@ def parse_course_name(
     )
     if match:
         subject, number, has_lab = match.group(1, 2, 3)
-        if subject in ["IE", "RR", "OR"]:
+        if subject in non_subjects:
             return [(None, units)]
         if has_lab:
             lab_units = 2 if has_lab == "L" else 2.5 if has_lab == "X" else 0
