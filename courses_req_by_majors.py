@@ -1,5 +1,8 @@
 """
 Lists what majors require each course. I might've done this already, I forgot.
+
+python3 courses_req_by_majors.py
+python3 courses_req_by_majors.py json > courses_req_by_majors.json
 """
 
 import json

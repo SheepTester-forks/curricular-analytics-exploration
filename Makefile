@@ -1,6 +1,7 @@
 all: academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree plan-editor plan-editor-index
 
 # Reports
+
 academic-plan-diffs: reports/output/academic-plan-diffs.html
 prereq-diffs: reports/output/prereq-diffs.html
 prereq-timeline: reports/output/prereq-timeline.html
@@ -107,3 +108,21 @@ reports/output/plan-editor-index.html: reports/plan-editor-index-template.html r
 	head -n -1 < reports/plan-editor-index-template.html > reports/output/plan-editor-index.html
 	cat reports/output/plan-editor-index-fragment.html >> reports/output/plan-editor-index.html
 	echo '</html>' >> reports/output/plan-editor-index.html
+
+# Seats
+
+courses_req_by_majors.json: courses_req_by_majors.py
+	python3 courses_req_by_majors.py json | prettier --parser=json --no-config > courses_req_by_majors.json
+
+reports/output/courses_by_major.js: courses_req_by_majors.json
+	echo 'window.COURSES_BY_MAJOR =' > reports/output/courses_by_major.js
+	cat courses_req_by_majors.json >> reports/output/courses_by_major.js
+
+reports/output/seats.html: reports/seats-template.html courses_req_by_majors.json
+	head -n -4 < reports/seats-template.html > reports/output/seats.html
+	echo '<script id="courses_by_major" type="application/json">' >> reports/output/seats.html
+	cat courses_req_by_majors.json >> reports/output/seats.html
+	echo '</script>' >> reports/output/seats.html
+	echo '<script type="module">' >> reports/output/seats.html
+	cat reports/output/seats.js >> reports/output/seats.html
+	echo '</script></body></html>' >> reports/output/seats.html
