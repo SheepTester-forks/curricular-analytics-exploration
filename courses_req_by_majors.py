@@ -31,29 +31,28 @@ def print_json() -> None:
         for course in plans.plan(college)
         if course.course_code
     )
-    json.dump(
-        {
-            str(course_code): {
-                major: True
-                if len(set(colleges))
-                >= (
-                    len(majors)
-                    if major in university.college_codes
-                    else len(university.college_codes)
-                )
-                * MOST
-                else sorted(
-                    colleges,
-                    key=lambda college: university.college_codes.index(college),
-                )
-                if major not in university.college_codes
-                else colleges
-                for major, colleges in partition(major_colleges).items()
-            }
-            for course_code, major_colleges in sorted_dict(
-                courses, key=CourseCode.parts
+    courses = {
+        str(course_code): {
+            major: True
+            if len(set(colleges))
+            >= (
+                len(majors)
+                if major in university.college_codes
+                else len(university.college_codes)
             )
-        },
+            * MOST
+            else sorted(
+                colleges,
+                key=lambda college: university.college_codes.index(college),
+            )
+            if major not in university.college_codes
+            else colleges
+            for major, colleges in partition(major_colleges).items()
+        }
+        for course_code, major_colleges in sorted_dict(courses, key=CourseCode.parts)
+    }
+    json.dump(
+        {"_": {"college": university.college_names}, **courses},
         stdout,
     )
 

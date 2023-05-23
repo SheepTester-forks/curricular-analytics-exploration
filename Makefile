@@ -1,4 +1,5 @@
-all: academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree plan-editor plan-editor-index
+all: academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree plan-editor plan-editor-index seats
+dev: all reports/output/prereqs.js reports/output/courses_by_major.js
 
 # Reports
 
@@ -9,6 +10,7 @@ college-ge-units: reports/output/college-ge-units.html
 prereq-tree: reports/output/prereq-tree.html
 plan-editor: reports/output/plan-editor.html
 plan-editor-index: reports/output/plan-editor-index.html
+seats: reports/output/seats.html
 
 # Plan diffs
 

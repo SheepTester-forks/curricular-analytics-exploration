@@ -1,4 +1,15 @@
 {
+  "_": {
+    "college": {
+      "RE": "Revelle",
+      "MU": "Muir",
+      "TH": "Marshall",
+      "WA": "Warren",
+      "FI": "ERC",
+      "SI": "Sixth",
+      "SN": "Seventh"
+    }
+  },
   "ANTH 1": { "RE": ["AN28"] },
   "ANTH 2": { "RE": ["AN26"], "AN29": true },
   "ANTH 5": { "AN29": ["SN"] },
