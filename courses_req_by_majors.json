@@ -1,6 +1,6 @@
 {
   "_": {
-    "college": {
+    "colleges": {
       "RE": "Revelle",
       "MU": "Muir",
       "TH": "Marshall",
@@ -293,8 +293,8 @@
     "SI31": true
   },
   "CHEM 6C": {
-    "AN29": ["TH"],
     "SN": ["AN29"],
+    "AN29": ["TH"],
     "BE27": true,
     "BI30": true,
     "BI31": true,

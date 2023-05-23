@@ -4,16 +4,18 @@
 /// <reference lib="deno.ns" />
 
 import {
-  CoursesByMajor,
+  CoursesByGroup,
   isMajorCode,
-  StudentsByMajor
+  StudentsByGroup
 } from '../courses-by-major.ts'
 
 export type SeatsNeededProps = {
-  courses: CoursesByMajor
-  students: StudentsByMajor
+  courses: CoursesByGroup
+  students: StudentsByGroup
 }
 export function SeatsNeeded ({ courses, students }: SeatsNeededProps) {
+  console.log(students)
+
   return (
     <table>
       <thead>
@@ -25,8 +27,18 @@ export function SeatsNeeded ({ courses, students }: SeatsNeededProps) {
       <tbody>
         {Object.entries(courses).map(([courseCode, enrollers]) => {
           const seats = Object.entries(enrollers)
-            .filter(([code, value]) => value === true && isMajorCode(code))
-            .map(([majorCode]) => students?.[majorCode].total ?? 0)
+            // TODO: exceptions
+            .filter(([, value]) => value === true)
+            .map(([code]) =>
+              isMajorCode(code)
+                ? Object.entries(students.majors?.[code] ?? {})
+                    .map(([collegeCode, students]) =>
+                      // Don't double count major/GE overlap
+                      enrollers[collegeCode] === true ? 0 : students
+                    )
+                    .reduce((cum, curr) => cum + curr, 0)
+                : students.colleges[code]
+            )
             .reduce((cum, curr) => cum + curr, 0)
           return (
             <tr key={courseCode}>

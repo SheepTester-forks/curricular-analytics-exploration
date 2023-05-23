@@ -52,7 +52,7 @@ def print_json() -> None:
         for course_code, major_colleges in sorted_dict(courses, key=CourseCode.parts)
     }
     json.dump(
-        {"_": {"college": university.college_names}, **courses},
+        {"_": {"colleges": university.college_names}, **courses},
         stdout,
     )
 

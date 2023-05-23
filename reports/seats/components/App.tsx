@@ -5,27 +5,31 @@
 
 import { useState } from 'preact/hooks'
 import {
-  CoursesByMajorJson,
+  CoursesByGroupJson,
   isMajorCode,
-  StudentsByMajor
+  StudentsByGroup
 } from '../courses-by-major.ts'
 import { SeatsNeeded } from './SeatsNeeded.tsx'
 
 export type AppProps = {
-  courses: CoursesByMajorJson
+  courses: CoursesByGroupJson
 }
 export function App ({ courses: { _: header, ...courses } }: AppProps) {
-  const [students, setStudents] = useState<StudentsByMajor>(() => {
+  const [students, setStudents] = useState<StudentsByGroup>(() => {
     // Generate random numbers
-    const students: StudentsByMajor = {}
+    const students: StudentsByGroup = { majors: {}, colleges: {} }
+    for (const collegeCode of Object.keys(header.colleges)) {
+      students.colleges[collegeCode] = 0
+    }
+
     const majors = Object.values(courses).flatMap(course => Object.keys(course))
     for (const major of majors) {
       if (isMajorCode(major)) {
-        students[major] = { total: 0, colleges: {} }
-        for (const collegeCode of Object.keys(header)) {
+        students.majors[major] = {}
+        for (const collegeCode of Object.keys(header.colleges)) {
           const collegeStudents = Math.floor(Math.random() * 21 + 90)
-          students[major].colleges[collegeCode] = collegeStudents
-          students[major].total += collegeStudents
+          students.majors[major][collegeCode] = collegeStudents
+          students.colleges[collegeCode] += collegeStudents
         }
       }
     }
