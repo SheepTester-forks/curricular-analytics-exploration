@@ -17,11 +17,11 @@ from urllib.request import Request, urlopen
 
 from output_json import (
     Curriculum,
-    CurriculumHash,
-    CurriculumJson,
+    VisCurriculum,
+    VisUpdateCurriculum,
     DegreePlan,
-    DegreePlanHash,
-    DegreePlanJson,
+    VisDegreePlan,
+    VisUpdateDegreePlan,
 )
 
 CsvFile = Tuple[str, str]
@@ -310,17 +310,17 @@ class Session:
                 )
             }
 
-    def get_curriculum(self, curriculum_id: int) -> CurriculumHash:
+    def get_curriculum(self, curriculum_id: int) -> VisCurriculum:
         return self.get_json(f"/vis_curriculum_hash/{curriculum_id}")
 
-    def get_degree_plan(self, plan_id: int) -> DegreePlanHash:
+    def get_degree_plan(self, plan_id: int) -> VisDegreePlan:
         return self.get_json(f"/vis_degree_plan_hash/{plan_id}")
 
     def edit_curriculum(self, curriculum_id: int, curriculum: Curriculum) -> None:
         with self.request(
             f"/curriculums/viz_update/{curriculum_id}",
             {"Content-Type": "application/json", "X-CSRF-Token": self.get_auth_token()},
-            json.dumps(CurriculumJson(curriculum=curriculum)).encode("utf-8"),
+            json.dumps(VisUpdateCurriculum(curriculum=curriculum)).encode("utf-8"),
             "PATCH",
         ):
             pass
@@ -355,7 +355,7 @@ class Session:
             f"/degree_plans/viz_update/{plan_id}",
             {"Content-Type": "application/json", "X-CSRF-Token": self.get_auth_token()},
             json.dumps(
-                DegreePlanJson(
+                VisUpdateDegreePlan(
                     curriculum=curriculum, degree_plan=DegreePlan(id=plan_id)
                 )
             ).encode("utf-8"),

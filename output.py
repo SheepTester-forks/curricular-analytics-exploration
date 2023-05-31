@@ -8,7 +8,7 @@ Exports:
 """
 
 from typing import Dict, Generator, List, NamedTuple, Optional, Set
-from output_json import Curriculum, CurriculumHash, Item, Term, Requisite
+from output_json import Curriculum, VisCurriculum, CurriculumItem, Term, Requisite
 
 from parse import MajorPlans, major_codes, prereqs
 from parse_defs import CourseCode, Prerequisite, ProcessedCourse
@@ -309,7 +309,7 @@ class MajorOutput:
                 term,
             ) in processed.list_courses(major_course_section):
                 curriculum["curriculum_terms"][term]["curriculum_items"].append(
-                    Item(
+                    CurriculumItem(
                         name=course_title,
                         id=course_id,
                         credits=units,
@@ -330,7 +330,7 @@ class MajorOutput:
         return curriculum
 
     @classmethod
-    def from_json(cls, plans: MajorPlans, json: CurriculumHash) -> "MajorOutput":
+    def from_json(cls, plans: MajorPlans, json: VisCurriculum) -> "MajorOutput":
         """
         Creates a `MajorOutput` using the same course IDs from an existing
         curriculum or degree plan. This way, modifying a degree plan won't
