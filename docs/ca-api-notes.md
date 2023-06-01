@@ -34,7 +34,9 @@ Based on the [private repo](https://github.com/CurricularAnalytics/CA_API/) we g
 
 - POST `/curriculum/csv`
 
-  - Accepts `Curriculum` with `metrics`
+  - Accepts `Curriculum` with `metrics` (otherwise the endpoint will crash)
+
+  - Returns the CSV, named `[curriculum name].csv`
 
   - There's also a `create_degree_plan_csv` function in the codebase, but it isn't used
 
@@ -195,7 +197,6 @@ type DegreePlan = {
           centrality?: number
           complexity?: number
           'requisite distance'?: number
-          [metric: string]: any
         }
         nameSub?: string
         nameCanonical?: string
@@ -242,17 +243,14 @@ type Course = {
   prefix: string
   num: string
   institution: string
-  college: string
-  department: string
-  cross_listed: Course[]
-  canonical_name: string
-  requisites: Record<
-    number,
-    'pre' | 'co' | 'strict_co' | 'custom' | 'belong_to'
-  >
+  college: ''
+  department: ''
+  cross_listed: []
+  canonical_name: ''
+  requisites: Record<number, 'pre' | 'co' | 'strict_co'>
   metrics: t
   metadata: Record<string, any>
-  passrate: number
+  passrate: 0.5
 }
 type Curriculum = {
   id: number
