@@ -1,5 +1,7 @@
 import { CourseCode } from '../util/Prereqs.ts'
 
+// TODO: Remove
+
 export type MajorCode = string
 export type CollegeCode = string
 
