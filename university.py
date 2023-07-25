@@ -176,9 +176,13 @@ class _UCSD:
         # assume the student has credit for
         prereqs[CourseCode("MATH", "18")] = []
 
+    def get_plan_year(self, term_index: int) -> int:
+        return term_index // 3
+
     def get_term_code(self, start_year: int, term_index: int) -> TermCode:
         return TermCode(
-            QUARTERS[term_index % 3] + f"{(start_year + term_index // 3) % 100:02d}"
+            QUARTERS[term_index % 3]
+            + f"{(start_year + self.get_plan_year(term_index)) % 100:02d}"
         )
 
     def quarter_name(self, quarter: int) -> str:
