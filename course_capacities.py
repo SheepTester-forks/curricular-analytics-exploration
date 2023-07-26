@@ -9,7 +9,6 @@ from parse_defs import CourseCode
 from university import university
 
 YEAR_COUNT = 4
-YEARS = list(range(1, YEAR_COUNT + 1))
 
 
 class StudentType(NamedTuple):
@@ -28,7 +27,7 @@ def from_majors(students_by_major: Dict[str, int]) -> StudentBody:
     partitions = YEAR_COUNT * len(university.college_codes)
     students: StudentBody = {}
     for major, count in students_by_major.items():
-        for year in YEARS:
+        for year in range(YEAR_COUNT):
             for college in university.college_codes:
                 students[StudentType(year, major, college)] = count // partitions
     return students
