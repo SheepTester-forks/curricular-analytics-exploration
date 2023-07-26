@@ -56,7 +56,7 @@ def output_class_sizes(sizes: ClassSizeOutput, file: TextIO) -> None:
     file.write("Course,")
     file.write(",".join(university.terms))
     file.write("\n")
-    for course, size in sizes.items():
+    for course, size in sorted(sizes.items(), key=lambda item: item[0]):
         file.write(str(course))
         file.write(",")
         file.write(",".join(map(str, size)))
