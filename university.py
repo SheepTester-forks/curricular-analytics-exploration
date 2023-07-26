@@ -103,22 +103,20 @@ def clean_course_title(title: str) -> str:
     return title
 
 
-# Used for mapping term indices to term codes
-QUARTERS = ["FA", "WI", "SP"]
-
-
 class _UCSD:
     name = "University of California, San Diego"
     term_type = "Quarter"
+    terms = ["FA", "WI", "SP"]
+    "Used for mapping term indices to term codes"
 
     prereqs_file = "./files/prereqs_fa12.csv"
     plans_file = "./files/academic_plans_fa12.csv"
     majors_file = "./files/isis_major_code_list.xlsx - Major Codes.csv"
 
-    # College codes from least to most weird colleges (see #14)
     curriculum_priority = ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
-    # Defines the display order of colleges
+    "College codes from least to most weird colleges (see #14)"
     college_codes = ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
+    "Defines the display order of colleges"
     college_names = {
         "RE": "Revelle",
         "MU": "Muir",
@@ -176,14 +174,13 @@ class _UCSD:
         # assume the student has credit for
         prereqs[CourseCode("MATH", "18")] = []
 
-    def get_plan_year(self, term_index: int) -> int:
-        return term_index // 3
+    def get_term(self, term_index: int) -> Tuple[int, int]:
+        term_count = len(self.terms)
+        return term_index // term_count, term_index % term_count
 
     def get_term_code(self, start_year: int, term_index: int) -> TermCode:
-        return TermCode(
-            QUARTERS[term_index % 3]
-            + f"{(start_year + self.get_plan_year(term_index)) % 100:02d}"
-        )
+        year, term = self.get_term(term_index)
+        return TermCode(self.terms[term] + f"{(start_year + year) % 100:02d}")
 
     def quarter_name(self, quarter: int) -> str:
         return ["FA", "WI", "SP", "SU"][quarter]

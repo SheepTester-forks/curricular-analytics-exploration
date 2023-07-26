@@ -10,7 +10,7 @@ from sys import stdout
 from typing import NamedTuple
 from parse import major_plans
 from parse_defs import CourseCode
-from university import QUARTERS, university
+from university import university
 from util import partition, sorted_dict
 
 
@@ -51,7 +51,7 @@ def print_json() -> None:
     json.dump(
         {
             "colleges": list(university.college_names.items()),
-            "quarterNames": QUARTERS,
+            "quarterNames": university.terms,
             "courses": [
                 {
                     "courseCode": str(course_code),
