@@ -1,4 +1,8 @@
-from typing import Dict, NamedTuple
+"""
+python3 course_capacities.py test_input.csv
+"""
+
+from typing import Dict, NamedTuple, TextIO
 from parse import major_plans
 from parse_defs import CourseCode
 
@@ -36,14 +40,14 @@ def class_sizes(students: StudentBody, year: int) -> Dict[CourseCode, int]:
                 continue
             for course in plans.plan(college):
                 if course.course_code:
-                    if course.course_code not in courses:
-                        courses[course.course_code] = 0
                     student_type = StudentType(
                         university.get_plan_year(course.term_index),
                         major_code,
                         college,
                     )
                     if student_type in students:
+                        if course.course_code not in courses:
+                            courses[course.course_code] = 0
                         courses[course.course_code] += students[
                             StudentType(
                                 university.get_plan_year(course.term_index),
@@ -52,3 +56,22 @@ def class_sizes(students: StudentBody, year: int) -> Dict[CourseCode, int]:
                             )
                         ]
     return courses
+
+
+def output_class_sizes(sizes: Dict[CourseCode, int], file: TextIO) -> None:
+    file.write("Course,Size\n")
+    for course, size in sizes.items():
+        file.write(f"{course},{size}\n")
+
+
+if __name__ == "__main__":
+    import csv
+    import sys
+
+    majors: Dict[str, int] = {}
+    with open(sys.argv[1], newline="") as file:
+        reader = csv.reader(file)
+        next(reader)  # Skip header
+        for major_code, count in reader:
+            majors[major_code] = int(count)
+    output_class_sizes(class_sizes(from_majors(majors), 2022), sys.stdout)
