@@ -1,5 +1,5 @@
 """
-python3 course_capacities.py test_input.csv > course_capacities_output.csv
+python3 course_capacities.py files/ClassCapCalculatorNewStudents.csv > files/course_capacities_output.csv
 """
 
 from typing import Dict, List, NamedTuple, TextIO
@@ -13,7 +13,7 @@ YEAR_COUNT = 4
 
 class StudentType(NamedTuple):
     year: int
-    "Between 1 and 4."
+    "Between 0 and 3 (0-indexed)."
     major: str
     college: str
 
@@ -30,6 +30,26 @@ def from_majors(students_by_major: Dict[str, int]) -> StudentBody:
         for year in range(YEAR_COUNT):
             for college in university.college_codes:
                 students[StudentType(year, major, college)] = count // partitions
+    return students
+
+
+def from_first_years(file: TextIO) -> StudentBody:
+    students: StudentBody = {}
+    # It seems they alphabetized the colleges
+    college_codes = dict(
+        {name: code for code, name in university.college_names.items()},
+        Eighth="EI",
+        Roosevelt="FI",
+    )
+    reader = csv.reader(file)
+    _, *college_names, _ = next(reader)  # Skip header
+    for major_code, *by_college, _ in reader:
+        if len(major_code) != 4:
+            continue
+        for i, count in enumerate(by_college):
+            students[StudentType(0, major_code, college_codes[college_names[i]])] = int(
+                count or "0"
+            )
     return students
 
 
@@ -67,10 +87,6 @@ if __name__ == "__main__":
     import csv
     import sys
 
-    majors: Dict[str, int] = {}
     with open(sys.argv[1], newline="") as file:
-        reader = csv.reader(file)
-        next(reader)  # Skip header
-        for major_code, count in reader:
-            majors[major_code] = int(count)
-    output_class_sizes(class_sizes(from_majors(majors), 2022), sys.stdout)
+        student_body = from_first_years(file)
+    output_class_sizes(class_sizes(student_body, 2022), sys.stdout)
