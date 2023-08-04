@@ -1,4 +1,5 @@
 """
+python3 redundant_prereq_courses.py > redundant_prereq_courses.csv
 python3 redundant_prereq_courses.py txt > files/redundant_prereq_courses.txt
 """
 

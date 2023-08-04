@@ -262,7 +262,7 @@ Note: "outputs `<file name>`" means the program prints to standard output, which
 
 **PlanChanges.jl** produces `files/changes.csv` to determine which academic plans changed the most. This has now been superseded by diff/diffs.json from diff_plan.py.
 
-**redundant_prereq_check.py** was an attempt at identifying redundant prerequisites (for example, a course requiring both MATH 20A and 20B has a redundant 20A requirement because 20B implies 20A). This has been superseded by Metrics.jl.
+**redundant_prereq_check.py** was an attempt at identifying redundant prerequisites (for example, POLI 27 requires both WCWP 10A and 10B, so it has a redundant 10A requirement because 10B already requires 10A). This has been superseded by Metrics.jl.
 
 **redundant_prereq_courses.py** outputs `redundant_prereq_courses.csv`. In addition to identifying prerequisites that are redundant because they would've already been taken to satisfy another prerequisite, it also identifies courses that strictly require a course that no longer exists. The CSV file allows you to filter by error type.
 
@@ -323,6 +323,8 @@ On June 22, I started uploading all the curricula. I had to fix a few things, bu
 
 On August 2, we were given academic plans from 2012 to 2022; we previously only had plans from 2021. I uploaded all the plans from 2015 on (older plans were deemed too low quality). The Curricular Analytics website wasn't great for navigating this many curricula, so I made a [Tableau view that just had links][curr-idx] to the curriculum for every major and year.
 
+From October 28 to November 3, I tried to pull out all UCSD-specific code into its own file, university.py, so other universities don't have to scour through the code to figure out how to adapt it.
+
 Files:
 
 - **parse.py** parses the input CSV files as Python objects.
@@ -335,6 +337,8 @@ Data files:
 - **output_json.py** defines Python `TypedDict` objects to define the JSON structure for output.py.
 - **departments.py** parses a JSON file containing a list of departments. The department name is included in the curriculum name on Curricular Analytics.
   - (output: departments.txt) As a script, I wanted to check if there were department codes in the degree plan CSV that weren't included in the major code CSV.
+- university.py defines UCSD-specific constants, such as the number of colleges and the university name.
+- parse_defs.py defines Python objects representing data regarding plans, such as `CourseCode`s and `TermCode`s.
 
 This involved additional scripts for error checking:
 
@@ -409,7 +413,7 @@ Unrelated:
 
 ## Systematically flagging issues
 
-_2022 August 18–23. Python._
+_2022 August 18–23. Python. [Document](https://docs.google.com/document/d/1fa70-d-hs-eTqiSTg7h5M69SWHUgpRjxH6z_3ymu9vc/)._
 
 Task: Systematically flag common issues in UCSD's degree plans (because they are manually created by human college advisors).
 
@@ -425,31 +429,65 @@ Files:
 
 ## Changes to degree plans over time (plan diff)
 
-_2022 August 26–31. Python, Deno/TypeScript/Preact. [Details](https://educationalinnovation.ucsd.edu/ca-views/plan-changes.html), [app](https://educationalinnovation.ucsd.edu/_files/academic-plan-diffs.html)._
+_2022 August 26–31. Python, Deno/TypeScript/Preact. [Details](https://educationalinnovation.ucsd.edu/ca-views/plan-changes.html), [report](https://educationalinnovation.ucsd.edu/_files/academic-plan-diffs.html)._
 
-I forgot why I made this, but this wasn't a task. I think at some point, I realized that I wanted to see what specific changes occurred to a plan over the years, so I went ahead and made a diffing program. With feedback from Carlos, I made what originally was a fancy CLI tool into a web app. Since I had done the [CMS training](https://blink.ucsd.edu/technology/websites/training/start/access/index.html) (I think this was intended for Tableau), I got access to [educationalinnovation.ucsd.edu](https://educationalinnovation.ucsd.edu/) and was told to upload the web page on there.
+Carlos had a graph showing how chaotically units and complexity were varying, differently in each college for the same major, and I wanted to see what specific changes occurred to these plans, so I went ahead and made a diffing program. With feedback from Carlos, I made what originally was a fancy CLI tool into a web app. Since I had done the [CMS training](https://blink.ucsd.edu/technology/websites/training/start/access/index.html) (I think this was intended for Tableau), I got access to [educationalinnovation.ucsd.edu](https://educationalinnovation.ucsd.edu/) and was told to upload the web page on there.
 
-Files:
+Files: (output: reports/output/academic-plan-diffs.html)
 
-- diff_plan.py pretty-prints the changes made to the given major-college degree plan over the years. Carlos said to make it more presentable for non-techie advisors, so this also outputs a JSON file of diffs for every major-college combo for the web app that I made.
+- diff_plan.py (output: reports/output/academic-plan-diffs.json) pretty-prints the changes made to the given major-college degree plan over the years. Carlos said to make it more presentable for non-techie advisors, so this also outputs a JSON file of diffs for every major-college combo for the web app that I made.
   - It uses files/metrics_fa12.csv (rather than from PlanChanges.jl) to include complexity score changes.
 - reports/plan-diffs-template.html - A template HTML file. The Makefile replaces the last few lines with inline script tags containing the JSON of all the plan changes and the bundled code.
 - reports/plan-diffs.tsx - The entry point of the Preact app. It's written in TypeScript for Deno and uses Preact, and it's bundled using `deno bundle`, which later got deprecated for some reason.
-- Makefile is shared by all web reports and contains the commands to build all web reports just by running `make`.
 
 Unused:
 
 - PlanChanges.jl (output: files/changes.csv, which I imported into a [Google Sheet](https://docs.google.com/spreadsheets/d/1CIz7pCOAduXC-58jixgXlHwYGKCx4k9MX7z51uq0wtQ/)) calculates the amount of change per major-college. I wanted to see which degree plans would have interesting diffs. This is not used anywhere else since diff_plan.py uses Metrics.jl's complexity scores.
 
+For all web reports:
+
+- Makefile is shared by all web reports and contains the commands to build all web reports just by running `make`.
+- cms-replace-file.js is a browser script (copypaste and run in console) that adds a file input to every entry on UCSD's CMS that allows me to upload a large HTML file to overwrite an existing file.
+  - UCSD's CMS ([Cascade](https://www.hannonhill.com/products/cascade-cms/index.html)) shows a code editor for HTML files, which hangs the page when trying to load the large HTML files that these projects produce, so I can't upload a new version of an HTML file normally.
+
 ## Changes to prerequisites over time (prereq diff)
 
-_2022 September 9–28. Python. [Details](https://educationalinnovation.ucsd.edu/ca-views/prereq-changes.html), [app (by course)](https://educationalinnovation.ucsd.edu/_files/prereq-diffs.html), [app (by term)](https://educationalinnovation.ucsd.edu/_files/prereq-timeline.html)._
+_2022 September 9–28. Python. [Details](https://educationalinnovation.ucsd.edu/ca-views/prereq-changes.html), [report (by course)](https://educationalinnovation.ucsd.edu/_files/prereq-diffs.html), [report (by term)](https://educationalinnovation.ucsd.edu/_files/prereq-timeline.html)._
 
 Task: list changes to prerequisites and specify which term they were added or removed.
 
 Carlos then wanted to focus on changes one year at a time. This way, you can see when prerequisites are changed in the middle of a year.
 
+Files: (output: reports/output/prereq-diffs.html, reports/output/prereq-timeline.html)
+
+- diff_prereqs.py (reports/output/prereq-diffs-fragment.html, reports/output/prereq-timeline-fragment.html) generates an HTML fragment for the report.
+- reports/prereq-diffs-template.html, reports/prereq-timeline-template.html - Contains the CSS for the web page. The Makefile removes the last few lines to insert the HTML fragments generated by `diff_prereqs.py`.
+
+## Redundant prerequisites by course
+
+_2022 September 29 to October 11. Python. [Document](https://docs.google.com/document/d/1sxWBVhSMkQWPXLNyZXA4acDasFBuiv66rg6PFEJeEd8/)._
+
+Task: identify redundant prerequisites for courses (rather than curricula with redundant prerequisites).
+
+The Curricular Analytics Julia package can only identify redundant prerequisites in a curriculum or degree plan. Identifying redundancy in prerequisites without a degree plan is a bit harder because prerequisites aren't a graph—they encode OR relationships like "MATH 10B or 20A"—so typical graph algorithms won't work on it.
+
 Files:
 
-- diff_prereqs.py generates an HTML fragment for the report.
-- reports/prereq-diffs-template.html, reports/prereq-timeline-template.html - Contains the CSS for the web page. The Makefile removes the last few lines to insert the HTML fragments generated by `diff_prereqs.py`.
+- redundant_prereq_courses.py (output: files/redundant_prereq_courses.txt, redundant_prereq_courses.csv) outputs a report (human-readable plain text or CSV) of courses with redundant prerequisites. There are three categories of prerequisite issues that I ended up flagging:
+  1. Courses that require nonexistent courses
+  2. Redundant prerequisites, which assumes every alternative prerequisite is taken.
+  3. Courses with nonexistent courses as an alternative prerequisite
+- util.py was created to house list partitioning helper functions. It's now used by other scripts too, like output.py after the rewrite.
+
+## Additional GE units by college
+
+_2022 October 14–18. Python, JavaScript. [Details](https://educationalinnovation.ucsd.edu/ca-views/college-ge-units.html), [report](https://educationalinnovation.ucsd.edu/_files/college-ge-units.html)._
+
+Task: compare how plans vary between colleges.
+
+Files: (output: reports/output/college-ge-units.html)
+
+- college_ges.py (output: college_ges.csv, reports/output/college-ge-units-fragment.html) outputs a CSV or HTML table of every major and the number of non-elective GE units per college's degree plan.
+- reports/college-ge-template.html has the CSS and some JavaScript functionality for table sorting by column.
+
+## Tree of blocked courses (prereq tree)

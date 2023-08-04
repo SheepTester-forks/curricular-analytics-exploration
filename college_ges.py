@@ -1,5 +1,6 @@
 """
 python3 college_ges.py > college_ges.csv
+python3 college_ges.py html > reports/output/college-ge-units-fragment.html
 """
 
 import sys

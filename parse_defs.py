@@ -1,9 +1,10 @@
 from typing import Literal, NamedTuple, Optional, Tuple
 
-# Cannot use @total_ordering: https://stackoverflow.com/a/68238299
-
 
 class TermCode(str):
+    # Cannot use @total_ordering on a str subclass:
+    # https://stackoverflow.com/a/68238299
+
     quarters = ["WI", "SP", "S1", "S2", "S3", "SU", "FA"]
 
     def quarter(self) -> str:
