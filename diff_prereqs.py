@@ -1,3 +1,10 @@
+"""
+This is run by the Makefile.
+
+python3 diff_prereqs.py > reports/output/prereq-diffs-fragment.html
+python3 diff_prereqs.py timeline > reports/output/prereq-timeline-fragment.html
+"""
+
 from typing import List, NamedTuple, Optional, Tuple, TypeVar
 from common_prereqs import parse_int
 from parse import prereqs, terms

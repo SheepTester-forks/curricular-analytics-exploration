@@ -1,7 +1,13 @@
+"""
+python3 units_per_course.py > units_per_course.txt
+python3 units_per_course.py json > units_per_course.json
+"""
+
 from functools import cmp_to_key
 from typing import Dict, List, NamedTuple
-from parse import MajorPlans, major_plans
+from parse import major_plans
 from parse_defs import CourseCode
+from university import university
 
 MAX_SAMPLE_LEN = 5
 
@@ -24,9 +30,9 @@ def comp_plan_id(a: PlanId, b: PlanId) -> int:
         return b.year - a.year
     if a.major != b.major:
         return -1 if a.major < b.major else 1
-    return MajorPlans.least_weird_colleges.index(
+    return university.curriculum_priority.index(
         a.college
-    ) - MajorPlans.least_weird_colleges.index(b.college)
+    ) - university.curriculum_priority.index(b.college)
 
 
 UnitVariant = List[PlanId]

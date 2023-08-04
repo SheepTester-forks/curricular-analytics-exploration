@@ -302,3 +302,154 @@ Build a single file. Upload the output file to the CMS.
 ```
 $ make
 ```
+
+# Projects
+
+There are a lot of scripts in the top-level directory of this repo, and it's not clear how they're related to each other because file tree viewers tend to alphabetize these file names. `redundant_prereq_check.py` and `redundant_prereq_courses.py` are right next to each other; are they related?
+
+Many files are one-time scripts just to answer a question that someone or I had. How many majors depend on math 18? Which major changed the most over the past few years? Also, for technical reasons ([I don't understand Python modules](https://stackoverflow.com/a/4383597)), I put all the Python files in the root directory so they can import each other.
+
+Below, the files are listed in somewhat chronological order, at least within each list. I think this organization better shows the relationship between the files so that when I clean things up for others to use, it's easier to tell which ones I can toss out.
+
+## Uploading to Curricular Analytics
+
+_2022 June 8 to July 7 (2021 plans), August 2 to (2015–2022 plans). Python._
+
+Task: Upload every major's curriculum and each of its college degree plans to Curricular Analytics.
+
+We approached this using automation rather than manually entering in the plans as other universities did. This involved parsing the given CSVs of all degree plans and majors, then outputting CSVs in the format of Curricular Analytics. A lot of cleanup was necessary to fix prerequisites, clean up messy course names, and correct the number of units for courses. Finally, to expediate uploading all of the plans, I reverse engineered Curricular Analytics' internal API to automate uploading the generated CSVs to the website.
+
+On June 22, I started uploading all the curricula. I had to fix a few things, but I finished on July 3.
+
+On August 2, we were given academic plans from 2012 to 2022; we previously only had plans from 2021. I uploaded all the plans from 2015 on (older plans were deemed too low quality). The Curricular Analytics website wasn't great for navigating this many curricula, so I made a [Tableau view that just had links][curr-idx] to the curriculum for every major and year.
+
+Files:
+
+- **parse.py** parses the input CSV files as Python objects.
+- **output.py** takes the Python objects and outputs them as CSV or JSON files to upload to Curricular Analytics.
+- **api.py** defines helper methods that interface directly with Curricular Analytics' internal API. Think of it like discord.js but for Curricular Analytics.
+  - [Documentation for Curricular Analytics' internal API](./docs/ca-api.md)
+
+Data files:
+
+- **output_json.py** defines Python `TypedDict` objects to define the JSON structure for output.py.
+- **departments.py** parses a JSON file containing a list of departments. The department name is included in the curriculum name on Curricular Analytics.
+  - (output: departments.txt) As a script, I wanted to check if there were department codes in the degree plan CSV that weren't included in the major code CSV.
+
+This involved additional scripts for error checking:
+
+- compare-curricula.py (output: comparisons.txt) compared, for each major, every college's degree plan (major courses only) against each other, and listed the differences in courses in comparisons.txt. I found that Marshall had the least deviations overall, so Marshall's degree plans are used to create curricula.
+- marshall-viability-analysis.py (output: marshall.txt) was a follow-up script that checked that Marshall was the least deviant of all the colleges. It compared Marshall with the degree plans of all the other colleges and printed when it disagreed with every college. It only disagreed with the others twice, which is pretty good.
+- course_names.py (output: course_names.txt) listed every unique course title (cleaned up a bit) with its parsed course code. This was to test `parse_course_name` (which turns `BICD110` into `("BICD", "110")` but not `IE1` into `("IE", "1")`) as well as `clean_course_title`.
+- course_names2.py (output: course_names2.txt) attempted to clean up course titles more aggressively, mostly to match the example CSV files we were given.
+  - However, by removing `GE`, `AWP`, and `DEI`, this ended up removing useful context from the plans. For example, some plans had something like two instances of "MCWP 40/GE," but on Curricular Analytics, this appeared as two MCWP 40 courses, which looks like an error. The rewrite of parse.py does not do this anymore I believe.
+- common_prereqs.py (output: common_prereqs.txt) identified common prereqs across all courses in a subject. This was to figure out if there were any exceptions other than the provided `SOCI- UD METHODOLOGY` and `TDHD XXX`.
+  - We started with example manually created curricula that defined prerequisites for these course categories, and to make our script match the examples, we just added special cases for those two courses.
+- unit_check.py listed degree plans with fewer than 180 units.
+- course_names3.py (output: course_names3.txt) runs [Arturo's course name cleanup algorithm](https://www.overleaf.com/project/62e8265ff1395d787286ea5b) on every unique course title, and lists all resulting unique cleaned course titles. The goal with this is to reduce variability in course titles resulting from college advisors phrasing things differently.
+  - This supercedes the old aggressive course title cleanup algorithm that was tested by course_names2.py.
+
+Scripts for uploading:
+
+- **upload.py** (output: files/uploaded\*.yml) is a CLI tool that uploads the specified major to Curricular Analytics.
+- **update.py** overwrote an already-uploaded curriculum. I ran this if I fixed something in output.py. It uses Curricular Analytics' internal API for editing curricula/degree plans using their visual editor by sending them a JSON file (rather than CSV) of the result.
+  - This script isn't very good because Curricular Analytics is kind of buggy. Course IDs are tied between curriculum and degree plans or something because in updated plans, prerequisites specific to a course in one degree plan would bleed into another. Uploading or editing by JSON is also much slower than using a CSV file.
+  - Editing is occasionally necessary because you can only delete curricula you created, and we were asked to overwrite the curricula already uploaded by someone else with ones generated by our scripts. Also, if we wanted to fix something now, we probably wouldn't want to break URLs by deleting existing curricula and uploading new ones.
+- files/fix.sh was used to update already-uploaded plans for several majors without me having to sit around the terminal waiting for it to load.
+- check_uploaded.py checked every major uploaded onto Curricular Analytics. For some reason, if curricula are uploaded too quickly to Curricular Analytics, they end up with blank degree plans. This happened for curricula uploaded earlier before I realized I set the delay time too short.
+- rename_all.py renamed every uploaded 2021 curriculum on Curricular Analytics to the new curriculum name format. This was because we were uploading plans for other years now, so the existing curriculum names had to include their year.
+- files/upload.sh was used to mass-upload plans for other (non-2021) years.
+
+## Tableau of metrics
+
+_2022 July 7 to August 2. Python, Julia, Tableau._
+
+Task: Create dashboards on Tableau displaying data about courses and majors. On July 20, more specific details were given:
+
+1. View \#1: majors going down, colleges going right. Given a year, select a metric to show in each degree plan's cell, or flag plans that meet specific conditions.
+2. View #2: majors going down. Given a college and year, select a metric to show in each row along with its value (e.g. the name of the course with highest complexity).
+3. Reports:
+   1. Number of plans any course appears in by year.
+   2. Complexity for any course by plan and year.
+   3. Centrality for any course by plan and year.
+   4. Course overlap between majors.
+
+I saw that Arturo was working with Julia, so I began reading its documentation on June 30.
+
+In order to get metrics such as complexity and centrality, Curricular Analytics has a [Julia package](https://github.com/CurricularAnalytics/CurricularAnalytics.jl/). I had to load the plans from Python into Julia. I first got a CSV file for every degree plan, but I decided to rewrite the plan parsing script in Julia (July 20 and 21). The Julia scripts output CSV files that I imported into Tableau. Tableau is quite powerful but also somewhat annoying to fight when I want a visualization (viz) to look a certain way. We were supposed to receive Tableau training, but scheduling was a pain. We had to take a privacy workshop first (where they asked us to move our views from Tableau Public to UCSD's Tableau instance), but by then, we had already figured out Tableau ourselves.
+
+Arturo took over handling the Tableau views, adding additional views (including views for quality control) and blank, data-less templates for other universities to use. We wanted to share views so that some views were public while others remained private to administrators only (since the data may be embarassing to certain departments), but we don't have sharing permissions. It has been over a year, and we still haven't resolved this issue.
+
+Old Tableau view: _Carlos mentioned in a meeting that he wanted a certain Tableau view, so I went ahead and [made it][metrics-old]. This was before he gave more specific details above._
+
+- output_all.py (output: files/output/\*\*/\*.csv) wrote a CSV for every curriculum and degree plan (2021 only).
+- metrics.jl (output: files/metrics.csv, files/courses.csv) read these CSVs then created a CSV of each degree plan's metrics.
+
+New Tableau views:
+
+- **Parse.jl** is the Julia equivalent of parse.py.
+- **Output.jl** creates `Curriculum` and `DegreePlan` objects for a given year and major.
+- Metrics.jl (output: files/metrics_fa12.csv) uses these objects to output a CSV of all the metrics needed for the [Tableau views (#1 and #2)][views] for every year-major-college combination.
+  - Not to be confused with lowercase metrics.jl. I don't know why I named it this way, but I guess it was because this supercedes the old metrics.jl. Julia module names are conventionally uppercase, which I learned after writing metrics.jl.
+- **Utils.jl** helped to reduce code repetition between Metrics.jl and CourseMetrics.jl for common functions like writing a CSV row.
+- CourseMetrics.jl (output: files/courses_fa12.csv) outputs a CSV of every course in every year-major and lists its metrics in the curriculum (based on Marshall's degree plan). This is for [reports #1, #2, and #3][reports].
+- CourseOverlap.jl (output: files/course_overlap.csv) lists the percent overlap of courses for every ordered major pair and year, for [report #4][reports]. It's an ordered pair because the way I calculated percent overlap wasn't commutative; it used the first major's number of courses in the denominator of the percentage.
+- curricula_index.py (output: files/curricula_index.csv) created a CSV file with the URL of every year-major pair, including the department and school of the major. This was for the [list of uploaded Curricular Analytics curriculum links][curr-idx].
+  - I'm listing this here because it's kind of a cross between the plan uploading and Tableau view project (we consider it a Tableau viz).
+
+Unrelated:
+
+- majors_per_course.py (output: files/majors_per_course.csv) lists the number of majors a course shows up in per major. Apparently this has nothing to do with the Tableau views; the math department just wanted to know how many majors depend on math 18.
+- redundant_prereq_check.py attempted to identify redundant prereqs. I think this might be to remove unnecessary prereq lines in the degree plans on Curricular Analytics (e.g. an arrow from MATH 20A and MATH 20B to some other course, even though only the arrow from MATH 20B is necessary).
+
+[metrics-old]: https://public.tableau.com/app/profile/sean.yen/viz/metrics_16619827387790/
+[views]: https://public.tableau.com/app/profile/sean.yen/viz/metrics_fa12/
+[reports]: https://public.tableau.com/app/profile/sean.yen/viz/reports_16591343716100/
+[curr-idx]: https://public.tableau.com/app/profile/sean.yen/viz/curriculum_index/
+
+## Systematically flagging issues
+
+_2022 August 18–23. Python._
+
+Task: Systematically flag common issues in UCSD's degree plans (because they are manually created by human college advisors).
+
+At first, these issues were supposed to be raw so the colleges could identify false positives, but after some colleges fixed the issues, the issues were expected to be cleaned up. They're rather pissed that the document is still listing issues they've fixed, but we haven't gotten a data update since last year.
+
+The report used to be in plain text, but I moved it to a Google Doc so it's web accessible (for the advisors).
+
+Files:
+
+- flag_issues.py (output: files/flagged_issues.html) outputs an HTML file that can be copy-pasted into a Google Doc for the advisors.
+- units_per_course.py (output: units_per_course.txt, units_per_course.json) identifies the likely correct number of units for a course. This is used as the correct number of units until I get a dataset of units per course (which I have not yet received).
+  - However, this isn't very accurate because units of courses can change over time. LTSP 2A seemingly used to be 4 units and now is 5, and all but one college updated their plans to reflect this, but they're all marked wrong because most of the older plans have 4 units.
+
+## Changes to degree plans over time (plan diff)
+
+_2022 August 26–31. Python, Deno/TypeScript/Preact. [Details](https://educationalinnovation.ucsd.edu/ca-views/plan-changes.html), [app](https://educationalinnovation.ucsd.edu/_files/academic-plan-diffs.html)._
+
+I forgot why I made this, but this wasn't a task. I think at some point, I realized that I wanted to see what specific changes occurred to a plan over the years, so I went ahead and made a diffing program. With feedback from Carlos, I made what originally was a fancy CLI tool into a web app. Since I had done the [CMS training](https://blink.ucsd.edu/technology/websites/training/start/access/index.html) (I think this was intended for Tableau), I got access to [educationalinnovation.ucsd.edu](https://educationalinnovation.ucsd.edu/) and was told to upload the web page on there.
+
+Files:
+
+- diff_plan.py pretty-prints the changes made to the given major-college degree plan over the years. Carlos said to make it more presentable for non-techie advisors, so this also outputs a JSON file of diffs for every major-college combo for the web app that I made.
+  - It uses files/metrics_fa12.csv (rather than from PlanChanges.jl) to include complexity score changes.
+- reports/plan-diffs-template.html - A template HTML file. The Makefile replaces the last few lines with inline script tags containing the JSON of all the plan changes and the bundled code.
+- reports/plan-diffs.tsx - The entry point of the Preact app. It's written in TypeScript for Deno and uses Preact, and it's bundled using `deno bundle`, which later got deprecated for some reason.
+- Makefile is shared by all web reports and contains the commands to build all web reports just by running `make`.
+
+Unused:
+
+- PlanChanges.jl (output: files/changes.csv, which I imported into a [Google Sheet](https://docs.google.com/spreadsheets/d/1CIz7pCOAduXC-58jixgXlHwYGKCx4k9MX7z51uq0wtQ/)) calculates the amount of change per major-college. I wanted to see which degree plans would have interesting diffs. This is not used anywhere else since diff_plan.py uses Metrics.jl's complexity scores.
+
+## Changes to prerequisites over time (prereq diff)
+
+_2022 September 9–28. Python. [Details](https://educationalinnovation.ucsd.edu/ca-views/prereq-changes.html), [app (by course)](https://educationalinnovation.ucsd.edu/_files/prereq-diffs.html), [app (by term)](https://educationalinnovation.ucsd.edu/_files/prereq-timeline.html)._
+
+Task: list changes to prerequisites and specify which term they were added or removed.
+
+Carlos then wanted to focus on changes one year at a time. This way, you can see when prerequisites are changed in the middle of a year.
+
+Files:
+
+- diff_prereqs.py generates an HTML fragment for the report.
+- reports/prereq-diffs-template.html, reports/prereq-timeline-template.html - Contains the CSS for the web page. The Makefile removes the last few lines to insert the HTML fragments generated by `diff_prereqs.py`.

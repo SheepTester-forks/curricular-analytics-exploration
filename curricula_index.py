@@ -1,3 +1,7 @@
+"""
+python3 curricula_index.py > files/curricula_index.csv
+"""
+
 from typing import Dict, Tuple
 from upload import track_uploaded_curricula
 

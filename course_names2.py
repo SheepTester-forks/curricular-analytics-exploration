@@ -1,3 +1,7 @@
+"""
+python3 course_names2.py > course_names2.txt
+"""
+
 import re
 from parse import major_plans
 

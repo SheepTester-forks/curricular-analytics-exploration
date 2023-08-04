@@ -1,3 +1,9 @@
+"""
+This is run by the Makefile.
+
+python3 diff_plan.py > reports/output/academic-plan-diffs.json
+"""
+
 import csv
 from difflib import SequenceMatcher
 import json
