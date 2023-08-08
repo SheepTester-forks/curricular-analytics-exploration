@@ -321,7 +321,9 @@ We approached this using automation rather than manually entering in the plans a
 
 On June 22, I started uploading all the curricula. I had to fix a few things, but I finished on July 3.
 
-On July 20 and 21, I rewrote some Python scripts in Julia so the degree plans could be used with the [Curricular Analytics Julia package](https://github.com/CurricularAnalytics/CurricularAnalytics.jl/).
+On July 20 and 21, I rewrote some Python scripts in Julia so the degree plans could be used with the [Curricular Analytics Julia package][ca-julia].
+
+[ca-julia]: https://github.com/CurricularAnalytics/CurricularAnalytics.jl/
 
 On August 2, we were given academic plans from 2012 to 2022; we previously only had plans from 2021. I uploaded all the plans from 2015 on (older plans were deemed too low quality). The Curricular Analytics website wasn't great for navigating this many curricula, so on August 16, I made a [Tableau view that just had links][curr-idx] to the curriculum for every major and year.
 
@@ -387,7 +389,7 @@ Task: Create dashboards on Tableau displaying data about courses and majors. On 
 
 I saw that Arturo was working with Julia, so I began reading its documentation on June 30.
 
-In order to get metrics such as complexity and centrality, Curricular Analytics has a [Julia package](https://github.com/CurricularAnalytics/CurricularAnalytics.jl/). I had to load the plans from Python into Julia. I first got a CSV file for every degree plan, but I decided to rewrite the plan parsing script in Julia (July 20 and 21). The Julia scripts output CSV files that I imported into Tableau. Tableau is quite powerful but also somewhat annoying to fight when I want a visualization (viz) to look a certain way. We were supposed to receive Tableau training, but scheduling was a pain. We had to take a privacy workshop first (where they asked us to move our views from Tableau Public to UCSD's Tableau instance), but by then, we had already figured out Tableau ourselves.
+In order to get metrics such as complexity and centrality, Curricular Analytics has a [Julia package][ca-julia]. I had to load the plans from Python into Julia. I first got a CSV file for every degree plan, but I decided to rewrite the plan parsing script in Julia (July 20 and 21). The Julia scripts output CSV files that I imported into Tableau. Tableau is quite powerful but also somewhat annoying to fight when I want a visualization (viz) to look a certain way. We were supposed to receive Tableau training, but scheduling was a pain. We had to take a privacy workshop first (where they asked us to move our views from Tableau Public to UCSD's Tableau instance), but by then, we had already figured out Tableau ourselves.
 
 Arturo took over handling the Tableau views, adding additional views (including views for quality control) and blank, data-less templates for other universities to use. We wanted to share views so that some views were public while others remained private to administrators only (since the data may be embarassing to certain departments), but we don't have sharing permissions. It has been over a year, and we still haven't resolved this issue.
 
@@ -510,7 +512,7 @@ My approach to this was to let the user enter in the classes they've taken, and 
 
 In January 2023, Carlos wanted the tree but reversed to show the prerequisite ancestors of a course as a tree.
 
-From April 7–12, I looked into another representation of the tree since the current network diagram, albeit nice, was too messy. I didn't finish as I moved on to rewriting Curricular Analytics' Julia package in Python.
+From April 7–12, I looked into another representation of the tree since the current network diagram, albeit nice, was too messy. I didn't finish as I moved on to rewriting [Curricular Analytics' Julia package][ca-julia] in Python.
 
 [^1]: i.e. courses without prerequisites, such as CSE 11, would not be shown ever in the tree because it cannot be unlocked by a course: it's already unlocked. The exception to this is if the user entered CSE 11 in as a course to start with.
 
@@ -582,20 +584,35 @@ Files:
 
 ## Rewriting CurricularAnalytics.jl in Python
 
-_2023 April 13 to May 9. Python._
+_2023 April 13 to May 9. Python. [GitHub repo](https://github.com/SheepTester-forks/CurricularAnalytics.py)._
 
-## Seats needed per course
+Task: port Curricular Analytics to Python.
+
+Arturo had made a what-if tool in Julia using the [Curricular Analytics Julia package][ca-julia] and wanted to make it available for advisors to use. However, since the beginning of 2023 we've been trying to no avail to try to set up a server to run the Julia program as a backend; there were concerns about whether it would handle increased load during weeks 9 through finals, for example. IT was being very slow. So, one idea was to rewrite the package in Python—most people use Python, anyways, so it would be useful for more than just this one tool. This would also obviate having to maintain two versions of our plan parser.
+
+Translating all the files was mostly tedious but simple work. Some issues I ran into were fussing over Python typings with third party libraries like pandas, and figuring out how to set up a Python package of my own. Translated Python files were placed adjacent to the original Julia files in a [fork](https://github.com/SheepTester-forks/CurricularAnalytics.py) of the original package.
+
+Good progress was made until the U of A trip, when I changed focus to the seats calculator (below). The Curricular Analytics team didn't think a Python port was necessary because they had a (WIP) API (documented in docs/ca-api-notes.md), but Carlos believed the Python version would still be useful in cases when the API wouldn't suffice.
+
+## Seats needed per course (class capacity calculator)
 
 _2023 May 23 to June 2 (web app), July 24–31 (Python script)._
 
-- courses_req_by_majors.py (output: courses_req_by_majors.json)
-- reports/seats.tsx
-- reports/seats-template.html
-- reports/seats/components/App.tsx
-  - reports/seats/components/SeatsNeeded.tsx
-- reports/seats/courses-by-major.ts
-- reports/seats/students-by-group.ts
+Task: calculate how many seats are needed per course based on the number of students in each major.
 
-- course_capacities.py (sample input: course_capacities_input.csv, sample output: course_capacities_output.csv)
+The number of students in each major wasn't enough: because of GEs and slightly different course placements in each college's degree plan, I'd also need to know the college distribution for each major. I'd also need the distribution of students in each year for maximum accuracy. Since we wouldn't be given the data until _after_ finishing the program, I decided to approach this by making another web app that would take a CSV file and ask whether it included college and year data, and make assumptions if not. This way, advisors could upload their own data without having to go through me.
 
-docs/ca-api-notes.md
+However, because the results were a bit urgent, I ended up narrowing the scope by simply assuming each major is split evenly across 7 colleges and 4 years. We were then given a file of first year majors and colleges across 8 colleges. We don't have academic plans for 2023 yet, so Eighth students were omitted from our results. However, the academic plans aren't strictly followed anyways, so it doesn't really make our estimates significantly more inaccurate, I think.
+
+Web app (no longer used):
+
+- courses_req_by_majors.py (output: courses_req_by_majors.json) tried to output the degree plans that required each course.
+- reports/seats-template.html: CSS.
+- reports/seats.tsx: entry point.
+- reports/seats/components/App.tsx: top-level component.
+  - reports/seats/components/SeatsNeeded.tsx: displays the seats needed per course.
+- reports/seats/courses-by-major.ts: defines types for the data structure of courses_req_by_majors.json.
+- reports/seats/students-by-group.ts: defines an intermediate format that the uploaded CSV file would be converted into. For example, if the given input doesn't account for years, then each major-college would be partitioned evenly into four years, and each demographic would look up the course it would take in the quarter.
+
+- course_capacities.py (inputs: files/ClassCapCalculatorNewStudents.csv, files/ClassCapCalculatorCourses.csv; output: files/course_capacities_output.csv) takes the number of incoming first years in each major-college and the number of seats left in each course and outputs the number of seats needed for freshmen and seats available for each course. Eighth first-years are ignored.
+  - The sample input: course_capacities_input.csv and output: course_capacities_output.csv were for an earlier version that assumed every major was evenly divided across the 7 colleges and 4 years.
