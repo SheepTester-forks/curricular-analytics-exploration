@@ -344,7 +344,6 @@ Data files:
 
 - **output_json.py** defines Python `TypedDict` objects to define the JSON structure for output.py.
 - **departments.py** parses a JSON file containing a list of departments. The department name is included in the curriculum name on Curricular Analytics.
-  - (output: departments.txt) As a script, I wanted to check if there were department codes in the degree plan CSV that weren't included in the major code CSV.
 - university.py defines UCSD-specific constants, such as the number of colleges and the university name.
 - parse_defs.py defines Python objects representing data regarding plans, such as `CourseCode`s and `TermCode`s.
 
@@ -353,6 +352,8 @@ This involved additional scripts for error checking:
 - compare-curricula.py (output: comparisons.txt) compared, for each major, every college's degree plan (major courses only) against each other, and listed the differences in courses in comparisons.txt. I found that Marshall had the least deviations overall, so Marshall's degree plans are used to create curricula.
 - marshall-viability-analysis.py (output: marshall.txt) was a follow-up script that checked that Marshall was the least deviant of all the colleges. It compared Marshall with the degree plans of all the other colleges and printed when it disagreed with every college. It only disagreed with the others twice, which is pretty good.
 - course_names.py (output: course_names.txt) listed every unique course title (cleaned up a bit) with its parsed course code. This was to test `parse_course_name` (which turns `BICD110` into `("BICD", "110")` but not `IE1` into `("IE", "1")`) as well as `clean_course_title`.
+- department_names.py (output: departments.txt) checks if there were department codes in the degree plan CSV that weren't included in the major code CSV.
+  - This was originally called departments.py, but I renamed it in a merge conflict because there was already another departments.py. This is why the output isn't called department_names.txt.
 - course_names2.py (output: course_names2.txt) attempted to clean up course titles more aggressively, mostly to match the example CSV files we were given.
   - However, by removing `GE`, `AWP`, and `DEI`, this ended up removing useful context from the plans. For example, some plans had something like two instances of "MCWP 40/GE," but on Curricular Analytics, this appeared as two MCWP 40 courses, which looks like an error. The rewrite of parse.py does not do this anymore I believe.
 - common_prereqs.py (output: common_prereqs.txt) identified common prereqs across all courses in a subject. This was to figure out if there were any exceptions other than the provided `SOCI- UD METHODOLOGY` and `TDHD XXX`.
