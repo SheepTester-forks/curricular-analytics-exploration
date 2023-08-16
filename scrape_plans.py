@@ -1,5 +1,5 @@
 import json
-from typing import Any, Hashable, List, Literal, Optional, TypedDict
+from typing import Any, Dict, Hashable, List, Literal, Optional, TypedDict, Union
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
@@ -74,7 +74,11 @@ class PlanComment(TypedDict):
 
 class LoadPlanResponse(TypedDict):
     planId: int
-    courses: List[List[List[PlanCourse]]]
+    courses: List[Union[List[List[PlanCourse]], Dict[str, List[PlanCourse]]]]
+    """
+    2023 PY29 FI has a partial array that looks like `{ "2": [...] }`.
+    plans.ucsd.edu crashes when you try looking at it.
+    """
     comments: List[PlanComment]
     college_code: str
     college_name: str
@@ -110,14 +114,6 @@ class PlansApi:
         return PlansApi._request("LoadSearchControls")
 
     @staticmethod
-    def load_all_majors(department: str = "") -> LoadMajorsResponse:
-        """
-        If `department` is omitted, the API returns majors for all departments.
-        NOTE: All majors will be considered unavailable.
-        """
-        return PlansApi._request("LoadMajors", department=department)
-
-    @staticmethod
     def load_majors(
         year: int, college: str, department: str = ""
     ) -> LoadMajorsResponse:
@@ -130,6 +126,22 @@ class PlansApi:
         return PlansApi._request(
             "LoadMajors", year=year, college=college, department=department
         )
+
+    @staticmethod
+    def load_all_majors(department: str = "") -> LoadMajorsResponse:
+        """
+        If `department` is omitted, the API returns majors for all departments.
+        NOTE: All majors will be considered unavailable.
+        """
+        return PlansApi._request("LoadMajors", department=department)
+
+    @staticmethod
+    def major_codes() -> List[str]:
+        """
+        Returns a list of all major codes, including historical majors, since
+        plans.ucsd.edu uses the same list of majors for all years anyways.
+        """
+        return [major["major"][-5:-1] for major in PlansApi.load_all_majors()]
 
     @staticmethod
     def load_plan(plan_id: int) -> LoadPlanResponse:
@@ -154,6 +166,7 @@ HEADER = [
     "Year Taken",
     "Quarter Taken",
     "Term Taken",
+    "Plan Length",
 ]
 
 
@@ -183,21 +196,19 @@ def plans_to_csv(
     if header:
         writer.row(*HEADER)
     search_controls = PlansApi.load_search_controls()
-    for college in search_controls["colleges"]:
-        major_codes = sorted(
-            major["major_code"]
-            for major in PlansApi.load_majors(year, college["code"])
-            if major["major_code"] != "NONE"
-        )
-        for major in major_codes:
+    for major in sorted(PlansApi.major_codes()):
+        for college in search_controls["colleges"]:
             for plan in PlansApi.load_plans(year, major, college["code"]):
                 for plan_year in plan["courses"]:
-                    for term in plan_year:
+                    for term in (
+                        plan_year if isinstance(plan_year, list) else plan_year.values()
+                    ):
                         for course in term:
                             writer.row(
                                 plan["department"],
                                 major,
                                 college["code"],
+                                course["course_name"],
                                 # `units` is a string, but printing it
                                 # directly into the CSV is fine
                                 course["units"],
@@ -207,6 +218,7 @@ def plans_to_csv(
                                 str(course["year_taken"]),
                                 str(course["quarter_taken"]),
                                 _display_term(year, course),
+                                str(plan["plan_length"]),
                             )
     return writer
 
