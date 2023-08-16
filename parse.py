@@ -16,7 +16,7 @@ Exports:
 """
 
 import csv
-from typing import Dict, Iterable, List, NamedTuple, Optional, Set
+from typing import Dict, Iterable, List, NamedTuple, Optional, Set, Tuple
 from parse_defs import CourseCode, ProcessedCourse, Prerequisite, RawCourse, TermCode
 from university import university
 
@@ -187,7 +187,7 @@ def plan_rows_to_dict(rows: Iterable[List[str]]) -> Dict[str, MajorPlans]:
         year,  # Start Year
         plan_yr,  # Year Taken
         plan_qtr,  # Quarter Taken
-        _,  # Term Taken
+        *_,  # Term Taken, Plan Length
     ) in rows:
         year = int(year)
         if major_code not in plans:
@@ -208,19 +208,23 @@ def plan_rows_to_dict(rows: Iterable[List[str]]) -> Dict[str, MajorPlans]:
     return plans
 
 
-_plan_cache: Dict[int, Dict[str, MajorPlans]] = {}
+_plan_cache: Dict[Tuple[int, int], Dict[str, MajorPlans]] = {}
 
 
-def major_plans(year: int) -> Dict[str, MajorPlans]:
+def major_plans(year: int, length: int = 4) -> Dict[str, MajorPlans]:
     global _major_plans
-    if year not in _plan_cache:
+    if (year, length) not in _plan_cache:
         with open(university.plans_file, newline="") as file:
             reader = csv.reader(file)
             next(reader)  # Skip header
-            _plan_cache[year] = plan_rows_to_dict(
-                row for row in reader if int(row[7]) == year
+            _plan_cache[year, length] = plan_rows_to_dict(
+                row
+                for row in reader
+                if int(row[7]) == year
+                # Default plan length is 4
+                and (int(row[11]) if len(row) > 11 else 4) == length
             )
-    return _plan_cache[year]
+    return _plan_cache[year, length]
 
 
 class MajorInfo(NamedTuple):

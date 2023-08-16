@@ -9,7 +9,8 @@ from parse import major_plans, prereqs
 from parse_defs import CourseCode, ProcessedCourse
 from university import university
 
-YEAR = 2022
+YEAR = 2023
+LENGTH = 4
 
 GES = {
     "RE": [
@@ -217,7 +218,7 @@ def print_issues(issues: List[str], description: str) -> None:
 def main() -> None:
     for college_code, college_name in university.college_names.items():
         issues = Issues()
-        for major_code, plans in major_plans(YEAR).items():
+        for major_code, plans in major_plans(YEAR, LENGTH).items():
             if college_code not in plans.colleges:
                 continue
             curriculum = {course.course_title for course in plans.curriculum()}

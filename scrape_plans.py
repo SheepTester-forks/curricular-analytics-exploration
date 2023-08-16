@@ -1,3 +1,7 @@
+"""
+python3 scrape_plans.py > files/plans2023.csv
+"""
+
 import json
 from typing import Any, Dict, Hashable, List, Literal, Optional, TypedDict, Union
 from urllib.parse import urlencode
