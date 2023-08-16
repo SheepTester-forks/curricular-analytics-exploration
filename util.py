@@ -11,7 +11,9 @@ from typing import (
     Dict,
     Iterable,
     List,
+    Optional,
     Protocol,
+    TextIO,
     Tuple,
     TypeVar,
 )
@@ -103,12 +105,12 @@ class CsvWriter:
     """
 
     _cols: int
-    _output = StringIO()
+    _output: TextIO = StringIO()
     _writer = csv.writer(_output)  # idk how to make its type _writer
 
-    def __init__(self, cols: int) -> None:
+    def __init__(self, cols: int, output: Optional[TextIO] = None) -> None:
         self._cols = cols
-        self._output = StringIO()
+        self._output = StringIO() if output is None else output
         self._writer = csv.writer(self._output)
 
     def row(self, *values: str) -> None:
@@ -122,5 +124,13 @@ class CsvWriter:
         )
 
     def done(self) -> str:
-        # https://stackoverflow.com/a/9157370
-        return self._output.getvalue()
+        """
+        Returns the CSV output as a string.
+        """
+        if isinstance(self._output, StringIO):
+            # https://stackoverflow.com/a/9157370
+            return self._output.getvalue()
+        else:
+            raise TypeError(
+                "done() is only available when the output is a StringIO instance."
+            )
