@@ -56,6 +56,9 @@ class CourseCode(NamedTuple):
     def __str__(self) -> str:
         return f"{self.subject} {self.number}"
 
+    def __repr__(self) -> str:
+        return str(self)
+
     def __lt__(self, other: Tuple[object, ...]) -> bool:
         if not isinstance(other, CourseCode):
             raise NotImplemented
