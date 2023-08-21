@@ -2,6 +2,8 @@
 This is run by the Makefile.
 
 python3 diff_plan.py > reports/output/academic-plan-diffs.json
+
+python3 college_ges.py <from> <to> [major] [college]
 """
 
 import csv
@@ -165,8 +167,8 @@ def diff(old: List[RawCourse], new: List[RawCourse]) -> DiffResults:
     )
 
 
-def print_major_changes(major: str, college: str) -> None:
-    for year in range(2015, 2022):
+def print_major_changes(start: int, end: int, major: str, college: str) -> None:
+    for year in range(start, end):
         if (
             major not in major_plans(year)
             or major not in major_plans(year + 1)
@@ -190,7 +192,7 @@ def print_major_changes(major: str, college: str) -> None:
         differences.print()
 
 
-def diff_all() -> None:
+def diff_all(start: int, end: int) -> None:
     complexities: Dict[Tuple[int, str, str], float] = {}
     with open("./files/metrics_fa12.csv", newline="") as file:
         reader = csv.reader(file)
@@ -206,7 +208,7 @@ def diff_all() -> None:
 
     def diff_major(major: str, college: str):
         years: List[Any] = []
-        for year in range(2015, 2022):
+        for year in range(start, end):
             if (
                 major not in major_plans(year)
                 or major not in major_plans(year + 1)
@@ -232,7 +234,7 @@ def diff_all() -> None:
         return years
 
     majors_by_dept: Dict[str, Dict[str, Dict[str, Any]]] = {}
-    for year in range(2015, 2023):
+    for year in range(start, end + 1):
         for major_code in major_plans(year).keys():
             major = f"{major_code} {major_codes()[major_code].name}"
             department = departments[major_codes()[major_code].department]
@@ -266,6 +268,13 @@ if __name__ == "__main__":
         os.system("color")
 
     if len(argv) < 3:
-        diff_all()
+        raise ValueError(
+            "Need years: python3 college_ges.py <from> <to> [major] [college]"
+        )
+    start = int(argv[1])
+    end = int(argv[2])
+
+    if len(argv) < 3:
+        diff_all(start, end)
     else:
-        print_major_changes(*argv[1:3])
+        print_major_changes(start, end, *argv[1:3])

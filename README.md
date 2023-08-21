@@ -2,7 +2,7 @@
 
 [`parse.py`](parse.py) expects certain files in the `files/` directory. Download them from our shared Google Drive folder.
 
-- [**`academic_plans_fa12.csv`**](https://drive.google.com/file/d/1SMNCi_UD3NoIyUt8TidpPOWha_pOx3il/view),
+- [**`academic_plans_fa23.csv`**](https://drive.google.com/file/d/1SMNCi_UD3NoIyUt8TidpPOWha_pOx3il/view),
   containing degree plans for every year, major, and college combination since
   fall 2012 created by college advisors painstakingly cross-referencing major
   and college requirements to manually design plans for every major, so there
@@ -76,7 +76,7 @@
 
   - `Term Taken` is not used.
 
-- [**`prereqs_fa12.csv`**](https://drive.google.com/file/d/19oVI16mmhDIclyj6p3GMlxTMPDRNIcHw/view),
+- [**`prereqs_fa23.csv`**](https://drive.google.com/file/d/19oVI16mmhDIclyj6p3GMlxTMPDRNIcHw/view),
   containing every course and their prerequisites for every quarter since fall 2012.
 
   We use this to add prerequisite and corequisite relationships between courses
@@ -114,7 +114,7 @@
 
   `Term Code` is respected in case prerequisites change midway through the plan. They currently are expected to be in UCSD's term code format: `<quarter><year>`, such as `FA22` for Fall 2022.
 
-- **`isis_major_code_list.xlsx - Major Codes.csv`**: Open [isis_major_code_list.xlsx "Major Codes"](https://docs.google.com/spreadsheets/d/1Mgr99R6OFXJuNO_Xx-j49mBgurpwExKL/edit#gid=616727155) and go to File > Download > Comma Separated Values (.csv). This should be the default name it suggests, so you don't have to worry about setting the name.
+- [**`isis_major_code_list.csv`**](https://blink.ucsd.edu/_files/instructors-tab/major-codes/isis_major_code_list.xlsx): Save the Major Codes sheet as a CSV.
 
   The spreadsheet is a modified version of the publicly available [list of ISIS
   major

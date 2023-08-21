@@ -9,6 +9,7 @@ from parse_defs import CourseCode
 
 from university import university
 
+YEAR = 2022
 YEAR_COUNT = 4
 
 
@@ -142,7 +143,7 @@ def main() -> None:
                     # Skip, it's not the section we want (eg LE)
                     continue
             courses[course_code] = enrolled, capacity
-    output_seats_left(class_sizes(student_body, 2022), 0, courses, sys.stdout)
+    output_seats_left(class_sizes(student_body, YEAR), 0, courses, sys.stdout)
 
 
 if __name__ == "__main__":

@@ -109,13 +109,13 @@ class _UCSD:
     terms = ["FA", "WI", "SP"]
     "Used for mapping term indices to term codes"
 
-    prereqs_file = "./files/prereqs_fa12.csv"
-    plans_file = "./files/plans_all.csv"
-    majors_file = "./files/isis_major_code_list.xlsx - Major Codes.csv"
+    prereqs_file = "./files/prereqs_fa23.csv"
+    plans_file = "./files/academic_plans_fa23.csv"
+    majors_file = "./files/isis_major_code_list.csv"
 
-    curriculum_priority = ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
+    curriculum_priority = ["TH", "WA", "SN", "MU", "FI", "RE", "SI", "EI"]
     "College codes from least to most weird colleges (see #14)"
-    college_codes = ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
+    college_codes = ["RE", "MU", "TH", "WA", "FI", "SI", "SN", "EI"]
     "Defines the display order of colleges"
     college_names = {
         "RE": "Revelle",
@@ -125,6 +125,7 @@ class _UCSD:
         "FI": "ERC",
         "SI": "Sixth",
         "SN": "Seventh",
+        "EI": "Eighth",
     }
 
     # Prerequisites for courses without course codes

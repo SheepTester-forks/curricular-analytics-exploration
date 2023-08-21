@@ -1,6 +1,9 @@
 """
 python3 college_ges.py > college_ges.csv
-python3 college_ges.py html > reports/output/college-ge-units-fragment.html
+python3 college_ges.py 2022 html > reports/output/college-ge-units-fragment.html
+
+python3 college_ges.py <year> debug <major> <college>
+python3 college_ges.py <year> (html)
 """
 
 import sys
@@ -8,11 +11,16 @@ from parse import major_codes, major_plans
 from university import university
 from util import partition
 
-if len(sys.argv) > 1 and sys.argv[1] == "debug":
-    if len(sys.argv) != 4:
-        raise Exception("Need major code and college")
-    major_code = sys.argv[2]
-    college = sys.argv[3]
+if len(sys.argv) <= 1:
+    raise ValueError("Need year: python3 college_ges.py <year> (html|debug) ...")
+year = int(sys.argv[1])
+
+if len(sys.argv) > 2 and sys.argv[2] == "debug":
+    if len(sys.argv) != 5:
+        raise ValueError(
+            "Need major code and college: python3 college_ges.py <year> debug <major> <college>"
+        )
+    _, _, _, major_code, college = sys.argv
     courses = partition(
         (
             "MAJOR"
@@ -24,7 +32,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "debug":
             if course.units == 4
             else f"{course.course_title} ({course.units})",
         )
-        for course in major_plans(2022)[major_code].plan(college)
+        for course in major_plans(int(year))[major_code].plan(college)
     )
     print("[Major]")
     print(", ".join(courses.get("MAJOR") or []) or "(none)")
@@ -36,7 +44,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "debug":
     print(", ".join(courses.get("ELECTIVE") or []) or "(none)")
     exit()
 
-html = len(sys.argv) > 1 and sys.argv[1] == "html"
+html = len(sys.argv) > 2 and sys.argv[2] == "html"
 
 all_extra_ge_units = {
     (major_code, college): sum(
@@ -44,7 +52,7 @@ all_extra_ge_units = {
         for course in plans.plan(college)
         if course.course_title.upper() != "ELECTIVE" and not course.for_major
     )
-    for major_code, plans in major_plans(2022).items()
+    for major_code, plans in major_plans(year).items()
     for college in plans.colleges
 }
 min_ge = min(units for units in all_extra_ge_units.values() if units > 0)
@@ -95,7 +103,7 @@ else:
 sums = {college: 0.0 for college in university.college_codes}
 major_count = 0
 
-for major_code in major_plans(2022).keys():
+for major_code in major_plans(year).keys():
     if major_code.startswith("UN"):
         continue
     major_count += 1

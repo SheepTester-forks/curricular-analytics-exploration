@@ -1,8 +1,8 @@
 """
 Lists what majors require each course. I might've done this already, I forgot.
 
-python3 courses_req_by_majors.py
-python3 courses_req_by_majors.py json > courses_req_by_majors.json
+python3 courses_req_by_majors.py 2022
+python3 courses_req_by_majors.py 2022 json > courses_req_by_majors.json
 """
 
 import json
@@ -26,9 +26,9 @@ MOST = 0.5
 'Minimum percentage considered to be "most" colleges/majors (to allow for errors)'
 
 
-def print_json() -> None:
+def print_json(year: int) -> None:
     # TODO: partition by term
-    majors = major_plans(2022)
+    majors = major_plans(year)
     courses = partition(
         (
             course.course_code,
@@ -64,10 +64,10 @@ def print_json() -> None:
     )
 
 
-def print_readable() -> None:
+def print_readable(year: int) -> None:
     courses = partition(
         (course.course_code, major_code)
-        for major_code, plans in major_plans(2022).items()
+        for major_code, plans in major_plans(year).items()
         for college in plans.colleges
         for course in plans.plan(college)
         if course.for_major and course.course_code
@@ -80,7 +80,10 @@ def print_readable() -> None:
 if __name__ == "__main__":
     import sys
 
-    if len(sys.argv) > 1 and sys.argv[1] == "json":
-        print_json()
+    if len(sys.argv) < 2:
+        raise ValueError("Need years: python3 courses_req_by_majors.py <year> (json)")
+    year = int(sys.argv[1])
+    if len(sys.argv) > 2 and sys.argv[2] == "json":
+        print_json(year)
     else:
-        print_readable()
+        print_readable(year)
