@@ -7,16 +7,6 @@ import { useState } from 'preact/hooks'
 import { Diffs, PlanDiffs } from '../types.ts'
 import { DiffProps } from './Diff.tsx'
 
-const collegeNames = [
-  'Revelle',
-  'Muir',
-  'Marshall',
-  'Warren',
-  'ERC',
-  'Sixth',
-  'Seventh'
-]
-
 const byKeyLocale = <T,>([a]: [string, T], [b]: [string, T]) =>
   a.localeCompare(b)
 
@@ -42,10 +32,16 @@ const getMetric = {
 
 export type TableProps = {
   diffs: Diffs
+  collegeNames: string[]
   selected?: string
   onSelect: (diff: DiffProps) => void
 }
-export function Table ({ diffs, selected, onSelect }: TableProps) {
+export function Table ({
+  diffs,
+  collegeNames,
+  selected,
+  onSelect
+}: TableProps) {
   const [metric, setMetric] = useState<keyof typeof getMetric>('maxUnitChange')
   let max = 0
   for (const departments of Object.values(diffs)) {

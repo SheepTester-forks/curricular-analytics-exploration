@@ -25,7 +25,7 @@ export type YearDiff = {
   changes: Change[]
   units?: BeforeAfter<number>
   year: number
-  url: string
+  url?: string
   complexity?: BeforeAfter<number>
 }
 
@@ -33,7 +33,7 @@ export type PlanDiffs = {
   changes: YearDiff[]
   first: {
     year: number
-    url: string
+    url?: string
   }
 }
 
@@ -45,4 +45,9 @@ export type Diffs = {
       }
     }
   }
+}
+
+export type Data = {
+  diffs: Diffs
+  collegeNames: string[]
 }

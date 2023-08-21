@@ -76,7 +76,7 @@ function get_prereqs()
     _, # Prereq Minimum Grade Priority
     _, # Prereq Minimum Grade
     _, # Allow concurrent registration (TODO: can I ignore this?)
-  ) in open(parsecsv, "./files/prereqs_fa12.csv")[2:end]
+  ) in open(parsecsv, "./files/prereqs_fa23.csv")[2:end]
     if req_seq == ""
       continue
     end
@@ -153,7 +153,7 @@ function get_plans()
     year, # Year Taken
     qtr, # Quarter Taken
     _, # Term Taken
-  ) in open(parsecsv, "./files/academic_plans_fa12.csv")[2:end]
+  ) in open(parsecsv, "./files/academic_plans_fa23.csv")[2:end]
     majors = get!(years, parse(Int, plan_year), Dict())
     colleges = get!(majors, major, Dict())
     plan = get!(colleges, college, [[] for _ in 1:12])

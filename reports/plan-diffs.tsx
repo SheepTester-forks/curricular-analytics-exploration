@@ -6,10 +6,10 @@
 import { render } from 'preact'
 import { App } from './plan-diffs/components/App.tsx'
 import { DiffProps } from './plan-diffs/components/Diff.tsx'
-import { Diffs } from './plan-diffs/types.ts'
+import { Data } from './plan-diffs/types.ts'
 
 {
-  const diffs: Diffs =
+  const data: Data =
     JSON.parse(document.getElementById('diffs')?.textContent ?? 'null') ??
     // deno-lint-ignore no-explicit-any
     (window as any)['DIFFS']
@@ -20,7 +20,7 @@ import { Diffs } from './plan-diffs/types.ts'
   const college = params.get('college')
   let showDiff: DiffProps | undefined
   if (major && college) {
-    top: for (const departments of Object.values(diffs)) {
+    top: for (const departments of Object.values(data.diffs)) {
       for (const majors of Object.values(departments)) {
         for (const [majorCode, colleges] of Object.entries(majors)) {
           if (majorCode.startsWith(major)) {
@@ -34,5 +34,12 @@ import { Diffs } from './plan-diffs/types.ts'
       }
     }
   }
-  render(<App diffs={diffs} showDiff={showDiff} />, root)
+  render(
+    <App
+      diffs={data.diffs}
+      collegeNames={data.collegeNames}
+      showDiff={showDiff}
+    />,
+    root
+  )
 }

@@ -10,15 +10,21 @@ import { Table } from './Table.tsx'
 
 export type AppProps = {
   diffs: Diffs
+  collegeNames: string[]
   showDiff?: DiffProps
 }
-export function App ({ diffs, showDiff }: AppProps) {
+export function App ({ diffs, collegeNames, showDiff }: AppProps) {
   const [diff, setDiff] = useState<DiffProps | null>(null)
   return (
     <>
       {!showDiff && (
         <div class='side'>
-          <Table diffs={diffs} selected={diff?.name} onSelect={setDiff} />
+          <Table
+            diffs={diffs}
+            collegeNames={collegeNames}
+            selected={diff?.name}
+            onSelect={setDiff}
+          />
         </div>
       )}
       <div class='side diff'>

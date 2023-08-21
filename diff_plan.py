@@ -221,7 +221,7 @@ def diff_all(start: int, end: int) -> None:
                 major_plans(year + 1)[major].raw_plans[college],
             ).to_json()
             differences["year"] = year + 1
-            differences["url"] = urls[year + 1, major]
+            differences["url"] = urls.get((year + 1, major))
             if (
                 complexities[year, major, college]
                 != complexities[year + 1, major, college]
@@ -253,10 +253,16 @@ def diff_all(start: int, end: int) -> None:
                         "changes": output,
                         "first": {
                             "year": first_year - 1,
-                            "url": urls[first_year - 1, major_code],
+                            "url": urls.get((first_year - 1, major_code)),
                         },
                     }
-    json.dump(majors_by_dept, stdout)
+    json.dump(
+        {
+            "diffs": majors_by_dept,
+            "collegeNames": list(university.college_names.values()),
+        },
+        stdout,
+    )
 
 
 if __name__ == "__main__":
@@ -274,7 +280,7 @@ if __name__ == "__main__":
     start = int(argv[1])
     end = int(argv[2])
 
-    if len(argv) < 3:
+    if len(argv) < 5:
         diff_all(start, end)
     else:
         print_major_changes(start, end, *argv[1:3])

@@ -42,7 +42,7 @@ reports/output/plan-diffs.js: reports/plan-diffs.tsx
 	deno bundle reports/plan-diffs.tsx -- reports/output/plan-diffs.js
 
 reports/output/academic-plan-diffs.html: reports/plan-diffs-template.html reports/output/academic-plan-diffs.json reports/output/plan-diffs.js
-	head -n -2 < reports/plan-diffs-template.html > reports/output/academic-plan-diffs.html
+	head -n -4 < reports/plan-diffs-template.html > reports/output/academic-plan-diffs.html
 	echo '<script id="diffs" type="application/json">' >> reports/output/academic-plan-diffs.html
 	cat reports/output/academic-plan-diffs.json >> reports/output/academic-plan-diffs.html
 	echo '</script>' >> reports/output/academic-plan-diffs.html

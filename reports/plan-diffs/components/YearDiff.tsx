@@ -16,7 +16,7 @@ export function YearDiff ({ year, url, units, complexity, changes }: YearDiff) {
   return (
     <>
       <h2>
-        Changes in <a href={url}>{year}</a>
+        Changes in {url ? <a href={url}>{year}</a> : year}
         {(units || complexity) && (
           <>
             {' '}
