@@ -13,6 +13,8 @@ Exports:
 
     `major_codes`, a dictionary mapping from ISIS major codes to `MajorInfo`
     objects, which contains data from the ISIS major codes spreadsheet.
+
+python3 parse.py <year> # Get a list of major codes to upload with upload.sh
 """
 
 import csv
@@ -293,4 +295,6 @@ def major_codes():
 
 
 if __name__ == "__main__":
-    print(prereqs("WI23")[CourseCode("CSE", "101")])
+    import sys
+
+    print(" ".join(major_plans(int(sys.argv[1])).keys()))

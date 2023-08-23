@@ -1,15 +1,18 @@
 """
-python3 curricula_index.py > files/curricula_index.csv
+python3 curricula_index.py 2015 2022 > files/curricula_index.csv
 """
 
+import sys
 from typing import Dict, Tuple
 from upload import track_uploaded_curricula
 
 __all__ = ["urls"]
 
+_, start_year, end_year = sys.argv
+
 urls: Dict[Tuple[int, str], str] = {}
 
-for year in range(2015, 2023):
+for year in range(int(start_year), int(end_year) + 1):
     with track_uploaded_curricula(year) as curricula:
         for major_code, curriculum_id in curricula.items():
             urls[

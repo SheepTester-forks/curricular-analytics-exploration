@@ -540,3 +540,24 @@ Narrowed Python version:
 | ---- | ----------- |
 course_capacities.py | (inputs: files/ClassCapCalculatorNewStudents.csv, files/ClassCapCalculatorCourses.csv; output: files/course_capacities_output.csv) takes the number of incoming first years in each major-college and the number of seats left in each course and outputs the number of seats needed for freshmen and seats available for each course. Eighth first-years are ignored. <br> The sample input: course_capacities_input.csv and output: course_capacities_output.csv were for an earlier version that assumed every major was evenly divided across the 7 colleges and 4 years.
 <!-- prettier-ignore-end -->
+
+## How to use a data refresh
+
+1. `Makefile`: Update these variables:
+
+   - `year` - the final year available.
+   - `prereq-term` - the term from which prereqs will be used for the prereq tree.
+   - `prereqs`, `plans`, `majors` - if the paths to the new files changed.
+
+2. `university.py`: Update these variables:
+
+   - `prereqs_file`, `plans_file`, `majors_file` - if the paths to the new files changed.
+   - `curriculum_priority`, `college_codes`, `college_names` - if there's a new college. It doesn't particularly matter where the college goes in `curriculum_priority`.
+
+3. The Julia files also need to be manually updated, but I won't write their instructions here since I will probably update them later.
+
+4. Run `make`. This will update the web report files in `reports/output/` as well as CSV files used in the Tableau views.
+
+5. **Web reports**: Replace the web report files to the [CMS](https://cms.ucsd.edu/) in `_files/` with the new files. Update the last updated dates in the corresponding instruction pages in `ca-views/`.
+
+6. **Uploading to Curricular Analytics**: Run `python3 parse.py <year>` to get a list of major codes to upload. Paste them into `files/upload.sh` and run `bash files/upload.sh`.

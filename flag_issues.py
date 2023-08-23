@@ -53,6 +53,12 @@ GES = {
         CourseCode("SYN", "2"),
         CourseCode("SYN", "100"),
     ],
+    "EI": [
+        CourseCode("CCE", "1"),
+        CourseCode("CCE", "2"),
+        CourseCode("CCE", "3"),
+        CourseCode("CCE", "120"),
+    ],
 }
 
 CONSENSUS_WRONG = [
