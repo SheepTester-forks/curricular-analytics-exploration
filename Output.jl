@@ -10,7 +10,7 @@ export colleges, output, termname
 plans = get_plans()
 prereqs = get_prereqs()
 
-const colleges = ["RE", "MU", "TH", "WA", "FI", "SI", "SN"]
+const colleges = ["RE", "MU", "TH", "WA", "FI", "SI", "SN", "EI"]
 
 const non_course_prereqs = Dict{String,Vector{CourseCode}}(
   "SOCI- UD METHODOLOGY" => [("SOCI", "60")],

@@ -556,6 +556,8 @@ course_capacities.py | (inputs: files/ClassCapCalculatorNewStudents.csv, files/C
 
 3. The Julia files also need to be manually updated, but I won't write their instructions here since I will probably update them later.
 
+   If there's a new college, search all Julia files for college code lists (eg `"TH"`) and add the new college code to the list.
+
 4. Run `make`. This will update the web report files in `reports/output/` as well as CSV files used in the Tableau views.
 
 5. **Web reports**: Replace the web report files to the [CMS](https://cms.ucsd.edu/) in `_files/` with the new files. Update the last updated dates in the corresponding instruction pages in `ca-views/`.

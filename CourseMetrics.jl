@@ -27,7 +27,7 @@ open("./files/courses_fa12.csv", "w") do file
       degree_plans = output(year, major)
       curriculum_college = first(
         college
-        for college in ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
+        for college in ["TH", "WA", "SN", "MU", "FI", "RE", "SI", "EI"]
         if college ∈ keys(degree_plans) && !(college == "SN" && year < 2020)
       )
       curriculum = convert(Curriculum, degree_plans[curriculum_college])

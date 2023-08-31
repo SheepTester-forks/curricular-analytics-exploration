@@ -19,7 +19,7 @@ degree_plan = if is_curriculum
   degree_plans = output(parse(Int, year), major)
   curriculum_college = first(
     college
-    for college in ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
+    for college in ["TH", "WA", "SN", "MU", "FI", "RE", "SI", "EI"]
     if college ∈ keys(degree_plans) && !(college == "SN" && year < 2020)
   )
   degree_plans[curriculum_college]

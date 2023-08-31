@@ -25,7 +25,7 @@ open("./files/course_overlap.csv", "w") do file
         course
         for term in degree_plans[first(
           college
-          for college in ["TH", "WA", "SN", "MU", "FI", "RE", "SI"]
+          for college in ["TH", "WA", "SN", "MU", "FI", "RE", "SI", "EI"]
           if college ∈ keys(degree_plans) && !(college == "SN" && year < 2020)
         )]
         for course in term
