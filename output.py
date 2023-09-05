@@ -8,7 +8,9 @@ Exports:
 """
 
 from typing import Dict, Generator, List, NamedTuple, Optional, Set
-from output_json import Curriculum, VisCurriculum, CurriculumItem, Term, Requisite
+
+import curricularanalytics as ca
+import output_json as obj
 
 from parse import MajorPlans, major_codes, prereqs
 from parse_defs import CourseCode, Prerequisite, ProcessedCourse
@@ -282,18 +284,14 @@ class MajorOutput:
 
         return output.done()
 
-    def output_json(self, college: Optional[str] = None) -> Curriculum:
+    def output_json(self, college: Optional[str] = None) -> obj.Curriculum:
         """
         Like `_output_plan`, but outputs a JSON-serializable `Curriculum` object
         instead. This JSON format is what the Curricular Analytics site
         currently uses when you edit or create a curriculum or degree plan with
         a GUI.
         """
-        curriculum = Curriculum(
-            curriculum_terms=[
-                Term(id=i + 1, curriculum_items=[]) for i in range(12 if college else 1)
-            ]
-        )
+        curriculum = obj.Curriculum(curriculum_terms=[])
         processed = OutputCourses(self, college)
         # Put college courses at the bottom of each quarter, consistent with CSV
         for major_course_section in True, False:
@@ -308,19 +306,26 @@ class MajorOutput:
                 units,
                 term,
             ) in processed.list_courses(major_course_section):
+                while term <= len(curriculum["curriculum_terms"]):
+                    curriculum["curriculum_terms"].append(
+                        obj.Term(
+                            id=len(curriculum["curriculum_terms"]) + 1,
+                            curriculum_items=[],
+                        )
+                    )
                 curriculum["curriculum_terms"][term]["curriculum_items"].append(
-                    CurriculumItem(
+                    obj.CurriculumItem(
                         name=course_title,
                         id=course_id,
                         credits=units,
                         curriculum_requisites=[
-                            Requisite(
+                            obj.Requisite(
                                 source_id=prereq_id, target_id=course_id, type="prereq"
                             )
                             for prereq_id in prereq_ids
                         ]
                         + [
-                            Requisite(
+                            obj.Requisite(
                                 source_id=coreq_id, target_id=course_id, type="coreq"
                             )
                             for coreq_id in coreq_ids
@@ -329,8 +334,53 @@ class MajorOutput:
                 )
         return curriculum
 
+    def output_degree_plan(self, college: str) -> ca.DegreePlan:
+        processed = list(OutputCourses(self, college).list_courses())
+        curriculum = ca.Curriculum(
+            f"{self.plans.major_code} {college}",
+            [
+                ca.Course(
+                    course.course_title,
+                    course.units,
+                    id=course.course_id,
+                    prefix=course.course_code[0],
+                    num=course.course_code[1],
+                )
+                for course in processed
+            ],
+            sort_by_id=False,
+        )
+        for course, course_object in zip(processed, curriculum.courses):
+            course_object.add_requisites(
+                [
+                    (curriculum.course_from_id(prereq_id), ca.pre)
+                    for prereq_id in course.prereq_ids
+                ]
+            )
+            course_object.add_requisites(
+                [
+                    (curriculum.course_from_id(coreq_id), ca.co)
+                    for coreq_id in course.coreq_ids
+                ]
+            )
+        term_count = max(course.term for course in processed)
+        return ca.DegreePlan(
+            f"{self.plans.major_code} {college}",
+            curriculum,
+            [
+                ca.Term(
+                    [
+                        course_object
+                        for course, course_object in zip(processed, curriculum.courses)
+                        if course.term == i
+                    ]
+                )
+                for i in range(term_count)
+            ],
+        )
+
     @classmethod
-    def from_json(cls, plans: MajorPlans, json: VisCurriculum) -> "MajorOutput":
+    def from_json(cls, plans: MajorPlans, json: obj.VisCurriculum) -> "MajorOutput":
         """
         Creates a `MajorOutput` using the same course IDs from an existing
         curriculum or degree plan. This way, modifying a degree plan won't
