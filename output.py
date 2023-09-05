@@ -306,7 +306,7 @@ class MajorOutput:
                 units,
                 term,
             ) in processed.list_courses(major_course_section):
-                while term <= len(curriculum["curriculum_terms"]):
+                while term >= len(curriculum["curriculum_terms"]):
                     curriculum["curriculum_terms"].append(
                         obj.Term(
                             id=len(curriculum["curriculum_terms"]) + 1,
@@ -336,42 +336,45 @@ class MajorOutput:
 
     def output_degree_plan(self, college: str) -> ca.DegreePlan:
         processed = list(OutputCourses(self, college).list_courses())
-        curriculum = ca.Curriculum(
-            f"{self.plans.major_code} {college}",
-            [
-                ca.Course(
-                    course.course_title,
-                    course.units,
-                    id=course.course_id,
-                    prefix=course.course_code[0],
-                    num=course.course_code[1],
-                )
-                for course in processed
-            ],
-            sort_by_id=False,
-        )
-        for course, course_object in zip(processed, curriculum.courses):
+        course_objects: List[ca.AbstractCourse] = []
+        course_object_by_id: Dict[int, ca.AbstractCourse] = {}
+        for course in processed:
+            course_object = ca.Course(
+                course.course_title,
+                course.units,
+                id=course.course_id,
+                prefix=course.course_code[0],
+                num=course.course_code[1],
+            )
+            course_objects.append(course_object)
+            if course.course_id not in course_object_by_id:
+                course_object_by_id[course.course_id] = course_object
+        for course, course_object in zip(processed, course_objects):
             course_object.add_requisites(
                 [
-                    (curriculum.course_from_id(prereq_id), ca.pre)
+                    (course_object_by_id[prereq_id], ca.pre)
                     for prereq_id in course.prereq_ids
                 ]
             )
             course_object.add_requisites(
                 [
-                    (curriculum.course_from_id(coreq_id), ca.co)
+                    (course_object_by_id[coreq_id], ca.co)
                     for coreq_id in course.coreq_ids
                 ]
             )
         term_count = max(course.term for course in processed)
         return ca.DegreePlan(
             f"{self.plans.major_code} {college}",
-            curriculum,
+            ca.Curriculum(
+                f"{self.plans.major_code} {college}",
+                course_objects,
+                sort_by_id=False,
+            ),
             [
                 ca.Term(
                     [
                         course_object
-                        for course, course_object in zip(processed, curriculum.courses)
+                        for course, course_object in zip(processed, course_objects)
                         if course.term == i
                     ]
                 )
