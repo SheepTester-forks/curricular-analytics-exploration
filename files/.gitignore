@@ -3,6 +3,8 @@
 *.txt
 uploaded-*.yml
 output/
+prereqs/
+plans/
 
 # Tableau tables
 *.twbr

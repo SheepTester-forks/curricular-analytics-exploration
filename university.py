@@ -109,8 +109,6 @@ class _UCSD:
     terms = ["FA", "WI", "SP"]
     "Used for mapping term indices to term codes"
 
-    prereqs_file = "./files/prereqs_fa23.csv"
-    plans_file = "./files/academic_plans_fa23.csv"
     majors_file = "./files/isis_major_code_list.csv"
 
     curriculum_priority = ["TH", "WA", "SN", "MU", "FI", "RE", "SI", "EI"]

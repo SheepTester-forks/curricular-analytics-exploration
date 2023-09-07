@@ -125,12 +125,12 @@ class CsvWriter:
 
     def done(self) -> str:
         """
-        Returns the CSV output as a string.
+        Returns the CSV output as a string if the output is StringIO; otherwise,
+        closes the file.
         """
         if isinstance(self._output, StringIO):
             # https://stackoverflow.com/a/9157370
             return self._output.getvalue()
         else:
-            raise TypeError(
-                "done() is only available when the output is a StringIO instance."
-            )
+            self._output.close()
+            return ""

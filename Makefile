@@ -25,8 +25,15 @@ seats: reports/output/seats.html
 
 clean:
 	rm -f reports/output/*.js reports/output/*.json reports/output/*.html
+	rm -rf files/prereqs/ files/plans/
 	rm -f files/metrics_fa12.csv files/courses_fa12.csv files/course_overlap.csv files/curricula_index.csv
 	rm -f courses_req_by_majors.json
+
+files/prereqs/.done: $(prereqs)
+	python3 split_csv.py prereqs $(prereqs)
+
+files/plans/.done: $(plans)
+	python3 split_csv.py plans $(plans)
 
 # Tableau
 
@@ -44,7 +51,7 @@ files/curricula_index.csv: curricula_index.py files/uploaded*.yml
 
 # Plan diffs
 
-reports/output/academic-plan-diffs.json: files/metrics_fa12.csv diff_plan.py $(plans) $(majors)
+reports/output/academic-plan-diffs.json: files/metrics_fa12.csv diff_plan.py files/plans/.done $(majors)
 	python3 diff_plan.py $(year-start) $(year) > reports/output/academic-plan-diffs.json
 
 reports/output/academic-plan-diffs.js: reports/output/academic-plan-diffs.json
@@ -65,7 +72,7 @@ reports/output/academic-plan-diffs.html: reports/plan-diffs-template.html report
 
 # Prereq diffs
 
-reports/output/prereq-diffs-fragment.html: diff_prereqs.py $(prereqs)
+reports/output/prereq-diffs-fragment.html: diff_prereqs.py files/prereqs/.done
 	python3 diff_prereqs.py > reports/output/prereq-diffs-fragment.html
 
 reports/output/prereq-diffs.html: reports/prereq-diffs-template.html reports/output/prereq-diffs-fragment.html
@@ -75,7 +82,7 @@ reports/output/prereq-diffs.html: reports/prereq-diffs-template.html reports/out
 
 # Prereq timeline
 
-reports/output/prereq-timeline-fragment.html: diff_prereqs.py $(prereqs)
+reports/output/prereq-timeline-fragment.html: diff_prereqs.py files/prereqs/.done
 	python3 diff_prereqs.py timeline > reports/output/prereq-timeline-fragment.html
 
 reports/output/prereq-timeline.html: reports/prereq-timeline-template.html reports/output/prereq-timeline-fragment.html
@@ -85,7 +92,7 @@ reports/output/prereq-timeline.html: reports/prereq-timeline-template.html repor
 
 # College GEs
 
-reports/output/college-ge-units-fragment.html: college_ges.py $(plans) $(majors)
+reports/output/college-ge-units-fragment.html: college_ges.py files/plans/.done $(majors)
 	python3 college_ges.py $(year) html > reports/output/college-ge-units-fragment.html
 
 reports/output/college-ge-units.html: reports/college-ge-template.html reports/output/college-ge-units-fragment.html
@@ -95,7 +102,7 @@ reports/output/college-ge-units.html: reports/college-ge-template.html reports/o
 
 # Prereq tree
 
-reports/output/prereqs.json: dump_prereqs.py $(prereqs)
+reports/output/prereqs.json: dump_prereqs.py files/prereqs/.done
 	python3 dump_prereqs.py $(prereq-term)
 
 reports/output/prereqs.js: reports/output/prereqs.json
@@ -130,7 +137,7 @@ reports/output/plan-editor.html: reports/plan-editor-template.html reports/outpu
 
 # Plan editor index
 
-reports/output/plan-editor-index-fragment.html: dump_plans.py $(plans)
+reports/output/plan-editor-index-fragment.html: dump_plans.py files/plans/.done
 	python3 dump_plans.py $(year) html > reports/output/plan-editor-index-fragment.html
 
 reports/output/plan-editor-index.html: reports/plan-editor-index-template.html reports/output/plan-editor-index-fragment.html
