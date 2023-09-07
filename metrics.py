@@ -60,9 +60,14 @@ with open("./files/metrics_fa12_py.csv", "w") as file:
             for college in university.college_codes:
                 if college not in plans.colleges or college == "SN" and year < 2020:
                     continue
+                import time
+
+                t0 = time.time()
+                print("output")
                 courses = plans.plan(college)
                 degree_plan = output.output_degree_plan(college)
                 curriculum = degree_plan.curriculum
+                print("create done", time.time() - t0)
 
                 total_units = sum(course.units for course in courses)
                 major_units = sum(
@@ -118,3 +123,4 @@ with open("./files/metrics_fa12_py.csv", "w") as file:
                     str(any(term.credit_hours < 12 for term in degree_plan.terms)),
                     significant_difference,  # Has > 6 unit difference across colleges?
                 )
+                print("write done", time.time() - t0)

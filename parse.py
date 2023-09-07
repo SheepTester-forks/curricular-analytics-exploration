@@ -17,12 +17,62 @@ Exports:
 python3 parse.py <year> # Get a list of major codes to upload with upload.sh
 """
 
+from abc import abstractmethod
 import csv
+from functools import cached_property
+from itertools import islice
 from typing import Dict, Iterable, List, NamedTuple, Optional, Set, Tuple
 from parse_defs import CourseCode, ProcessedCourse, Prerequisite, RawCourse, TermCode
 from university import university
 
 __all__ = ["prereqs", "major_plans", "major_codes"]
+
+
+class CsvScanPosition:
+    position: int
+    lines: int = 0
+
+    def __init__(self, position: int) -> None:
+        self.position = position
+
+
+class CsvScanner:
+    file_path: str
+
+    def __init__(self, file_path: str):
+        self.file_path = file_path
+
+    @cached_property
+    def positions(self) -> Dict[str, CsvScanPosition]:
+        import time
+
+        t0 = time.time()
+        print("scan", self.file_path)
+        positions: Dict[str, CsvScanPosition] = {}
+        with open(self.file_path, newline="") as file:
+            # Skip header
+            file.readline()
+            last_column: Optional[str] = None
+            last = None
+            # position = file.tell()
+            while line := file.readline():
+                # column = self.column(line)
+                # if not last or column != last_column:
+                #     if column in positions:
+                #         raise KeyError(
+                #             "Sections of the CSV file are out of order. For performance, rows from the same year or term should be grouped together in the same part of the CSV file, so only that section needs to be parsed."
+                #         )
+                #     last = CsvScanPosition(position)
+                #     last_column = column
+                # last.lines += 1
+                position = file.tell()
+                pass
+        print("scan done", time.time() - t0)
+        return positions
+
+    @abstractmethod
+    def column(self, line: str) -> str:
+        pass
 
 
 def prereq_rows_to_dict(
@@ -67,41 +117,46 @@ def prereq_rows_to_dict(
     return courses
 
 
-_term_cache: Optional[List[TermCode]] = None
+class PrereqCache(CsvScanner):
+    cache: Dict[TermCode, Dict[CourseCode, List[List[Prerequisite]]]]
+
+    def __init__(self):
+        super().__init__(university.prereqs_file)
+        self.cache = {}
+
+    def column(self, line: str) -> str:
+        return line.split(",", maxsplit=1)[0]
+
+    @cached_property
+    def terms(self) -> List[TermCode]:
+        return sorted(TermCode(term) for term in self.positions.keys())
+
+    def term(self, term: str) -> Dict[CourseCode, List[List[Prerequisite]]]:
+        term = TermCode(term)
+        if term < self.terms[0]:
+            term = self.terms[0]
+        elif term > self.terms[-1]:
+            term = self.terms[-1]
+        if term not in self.cache:
+            with open(university.prereqs_file, newline="") as file:
+                position = self.positions[str(term)]
+                file.seek(position.position)
+                self.cache[term] = prereq_rows_to_dict(
+                    islice(csv.reader(file), position.lines)
+                )
+            university.fix_prereqs(self.cache[term], term)
+        return self.cache[term]
+
+
+_prereq_cache = PrereqCache()
 
 
 def terms() -> List[TermCode]:
-    global _term_cache
-    if not _term_cache:
-        terms: Set[TermCode] = set()
-        with open(university.prereqs_file, newline="") as file:
-            reader = csv.reader(file)
-            next(reader)  # Skip header
-            for term, *_ in reader:
-                terms.add(TermCode(term))
-        _term_cache = sorted(terms)
-    return _term_cache
-
-
-_prereq_cache: Dict[TermCode, Dict[CourseCode, List[List[Prerequisite]]]] = {}
+    return _prereq_cache.terms
 
 
 def prereqs(term: str) -> Dict[CourseCode, List[List[Prerequisite]]]:
-    global _prereq_cache
-    term = TermCode(term)
-    if term < terms()[0]:
-        term = terms()[0]
-    elif term > terms()[-1]:
-        term = terms()[-1]
-    if term not in _prereq_cache:
-        with open(university.prereqs_file, newline="") as file:
-            reader = csv.reader(file)
-            next(reader)  # Skip header
-            _prereq_cache[term] = prereq_rows_to_dict(
-                row for row in reader if row[0] == term
-            )
-        university.fix_prereqs(_prereq_cache[term], term)
-    return _prereq_cache[term]
+    return _prereq_cache.term(term)
 
 
 class MajorPlans:
@@ -210,23 +265,32 @@ def plan_rows_to_dict(rows: Iterable[List[str]]) -> Dict[str, MajorPlans]:
     return plans
 
 
-_plan_cache: Dict[Tuple[int, int], Dict[str, MajorPlans]] = {}
+class PlanCache(CsvScanner):
+    cache: Dict[Tuple[int, int], Dict[str, MajorPlans]]
+
+    def __init__(self):
+        super().__init__(university.plans_file)
+        self.cache = {}
+
+    def column(self, line: str) -> str:
+        return line.rsplit(",", maxsplit=4)[-4]
+
+    def plan(self, year: int, length: int) -> Dict[str, MajorPlans]:
+        if (year, length) not in self.cache:
+            with open(university.plans_file, newline="") as file:
+                position = self.positions[str(year)]
+                file.seek(position.position)
+                self.cache[year, length] = plan_rows_to_dict(
+                    islice(csv.reader(file), position.lines)
+                )
+        return self.cache[year, length]
+
+
+_plan_cache = PlanCache()
 
 
 def major_plans(year: int, length: int = 4) -> Dict[str, MajorPlans]:
-    global _major_plans
-    if (year, length) not in _plan_cache:
-        with open(university.plans_file, newline="") as file:
-            reader = csv.reader(file)
-            next(reader)  # Skip header
-            _plan_cache[year, length] = plan_rows_to_dict(
-                row
-                for row in reader
-                if int(row[7]) == year
-                # Default plan length is 4
-                and (int(row[11]) if len(row) > 11 else 4) == length
-            )
-    return _plan_cache[year, length]
+    return _plan_cache.plan(year, length)
 
 
 class MajorInfo(NamedTuple):
@@ -281,20 +345,26 @@ def major_rows_to_dict(rows: Iterable[List[str]]) -> Dict[str, MajorInfo]:
     return majors
 
 
-_major_codes: Optional[Dict[str, MajorInfo]] = None
-
-
-def major_codes():
-    global _major_codes
-    if _major_codes is None:
+class MajorCodeCache:
+    @cached_property
+    def major_codes(self) -> Dict[str, MajorInfo]:
         with open(university.majors_file, newline="") as file:
             reader = csv.reader(file)
             next(reader)  # Skip header
-            _major_codes = major_rows_to_dict(reader)
-    return _major_codes
+            return major_rows_to_dict(reader)
+
+
+_cache = MajorCodeCache()
+
+
+def major_codes() -> Dict[str, MajorInfo]:
+    return _cache.major_codes
 
 
 if __name__ == "__main__":
     import sys
 
-    print(" ".join(major_plans(int(sys.argv[1])).keys()))
+    print(prereqs("FA23")[CourseCode("CSE", "100")])
+    print(prereqs("FA13")[CourseCode("CSE", "100")])
+    print(major_plans(2022)["CS25"])
+    # print(" ".join(major_plans(int(sys.argv[1])).keys()))
