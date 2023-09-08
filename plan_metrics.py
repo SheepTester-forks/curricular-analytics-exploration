@@ -1,11 +1,10 @@
 """
-python3 metrics.py
+python3 plan_metrics.py
 """
 
 from output import MajorOutput
 from parse import MajorPlans, major_plans
 from university import university
-
 from util import CsvWriter
 
 HEADER = [
@@ -120,13 +119,12 @@ def main() -> None:
                     course.units
                     for college in university.college_codes
                     if college in plans.colleges
-                    and not (college == "SN" and year < 2020)
                     for course in plans.plan(college)
                 ]
                 significant_difference = str(max(plan_units) - min(plan_units) > 6)
 
                 for college in university.college_codes:
-                    if college not in plans.colleges or college == "SN" and year < 2020:
+                    if college not in plans.colleges:
                         continue
                     write_row(
                         writer,

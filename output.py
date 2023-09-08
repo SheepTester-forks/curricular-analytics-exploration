@@ -306,6 +306,8 @@ class MajorOutput:
                 units,
                 term,
             ) in processed.list_courses(major_course_section):
+                if not college:
+                    term = 0
                 while term >= len(curriculum["curriculum_terms"]):
                     curriculum["curriculum_terms"].append(
                         obj.Term(
@@ -334,7 +336,7 @@ class MajorOutput:
                 )
         return curriculum
 
-    def output_degree_plan(self, college: str) -> ca.DegreePlan:
+    def output_degree_plan(self, college: Optional[str] = None) -> ca.DegreePlan:
         processed = list(OutputCourses(self, college).list_courses())
         course_objects: List[ca.AbstractCourse] = []
         course_object_by_id: Dict[int, ca.AbstractCourse] = {}
@@ -362,7 +364,8 @@ class MajorOutput:
                     for coreq_id in course.coreq_ids
                 ]
             )
-        term_count = max(course.term for course in processed)
+        # For curricula: undeclared majors have an empty curriculum
+        term_count = max(course.term for course in processed) + 1 if processed else 0
         return ca.DegreePlan(
             f"{self.plans.major_code} {college}",
             ca.Curriculum(
