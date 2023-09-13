@@ -6,7 +6,7 @@ from curricularanalytics import Course
 
 from output import MajorOutput
 from parse import major_plans
-from util import CsvWriter
+from util import CsvWriter, float_str
 
 HEADER = [
     "Year",
@@ -40,11 +40,13 @@ def main() -> None:
                         str(year),  # Year
                         major,  # Major
                         f"{course.prefix} {course.num}",  # Course
-                        str(curriculum.complexity(course)),  # Complexity
+                        float_str(curriculum.complexity(course)),  # Complexity
                         str(curriculum.centrality(course)),  # Centrality
                         str(degree_plan.find_term(course)),  # Year taken in plan
-                        str(curriculum.blocking_factor(course)),  # Blocking factor
-                        str(curriculum.delay_factor(course)),  # Delay factor
+                        float_str(
+                            curriculum.blocking_factor(course)
+                        ),  # Blocking factor
+                        float_str(curriculum.delay_factor(course)),  # Delay factor
                     )
 
 

@@ -134,3 +134,17 @@ class CsvWriter:
         else:
             self._output.close()
             return ""
+
+
+def float_str(num: float) -> str:
+    """
+    Displays a float as a string. Casts int to a float before string-ifying.
+    """
+    return str(float(num))
+
+
+def bool_str(num: bool) -> str:
+    """
+    Displays a boolean as a string.
+    """
+    return "true" if num else "false"
