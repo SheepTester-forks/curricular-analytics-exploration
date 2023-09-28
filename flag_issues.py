@@ -145,7 +145,7 @@ def check_plan(
             )
         elif (
             course.course_code in consensus_units
-            and consensus_units[course.course_code] != course.units
+            and consensus_units[course.course_code] != course.raw.units
         ):
             issues.wrong_units.append(
                 f"[{name}] “{course.course_title}” should be {consensus_units[course.course_code]} units but is {course.units} units"

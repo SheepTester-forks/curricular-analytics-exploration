@@ -51,7 +51,7 @@ def parse_course_name(
         return [(None, units)]
     name = re.sub(r"DF-?\d - ", "", name)
     match = re.search(
-        r"\b([A-Z]{2,4}) ?(\d+[A-Z]{0,2})(?: ?[&/] ?\d?[A-Z]([LX]))?", name
+        r"\b([A-Z]{2,4}) ?(\d+[A-Z]{0,2})(?: ?[&/] ?\d?[A-Z]([LX]))?\b", name
     )
     if match:
         subject, number, has_lab = match.group(1, 2, 3)
