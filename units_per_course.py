@@ -74,7 +74,7 @@ def main() -> None:
         # Output JSON mapping course code to probably correct unit count
         printed = False
         print("{")
-        for course_code, variants in courses.items():
+        for course_code, variants in sorted(courses.items(), key=lambda item: item[0]):
             if len(variants) <= 1:
                 continue
             if printed:
@@ -92,11 +92,13 @@ def main() -> None:
         print("}")
         return
 
-    for course_code, variants in courses.items():
+    for course_code, variants in sorted(courses.items(), key=lambda item: item[0]):
         if len(variants) <= 1:
             continue
         print(f"{course_code}")
-        for units, variant in variants.items():
+        for units, variant in sorted(
+            variants.items(), key=lambda item: -score(item[1])
+        ):
             samples = ", ".join(
                 [str(p) for p in sorted(variant, key=cmp_to_key(comp_plan_id))][0:5]
             )
