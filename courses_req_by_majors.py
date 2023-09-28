@@ -81,7 +81,7 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 2:
-        raise ValueError("Need years: python3 courses_req_by_majors.py <year> (json)")
+        raise ValueError("Need year: python3 courses_req_by_majors.py <year> (json)")
     year = int(sys.argv[1])
     if len(sys.argv) > 2 and sys.argv[2] == "json":
         print_json(year)

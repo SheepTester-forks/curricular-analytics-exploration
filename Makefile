@@ -1,4 +1,4 @@
-all: tableau academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree plan-editor plan-editor-index
+all: tableau academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree plan-editor plan-editor-index flagged-issues
 dev: all reports/output/prereqs.js reports/output/courses_by_major.js
 
 year-start = 2015
@@ -11,7 +11,7 @@ majors = files/isis_major_code_list.csv
 
 # Reports
 
-tableau: files/metrics_fa12.csv files/courses_fa12.csv files/course_overlap.csv files/curricula_index.csv
+tableau: files/metrics_fa12_py.csv files/courses_fa12_py.csv files/course_overlap_py.csv files/curricula_index.csv
 academic-plan-diffs: reports/output/academic-plan-diffs.html
 prereq-diffs: reports/output/prereq-diffs.html
 prereq-timeline: reports/output/prereq-timeline.html
@@ -20,13 +20,14 @@ prereq-tree: reports/output/prereq-tree.html
 plan-editor: reports/output/plan-editor.html
 plan-editor-index: reports/output/plan-editor-index.html
 seats: reports/output/seats.html
+flagged-issues: files/flagged_issues.html
 
 # Clean
 
 clean:
 	rm -f reports/output/*.js reports/output/*.json reports/output/*.html
 	rm -rf files/prereqs/ files/plans/
-	rm -f files/metrics_fa12.csv files/courses_fa12.csv files/course_overlap.csv files/curricula_index.csv
+	rm -f files/metrics_fa12_py.csv files/courses_fa12_py.csv files/course_overlap_py.csv files/curricula_index.csv
 	rm -f courses_req_by_majors.json
 
 files/prereqs/.done: $(prereqs)
@@ -37,21 +38,21 @@ files/plans/.done: $(plans)
 
 # Tableau
 
-files/metrics_fa12.csv: Metrics.jl $(prereqs) $(plans)
-	julia Metrics.jl
+files/metrics_fa12_py.csv: plan_metrics.py $(prereqs) $(plans)
+	python3 plan_metrics.py
 
-files/courses_fa12.csv: CourseMetrics.jl $(prereqs) $(plans)
-	julia CourseMetrics.jl
+files/courses_fa12_py.csv: course_metrics.py $(prereqs) $(plans)
+	python3 course_metrics.py
 
-files/course_overlap.csv: CourseOverlap.jl $(plans)
-	julia CourseOverlap.jl
+files/course_overlap_py.csv: course_overlap.py $(plans)
+	python3 course_overlap.py
 
 files/curricula_index.csv: curricula_index.py files/uploaded*.yml
 	python3 curricula_index.py $(year-start) $(year) > files/curricula_index.csv
 
 # Plan diffs
 
-reports/output/academic-plan-diffs.json: files/metrics_fa12.csv diff_plan.py files/plans/.done $(majors)
+reports/output/academic-plan-diffs.json: files/metrics_fa12_py.csv diff_plan.py files/plans/.done $(majors)
 	python3 diff_plan.py $(year-start) $(year) > reports/output/academic-plan-diffs.json
 
 reports/output/academic-plan-diffs.js: reports/output/academic-plan-diffs.json
@@ -165,3 +166,11 @@ reports/output/seats.html: reports/seats-template.html courses_req_by_majors.jso
 	echo '<script type="module">' >> reports/output/seats.html
 	cat reports/output/seats.js >> reports/output/seats.html
 	echo '</script></body></html>' >> reports/output/seats.html
+
+# Flagged issues
+
+units_per_course.json: units_per_course.py
+	python3 units_per_course.py json > units_per_course.json
+
+files/flagged_issues.html: flag_issues.py units_per_course.json
+	python3 flag_issues.py $(year) > files/flagged_issues.html

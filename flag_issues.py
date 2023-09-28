@@ -1,6 +1,6 @@
 """
 python3 units_per_course.py json > units_per_course.json
-python3 flag_issues.py > files/flagged_issues.html
+python3 flag_issues.py 2023 > files/flagged_issues.html
 """
 
 import json
@@ -8,9 +8,6 @@ from typing import Dict, List, Set
 from parse import major_plans, prereqs
 from parse_defs import CourseCode, ProcessedCourse
 from university import university
-
-YEAR = 2023
-LENGTH = 4
 
 GES = {
     "RE": [
@@ -61,14 +58,6 @@ GES = {
     ],
 }
 
-CONSENSUS_WRONG = [
-    CourseCode("JAPN", "130A"),
-    CourseCode("JAPN", "130B"),
-    CourseCode("JAPN", "130C"),
-    CourseCode("JWSP", "1"),
-    CourseCode("JWSP", "2"),
-    CourseCode("JWSP", "3"),
-]
 
 ASSUMED_SATISFIED = [
     CourseCode("MATH", "10A"),
@@ -77,6 +66,12 @@ ASSUMED_SATISFIED = [
     CourseCode("MMW", "12"),
     CourseCode("CAT", "1"),
     CourseCode("SYN", "1"),
+]
+
+ALLOW_DUPLICATES = [
+    CourseCode("MUS", "43"),
+    CourseCode("EDS", "139"),
+    CourseCode("TDPR", "6"),
 ]
 
 with open("./units_per_course.json") as file:
@@ -110,6 +105,7 @@ class Issues:
 
 
 def check_plan(
+    year: int,
     name: str,
     curriculum: Set[str],
     plan: List[ProcessedCourse],
@@ -125,7 +121,7 @@ def check_plan(
                 issues.multiple_options.append(
                     f"[{name}] multiple options for {code} “{title}”"
                 )
-            else:
+            elif code not in ALLOW_DUPLICATES:
                 issues.duplicate_courses.append(
                     f"[{name}] duplicate course {code} “{title}”"
                 )
@@ -136,7 +132,7 @@ def check_plan(
             )
         elif courses[code].raw.type != "COLLEGE":
             issues.miscategorized_courses.append(
-                f"[{name}] {code} is marked as a department course (it's a college GE)"
+                f"[{name}] {code} is marked as a department course (it's part of the college writing program)"
             )
     for course in plan:
         # Course title must match to exclude split lab courses
@@ -149,11 +145,10 @@ def check_plan(
             )
         elif (
             course.course_code in consensus_units
-            and course.course_code not in CONSENSUS_WRONG
             and consensus_units[course.course_code] != course.units
         ):
             issues.wrong_units.append(
-                f"[{name}] “{course.course_title}” should be {consensus_units[course.course_code]} units (by consensus) but is {course.units} units"
+                f"[{name}] “{course.course_title}” should be {consensus_units[course.course_code]} units but is {course.units} units"
             )
         if course.course_title in curriculum:
             if not course.for_major:
@@ -175,7 +170,7 @@ def check_plan(
                 f"[{name}] “{course.course_title}” is taken in year {course.term_index // 3 + 1} {quarter} quarter"
             )
         if course.course_code and course.course_code not in ASSUMED_SATISFIED:
-            reqs = prereqs(university.get_term_code(YEAR, course.term_index)).get(
+            reqs = prereqs(university.get_term_code(year, course.term_index)).get(
                 course.course_code
             )
             if reqs is None:
@@ -221,14 +216,15 @@ def print_issues(issues: List[str], description: str) -> None:
     print()
 
 
-def main() -> None:
+def main(year: int, length: int = 4) -> None:
     for college_code, college_name in university.college_names.items():
         issues = Issues()
-        for major_code, plans in major_plans(YEAR, LENGTH).items():
+        for major_code, plans in major_plans(year, length).items():
             if college_code not in plans.colleges:
                 continue
             curriculum = {course.course_title for course in plans.curriculum()}
             check_plan(
+                year,
                 major_code,
                 curriculum,
                 plans.plan(college_code),
@@ -264,5 +260,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) < 2:
+        raise ValueError("Need year: python3 courses_req_by_majors.py <year>")
     print("<style>p { margin: 0; }</style>")
-    main()
+    main(int(sys.argv[1]))

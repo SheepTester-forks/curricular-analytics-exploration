@@ -1,6 +1,8 @@
 """
 python3 units_per_course.py > units_per_course.txt
 python3 units_per_course.py json > units_per_course.json
+
+python3 units_per_course.py (json) [year]
 """
 
 from functools import cmp_to_key
@@ -23,16 +25,15 @@ class PlanId(NamedTuple):
 
 def comp_plan_id(a: PlanId, b: PlanId) -> int:
     """
-    Prioritizes most recent plans first, then lists different majors rather than
-    their different colleges.
+    Sort the plans to highlight a variety of years and colleges.
     """
-    if a.year != b.year:
-        return b.year - a.year
     if a.major != b.major:
         return -1 if a.major < b.major else 1
-    return university.curriculum_priority.index(
-        a.college
-    ) - university.curriculum_priority.index(b.college)
+    if a.college != b.college:
+        return university.curriculum_priority.index(
+            a.college
+        ) - university.curriculum_priority.index(b.college)
+    return b.year - a.year
 
 
 UnitVariant = List[PlanId]
@@ -43,7 +44,19 @@ def main() -> None:
 
     courses: Dict[CourseCode, Dict[float, UnitVariant]] = {}
 
-    for year in range(2015, 2023):
+    try:
+        max_year = int(sys.argv[2])
+        years = [max_year]
+    except (ValueError, IndexError):
+        years = range(2015, 2024)
+        max_year = max(years)
+    json_mode = len(sys.argv) > 1 and sys.argv[1] == "json"
+
+    def score(variant: UnitVariant) -> float:
+        # Prioritize more recent years
+        return sum(0.9 ** (max_year - plan.year) for plan in variant)
+
+    for year in years:
         for major_code, colleges in major_plans(year).items():
             for college in colleges.colleges:
                 for course in colleges.plan(college):
@@ -57,7 +70,7 @@ def main() -> None:
                         variants[course.units] = unit_variant
                     unit_variant.append(PlanId(year, major_code, college))
 
-    if len(sys.argv) > 1 and sys.argv[1] == "json":
+    if json_mode:
         # Output JSON mapping course code to probably correct unit count
         printed = False
         print("{")
@@ -68,11 +81,11 @@ def main() -> None:
                 print(",")
             else:
                 printed = True
-            most_common_count = max(len(variant) for variant in variants.values())
+            most_common_count = max(score(variant) for variant in variants.values())
             most_common_units = next(
                 units
                 for units, variant in variants.items()
-                if len(variant) == most_common_count
+                if score(variant) == most_common_count
             )
             print(f'  "{course_code}": {most_common_units}', end="")
         print()
@@ -87,7 +100,9 @@ def main() -> None:
             samples = ", ".join(
                 [str(p) for p in sorted(variant, key=cmp_to_key(comp_plan_id))][0:5]
             )
-            print(f"{units} units ({len(variant)}): {samples}")
+            print(
+                f"{units} units (score: {score(variant):.2f}; {len(variant)}): {samples}"
+            )
 
 
 if __name__ == "__main__":
