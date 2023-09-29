@@ -141,14 +141,14 @@ def check_plan(
             and course.course_title == course.raw.course_title
         ):
             issues.wrong_units.append(
-                f"[{name}] “{course.course_title}” should be {course.units} units but is {course.raw.units} units"
+                f"[{name}] {course.course_code} (from “{course.raw.course_title}”) should be {course.units} units but is {course.raw.units} units"
             )
         elif (
             course.course_code in consensus_units
-            and consensus_units[course.course_code] != course.raw.units
+            and consensus_units[course.course_code] != course.units
         ):
             issues.wrong_units.append(
-                f"[{name}] “{course.course_title}” should be {consensus_units[course.course_code]} units but is {course.units} units"
+                f"[{name}] {course.course_code} (from “{course.raw.course_title}”) should be {consensus_units[course.course_code]} units but is {course.units} units"
             )
         if course.course_title in curriculum:
             if not course.for_major:
@@ -158,7 +158,7 @@ def check_plan(
         else:
             if course.for_major:
                 issues.curriculum_deviances.append(
-                    f"[{name}] “{course.course_title}” differs from curriculum"
+                    f"[{name}] “{course.raw.course_title}” differs from curriculum"
                 )
         if (
             course.term_index < 6
@@ -167,7 +167,7 @@ def check_plan(
         ):
             quarter = ["fall", "winter", "spring"][course.term_index % 3]
             issues.early_upper_division.append(
-                f"[{name}] “{course.course_title}” is taken in year {course.term_index // 3 + 1} {quarter} quarter"
+                f"[{name}] “{course.raw.course_title}” is taken in year {course.term_index // 3 + 1} {quarter} quarter"
             )
         if course.course_code and course.course_code not in ASSUMED_SATISFIED:
             reqs = prereqs(university.get_term_code(year, course.term_index)).get(
@@ -175,7 +175,7 @@ def check_plan(
             )
             if reqs is None:
                 issues.dne.append(
-                    f"[{name}] “{course.course_title}” ({course.course_code}) does not exist"
+                    f"[{name}] {course.course_code} (from “{course.raw.course_title}”) does not exist"
                 )
             else:
                 taken = [
@@ -203,7 +203,7 @@ def check_plan(
                     else:
                         or_group = " or ".join(str(alt.course_code) for alt in req)
                         issues.missing_prereqs.append(
-                            f"[{name}] “{course.course_title}” ({course.course_code}) is missing prereq {or_group}"
+                            f"[{name}] {course.course_code} (from “{course.raw.course_title}”) is missing prereq {or_group}"
                         )
 
 
@@ -264,5 +264,5 @@ if __name__ == "__main__":
 
     if len(sys.argv) < 2:
         raise ValueError("Need year: python3 courses_req_by_majors.py <year>")
-    print("<style>p { margin: 0; }</style>")
+    print("<style>p { margin: 0; white-space: pre-wrap; }</style>")
     main(int(sys.argv[1]))

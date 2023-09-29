@@ -10,17 +10,6 @@ __all__ = ["university"]
 ParsedCourseCodes = List[Tuple[Optional[CourseCode], float]]
 
 
-course_code_overrides: Dict[str, ParsedCourseCodes] = {
-    # See #15
-    "UD DOMAIN ELECTIVE 1 (IF MATH 180A NOT TAKEN)": [(None, 4)],
-    "MATH 11": [(CourseCode("MATH", "11"), 5)],
-    "CAT 2": [(CourseCode("CAT", "2"), 6)],
-    "CAT 3": [(CourseCode("CAT", "3"), 6)],
-    "PHYS 1C": [(CourseCode("PHYS", "1C"), 3)],
-    "JWSP 1": [(CourseCode("JWSP", "1"), 5)],
-    "JWSP 2": [(CourseCode("JWSP", "2"), 5)],
-    "JWSP 3": [(CourseCode("JWSP", "3"), 5)],
-}
 non_subjects: Set[str] = {"IE", "RR", "OR", "TE", "DEPT"}
 
 
@@ -45,20 +34,24 @@ def parse_course_name(
     """
     # Based on
     # https://github.com/SheepTester-forks/ExploratoryCurricularAnalytics/blob/a9e6d0d7afb74f217b3efb382ed39cdd86fe0559/course_names.py#L13-L37
-    if name in course_code_overrides:
-        return course_code_overrides[name]
+    if "NOT TAKEN" in name:
+        return [(None, units)]
     if name.startswith("ADV CHEM"):
         return [(None, units)]
     name = re.sub(r"DF-?\d - ", "", name)
     match = re.search(
-        r"\b([A-Z]{2,4}) ?(\d+[A-Z]{0,2})(?: ?[&/] ?\d?[A-Z]([LX]))?\b", name
+        r"\b([A-Z]{2,4}) ?(\d+[A-Z]{0,2})(?: ?[&/] ?\d*[A-Z]([LX]))?\b", name
     )
     if match:
         subject, number, has_lab = match.group(1, 2, 3)
-        if subject in non_subjects:
+        # TDHT 1XX etc are not valid course codes (there are no real course
+        # codes that end in XX)
+        if subject in non_subjects or number.endswith("XX"):
             return [(None, units)]
-        if has_lab:
-            lab_units = 2 if has_lab == "L" else 2.5 if has_lab == "X" else 0
+        number = number.lstrip("0")
+        # Prevent "PHYS 2BL / 2CL" producing PHYS 2BL and PHYS 2BLL
+        if has_lab and not number.endswith(has_lab):
+            lab_units = 2.0 if has_lab == "L" else 2.5 if has_lab == "X" else 0.0
             return [
                 (CourseCode(subject, number), units - lab_units),
                 (CourseCode(subject, number + has_lab), lab_units),
@@ -160,9 +153,6 @@ class _UCSD:
         self, prereqs: Dict[CourseCode, List[List[Prerequisite]]], term: TermCode
     ) -> None:
         # Fix possible errors in prereqs (#52)
-        prereqs[CourseCode("NANO", "102")] = [
-            [Prerequisite(CourseCode("CHEM", "6C"), False)]
-        ]
         prereqs[CourseCode("DOC", "2")] = [
             [Prerequisite(CourseCode("DOC", "1"), False)]
         ]

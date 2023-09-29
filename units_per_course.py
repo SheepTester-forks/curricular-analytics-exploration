@@ -54,7 +54,7 @@ def main() -> None:
 
     def score(variant: UnitVariant) -> float:
         # Prioritize more recent years
-        return sum(0.9 ** (max_year - plan.year) for plan in variant)
+        return sum(0.8 ** (max_year - plan.year) for plan in variant)
 
     for year in years:
         for major_code, colleges in major_plans(year).items():
@@ -65,9 +65,9 @@ def main() -> None:
                     variants = courses.get(course.course_code) or {}
                     if course.course_code not in courses:
                         courses[course.course_code] = variants
-                    unit_variant = variants.get(course.raw.units) or []
-                    if course.raw.units not in variants:
-                        variants[course.raw.units] = unit_variant
+                    unit_variant = variants.get(course.units) or []
+                    if course.units not in variants:
+                        variants[course.units] = unit_variant
                     unit_variant.append(PlanId(year, major_code, college))
 
     if json_mode:
