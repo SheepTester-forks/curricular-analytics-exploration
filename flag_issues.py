@@ -119,20 +119,21 @@ def check_plan(
             title = courses[code].raw.course_title
             if any(char in title for char in ["/", "or", "OR", "-"]):
                 issues.multiple_options.append(
-                    f"[{name}] multiple options for {code} “{title}”"
+                    f"[{name}] multiple options for “{title}”; assuming {code}"
                 )
             elif code not in ALLOW_DUPLICATES:
                 issues.duplicate_courses.append(
                     f"[{name}] duplicate course {code} “{title}”"
                 )
     for code in GES[college]:
+        # Hack for PHIL/POLI commutativity
+        if code.subject == "POLI" and code not in course_codes:
+            code = CourseCode("PHIL", code.number)
         if code not in course_codes:
-            issues.missing_ges.append(
-                f"[{name}] missing {university.college_names[college]} GE {code}"
-            )
+            issues.missing_ges.append(f"[{name}] Missing writing course {code}")
         elif courses[code].raw.type != "COLLEGE":
             issues.miscategorized_courses.append(
-                f"[{name}] {code} is marked as a department course (it's part of the college writing program)"
+                f"[{name}] “{courses[code].raw.course_title}” is a college writing course but is marked as a major requirement"
             )
     for course in plan:
         # Course title must match to exclude split lab courses
@@ -150,16 +151,16 @@ def check_plan(
             issues.wrong_units.append(
                 f"[{name}] {course.course_code} (from “{course.raw.course_title}”) should be {consensus_units[course.course_code]} units but is {course.units} units"
             )
-        if course.course_title in curriculum:
-            if not course.for_major:
-                issues.miscategorized_courses.append(
-                    f"[{name}] Curriculum course “{course.course_title}” marked as GE"
-                )
-        else:
-            if course.for_major:
-                issues.curriculum_deviances.append(
-                    f"[{name}] “{course.raw.course_title}” differs from curriculum"
-                )
+        # if course.course_title in curriculum:
+        #     if not course.for_major:
+        #         issues.miscategorized_courses.append(
+        #             f"[{name}] Curriculum course “{course.course_title}” marked as GE"
+        #         )
+        # else:
+        #     if course.for_major:
+        #         issues.curriculum_deviances.append(
+        #             f"[{name}] “{course.raw.course_title}” differs from curriculum"
+        #         )
         if (
             course.term_index < 6
             and course.course_code
@@ -174,9 +175,11 @@ def check_plan(
                 course.course_code
             )
             if reqs is None:
-                issues.dne.append(
-                    f"[{name}] {course.course_code} (from “{course.raw.course_title}”) does not exist"
-                )
+                # Eighth CCE courses don't exist yet
+                if course.course_code.subject != "CCE":
+                    issues.dne.append(
+                        f"[{name}] {course.course_code} (from “{course.raw.course_title}”) does not exist"
+                    )
             else:
                 taken = [
                     past_course.course_code

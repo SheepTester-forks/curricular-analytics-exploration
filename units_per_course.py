@@ -71,6 +71,7 @@ def main() -> None:
                     unit_variant.append(PlanId(year, major_code, college))
 
     if json_mode:
+        # Manually correct units
         # Output JSON mapping course code to probably correct unit count
         printed = False
         print("{")
@@ -87,6 +88,13 @@ def main() -> None:
                 for units, variant in variants.items()
                 if score(variant) == most_common_count
             )
+            if course_code in [
+                CourseCode("LTSP", "2C"),
+                CourseCode("JWSP", "1"),
+                CourseCode("JWSP", "2"),
+                CourseCode("JWSP", "3"),
+            ]:
+                most_common_units = 5.0
             print(f'  "{course_code}": {most_common_units}', end="")
         print()
         print("}")
