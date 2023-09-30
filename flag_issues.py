@@ -119,7 +119,7 @@ def check_plan(
             title = courses[code].raw.course_title
             if any(char in title for char in ["/", "or", "OR", "-"]):
                 issues.multiple_options.append(
-                    f"[{name}] multiple options for “{title}”; assuming {code}"
+                    f"[{name}] “{title}” is listed multiple times and has multiple options; assuming {code} each time"
                 )
             elif code not in ALLOW_DUPLICATES:
                 issues.duplicate_courses.append(
@@ -236,18 +236,18 @@ def main(year: int, length: int = 4) -> None:
             )
 
         print(f"<h1>{college_name}</h1>")
-        print_issues(
-            issues.dne,
-            "Nonexistent courses",
-        )
-        print_issues(issues.duplicate_courses, "Duplicate courses")
+        print_issues(issues.wrong_units, "Wrong unit numbers")
+        print_issues(issues.missing_prereqs, "Missing prerequisites")
         print_issues(
             issues.miscategorized_courses,
             "College GE courses marked as major/department courses",
         )
         print_issues(issues.missing_ges, "Missing college GE")
-        print_issues(issues.wrong_units, "Wrong unit numbers")
-        print_issues(issues.missing_prereqs, "Missing prerequisites")
+        print_issues(issues.duplicate_courses, "Duplicate courses")
+        print_issues(
+            issues.dne,
+            "Nonexistent courses",
+        )
         print_issues(
             issues.early_upper_division,
             "Upper division courses taken before junior year",
