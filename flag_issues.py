@@ -91,6 +91,7 @@ class Issues:
     early_upper_division: List[str]
     missing_prereqs: List[str]
     dne: List[str]
+    missing_major: List[str]
 
     def __init__(self) -> None:
         self.multiple_options = []
@@ -102,6 +103,7 @@ class Issues:
         self.early_upper_division = []
         self.missing_prereqs = []
         self.dne = []
+        self.missing_major = []
 
 
 def check_plan(
@@ -224,6 +226,8 @@ def main(year: int, length: int = 4) -> None:
         issues = Issues()
         for major_code, plans in major_plans(year, length).items():
             if college_code not in plans.colleges:
+                if not major_code.startswith("UN"):
+                    issues.missing_major.append(f"Missing plan for major {major_code}")
                 continue
             curriculum = {course.course_title for course in plans.curriculum()}
             check_plan(
@@ -236,6 +240,7 @@ def main(year: int, length: int = 4) -> None:
             )
 
         print(f"<h1>{college_name}</h1>")
+        print_issues(issues.missing_major, "Missing plans")
         print_issues(issues.wrong_units, "Wrong unit numbers")
         print_issues(issues.missing_prereqs, "Missing prerequisites")
         print_issues(

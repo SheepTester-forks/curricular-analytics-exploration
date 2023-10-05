@@ -554,9 +554,7 @@ course_capacities.py | (inputs: files/ClassCapCalculatorNewStudents.csv, files/C
    - `prereqs_file`, `plans_file`, `majors_file` - if the paths to the new files changed.
    - `curriculum_priority`, `college_codes`, `college_names` - if there's a new college. It doesn't particularly matter where the college goes in `curriculum_priority`.
 
-3. The Julia files also need to be manually updated, but I won't write their instructions here since I will probably update them later.
-
-   If there's a new college, search all Julia files for college code lists (eg `"TH"`) and add the new college code to the list.
+3. You may need to update `isis_major_code_list.csv` for any new majors.
 
 4. Run `make`. This will update the web report files in `reports/output/` as well as CSV files used in the Tableau views.
 

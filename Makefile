@@ -30,6 +30,9 @@ clean:
 	rm -f files/metrics_fa12_py.csv files/courses_fa12_py.csv files/course_overlap_py.csv files/curricula_index.csv
 	rm -f courses_req_by_majors.json
 
+# make split
+split: files/prereqs/.done files/plans/.done
+
 files/prereqs/.done: $(prereqs)
 	python3 split_csv.py prereqs $(prereqs)
 
@@ -38,13 +41,13 @@ files/plans/.done: $(plans)
 
 # Tableau
 
-files/metrics_fa12_py.csv: plan_metrics.py $(prereqs) $(plans)
+files/metrics_fa12_py.csv: plan_metrics.py files/prereqs/.done files/plans/.done
 	python3 plan_metrics.py
 
-files/courses_fa12_py.csv: course_metrics.py $(prereqs) $(plans)
+files/courses_fa12_py.csv: course_metrics.py files/prereqs/.done files/plans/.done
 	python3 course_metrics.py
 
-files/course_overlap_py.csv: course_overlap.py $(plans)
+files/course_overlap_py.csv: course_overlap.py files/plans/.done
 	python3 course_overlap.py
 
 files/curricula_index.csv: curricula_index.py files/uploaded*.yml
