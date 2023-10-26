@@ -9,5 +9,3 @@ plans/
 # Tableau tables
 *.twbr
 *.twb
-
-summarize_dfw.json
