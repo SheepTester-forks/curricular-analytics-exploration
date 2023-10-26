@@ -51,13 +51,13 @@ def main():
 
     # Sort by highest DFW first
     courses = dict(
-        (course_code, len(terms) / len(all_terms))
+        (course_code, list(terms))
         for course_code, terms in sorted(
             course_offerings.items(), key=lambda item: (-len(item[1]), item[0])
         )
     )
 
-    json.dump(courses, sys.stdout, indent=2)
+    json.dump({**courses, "total terms": list(all_terms)}, sys.stdout, indent=2)
     print()
 
 
