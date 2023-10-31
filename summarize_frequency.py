@@ -1,5 +1,5 @@
 """
-python3 summarize_frequency.py './files/21-22 Enrollment_DFW CJ.xlsx.csv' 4 > files/protected/summarize_frequency.json
+python3 summarize_frequency.py './files/21-22 Enrollment_DFW CJ.xlsx.csv' > files/protected/summarize_frequency.json
 """
 
 
@@ -9,10 +9,6 @@ import sys
 from typing import Dict, Set
 
 from parse_defs import TermCode
-
-
-def parse(number: str) -> float:
-    return float(number.replace(",", "") or "0")
 
 
 def main():

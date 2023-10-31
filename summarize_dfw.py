@@ -14,7 +14,7 @@ def parse(number: str) -> float:
 
 def main():
     if len(sys.argv) < 2:
-        print("python3 summarize_dfw.py <path>")
+        print("python3 summarize_dfw.py <path> [min_enrolled]")
         exit(1)
 
     min_enrolled = int(sys.argv[2]) if len(sys.argv) >= 3 else 0
