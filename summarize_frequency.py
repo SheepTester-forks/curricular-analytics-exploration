@@ -1,5 +1,5 @@
 """
-python3 summarize_frequency.py './files/21-22 Enrollment_DFW CJ.xlsx.csv' > files/protected/summarize_frequency.json
+python3 summarize_frequency.py './files/21-22 Enrollment_DFW CJ.xlsx.csv' './files/Waitlist by Course for CJ.xlsx.csv' > files/protected/summarize_frequency.json
 """
 
 
@@ -13,47 +13,40 @@ from parse_defs import TermCode
 
 def main():
     if len(sys.argv) < 2:
-        print("python3 summarize_frequency.py <path>")
+        print("python3 summarize_frequency.py <paths...>")
         exit(1)
 
     course_offerings: Dict[str, Set[TermCode]] = {}
     all_terms: Set[TermCode] = set()
 
-    with open(sys.argv[1]) as file:
-        reader = csv.reader(file)
-        # Skip header
-        next(reader)
-        next(reader)
-        course_code = ""
-        for (
-            course,
-            _,
-            term,
-            _,  # Grand Total: % of Total Enrolled
-            _,  # Grand Total: N
-            _,  # ABC: % of Total Enrolled
-            _,  # ABC: N
-            _,  # DFW: % of Total Enrolled
-            _,  # DFW: N
-        ) in reader:
-            if not term:
-                continue
-            course_code = course or course_code
-            if course_code not in course_offerings:
-                course_offerings[course_code] = set()
-            term = TermCode(term)
-            course_offerings[course_code].add(term)
-            all_terms.add(term)
+    for path in sys.argv[1:]:
+        with open(path) as file:
+            reader = csv.reader(file)
+            # Skip header
+            next(reader)
+            next(reader)
+            course_code = ""
+            for course, _, term, *_ in reader:
+                if not term:
+                    continue
+                course_code = course or course_code
+                if not course_code:
+                    continue
+                if course_code not in course_offerings:
+                    course_offerings[course_code] = set()
+                term = TermCode(term)
+                course_offerings[course_code].add(term)
+                all_terms.add(term)
 
-    # Sort by highest DFW first
+    # Sort by course code
     courses = dict(
-        (course_code, list(terms))
+        (course_code, sorted(terms))
         for course_code, terms in sorted(
-            course_offerings.items(), key=lambda item: (-len(item[1]), item[0])
+            course_offerings.items(), key=lambda item: item[0]
         )
     )
 
-    json.dump({**courses, "total terms": list(all_terms)}, sys.stdout, indent=2)
+    json.dump({**courses, "total terms": sorted(all_terms)}, sys.stdout, indent=2)
     print()
 
 
