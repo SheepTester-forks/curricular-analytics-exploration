@@ -4,13 +4,29 @@ python3 dump_graphs.py 2022 html > reports/output/plan-editor-index.html
 """
 
 
+import json
 import sys
 from typing import Dict, List, Tuple
 from departments import departments, dept_schools
 from output import MajorOutput
 from parse import major_codes, major_plans
 from university import university
-from visualize import generate_paths
+
+
+def render_plan_json(year: int) -> None:
+    plan_jsons: Dict[str, str] = {}
+    for year in range(2015, 2050):
+        all_plans = major_plans(year)
+        if all_plans == {}:
+            break
+        for major_code, major_plan in all_plans.items():
+            output = MajorOutput(major_plan)
+            for college in university.college_codes:
+                if college in major_plan.colleges:
+                    plan_jsons[f"{year}.{major_code}.{college}"] = output.output(
+                        college
+                    )
+    json.dump(plan_jsons, sys.stdout, separators=(",", ":"))
 
 
 def render_plan_urls(year: int) -> None:
@@ -32,10 +48,20 @@ def render_plan_urls(year: int) -> None:
                 qs_by_dept[school][department][major_code] = {}
             if year not in qs_by_dept[school][department][major_code]:
                 qs_by_dept[school][department][major_code][year] = []
-            for college_code, path in generate_paths(MajorOutput(major_plan)).items():
-                qs_by_dept[school][department][major_code][year].append(
-                    (college_code, path)
-                )
+            for college in university.college_codes:
+                if college in major_plan.colleges:
+                    qs_by_dept[school][department][major_code][year].append(
+                        (college, f"?plan={year}.{major_code}.{college}")
+                    )
+    print("<script>")
+    print("const plan = new URL(window.location.href).searchParams.get('plan')")
+    print("if (plan)")
+    print("  fetch('./plan-graph-index.json')")
+    print("    .then(r => r.json())")
+    print(
+        "    .then(({ [plan]: csv }) => window.location.replace(`./graph-demo.html?defaults=ca#${encodeURIComponent(csv)}`))"
+    )
+    print("</script>")
     print("<table><tr><th>School</th><th>Department</th><th>Major</th>")
     for year in years:
         print(f"<th>{year}</th>")
@@ -74,4 +100,7 @@ def render_plan_urls(year: int) -> None:
 
 
 if __name__ == "__main__":
-    render_plan_urls(int(sys.argv[1]))
+    if sys.argv[2] == "json":
+        render_plan_json(int(sys.argv[1]))
+    else:
+        render_plan_urls(int(sys.argv[1]))
