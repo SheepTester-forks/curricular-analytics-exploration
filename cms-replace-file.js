@@ -18,7 +18,7 @@ async function writeFile (fileId, contents, message) {
   await fetch('/entity/submitfile.act?saveAs=draft', {
     body: formData,
     method: 'POST'
-  })
+  }).then(r => !r.ok && r.text().then(console.warn))
 
   const submitId = (
     await fetch(`/entity/open.act?type=file&id=${fileId}`).then(r => r.text())

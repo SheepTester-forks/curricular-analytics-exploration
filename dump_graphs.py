@@ -5,6 +5,7 @@ python3 dump_graphs.py 2022 html > reports/output/plan-editor-index.html
 
 
 import json
+import re
 import sys
 from typing import Dict, List, Tuple
 from departments import departments, dept_schools
@@ -23,8 +24,10 @@ def render_plan_json(year: int) -> None:
             output = MajorOutput(major_plan)
             for college in university.college_codes:
                 if college in major_plan.colleges:
-                    plan_jsons[f"{year}.{major_code}.{college}"] = output.output(
-                        college
+                    plan_jsons[f"{year}.{major_code}.{college}"] = re.sub(
+                        r",*\n",
+                        "",
+                        output.output(college).replace("\r\n", "\n"),
                     )
     json.dump(plan_jsons, sys.stdout, separators=(",", ":"))
 
@@ -55,13 +58,14 @@ def render_plan_urls(year: int) -> None:
                     )
     print("<script>")
     print("const plan = new URL(window.location.href).searchParams.get('plan')")
-    print("if (plan)")
+    print("if (plan) {")
+    print("  window.stop()")
     print("  fetch('./plan-graph-index.json')")
     print("    .then(r => r.json())")
     print(
         "    .then(({ [plan]: csv }) => window.location.replace(`./graph-demo.html?defaults=ca#${encodeURIComponent(csv)}`))"
     )
-    print("</script>")
+    print("}</script>")
     print("<table><tr><th>School</th><th>Department</th><th>Major</th>")
     for year in years:
         print(f"<th>{year}</th>")
