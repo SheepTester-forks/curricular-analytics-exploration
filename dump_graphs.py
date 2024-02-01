@@ -25,8 +25,8 @@ def render_plan_json(year: int) -> None:
             for college in university.college_codes:
                 if college in major_plan.colleges:
                     plan_jsons[f"{year}.{major_code}.{college}"] = re.sub(
-                        r",*\n",
-                        "",
+                        r",+\n",
+                        "\n",
                         output.output(college).replace("\r\n", "\n"),
                     )
     json.dump(plan_jsons, sys.stdout, separators=(",", ":"))
