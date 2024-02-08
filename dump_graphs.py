@@ -83,10 +83,13 @@ def render_plan_urls() -> None:
     print("const plan = new URL(window.location.href).searchParams.get('plan')")
     print("if (plan) {")
     print("  window.stop()")
-    print("  fetch('./plan-graph-index.json')")
-    print("    .then(r => r.json())")
+    print("  const [year, major, college] = plan.split('.')")
     print(
-        "    .then(({ [plan]: csv }) => window.location.replace(`./graph-demo.html?defaults=ca#${encodeURIComponent(csv)}`))"
+        "  fetch(`https://raw.githubusercontent.com/SheepTester-forks/ucsd-degree-plans/main/${year}/${major}/${year}_${major}_${college}.csv`)"
+    )
+    print("    .then(r => r.text())")
+    print(
+        "    .then(csv => window.location.replace(`./graph-demo.html?defaults=ca#${encodeURIComponent(csv)}`))"
     )
     print("}</script>")
     print("<table><tr><th>School</th><th>Department</th><th>Major</th>")
