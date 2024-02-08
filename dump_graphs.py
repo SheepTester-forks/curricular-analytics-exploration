@@ -1,10 +1,11 @@
 """
-python3 dump_graphs.py 2022 json
-python3 dump_graphs.py 2022 html > reports/output/plan-editor-index.html
+python3 dump_graphs.py json
+python3 dump_graphs.py html > reports/output/plan-editor-index.html
+python3 dump_graphs.py files
 """
 
-
 import json
+import os
 import re
 import sys
 from typing import Dict, List, Tuple
@@ -14,7 +15,29 @@ from parse import major_codes, major_plans
 from university import university
 
 
-def render_plan_json(year: int) -> None:
+def render_plan_files() -> None:
+    for year in range(2015, 2050):
+        all_plans = major_plans(year)
+        if all_plans == {}:
+            break
+        for major_code, major_plan in all_plans.items():
+            output = MajorOutput(major_plan)
+            os.makedirs(f"./plan_csvs/{year}/{major_code}/", exist_ok=True)
+            with open(
+                f"./plan_csvs/{year}/{major_code}/{year}_{major_code}.csv",
+                "w",
+            ) as file:
+                file.write(output.output())
+            for college in university.college_codes:
+                if college in major_plan.colleges:
+                    with open(
+                        f"./plan_csvs/{year}/{major_code}/{year}_{major_code}_{college}.csv",
+                        "w",
+                    ) as file:
+                        file.write(output.output(college))
+
+
+def render_plan_json() -> None:
     plan_jsons: Dict[str, str] = {}
     for year in range(2015, 2050):
         all_plans = major_plans(year)
@@ -32,7 +55,7 @@ def render_plan_json(year: int) -> None:
     json.dump(plan_jsons, sys.stdout, separators=(",", ":"))
 
 
-def render_plan_urls(year: int) -> None:
+def render_plan_urls() -> None:
     qs_by_dept: Dict[str, Dict[str, Dict[str, Dict[int, List[Tuple[str, str]]]]]] = {}
     years: List[int] = []
     for year in range(2015, 2050):
@@ -104,7 +127,9 @@ def render_plan_urls(year: int) -> None:
 
 
 if __name__ == "__main__":
-    if sys.argv[2] == "json":
-        render_plan_json(int(sys.argv[1]))
+    if sys.argv[1] == "json":
+        render_plan_json()
+    elif sys.argv[1] == "files":
+        render_plan_files()
     else:
-        render_plan_urls(int(sys.argv[1]))
+        render_plan_urls()
