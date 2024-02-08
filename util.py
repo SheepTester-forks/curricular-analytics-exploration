@@ -28,8 +28,7 @@ _T_contra = TypeVar("_T_contra", contravariant=True)
 
 
 class SupportsDunderLT(Protocol[_T_contra]):
-    def __lt__(self, __other: _T_contra) -> bool:
-        ...
+    def __lt__(self, __other: _T_contra) -> bool: ...
 
 
 CompK = TypeVar("CompK", bound=SupportsDunderLT[Any])
@@ -114,14 +113,11 @@ class CsvWriter:
         self._writer = csv.writer(self._output)
 
     def row(self, *values: str) -> None:
+        """
+        Extra values at the end of `values` are discarded.
+        """
         row = list(values)
-        self._writer.writerow(
-            row[0 : self._cols]
-            if len(row) > self._cols
-            else row + [""] * (len(row) - self._cols)
-            if len(row) < self._cols
-            else row
-        )
+        self._writer.writerow((row + [""] * (self._cols - len(row)))[0 : self._cols])
 
     def done(self) -> str:
         """
