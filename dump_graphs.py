@@ -35,6 +35,8 @@ def render_plan_files() -> None:
                         "w",
                     ) as file:
                         file.write(output.output(college))
+    with open("./plan_csvs/.done", "w+"):
+        pass
 
 
 def render_plan_json() -> None:
@@ -89,7 +91,7 @@ def render_plan_urls() -> None:
     )
     print("    .then(r => r.text())")
     print(
-        "    .then(csv => window.location.replace(`./graph-demo.html?defaults=ca#${encodeURIComponent(csv)}`))"
+        "    .then(csv => window.location.replace(`./graph-demo.html?defaults=ucsd#${encodeURIComponent(csv)}`))"
     )
     print("}</script>")
     print("<table><tr><th>School</th><th>Department</th><th>Major</th>")
