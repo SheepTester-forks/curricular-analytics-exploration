@@ -19,54 +19,58 @@ type Graph = {
   links: CourseCodeLink[]
 }
 function getUnlockedCourses ({ prereqs, courses, options }: TreeProps): Graph {
-  const allCourses: CourseCodeNode[] = courses.map(course => ({
-    course,
-    selected: true,
-    note: options.unlockedOnly ? null : { type: 'taken' }
-  }))
-  const taken = new Set(courses)
+  let allCourses: Record<string, CourseCodeNode> = Object.fromEntries(
+    courses.map(course => [
+      course,
+      {
+        course,
+        selected: true,
+        dependents: [],
+        note: options.unlockedOnly ? null : { type: 'taken' }
+      }
+    ])
+  )
   const links: CourseCodeLink[] = []
-  let newCourses: CourseCodeNode[]
+  let newCourses: Record<string, CourseCodeNode>
   do {
-    newCourses = []
+    newCourses = {}
     for (const [courseCode, reqs] of Object.entries(prereqs)) {
       // Skip classes that are unlocked by default
-      if (reqs.length === 0 || taken.has(courseCode)) {
+      if (reqs.length === 0 || allCourses[courseCode]) {
         continue
       }
-      const linked: Set<CourseCode> = new Set()
+      const linked: Set<CourseCodeNode> = new Set()
       let satisfied = 0
       for (const req of reqs) {
         for (const alt of req) {
-          if (taken.has(alt)) {
-            linked.add(alt)
+          if (allCourses[alt]) {
+            linked.add(allCourses[alt])
             satisfied++
             break
           }
         }
       }
       if (options.unlockedOnly ? satisfied === reqs.length : satisfied > 0) {
-        newCourses.push({
+        newCourses[courseCode] = {
           course: courseCode,
           selected: false,
+          dependents: [],
           note: options.unlockedOnly
             ? null
             : { type: 'satisfied', satisfied, total: reqs.length }
-        })
-        links.push(
-          ...Array.from(linked, course => ({
-            source: course,
+        }
+        for (const source of linked) {
+          links.push({
+            source: source.course,
             target: courseCode
-          }))
-        )
+          })
+          source.dependents.push(courseCode)
+        }
       }
     }
-    allCourses.push(...newCourses)
-    for (const { course } of newCourses) {
-      taken.add(course)
-    }
-  } while (newCourses.length > 0)
-  return { nodes: allCourses, links }
+    allCourses = { ...allCourses, ...newCourses }
+  } while (Object.keys(newCourses).length > 0)
+  return { nodes: Object.values(allCourses), links }
 }
 function getCoursePrereqs ({ prereqs, courses, options }: TreeProps): Graph {
   const nodes: CourseCodeNode[] = courses.map(course => {
@@ -74,6 +78,7 @@ function getCoursePrereqs ({ prereqs, courses, options }: TreeProps): Graph {
     return {
       course,
       selected: true,
+      dependents: [], // not used
       note: options.allAlts
         ? { type: 'reqs', count: reqs.length ?? 0 }
         : {
@@ -101,6 +106,7 @@ function getCoursePrereqs ({ prereqs, courses, options }: TreeProps): Graph {
             nodes.push({
               course: alt,
               selected: false,
+              dependents: [], // not used
               note: options.allAlts
                 ? { type: 'reqs', count: reqs.length ?? 0 }
                 : {

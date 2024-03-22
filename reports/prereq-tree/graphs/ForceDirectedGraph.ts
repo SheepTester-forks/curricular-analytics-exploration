@@ -7,10 +7,12 @@ import { CourseCode } from '../../util/Prereqs.ts'
 import { Vector2 } from '../../util/Vector2.ts'
 import '../d3-hack.ts'
 import { GraphCommon } from './GraphCommon.ts'
+import { chunks } from '../../util/arrays.ts'
 
 export type CourseCodeNode = {
   course: CourseCode
   selected: boolean
+  dependents: CourseCode[]
   note:
     | {
         type: 'satisfied'
@@ -70,6 +72,11 @@ export class ForceDirectedGraph extends GraphCommon {
     .attr('class', 'text small')
     .attr('x', 10)
     .attr('y', 15)
+  #tooltipLine2 = this.#tooltip
+    .append('text')
+    .attr('class', 'text small')
+    .attr('x', 10)
+    .attr('y', 30)
   #tooltipNode: CourseNode | null = null
 
   #simulation = d3
@@ -197,9 +204,17 @@ export class ForceDirectedGraph extends GraphCommon {
                     } not shown`
                   : ''
               )
-              // tooltipLine2.text(
-              //   node.note?.type === 'satisfied' ? 'nth degree' : ''
-              // )
+              this.#tooltipLine2.text(
+                `Blocks ${node.dependents.length} course${
+                  node.dependents.length === 0
+                    ? 's'
+                    : node.dependents.length === 1
+                    ? ': '
+                    : 's: '
+                }${chunks(node.dependents, 5)
+                  .map(line => line.join(', '))
+                  .join(',\n')}`
+              )
               this.#tooltip
                 .attr('display', null)
                 .attr(
