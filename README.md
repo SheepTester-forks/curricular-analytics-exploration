@@ -1,5 +1,8 @@
 ## Setup
 
+> [!NOTE]
+> All TypeScript code in this repo should be run with Deno 1.x.
+
 [`parse.py`](parse.py) expects certain files in the `files/` directory. Download them from our shared Google Drive folder.
 
 - [**`academic_plans_fa23.csv`**](https://drive.google.com/file/d/1SMNCi_UD3NoIyUt8TidpPOWha_pOx3il/view),

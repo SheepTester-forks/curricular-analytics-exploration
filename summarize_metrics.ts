@@ -7,6 +7,22 @@ import { parse } from 'https://deno.land/std@0.181.0/csv/parse.ts'
 
 const table = parse(await Deno.readTextFile(Deno.args[0])).slice(1)
 
+const majorByDepartment = Object.groupBy(
+  parse(await Deno.readTextFile('files/isis_major_code_list.csv'), {
+    skipFirstRow: true
+  }).map(({ 'ISIS Major Code': isMajorCode, Department: department }) => ({
+    majorCode:
+      typeof isMajorCode === 'string'
+        ? isMajorCode
+        : expect('ISIS Major Code should be string'),
+    department:
+      typeof department === 'string'
+        ? department
+        : expect('Department should be string')
+  })),
+  ({ department }) => department
+)
+
 function expect (message: string): never {
   throw new TypeError(message)
 }
@@ -142,17 +158,25 @@ Deno.writeTextFile(
         courseCode,
         {
           ...Object.fromEntries(
-            rows.map(
-              ({ departmentCode, dfwCount, studentCount, dfwPercent }) => [
-                departmentCode,
-                check(dfwCount / studentCount, percent =>
-                  Math.round(percent * 100) / 100 === dfwPercent
-                    ? null
-                    : `${courseCode} ${departmentCode}: ${
-                        dfwCount / studentCount
-                      } =/= ${dfwPercent}`
+            rows.flatMap(
+              ({ departmentCode, dfwCount, studentCount, dfwPercent }) =>
+                Array.from(
+                  new Set(
+                    majorByDepartment[departmentCode]?.map(({ majorCode }) =>
+                      majorCode.slice(0, 2)
+                    )
+                  ),
+                  majorCode => [
+                    majorCode,
+                    check(dfwCount / studentCount, percent =>
+                      Math.round(percent * 100) / 100 === dfwPercent
+                        ? null
+                        : `${courseCode} ${departmentCode}: ${
+                            dfwCount / studentCount
+                          } =/= ${dfwPercent}`
+                    )
+                  ]
                 )
-              ]
             )
           ),
           allMajors:
@@ -187,3 +211,8 @@ Deno.writeTextFile(
   ) + '\n'
 )
 console.log('wrote files/protected/summarize_waitlist.json')
+
+console.log(
+  'all departments',
+  Array.from(new Set(rows.map(({ departmentCode }) => departmentCode))).sort()
+)
