@@ -81,7 +81,7 @@ def render_plan_urls() -> None:
                     qs_by_dept[school][department][major_code][year].append(
                         (
                             college,
-                            f"?plan={year}.{major_code}.{college}&major={major_code}",
+                            f"?plan={year}.{major_code}.{college}",
                         )
                     )
     print("<script>")
@@ -92,6 +92,7 @@ def render_plan_urls() -> None:
     print("  params.append('defaults', 'ucsd')")
     print("  params.delete('plan')")
     print("  const [year, major, college] = plan.split('.')")
+    print("  params.append('major', major)")
     print(
         "  fetch(`https://raw.githubusercontent.com/SheepTester-forks/ucsd-degree-plans/main/${year}/${major}/${year}_${major}_${college}.csv`)"
     )
