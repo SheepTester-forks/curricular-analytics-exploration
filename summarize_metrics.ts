@@ -23,6 +23,25 @@ const majorByDepartment = Object.groupBy(
   ({ department }) => department
 )
 
+const majorSubjByDeptEntries = Object.entries(majorByDepartment).map(
+  ([dept, majors]): [string, string[]] => [
+    dept,
+    Array.from(new Set(majors?.map(major => major.majorCode.slice(0, 2))))
+  ]
+)
+const majorSubjByDept = Object.fromEntries(majorSubjByDeptEntries)
+for (const [dept, majorCodes] of majorSubjByDeptEntries) {
+  for (const [dept2, majorCodes2] of majorSubjByDeptEntries) {
+    if (dept === dept2) {
+      continue
+    }
+    const dupe = majorCodes.find(code => majorCodes2.includes(code))
+    if (dupe) {
+      console.warn('dept', dept, 'major', dupe, 'also in dept', dept2)
+    }
+  }
+}
+
 function expect (message: string): never {
   throw new TypeError(message)
 }
