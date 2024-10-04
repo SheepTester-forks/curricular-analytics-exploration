@@ -79,7 +79,10 @@ def render_plan_urls() -> None:
             for college in university.college_codes:
                 if college in major_plan.colleges:
                     qs_by_dept[school][department][major_code][year].append(
-                        (college, f"?plan={year}.{major_code}.{college}")
+                        (
+                            college,
+                            f"?plan={year}.{major_code}.{college}&major={major_code}",
+                        )
                     )
     print("<script>")
     print("const params = new URL(window.location.href).searchParams")

@@ -179,23 +179,16 @@ Deno.writeTextFile(
           ...Object.fromEntries(
             rows.flatMap(
               ({ departmentCode, dfwCount, studentCount, dfwPercent }) =>
-                Array.from(
-                  new Set(
-                    majorByDepartment[departmentCode]?.map(({ majorCode }) =>
-                      majorCode.slice(0, 2)
-                    )
-                  ),
-                  majorCode => [
-                    majorCode,
-                    check(dfwCount / studentCount, percent =>
-                      Math.round(percent * 100) / 100 === dfwPercent
-                        ? null
-                        : `${courseCode} ${departmentCode}: ${
-                            dfwCount / studentCount
-                          } =/= ${dfwPercent}`
-                    )
-                  ]
-                )
+                majorSubjByDept[departmentCode]?.map(majorCode => [
+                  majorCode,
+                  check(dfwCount / studentCount, percent =>
+                    Math.round(percent * 100) / 100 === dfwPercent
+                      ? null
+                      : `${courseCode} ${departmentCode}: ${
+                          dfwCount / studentCount
+                        } =/= ${dfwPercent}`
+                  )
+                ]) ?? []
             )
           ),
           allMajors:
