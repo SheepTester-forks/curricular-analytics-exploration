@@ -98,7 +98,7 @@ def render_plan_urls() -> None:
     )
     print("    .then(r => r.text())")
     print(
-        "    .then(csv => window.location.replace(`./graph-demo.html?${params}#${encodeURIComponent(csv)}`))"
+        "    .then(csv => window.location.replace(`./plan-graph.html?${params}#${encodeURIComponent(csv)}`))"
     )
     print("}</script>")
     print("<table><tr><th>School</th><th>Department</th><th>Major</th>")
