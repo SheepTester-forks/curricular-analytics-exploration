@@ -9,6 +9,7 @@ import os
 import re
 import sys
 from typing import Dict, List, Tuple
+from urllib.parse import urlencode
 from departments import departments, dept_schools
 from output import MajorOutput
 from parse import major_codes, major_plans
@@ -81,10 +82,22 @@ def render_plan_urls() -> None:
                     qs_by_dept[school][department][major_code][year].append(
                         (
                             college,
-                            f"?plan={year}.{major_code}.{college}",
+                            "?" + urlencode({"plan": f"{year}.{major_code}.{college}"}),
                         )
                     )
+    titles = json.dumps(
+        {
+            f"{major_code}.{college}": f"{major_code} ({university.college_names[college]}, !YEAR!): {major_codes()[major_code].name}"
+            for year in range(2015, 2050)
+            for all_plans in (major_plans(year),)
+            if all_plans != {}
+            for major_code, major_plan in all_plans.items()
+            for college in university.college_codes
+            if college in major_plan.colleges
+        }
+    ).replace("'", "\\'")
     print("<script>")
+    print(f"const titles = JSON.parse('{titles}')")
     print("const params = new URL(window.location.href).searchParams")
     print("const plan = params.get('plan')")
     print("if (plan) {")
@@ -93,6 +106,9 @@ def render_plan_urls() -> None:
     print("  params.delete('plan')")
     print("  const [year, major, college] = plan.split('.')")
     print("  params.append('major', major)")
+    print(
+        "  params.append('title', titles[`${major}.${college}`].replace('!YEAR!', year))"
+    )
     print(
         "  fetch(`https://raw.githubusercontent.com/SheepTester-forks/ucsd-degree-plans/main/${year}/${major}/${year}_${major}_${college}.csv`)"
     )
