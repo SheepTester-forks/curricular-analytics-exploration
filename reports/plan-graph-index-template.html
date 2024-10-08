@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>List of all UCSD majors</title>
+    <meta
+      name="description"
+      content="All UCSD majors organized by school and department."
+    />
+
+    <style>
+      @media (prefers-color-scheme: dark) {
+        :root {
+          color-scheme: dark;
+        }
+      }
+      body {
+        margin: 0;
+      }
+      tr:first-child {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        background-color: Canvas;
+      }
+      tr:nth-child(2n) td:not([rowspan]) {
+        background-color: rgba(0, 0, 0, 0.05);
+        background-color: color-mix(in srgb, CanvasText 5%, transparent);
+      }
+      th {
+        vertical-align: top;
+        text-align: left;
+      }
+      th[scope='row'] {
+        border-bottom: 1px solid currentColor;
+      }
+      th[rowspan] {
+        border-top: 1px solid currentColor;
+      }
+      td {
+        vertical-align: top;
+      }
+    </style>
+  </head>
+</html>
