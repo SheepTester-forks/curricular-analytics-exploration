@@ -155,8 +155,8 @@ plan_csvs/.done: dump_graphs.py files/prereqs/.done files/plans/.done
 reports/output/plan-graph-index-fragment.html: dump_graphs.py files/plans/.done
 	python3 dump_graphs.py html > reports/output/plan-graph-index-fragment.html
 
-reports/output/plan-graph-index.html: reports/plan-editor-index-template.html reports/output/plan-graph-index-fragment.html
-	head -n -1 < reports/plan-editor-index-template.html > reports/output/plan-graph-index.html
+reports/output/plan-graph-index.html: reports/plan-graph-index-template.html reports/output/plan-graph-index-fragment.html
+	head -n -1 < reports/plan-graph-index-template.html > reports/output/plan-graph-index.html
 	cat reports/output/plan-graph-index-fragment.html >> reports/output/plan-graph-index.html
 	echo '</html>' >> reports/output/plan-graph-index.html
 

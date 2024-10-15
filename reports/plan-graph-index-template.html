@@ -18,10 +18,13 @@
       }
       body {
         margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
+          'Segoe UI Emoji', 'Segoe UI Symbol';
       }
       tr:first-child {
         position: sticky;
-        top: 0;
+        top: -1px;
         background-color: white;
         background-color: Canvas;
       }
@@ -35,13 +38,33 @@
       }
       th[scope='row'] {
         border-bottom: 1px solid currentColor;
+        border-color: color-mix(in srgb, CanvasText 30%, transparent);
       }
       th[rowspan] {
         border-top: 1px solid currentColor;
+        border-color: color-mix(in srgb, CanvasText 30%, transparent);
       }
       td {
         vertical-align: top;
       }
+      .warning {
+        padding: 1px 1em;
+        background-color: color-mix(in srgb, rgb(255, 213, 0) 30%, transparent);
+        border-bottom: 1px solid rgb(255, 213, 0);
+      }
     </style>
   </head>
+  <body>
+    <div class="warning">
+      <p>
+        The plan graphs include real DFW rates, which are
+        <strong>protected</strong> data. To access them, you must be on the
+        UCSD-PROTECTED or UCSD-GUEST WiFi networks or use the UCSD VPN.
+        <a
+          href="https://blink.ucsd.edu/technology/network/connections/off-campus/VPN/"
+          >Learn more.</a
+        >
+      </p>
+    </div>
+  </body>
 </html>

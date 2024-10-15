@@ -98,7 +98,8 @@ def render_plan_urls() -> None:
     ).replace("'", "\\'")
     print("<script>")
     print(f"const titles = JSON.parse('{titles}')")
-    print("const params = new URL(window.location.href).searchParams")
+    print("const url = new URL(window.location.href)")
+    print("const params = url.searchParams")
     print("const plan = params.get('plan')")
     print("if (plan) {")
     print("  window.stop()")
@@ -109,13 +110,16 @@ def render_plan_urls() -> None:
     print(
         "  params.append('title', titles[`${major}.${college}`].replace('!YEAR!', year))"
     )
+    print("  url.hostname = 'stage-' + url.hostname")
+    print("  url.pathname += '/../plan-graph.html'")
     print(
         "  fetch(`https://raw.githubusercontent.com/SheepTester-forks/ucsd-degree-plans/main/${year}/${major}/${year}_${major}_${college}.csv`)"
     )
     print("    .then(r => r.text())")
-    print(
-        "    .then(csv => window.location.replace(`./plan-graph.html?${params}#${encodeURIComponent(csv)}`))"
-    )
+    print("    .then(csv => {")
+    print("      url.hash = csv")
+    print("      window.location.replace(url)")
+    print("    })")
     print("}</script>")
     print("<table><tr><th>School</th><th>Department</th><th>Major</th>")
     for year in years:
