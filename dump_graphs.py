@@ -110,14 +110,14 @@ def render_plan_urls() -> None:
     print(
         "  params.append('title', titles[`${major}.${college}`].replace('!YEAR!', year))"
     )
-    print("  url.hostname = 'stage-' + url.hostname")
-    print("  url.pathname += '/../plan-graph.html'")
+    print("  url.hostname = 'stage-educationalinnovation.ucsd.edu'")
+    print("  url.pathname = '/_files/plan-graph.html'")
     print(
         "  fetch(`https://raw.githubusercontent.com/SheepTester-forks/ucsd-degree-plans/main/${year}/${major}/${year}_${major}_${college}.csv`)"
     )
     print("    .then(r => r.text())")
     print("    .then(csv => {")
-    print("      url.hash = csv")
+    print("      url.hash = encodeURIComponent(csv)")
     print("      window.location.replace(url)")
     print("    })")
     print("}</script>")
