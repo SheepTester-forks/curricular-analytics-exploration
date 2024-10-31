@@ -194,7 +194,7 @@ def print_major_changes(start: int, end: int, major: str, college: str) -> None:
 
 def diff_all(start: int, end: int) -> None:
     complexities: Dict[Tuple[int, str, str], float] = {}
-    with open("./files/metrics_fa12.csv", newline="") as file:
+    with open("./files/metrics_fa12_py.csv", newline="") as file:
         reader = csv.reader(file)
         next(reader)  # Skip header
         for (

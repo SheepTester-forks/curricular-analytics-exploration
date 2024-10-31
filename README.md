@@ -3,9 +3,86 @@
 > [!NOTE]
 > All TypeScript code in this repo should be run with Deno 1.x.
 
+1. Make sure the following are installed:
+
+   - `make`
+
+     ```shell
+     $ sudo apt install make
+     ```
+
+   - Python 3.12 or newer.
+
+     I recommend setting up a virtual environment using VS Code. For some reason WSL comes with Python 3.12 preinstalled, but not `pip`. Using VS Code to create a virtual environment from `/bin/python3.12` fixes this.
+
+     Then, install the Python dependencies ([`curricularanalytics`](https://pypi.org/project/curricularanalytics/), [`python-dotenv`](https://pypi.org/project/python-dotenv/)):
+
+     ```shell
+     $ pip install -r requirements.txt
+     ```
+
+   - Deno 1.x.
+
+     Many web-based parts of this codebase rely on `deno bundle,` which got deprecated and removed in Deno 2. Oh well. It might be worth migrating away from Deno to Node and [esbuild](https://esbuild.github.io/).
+
+     To install Deno 1, you could probably install Deno 2 then switch to Deno v1.46.3. Or, you can set the `deno_version` environment variable to `v1.46.3`.
+
+     ```shell
+     $ export deno_version=v1.46.3
+     $ sudo apt-get install unzip -y
+     $ curl -fsSL https://deno.land/install.sh | sh
+
+     # After restarting the shell
+     $ deno --version
+     deno 1.46.3 (stable, release, x86_64-unknown-linux-gnu)
+     v8 12.9.202.5-rusty
+     typescript 5.5.2
+     ```
+
+2. Download the required CSV files. The links are probably private, so you will have to request the files. Their format is [detailed below](#required-files).
+
+   - [**`academic_plansFA23.csv`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/aramaya_ucsd_edu/Documents/Microsoft%20Teams%20Chat%20Files/academic_plansFA23.csv?d=w624debab4eb94e2dbc88530f89ed6482&csf=1&web=1&e=GsJREp)
+   - [**`prereqsFA23.csv`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/aramaya_ucsd_edu/Documents/Microsoft%20Teams%20Chat%20Files/prereqsFA23.csv?d=wb3bb920e477640a2966ecdf9bea6f198&csf=1&web=1&e=YhUuOa)
+   - [**`isis_major_code_list.csv`**](https://blink.ucsd.edu/_files/instructors-tab/major-codes/isis_major_code_list.xlsx)
+     - Export the Major Codes sheet ("isis_major_code_list") as a CSV.
+
+3. Run `make`.
+
+   ```shell
+   $ make
+   ```
+
+   You can remove all generated files by running
+
+   ```shell
+   $ make clean
+   ```
+
+4. Enjoy the output. You can see the files that are produced in the `Makefile` under `# Reports`.
+
+5. These need to be done every year once a data dump of the new year's plans and prereqs is available:
+
+   - To update the views on the [EI website](https://educationalinnovation.ucsd.edu/ca-views/), navigate to the [`/_files/` folder for the Educational-Innovation site on Cascade CMS](https://cms.ucsd.edu/entity/open.act?id=bbd5a01eac1a010c51a0f38fa018ce21&type=folder). Copy and paste the contents of [cms-replace-file.js](./cms-replace-file.js) into the DevTools console; this adds a file upload button to each file. Then replace the individual HTML files as needed from [reports/output/](./reports/output/).
+
+     The JS file is because with Cascade CMS only lets you use their HTML text editor to edit the file,
+
+   - To upload the views on Tableau, if I recall correctly I believe it's quite a pain. **TODO**
+
+   - To share automatically flagged issues in the degree plans, open [files/flagged_issues.html](./files/flagged_issues.html) in the browser, then copy and paste it into a Google Doc. Remove false positives as needed.
+
+What's in other repos:
+
+- [CurricularAnalytics.py](https://github.com/SheepTester-forks/CurricularAnalytics.py): This is a rewrite of CurricularAnalytics.jl (hence the unused Julia files in this repo). Julia has a massive startup time that ends up making these scripts take longer to run than in Python.
+
+- [curricular-analytics-graph](https://github.com/SheepTester-forks/curricular-analytics-graph): This produces `plan-graph.html`. I recommend cloning that repo in the same parent folder as this repo (i.e. the repos should be siblings) because the graph repo depends on files in this repo.
+
+- [ucsd-plan-editor](https://github.com/SheepTester-forks/ucsd-plan-editor): This produces `plan-editor.html`.
+
+### Required files
+
 [`parse.py`](parse.py) expects certain files in the `files/` directory. Download them from our shared Google Drive folder.
 
-- [**`academic_plans_fa23.csv`**](https://drive.google.com/file/d/1SMNCi_UD3NoIyUt8TidpPOWha_pOx3il/view),
+- [**`academic_plansFA23.csv`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/aramaya_ucsd_edu/Documents/Microsoft%20Teams%20Chat%20Files/academic_plansFA23.csv?d=w624debab4eb94e2dbc88530f89ed6482&csf=1&web=1&e=GsJREp),
   containing degree plans for every year, major, and college combination since
   fall 2012 created by college advisors painstakingly cross-referencing major
   and college requirements to manually design plans for every major, so there
@@ -13,7 +90,33 @@
   [plans.ucsd.edu](https://plans.ucsd.edu/).
 
   We use this to create degree plans and curriculum for every major to upload to
-  [Curricular Analytics](https://curricularanalytics.org/).
+  [Curricular Analytics](https://curricularanalytics.org/). It is retrieved using this SQL query:
+
+  ```sql
+  -- Hops (Provost DB) - Academic Plans query
+  SELECT
+  p.department AS "Department",
+  p.major_code AS "Major",
+  p.college  AS "College",
+  c.course_name AS "Course",
+  c.units  AS "Units",
+  c.course_type  AS "Course Type",
+  CASE c.ge_major_overlap WHEN 1 THEN 'Y' ELSE 'N' END AS "GE/Major Overlap",
+  p.start_year AS "Start Year",
+  c.year_taken AS "Year Taken",
+  c.quarter_taken AS "Quarter Taken",
+  CASE
+  WHEN c.quarter_taken=1 THEN CONCAT('FA',SUBSTRING(p.start_year+c.year_taken-1,3,2) )
+  WHEN c.quarter_taken=2 THEN CONCAT('WI',SUBSTRING(p.start_year+c.year_taken,3,2) )
+  WHEN c.quarter_taken=3 THEN CONCAT('SP',SUBSTRING(p.start_year+c.year_taken,3,2) )
+  WHEN c.quarter_taken=4 THEN CONCAT('SU',SUBSTRING(p.start_year+c.year_taken,3,2) )
+  ELSE 'ERROR' END AS "Term Taken"
+  FROM college_four_year_plans.college_plans p
+  JOIN college_four_year_plans.college_plan_courses c
+   ON (c.plan_id =p.plan_id )
+   WHERE p.plan_length =4 AND p.start_year >=2012 AND p.college <>'XX'
+   ORDER BY p.start_year ,p.major_code ,p.college,c.year_taken ,c.quarter_taken ,c.display_order
+  ```
 
   If others want to adapt our code for their university, here is sampling of rows to show what we were dealing with.
 
@@ -77,14 +180,37 @@
 
     Many parts of the code currently expect four years, each with three quarters. Summer quarters (the fourth quarter of each year) are merged with the prior spring quarter.
 
-  - `Term Taken` is not used.
+  - `Term Taken` is not used. Its contents can be derived from the other columns.
 
-- [**`prereqs_fa23.csv`**](https://drive.google.com/file/d/19oVI16mmhDIclyj6p3GMlxTMPDRNIcHw/view),
+- [**`prereqsFA23.csv`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/aramaya_ucsd_edu/Documents/Microsoft%20Teams%20Chat%20Files/prereqsFA23.csv?d=wb3bb920e477640a2966ecdf9bea6f198&csf=1&web=1&e=YhUuOa),
   containing every course and their prerequisites for every quarter since fall 2012.
 
   We use this to add prerequisite and corequisite relationships between courses
   in the degree plans for [Curricular
-  Analytics](https://curricularanalytics.org/).
+  Analytics](https://curricularanalytics.org/). It was retrieved using this SQL query:
+
+  ```sql
+  SELECT
+      sc.TRM_TERM_CODE AS "Term Code",
+      sc.TRM_TERM_ID AS "Term ID",
+          sc.CRS_COURSE_ID AS "Course ID",
+          sc.SUB_SUBJECT_CODE AS "Course Subject Code",
+          sc.CRS_COURSE_CODE AS "Course Number",
+          p.PREREQ_SEQ_ID AS  "Prereq Sequence ID",
+          p.PREREQ_COURSE_ID AS "Prereq Course ID",
+          p.PREREQ_SUBJECT_CODE AS "Prereq Subject Code",
+          p.PREREQ_COURSE_CODE AS "Prereq Course Number",
+          p.PREREQ_MIN_GRADE_PRIORITY AS "Prereq Minimum Grade Priority",
+          g.GRADE_CODE  AS "Prereq Minimum Grade",
+          p.PREREQ_CNCRNT_REG_PERMITTED AS "Allow concurrent registration"
+          FROM STUDENT_DB.S_COURSE sc
+          LEFT JOIN STUDENT_DB.S_COURSE_PREREQ p
+          ON (p.CRS_COURSE_ID=sc.CRS_COURSE_ID AND p.TRM_TERM_CODE=sc.TRM_TERM_CODE AND p.CRS_START_TERM =sc.CRS_START_TERM_CODE AND p.CRS_END_TERM=sc.CRS_END_TERM_CODE)
+          LEFT JOIN  STUDENT_DB.S_STU_LEVEL_GRADE g
+          ON (g.ACADEMIC_LEVEL ='UN' AND g.END_TERM_CODE ='' AND g.GRADE_PRIORITY=p.PREREQ_MIN_GRADE_PRIORITY )
+          WHERE sc.TRM_TERM_ID  >= 4550 AND sc.CRS_ACADEMIC_LEVEL IN ('UD','LD')
+          ORDER BY sc.TRM_TERM_ID ASC,sc.CRS_COURSE_ID ASC, p.PREREQ_SEQ_ID, p.PREREQ_COURSE_ID ;
+  ```
 
   Here are some sample rows from the CSV file.
 
@@ -107,17 +233,14 @@
   requirement. One course from each `Prereq Sequence ID` is required to satisfy
   the prerequisites for the course.
 
-  It's unclear what `Allow concurrent registration` really means---only a few
-  courses have it set to `Y`. Some course pairs, such as CSE 12 and 15L, are
-  supposedly corequisites according to the course catalog, but they are not
-  listed as corequisites in the table. The Python program creates a corequisite relationship between two courses with this flag set to `Y`.
+  In the case of UCSD, `Allow concurrent registration` represents how WebReg enforces corequisites, which can differ from the course catalog. For example, while CSE 12 and CSE 15L are said to be corequisites in the course catalog, there is no such relationship in WebReg. Generally speaking, this flag is almost always `N`. The Python program creates a non-strict corequisite relationship between two courses when this flag is set to `Y`.
 
   `Term ID`, `Course ID`, `Prereq Course ID`, `Prereq Minimum Grade Priority`,
   and `Prereq Minimum Grade` aren't used.
 
   `Term Code` is respected in case prerequisites change midway through the plan. They currently are expected to be in UCSD's term code format: `<quarter><year>`, such as `FA22` for Fall 2022.
 
-- [**`isis_major_code_list.csv`**](https://blink.ucsd.edu/_files/instructors-tab/major-codes/isis_major_code_list.xlsx): Save the Major Codes sheet as a CSV.
+- [**`isis_major_code_list.csv`**](https://blink.ucsd.edu/_files/instructors-tab/major-codes/isis_major_code_list.xlsx)
 
   The spreadsheet is a modified version of the publicly available [list of ISIS
   major

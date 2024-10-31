@@ -3,7 +3,7 @@
 /// <reference lib="dom" />
 /// <reference lib="deno.ns" />
 
-import { Metadata } from '../types.ts'
+import type { Metadata } from '../types.ts'
 import { MetadataField } from './MetadataField.tsx'
 
 export const colleges: Record<string, string> = {

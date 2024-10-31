@@ -3,3 +3,4 @@ __pycache__
 # *.txt
 # !course_names*.txt
 *.tmp
+*:Zone.Identifier

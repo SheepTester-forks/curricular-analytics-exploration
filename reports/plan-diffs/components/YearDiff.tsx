@@ -3,7 +3,7 @@
 /// <reference lib="dom" />
 /// <reference lib="deno.ns" />
 
-import { Change, YearDiff } from '../types.ts'
+import type { Change, YearDiff } from '../types.ts'
 import { Change as ChangeComponent } from './Change.tsx'
 import { ChangeItem } from './ChangeItem.tsx'
 

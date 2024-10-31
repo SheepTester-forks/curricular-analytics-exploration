@@ -245,11 +245,7 @@ def major_rows_to_dict(rows: Iterable[List[str]]) -> Dict[str, MajorInfo]:
         _,  # Program Length (in years)
         _,  # College
         cip_code,  # CIP Code
-        _,  # CIP Description
-        _,  # STEM
-        _,  # Self Supporting
-        _,  # Discontinued or Phasing Out
-        _,  # Notes
+        *_,  # et cetera...
     ) in rows:
         majors[isis_code.strip()] = MajorInfo(
             isis_code.strip(),

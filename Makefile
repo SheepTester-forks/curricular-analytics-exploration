@@ -5,8 +5,8 @@ year-start = 2015
 year = 2023
 prereq-term = FA23
 # Make sure to update the file paths in university.py as well
-prereqs = files/prereqs_fa23.csv
-plans = files/academic_plans_fa23.csv
+prereqs = files/prereqsFA23.csv
+plans = files/academic_plansFA23.csv
 majors = files/isis_major_code_list.csv
 
 # Reports
