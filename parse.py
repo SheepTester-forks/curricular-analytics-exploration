@@ -225,7 +225,7 @@ class MajorInfo(NamedTuple):
     # TODO: MajorPlan.department vs MajorInfo.department
     department: str
     cip_code: str
-    award_types: Set[str]
+    award_types: List[str]
 
 
 def major_rows_to_dict(rows: Iterable[List[str]]) -> Dict[str, MajorInfo]:
@@ -252,9 +252,7 @@ def major_rows_to_dict(rows: Iterable[List[str]]) -> Dict[str, MajorInfo]:
             title.strip(),
             department,
             cip_code[0:2] + "." + cip_code[2:],
-            set(award_types.split(" "))
-            if award_types and award_types != "NONE"
-            else set(),
+            award_types.split(" ") if award_types and award_types != "NONE" else [],
         )
     return majors
 

@@ -247,7 +247,7 @@ class MajorOutput:
         # Curricular Analytics' default, BS.
         output.row(
             "Degree Type",
-            list(major_info.award_types)[-1] if major_info.award_types else "BS",
+            major_info.award_types[-1] if major_info.award_types else "BS",
         )
         output.row("System Type", university.term_type)
         output.row("CIP", major_info.cip_code)

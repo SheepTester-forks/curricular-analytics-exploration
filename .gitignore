@@ -4,3 +4,4 @@ __pycache__
 # !course_names*.txt
 *.tmp
 *:Zone.Identifier
+plan_csvs/

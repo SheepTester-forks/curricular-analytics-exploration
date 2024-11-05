@@ -82,7 +82,20 @@ What's in other repos:
 
 - [curricular-analytics-graph](https://github.com/SheepTester-forks/curricular-analytics-graph): This produces `plan-graph.html`. I recommend cloning that repo in the same parent folder as this repo (i.e. the repos should be siblings) because the graph repo depends on files in this repo.
 
-- [ucsd-plan-editor](https://github.com/SheepTester-forks/ucsd-plan-editor): This produces `plan-editor.html`.
+- [ucsd-plan-editor](https://github.com/SheepTester-forks/ucsd-plan-editor): This produces [`plan-editor.html`](https://educationalinnovation.ucsd.edu/_files/plan-editor.html).
+
+- [ucsd-degree-plans](https://github.com/SheepTester-forks/ucsd-degree-plans): This contains the output of dump_graphs.py and is referenced by [`plan-graph-index.html`](https://educationalinnovation.ucsd.edu/_files/plan-graph-index.html).
+
+  ```shell
+  $ rm -rf plan_csvs/ # Ensure empty
+  $ git clone https://github.com/SheepTester-forks/ucsd-degree-plans.git plan_csvs
+  $ rm -r plan_csvs/* plan_csvs/.done # Ensure old files get removed
+  $ make
+  $ cd plan_csvs/
+  $ git add .
+  $ git commit -m "..."
+  $ git push
+  ```
 
 ### Required files
 

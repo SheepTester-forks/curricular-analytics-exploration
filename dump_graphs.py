@@ -12,7 +12,7 @@ from typing import Dict, List, Tuple
 from urllib.parse import urlencode
 from departments import departments, dept_schools
 from output import MajorOutput
-from parse import major_codes, major_plans
+from parse import major_codes, major_plans, prereqs, terms
 from university import university
 
 
@@ -36,6 +36,21 @@ def render_plan_files() -> None:
                         "w",
                     ) as file:
                         file.write(output.output(college))
+
+    os.makedirs(f"./plan_csvs/prereqs/", exist_ok=True)
+    for term in terms():
+        with open(f"./plan_csvs/prereqs/{term}.json", "w") as file:
+            for i, (course_code, reqs) in enumerate(prereqs(term).items()):
+                file.write("{ " if i == 0 else ", ")
+                json.dump(str(course_code), file)
+                file.write(": ")
+                json.dump(
+                    [[repr(alt) for alt in req] for req in reqs],
+                    file,
+                )
+                file.write("\n")
+            file.write("}\n")
+
     with open("./plan_csvs/.done", "w+"):
         pass
 

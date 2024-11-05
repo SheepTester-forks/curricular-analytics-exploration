@@ -3,7 +3,6 @@ python3 dump_plans.py 2022 json
 python3 dump_plans.py 2022 html > reports/output/plan-editor-index.html
 """
 
-
 import json
 import sys
 from typing import Dict, List, Optional
@@ -39,9 +38,7 @@ def dump_plans(year: int) -> None:
                     major_plan.major_code,
                     major_info.name,
                     major_info.cip_code,
-                    list(major_info.award_types)[-1]
-                    if major_info.award_types
-                    else "BS",
+                    major_info.award_types[-1] if major_info.award_types else "BS",
                 ],
                 file,
                 separators=(",", ":"),
@@ -81,9 +78,11 @@ def render_plan_urls(year: int) -> None:
                         "major": major_plan.major_code,
                         "cip": major_info.cip_code,
                         "college": college_code,
-                        "degree_type": list(major_info.award_types)[-1]
-                        if major_info.award_types
-                        else "BS",
+                        "degree_type": (
+                            major_info.award_types[-1]
+                            if major_info.award_types
+                            else "BS"
+                        ),
                         "courses": json.dumps(
                             to_json(major_plan.plan(college_code)),
                             separators=(",", ":"),
