@@ -52,6 +52,12 @@
    $ make
    ```
 
+   If you're working with [protected data](#protected-data) (for the [plan graph](https://github.com/SheepTester-forks/curricular-analytics-graph)), you also need to `make protected`.
+
+   ```shell
+   $ make protected
+   ```
+
    You can remove all generated files by running
 
    ```shell
@@ -263,6 +269,14 @@ What's in other repos:
   - `Department` is a department code used to group majors by departments and schools. The Python programs don't expect a specific format for department codes, but the way majors are grouped for Tableau views is defined in [`departments.py`](./departments.py).
 
   - `Award Type` (BS vs BA) and `CIP Code` (national major codes) are used to populate data fields for Curricular Analytics. That's it.
+
+#### Protected data
+
+- [**`21-22 Enrollment_DFW CJ.xlsx.csv`**](https://docs.google.com/spreadsheets/d/1Lq1-35oZra3pOS94VdrWOPD3gQZgmfCb/): Export as CSV.
+
+- [**`Waitlist by Course for CJ.xlsx.csv`**](https://docs.google.com/spreadsheets/d/1EC9QdtP9vy2nX46XOQyXWiMO7gnYWc6-/): Export as CSV.
+
+- [**`CA_MetricsforMap_FINAL(Metrics).csv`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/eespaldon_ucsd_edu/_layouts/15/Doc.aspx?sourcedoc=%7BD138C288-C477-4FC1-8F27-A275EAD0DCFD%7D&file=CA_MetricsforMap_FINAL.xlsx): Export as CSV.
 
 ### Uploading
 

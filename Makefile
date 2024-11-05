@@ -1,5 +1,6 @@
 all: tableau academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree plan-editor plan-editor-index flagged-issues
 dev: all reports/output/prereqs.js reports/output/courses_by_major.js
+protected: files/protected/summarize_dfw_by_major.json files/protected/summarize_frequency.json
 
 year-start = 2015
 year = 2023
@@ -29,6 +30,7 @@ clean:
 	rm -rf files/prereqs/ files/plans/
 	rm -f files/metrics_fa12_py.csv files/courses_fa12_py.csv files/course_overlap_py.csv files/curricula_index.csv
 	rm -f courses_req_by_majors.json
+	rm -f files/protected/*.json
 
 # make split
 split: files/prereqs/.done files/plans/.done
@@ -188,3 +190,11 @@ units_per_course.json: units_per_course.py
 
 files/flagged_issues.html: flag_issues.py units_per_course.json
 	python3 flag_issues.py $(year) > files/flagged_issues.html
+
+# Protected data
+
+files/protected/summarize_dfw_by_major.json: files/CA_MetricsforMap_FINAL(Metrics).csv
+	deno run -A summarize_metrics.ts './files/CA_MetricsforMap_FINAL(Metrics).csv'
+
+files/protected/summarize_frequency.json: files/21-22\ Enrollment_DFW\ CJ.xlsx.csv files/Waitlist\ by\ Course\ for\ CJ.xlsx.csv
+	python3 summarize_frequency.py './files/21-22 Enrollment_DFW CJ.xlsx.csv' './files/Waitlist by Course for CJ.xlsx.csv' > files/protected/summarize_frequency.json
