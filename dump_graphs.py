@@ -17,10 +17,13 @@ from university import university
 
 
 def render_plan_files() -> None:
-    for year in range(2015, 2050):
+    min_year = 2015
+    max_year = min_year
+    for year in range(min_year, 2050):
         all_plans = major_plans(year)
         if all_plans == {}:
             break
+        max_year = year
         for major_code, major_plan in all_plans.items():
             output = MajorOutput(major_plan)
             os.makedirs(f"./plan_csvs/{year}/{major_code}/", exist_ok=True)
@@ -51,8 +54,18 @@ def render_plan_files() -> None:
                 file.write("\n")
             file.write("}\n")
 
-    with open("./plan_csvs/.done", "w+"):
-        pass
+    with open("./plan_csvs/metadata.json", "w") as file:
+        json.dump(
+            {
+                "min_plan_year": min_year,
+                "max_plan_year": max_year,
+                "min_prereq_term": terms()[0],
+                "max_prereq_term": terms()[-1],
+            },
+            file,
+            indent="\t",
+        )
+        file.write("\n")
 
 
 def render_plan_json() -> None:

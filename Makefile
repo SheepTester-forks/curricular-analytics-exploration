@@ -19,7 +19,7 @@ prereq-timeline: reports/output/prereq-timeline.html
 college-ge-units: reports/output/college-ge-units.html
 prereq-tree: reports/output/prereq-tree.html
 plan-editor: reports/output/plan-editor.html
-plan-editor-index: reports/output/plan-editor-index.html reports/output/plan-graph-index.html plan_csvs/.done
+plan-editor-index: reports/output/plan-editor-index.html reports/output/plan-graph-index.html plan_csvs/metadata.json
 seats: reports/output/seats.html
 flagged-issues: files/flagged_issues.html
 
@@ -151,7 +151,7 @@ reports/output/plan-editor-index.html: reports/plan-editor-index-template.html r
 	cat reports/output/plan-editor-index-fragment.html >> reports/output/plan-editor-index.html
 	echo '</html>' >> reports/output/plan-editor-index.html
 
-plan_csvs/.done: dump_graphs.py files/prereqs/.done files/plans/.done
+plan_csvs/metadata.json: dump_graphs.py files/prereqs/.done files/plans/.done
 	python3 dump_graphs.py files
 
 reports/output/plan-graph-index-fragment.html: dump_graphs.py files/plans/.done

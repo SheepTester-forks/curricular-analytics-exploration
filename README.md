@@ -89,7 +89,7 @@ What's in other repos:
   ```shell
   $ rm -rf plan_csvs/ # Ensure empty
   $ git clone https://github.com/SheepTester-forks/ucsd-degree-plans.git plan_csvs
-  $ rm -r plan_csvs/* plan_csvs/.done # Ensure old files get removed
+  $ rm -r plan_csvs/* plan_csvs/metadata.json # Ensure old files get removed
   $ make
   $ cd plan_csvs/
   $ git add .
