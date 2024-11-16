@@ -134,6 +134,7 @@ def render_plan_urls() -> None:
     print("  params.append('defaults', 'ucsd')")
     print("  params.delete('plan')")
     print("  const [year, major, college] = plan.split('.')")
+    print("  params.append('year', year)")
     print("  params.append('major', major)")
     print(
         "  params.append('title', titles[`${major}.${college}`].replace('!YEAR!', year))"
