@@ -55,6 +55,15 @@ def dump_plans(year: int) -> None:
         file.write("]\n")
 
 
+def escape_html(string: str) -> str:
+    return (
+        string.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace('"', "&quot;")
+    )
+
+
 def render_plan_urls(year: int) -> None:
     all_plans = major_plans(year)
     qs_by_dept: Dict[str, Dict[str, Dict[str, Dict[str, Optional[str]]]]] = {}
@@ -98,13 +107,17 @@ def render_plan_urls(year: int) -> None:
     print("</tr>")
     for school, depts in sorted(qs_by_dept.items(), key=lambda entry: entry[0]):
         major_count = sum(len(majors) for majors in depts.values())
-        print(f'<tr><th scole="col" rowspan="{major_count}">{school}</th>')
+        print(
+            f'<tr><th scole="col" rowspan="{major_count}"><span>{escape_html(school)}</span></th>'
+        )
         for i, (department, majors) in enumerate(
             sorted(depts.items(), key=lambda entry: entry[0])
         ):
             if i > 0:
                 print("<tr>")
-            print(f'<th scole="col" rowspan="{len(majors)}">{department}</th>')
+            print(
+                f'<th scole="col" rowspan="{len(majors)}"><span>{escape_html(department)}</span></th>'
+            )
             for j, (major_code, colleges) in enumerate(
                 sorted(majors.items(), key=lambda entry: entry[0])
             ):
@@ -113,7 +126,7 @@ def render_plan_urls(year: int) -> None:
                 print(f"<td><strong>{major_code}</strong>", end="")
                 major_name = major_codes()[major_code].name
                 if major_name:
-                    print(f": {major_name}")
+                    print(f": {escape_html(major_name)}")
                 print("</td>")
                 for college_code in university.college_codes:
                     if colleges[college_code] is None:
