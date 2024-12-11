@@ -1,3 +1,12 @@
+# Curricular Analytics exploration
+
+This is a long README for a large repo. Here's a list of quick links:
+
+- [Setting up your environment](#setup)
+- [Other related repos](#whats-in-other-repos)
+- [Required data files](#required-files)
+- [What to change for a new school year](#how-to-use-a-data-refresh)
+
 ## Setup
 
 > [!NOTE]
@@ -64,7 +73,7 @@
    $ make clean
    ```
 
-4. Enjoy the output. You can see the files that are produced in the `Makefile` under `# Reports`.
+4. Enjoy the output. `Makefile` has the files that are produced listed under `# Reports`.
 
 5. These need to be done every year once a data dump of the new year's plans and prereqs is available:
 
@@ -76,9 +85,9 @@
 
    - To share automatically flagged issues in the degree plans, open [files/flagged_issues.html](./files/flagged_issues.html) in the browser, then copy and paste it into a Google Doc. Remove false positives as needed.
 
-What's in other repos:
+### What's in other repos
 
-- [CurricularAnalytics.py](https://github.com/SheepTester-forks/CurricularAnalytics.py): This is a rewrite of CurricularAnalytics.jl (hence the unused Julia files in this repo). Julia has a massive startup time that ends up making these scripts take longer to run than in Python.
+- [CurricularAnalytics.py](https://github.com/SheepTester-forks/CurricularAnalytics.py): This is a rewrite of CurricularAnalytics.jl (hence the unused Julia files in this repo). Julia takes such a long time to start up (due to JIT compilation) that it overshadows any resulting performance gains, so these scripts end up running faster in Python.
 
 - [curricular-analytics-graph](https://github.com/SheepTester-forks/curricular-analytics-graph): This produces `plan-graph.html`. I recommend cloning that repo in the same parent folder as this repo (i.e. the repos should be siblings) because the graph repo depends on files in this repo.
 
