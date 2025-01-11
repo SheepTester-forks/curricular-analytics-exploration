@@ -1,6 +1,6 @@
 """
 python3 units_per_course.py json > units_per_course.json
-python3 flag_issues.py 2023 > files/flagged_issues.html
+python3 flag_issues.py 2024 > files/flagged_issues.html
 """
 
 import json
