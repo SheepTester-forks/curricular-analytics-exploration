@@ -1,8 +1,9 @@
 """
-python3 scrape_plans.py > files/plans2023.csv
+python3 scrape_plans.py > files/plans2024.csv
 """
 
 import json
+import sys
 from typing import Any, Dict, Hashable, List, Literal, Optional, TypedDict, Union
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -203,6 +204,7 @@ def plans_to_csv(
     for major in sorted(PlansApi.major_codes()):
         for college in search_controls["colleges"]:
             for plan in PlansApi.load_plans(year, major, college["code"]):
+                print(f"\r{major} {college['code']}".ljust(80), end="", file=sys.stderr)
                 for plan_year in plan["courses"]:
                     for term in (
                         plan_year if isinstance(plan_year, list) else plan_year.values()
@@ -224,10 +226,10 @@ def plans_to_csv(
                                 _display_term(year, course),
                                 str(plan["plan_length"]),
                             )
+    print(file=sys.stderr)
     return writer
 
 
 if __name__ == "__main__":
-    import sys
 
-    plans_to_csv(2023, CsvWriter(len(HEADER), sys.stdout))
+    plans_to_csv(2024, CsvWriter(len(HEADER), sys.stdout))

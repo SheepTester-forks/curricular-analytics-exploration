@@ -3,11 +3,11 @@ dev: all reports/output/prereqs.js reports/output/courses_by_major.js
 protected: files/protected/summarize_dfw_by_major.json files/protected/summarize_frequency.json
 
 year-start = 2015
-year = 2023
-prereq-term = FA23
+year = 2024
+prereq-term = WI25
 # Make sure to update the file paths in university.py as well
-prereqs = files/prereqsFA23.csv
-plans = files/academic_plansFA23.csv
+prereqs = files/prereqs_thruFA25.csv
+plans = files/academic_plans_thruFA24.csv
 majors = files/isis_major_code_list.csv
 
 # Reports

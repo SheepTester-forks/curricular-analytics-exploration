@@ -48,10 +48,9 @@ This is a long README for a large repo. Here's a list of quick links:
      typescript 5.5.2
      ```
 
-2. Download the required CSV files. The links are probably private, so you will have to request the files. Their format is [detailed below](#required-files).
+2. Download the required CSV files to files/. The links are probably private, so you will have to request access or ask for updated data. Their format is [detailed below](#required-files).
 
-   - [**`academic_plansFA23.csv`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/aramaya_ucsd_edu/Documents/Microsoft%20Teams%20Chat%20Files/academic_plansFA23.csv?d=w624debab4eb94e2dbc88530f89ed6482&csf=1&web=1&e=GsJREp)
-   - [**`prereqsFA23.csv`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/aramaya_ucsd_edu/Documents/Microsoft%20Teams%20Chat%20Files/prereqsFA23.csv?d=wb3bb920e477640a2966ecdf9bea6f198&csf=1&web=1&e=YhUuOa)
+   - **`academic_plans_thruFA24.csv`** and **`prereqs_thruFA25.csv`** from the [Archive of Data Dumps](https://ucsdcloud.sharepoint.com/:f:/r/sites/EI/Shared%20Documents/Projects/Curricular%20Analytics/Archive%20of%20Data%20Dumps)
    - [**`isis_major_code_list.csv`**](https://blink.ucsd.edu/_files/instructors-tab/major-codes/isis_major_code_list.xlsx)
      - Export the Major Codes sheet ("isis_major_code_list") as a CSV.
 
@@ -110,7 +109,7 @@ This is a long README for a large repo. Here's a list of quick links:
 
 [`parse.py`](parse.py) expects certain files in the `files/` directory. Download them from our shared Google Drive folder.
 
-- [**`academic_plansFA23.csv`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/aramaya_ucsd_edu/Documents/Microsoft%20Teams%20Chat%20Files/academic_plansFA23.csv?d=w624debab4eb94e2dbc88530f89ed6482&csf=1&web=1&e=GsJREp),
+- [**`academic_plans.csv`**](https://ucsdcloud.sharepoint.com/:f:/r/sites/EI/Shared%20Documents/Projects/Curricular%20Analytics/Archive%20of%20Data%20Dumps),
   containing degree plans for every year, major, and college combination since
   fall 2012 created by college advisors painstakingly cross-referencing major
   and college requirements to manually design plans for every major, so there
@@ -210,7 +209,7 @@ This is a long README for a large repo. Here's a list of quick links:
 
   - `Term Taken` is not used. Its contents can be derived from the other columns.
 
-- [**`prereqsFA23.csv`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/aramaya_ucsd_edu/Documents/Microsoft%20Teams%20Chat%20Files/prereqsFA23.csv?d=wb3bb920e477640a2966ecdf9bea6f198&csf=1&web=1&e=YhUuOa),
+- [**`prereqs.csv`**](https://ucsdcloud.sharepoint.com/:f:/r/sites/EI/Shared%20Documents/Projects/Curricular%20Analytics/Archive%20of%20Data%20Dumps),
   containing every course and their prerequisites for every quarter since fall 2012.
 
   We use this to add prerequisite and corequisite relationships between courses
