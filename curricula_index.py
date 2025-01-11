@@ -15,9 +15,9 @@ urls: Dict[Tuple[int, str], str] = {}
 for year in range(int(start_year), int(end_year) + 1):
     with track_uploaded_curricula(year) as curricula:
         for major_code, curriculum_id in curricula.items():
-            urls[
-                year, major_code
-            ] = f"https://curricularanalytics.org/curriculums/{curriculum_id}"
+            urls[year, major_code] = (
+                f"https://curricularanalytics.org/curricula/{curriculum_id}"
+            )
 
 
 if __name__ == "__main__":

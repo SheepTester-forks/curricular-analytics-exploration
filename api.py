@@ -66,7 +66,7 @@ class CurriculumEntry(NamedTuple):
         Get the ID of the curriculum from its URL in the "Name" column
         (`raw_name`).
         """
-        match = re.match(r'<a href="/curriculums/(\d+)', self.raw_name)
+        match = re.match(r'<a href="/curricula/(\d+)', self.raw_name)
         if match is None:
             raise ValueError(
                 f"The name of the curriculum entry `{self.raw_name}` doesn't seem to be a link."
@@ -107,9 +107,13 @@ class Session:
                 )
             )
         except HTTPError as error:
-            raise RuntimeError(
-                "Curricular Analytics isn't recognizing your `CA_SESSION` environment variable. Could you try getting the session cookie again? See the README for how."
-            ) if error.code == 401 else error
+            raise (
+                RuntimeError(
+                    "Curricular Analytics isn't recognizing your `CA_SESSION` environment variable. Could you try getting the session cookie again? See the README for how."
+                )
+                if error.code == 401
+                else error
+            )
 
     def get_json(self, path: str) -> Any:
         with self.request(path, {"Accept": "application/json"}) as response:
@@ -217,7 +221,7 @@ class Session:
                 "curriculum_json": json.dumps(data),
             }
         self.post_form(
-            "/curriculums",
+            "/curricula",
             {
                 "authenticity_token": self.get_auth_token(),
                 "curriculum[name]": name,
@@ -266,7 +270,7 @@ class Session:
     ) -> List[CurriculumEntry]:
         """
         Get the user's curricula on Curricular Analytics. This is equivalent to the
-        table the user sees at https://curricularanalytics.org/curriculums.
+        table the user sees at https://curricularanalytics.org/curricula.
 
         Used by `upload_major` to get the ID of the most recently created
         curriculum.
@@ -294,14 +298,14 @@ class Session:
                 "search[value]": search,
             }
         )
-        data = self.get_json("/curriculums?" + params)["data"]
+        data = self.get_json("/curricula?" + params)["data"]
         return [
             CurriculumEntry(raw_name, raw_organization, cip_code, year, date_created)
             for raw_name, raw_organization, cip_code, year, date_created, _ in data
         ]
 
     def get_degree_plans(self, curriculum_id: int) -> Dict[str, int]:
-        with self.request(f"/curriculums/{curriculum_id}") as response:
+        with self.request(f"/curricula/{curriculum_id}") as response:
             return {
                 match.group(2): int(match.group(1))
                 for match in re.finditer(
@@ -318,7 +322,7 @@ class Session:
 
     def edit_curriculum(self, curriculum_id: int, curriculum: Curriculum) -> None:
         with self.request(
-            f"/curriculums/viz_update/{curriculum_id}",
+            f"/curricula/viz_update/{curriculum_id}",
             {"Content-Type": "application/json", "X-CSRF-Token": self.get_auth_token()},
             json.dumps(VisUpdateCurriculum(curriculum=curriculum)).encode("utf-8"),
             "PATCH",
@@ -348,7 +352,7 @@ class Session:
             form["curriculum[catalog_year]"] = str(year)
         if public is not None:
             form["curriculum[publicly_visible]"] = str(int(public))
-        self.post_form(f"/curriculums/{curriculum_id}", form)
+        self.post_form(f"/curricula/{curriculum_id}", form)
 
     def edit_degree_plan(self, plan_id: int, curriculum: Curriculum) -> None:
         with self.request(
@@ -365,7 +369,7 @@ class Session:
 
     def destroy_curriculum(self, curriculum_id: int) -> None:
         self.post_form(
-            f"/curriculums/{curriculum_id}",
+            f"/curricula/{curriculum_id}",
             {
                 "authenticity_token": self.get_auth_token(),
                 "_method": "delete",

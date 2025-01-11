@@ -77,7 +77,7 @@ class MajorUploader(Session):
         curriculum_id = self.get_curricula(4, direction="desc")[0].curriculum_id()
         if log:
             print(
-                f"[{major_code}] Curriculum URL: https://curricularanalytics.org/curriculums/{curriculum_id}"
+                f"[{major_code}] Curriculum URL: https://curricularanalytics.org/curricula/{curriculum_id}"
             )
         for college_code, college_name in university.college_names.items():
             # Seventh's 2018 plans are messy, so we've been asked to ignore them
@@ -118,7 +118,7 @@ class MajorUploader(Session):
         curriculum_id = self.get_curricula(4, direction="desc")[0].curriculum_id()
         if log:
             print(
-                f"[{major_code}] Curriculum URL: https://curricularanalytics.org/curriculums/{curriculum_id}"
+                f"[{major_code}] Curriculum URL: https://curricularanalytics.org/curricula/{curriculum_id}"
             )
         for college_code, college_name in university.college_names.items():
             if college_code not in output.plans.colleges:
@@ -193,7 +193,7 @@ def track_uploaded_curricula(year: int) -> Generator[Uploaded, None, None]:
     Curricular Analytics do not have an entry in the dictionary. At the end of
     the `with` block, changes to `curricula` are saved back in the YAML file.
     """
-    URL_BASE = "https://curricularanalytics.org/curriculums/"
+    URL_BASE = "https://curricularanalytics.org/curricula/"
     curricula: Uploaded = {}
     try:
         with open(f"./files/uploaded{year}.yml") as file:
@@ -201,7 +201,9 @@ def track_uploaded_curricula(year: int) -> Generator[Uploaded, None, None]:
                 major_code, curriculum_id = line.split(":", maxsplit=1)
                 curriculum_id = curriculum_id.strip()
                 if curriculum_id.startswith(URL_BASE):
-                    curricula[major_code] = int(curriculum_id[len(URL_BASE) :])
+                    curricula[major_code] = int(
+                        curriculum_id.replace(URL_BASE, "").replace("/graph", "")
+                    )
     except FileNotFoundError:
         pass
     original = {**curricula}
