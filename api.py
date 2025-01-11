@@ -305,7 +305,7 @@ class Session:
         ]
 
     def get_degree_plans(self, curriculum_id: int) -> Dict[str, int]:
-        with self.request(f"/curricula/{curriculum_id}") as response:
+        with self.request(f"/curricula/{curriculum_id}/graph") as response:
             return {
                 match.group(2): int(match.group(1))
                 for match in re.finditer(
@@ -352,7 +352,7 @@ class Session:
             form["curriculum[catalog_year]"] = str(year)
         if public is not None:
             form["curriculum[publicly_visible]"] = str(int(public))
-        self.post_form(f"/curricula/{curriculum_id}", form)
+        self.post_form(f"/curricula/{curriculum_id}/graph", form)
 
     def edit_degree_plan(self, plan_id: int, curriculum: Curriculum) -> None:
         with self.request(
@@ -369,7 +369,7 @@ class Session:
 
     def destroy_curriculum(self, curriculum_id: int) -> None:
         self.post_form(
-            f"/curricula/{curriculum_id}",
+            f"/curricula/{curriculum_id}/graph",
             {
                 "authenticity_token": self.get_auth_token(),
                 "_method": "delete",

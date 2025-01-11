@@ -77,7 +77,7 @@ class MajorUploader(Session):
         curriculum_id = self.get_curricula(4, direction="desc")[0].curriculum_id()
         if log:
             print(
-                f"[{major_code}] Curriculum URL: https://curricularanalytics.org/curricula/{curriculum_id}"
+                f"[{major_code}] Curriculum URL: https://curricularanalytics.org/curricula/{curriculum_id}/graph"
             )
         for college_code, college_name in university.college_names.items():
             # Seventh's 2018 plans are messy, so we've been asked to ignore them
@@ -118,7 +118,7 @@ class MajorUploader(Session):
         curriculum_id = self.get_curricula(4, direction="desc")[0].curriculum_id()
         if log:
             print(
-                f"[{major_code}] Curriculum URL: https://curricularanalytics.org/curricula/{curriculum_id}"
+                f"[{major_code}] Curriculum URL: https://curricularanalytics.org/curricula/{curriculum_id}/graph"
             )
         for college_code, college_name in university.college_names.items():
             if college_code not in output.plans.colleges:
@@ -217,7 +217,7 @@ def track_uploaded_curricula(year: int) -> Generator[Uploaded, None, None]:
                     if curriculum_id is None:
                         file.write(f"{major_code}:\n")
                     else:
-                        file.write(f"{major_code}: {URL_BASE}{curriculum_id}\n")
+                        file.write(f"{major_code}: {URL_BASE}{curriculum_id}/graph\n")
 
 
 if __name__ == "__main__":
