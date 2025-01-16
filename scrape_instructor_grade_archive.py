@@ -5,6 +5,7 @@ Scrapes instructor grades from https://asmain.ucsd.edu/home/InstructorGradeArchi
 """
 
 import csv
+from html import unescape
 from urllib.request import Request, urlopen
 
 SCRAPE_URL = "https://asmain.ucsd.edu/home/InstructorGradeArchive"
@@ -66,7 +67,7 @@ while True:
             raise Exception(f"Unclosed </tr> after index {next_td}")
         td_index = end_td
 
-        row.append(html[next_td + len("<td>") : end_td].strip())
+        row.append(unescape(html[next_td + len("<td>") : end_td]).strip())
 
     if row:
         writer.writerow(row)
