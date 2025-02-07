@@ -64,15 +64,15 @@ def main():
             d,
             f,
             w,
-            _p,
-            _np,
+            p,
+            np,
         ) in reader:
             course_code = subject + number
             term = quarter + year
             as_courses_count[course_code, term] += 1
             if as_courses_count[course_code, term] == 1:
-                abc_percent = as_parse(a) + as_parse(b) + as_parse(c)
-                dfw_percent = as_parse(d) + as_parse(f) + as_parse(w)
+                abc_percent = as_parse(a) + as_parse(b) + as_parse(c) + as_parse(p)
+                dfw_percent = as_parse(d) + as_parse(f) + as_parse(w) + as_parse(np)
                 if abc_percent + dfw_percent == 0:
                     as_courses[course_code, term] = 0
                     continue
@@ -83,13 +83,18 @@ def main():
                 del as_courses[course_code, term]
 
     intersection = set(courses.keys()) & set(as_courses.keys())
+    results: list[tuple[str, str, float, float, float]] = []
     for key in intersection:
         our_dfw = courses[key]
         as_dfw = as_courses[key]
         if abs(our_dfw - as_dfw) > 0.005:
-            print(
-                f"difference for {key}. OURS: {our_dfw:.1%}, THEIRS: {as_dfw:.1%}. diff: {abs(our_dfw - as_dfw):.4%}"
-            )
+            results.append((*key, our_dfw, as_dfw, abs(our_dfw - as_dfw)))
+    results.sort(key=lambda t: t[4])
+    for course_code, term, our_dfw, as_dfw, diff in results:
+        print(
+            f"difference for {course_code},{term}. OURS: {our_dfw:.1%}, THEIRS: {as_dfw:.1%}. diff: {diff:.4%}"
+        )
+    print(f"{len(results) / len(intersection):.0%} difference")
 
 
 if __name__ == "__main__":
