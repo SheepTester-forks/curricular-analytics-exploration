@@ -6,8 +6,8 @@ year-start = 2015
 year = 2024
 prereq-term = WI25
 # Make sure to update the file paths in university.py as well
-prereqs = files/prereqs_thruFA25.csv
-plans = files/academic_plans_thruFA24.csv
+prereqs = files/2024_prereqs_thruFA25.csv
+plans = files/2024_academic_plans_thruFA24.csv
 majors = files/isis_major_code_list.csv
 
 # Reports
@@ -193,8 +193,8 @@ files/flagged_issues.html: flag_issues.py units_per_course.json
 
 # Protected data
 
-files/protected/summarize_dfw_by_major.json: files/CA_MetricsforMap_FINAL(Metrics).csv
+files/protected/summarize_dfw_by_major.json: summarize_metrics.ts files/CA_MetricsforMap_FINAL(Metrics).csv
 	deno run -A summarize_metrics.ts './files/CA_MetricsforMap_FINAL(Metrics).csv'
 
-files/protected/summarize_frequency.json: files/21-22\ Enrollment_DFW\ CJ.xlsx.csv files/Waitlist\ by\ Course\ for\ CJ.xlsx.csv
+files/protected/summarize_frequency.json: summarize_frequency.py files/21-22\ Enrollment_DFW\ CJ.xlsx.csv files/Waitlist\ by\ Course\ for\ CJ.xlsx.csv
 	python3 summarize_frequency.py './files/21-22 Enrollment_DFW CJ.xlsx.csv' './files/Waitlist by Course for CJ.xlsx.csv' > files/protected/summarize_frequency.json

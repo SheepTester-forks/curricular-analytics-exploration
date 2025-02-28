@@ -1,101 +1,102 @@
 // deno run -A summarize_metrics.ts './files/CA_MetricsforMap_FINAL(Metrics).csv'
 // -> files/protected/summarize_dfw.json
 //    files/protected/summarize_dfw_by_major.json
+//    files/protected/summarize_equity_by_major.json
 //    files/protected/summarize_waitlist.json
 
-import { parse } from 'https://deno.land/std@0.181.0/csv/parse.ts'
+import { parse } from "https://deno.land/std@0.181.0/csv/parse.ts";
 
-const table = parse(await Deno.readTextFile(Deno.args[0])).slice(1)
+const table = parse(await Deno.readTextFile(Deno.args[0])).slice(1);
 
 const majorByDepartment = Object.groupBy(
-  parse(await Deno.readTextFile('files/isis_major_code_list.csv'), {
-    skipFirstRow: true
-  }).map(({ 'ISIS Major Code': isMajorCode, Department: department }) => ({
+  parse(await Deno.readTextFile("files/isis_major_code_list.csv"), {
+    skipFirstRow: true,
+  }).map(({ "ISIS Major Code": isMajorCode, Department: department }) => ({
     majorCode:
-      typeof isMajorCode === 'string'
+      typeof isMajorCode === "string"
         ? isMajorCode
-        : expect('ISIS Major Code should be string'),
+        : expect("ISIS Major Code should be string"),
     department:
-      typeof department === 'string'
+      typeof department === "string"
         ? department
-        : expect('Department should be string')
+        : expect("Department should be string"),
   })),
   ({ department }) => department
-)
+);
 
 const majorSubjByDeptEntries = Object.entries(majorByDepartment).map(
   ([dept, majors]): [string, string[]] => [
     dept,
-    Array.from(new Set(majors?.map(major => major.majorCode.slice(0, 2))))
+    Array.from(new Set(majors?.map((major) => major.majorCode.slice(0, 2)))),
   ]
-)
-const majorSubjByDept = Object.fromEntries(majorSubjByDeptEntries)
+);
+const majorSubjByDept = Object.fromEntries(majorSubjByDeptEntries);
 for (const [dept, majorCodes] of majorSubjByDeptEntries) {
   for (const [dept2, majorCodes2] of majorSubjByDeptEntries) {
     if (dept === dept2) {
-      continue
+      continue;
     }
-    const dupe = majorCodes.find(code => majorCodes2.includes(code))
+    const dupe = majorCodes.find((code) => majorCodes2.includes(code));
     if (dupe) {
-      console.warn('dept', dept, 'major', dupe, 'also in dept', dept2)
+      console.warn("dept", dept, "major", dupe, "also in dept", dept2);
     }
   }
 }
 
-function expect (message: string): never {
-  throw new TypeError(message)
+function expect(message: string): never {
+  throw new TypeError(message);
 }
 
-function check<T> (value: T, check: (value: T) => string | null): T {
-  const message = check(value)
+function check<T>(value: T, check: (value: T) => string | null): T {
+  const message = check(value);
   if (message !== null) {
-    throw new TypeError(message)
+    throw new TypeError(message);
   }
-  return value
+  return value;
 }
 
 type Row = {
   // Course ID
   /** No space, e.g. `AIP197DC` */
-  courseCode: string
+  courseCode: string;
   // Dept Cd
   /** Seems to represent the major of the student. Can be `No major` */
-  departmentCode: string
+  departmentCode: string;
   disproportionate: {
     // Major Disproportionate Impact
-    major: boolean
+    major: boolean;
     // URM Disproportionate Impact
-    urm: boolean
+    urm: boolean;
     // First Gen Disproportionate Impact
-    firstGen: boolean
+    firstGen: boolean;
     // Gender Disproportionate Impact
-    gender: boolean
-  }
+    gender: boolean;
+  };
   // N
-  studentCount: number
+  studentCount: number;
   // N Qtrs w/Enrollment
   /**
    * Number of quarters the course was offered / there was data for. Often seems
    * to be around 8.
    */
-  quarterCount: number
+  quarterCount: number;
   // Count of DFW Grades
-  dfwCount: number
+  dfwCount: number;
   // % DFW
   /** Between 0 and 1 */
-  dfwPercent: number
+  dfwPercent: number;
   // Avg. End Waitlist Count/Qtr
   /** At end of quarter */
-  averageWaitlist: number
+  averageWaitlist: number;
   // Avg. N Students Affected/Offering
   /** Per offering of the course */
-  averageStudentsAffected: number
+  averageStudentsAffected: number;
 
   // Ignored:
   // N Courses Blocked
   // Max. Complexity
   // Impact Index
-}
+};
 
 const rows = table.map(
   ([
@@ -110,67 +111,67 @@ const rows = table.map(
     dfwCount,
     dfwPercent,
     averageWaitlist,
-    averageStudentsAffected
+    averageStudentsAffected,
   ]): Row => ({
     courseCode,
     departmentCode,
     disproportionate: {
       major:
-        impactMajor === 'Y'
+        impactMajor === "Y"
           ? true
-          : impactMajor === ''
+          : impactMajor === ""
           ? false
-          : expect('expected impactMajor to be either Y or empty'),
+          : expect("expected impactMajor to be either Y or empty"),
       urm:
-        impactUrm === 'Y'
+        impactUrm === "Y"
           ? true
-          : impactUrm === ''
+          : impactUrm === ""
           ? false
-          : expect('expected impactUrm to be either Y or empty'),
+          : expect("expected impactUrm to be either Y or empty"),
       firstGen:
-        impactFirstGen === 'Y'
+        impactFirstGen === "Y"
           ? true
-          : impactFirstGen === ''
+          : impactFirstGen === ""
           ? false
-          : expect('expected impactFirstGen to be either Y or empty'),
+          : expect("expected impactFirstGen to be either Y or empty"),
       gender:
-        impactGender === 'Y'
+        impactGender === "Y"
           ? true
-          : impactGender === ''
+          : impactGender === ""
           ? false
-          : expect('expected impactGender to be either Y or empty')
+          : expect("expected impactGender to be either Y or empty"),
     },
     studentCount: +studentCount,
     quarterCount: +quarterCount,
     dfwCount: +dfwCount,
-    dfwPercent: +dfwPercent.replace('%', '') / 100,
+    dfwPercent: +dfwPercent.replace("%", "") / 100,
     averageWaitlist: +averageWaitlist,
-    averageStudentsAffected: +averageStudentsAffected
+    averageStudentsAffected: +averageStudentsAffected,
   })
-)
+);
 
 // console.log(rows)
 
-const byCourse = Map.groupBy(rows, ({ courseCode }) => courseCode)
+const byCourse = Map.groupBy(rows, ({ courseCode }) => courseCode);
 
 Deno.writeTextFile(
-  'files/protected/summarize_dfw.json',
+  "files/protected/summarize_dfw.json",
   JSON.stringify(
     Object.fromEntries(
       Array.from(byCourse, ([courseCode, rows]) => [
         courseCode,
         rows.reduce((cum, curr) => cum + curr.dfwCount, 0) /
-          rows.reduce((cum, curr) => cum + curr.studentCount, 0)
+          rows.reduce((cum, curr) => cum + curr.studentCount, 0),
       ])
     ),
     null,
     2
-  ) + '\n'
-)
-console.log('wrote files/protected/summarize_dfw.json')
+  ) + "\n"
+);
+console.log("wrote files/protected/summarize_dfw.json");
 
 Deno.writeTextFile(
-  'files/protected/summarize_dfw_by_major.json',
+  "files/protected/summarize_dfw_by_major.json",
   JSON.stringify(
     Object.fromEntries(
       Array.from(byCourse, ([courseCode, rows]) => [
@@ -179,52 +180,109 @@ Deno.writeTextFile(
           ...Object.fromEntries(
             rows.flatMap(
               ({ departmentCode, dfwCount, studentCount, dfwPercent }) =>
-                majorSubjByDept[departmentCode]?.map(majorCode => [
+                majorSubjByDept[departmentCode]?.map((majorCode) => [
                   majorCode,
-                  check(dfwCount / studentCount, percent =>
+                  check(dfwCount / studentCount, (percent) =>
                     Math.round(percent * 100) / 100 === dfwPercent
                       ? null
                       : `${courseCode} ${departmentCode}: ${
                           dfwCount / studentCount
                         } =/= ${dfwPercent}`
-                  )
+                  ),
                 ]) ?? []
             )
           ),
           allMajors:
             rows.reduce((cum, curr) => cum + curr.dfwCount, 0) /
-            rows.reduce((cum, curr) => cum + curr.studentCount, 0)
-        }
+            rows.reduce((cum, curr) => cum + curr.studentCount, 0),
+        },
       ])
     ),
     null,
     2
-  ) + '\n'
-)
-console.log('wrote files/protected/summarize_dfw_by_major.json')
+  ) + "\n"
+);
+console.log("wrote files/protected/summarize_dfw_by_major.json");
+
+function displayDisproportionate({
+  firstGen,
+  gender,
+  major,
+  urm,
+}: Row["disproportionate"]): string {
+  const strings: string[] = [];
+  if (firstGen) {
+    strings.push("firstGen");
+  }
+  if (gender) {
+    strings.push("gender");
+  }
+  if (major) {
+    strings.push("major");
+  }
+  if (urm) {
+    strings.push("urm");
+  }
+  return strings.join(" ");
+}
+Deno.writeTextFile(
+  "files/protected/summarize_equity_by_major.json",
+  JSON.stringify(
+    Object.fromEntries(
+      Array.from(byCourse, ([courseCode, rows]) => [
+        courseCode,
+        {
+          ...Object.fromEntries(
+            rows.flatMap(
+              ({ departmentCode, disproportionate }) =>
+                majorSubjByDept[departmentCode]?.map((majorCode) => [
+                  majorCode,
+                  displayDisproportionate(disproportionate),
+                ]) ?? []
+            )
+          ),
+          allMajors: displayDisproportionate(
+            rows.reduce<Row["disproportionate"]>(
+              (cum, curr) => ({
+                firstGen: cum.firstGen || curr.disproportionate.firstGen,
+                gender: cum.gender || curr.disproportionate.gender,
+                major: cum.major || curr.disproportionate.major,
+                urm: cum.urm || curr.disproportionate.urm,
+              }),
+              { firstGen: false, gender: false, major: false, urm: false }
+            )
+          ),
+        },
+      ])
+    ),
+    null,
+    2
+  ) + "\n"
+);
+console.log("wrote files/protected/summarize_equity_by_major.json");
 
 Deno.writeTextFile(
-  'files/protected/summarize_waitlist.json',
+  "files/protected/summarize_waitlist.json",
   JSON.stringify(
     Object.fromEntries(
       Array.from(byCourse, ([courseCode, rows]) => [
         courseCode,
         check(
           rows.map(({ averageWaitlist }) => averageWaitlist),
-          counts =>
-            counts.every(count => count === counts[0])
+          (counts) =>
+            counts.every((count) => count === counts[0])
               ? null
               : `waitlist counts differ ${courseCode}`
-        )[0]
+        )[0],
       ])
     ),
     null,
     2
-  ) + '\n'
-)
-console.log('wrote files/protected/summarize_waitlist.json')
+  ) + "\n"
+);
+console.log("wrote files/protected/summarize_waitlist.json");
 
 console.log(
-  'all departments',
+  "all departments",
   Array.from(new Set(rows.map(({ departmentCode }) => departmentCode))).sort()
-)
+);
