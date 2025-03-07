@@ -1,10 +1,16 @@
 // Run in the CMS folder view to replace HTML reports
 
 async function writeFile (fileId, contents, message) {
+    const editForm = await fetch(`/entity/edit.act?id=${fileId}&type=file`).then(r => r.text())
   const submittedFormIdentifier = (
-    await fetch(`/entity/edit.act?id=${fileId}&type=file`).then(r => r.text())
+    editForm
   ).match(
-    /<input type="hidden" name="submittedFormIdentifier" value="([0-9a-z]+)"\/>/
+    /<input type="hidden" name="submittedFormIdentifier" id="submittedFormIdentifier" value="([0-9a-z]+)"\/>/
+  )[1]
+    const metadataSetId = (
+    editForm
+  ).match(
+    /<input type="hidden" name="metadataSetId" value="([0-9a-z]+)" \/>/
   )[1]
 
   let formData = new FormData()
@@ -14,15 +20,17 @@ async function writeFile (fileId, contents, message) {
   formData.set('shouldBeIndexed', 'on')
   formData.set('shouldBePublished', 'on')
   formData.set('customLinkRewriting', 'ABSOLUTE')
+  formData.set('metadataSetId', metadataSetId)
+  formData.set('oldMetadataSetId', metadataSetId)
 
-  await fetch('/entity/submitfile.act?saveAs=draft', {
+  const { forward } = await fetch('/entity/submitfile.act?saveAs=draft&backgroundSave=false', {
     body: formData,
     method: 'POST'
-  }).then(r => !r.ok && r.text().then(console.warn))
+  }).then(r => r.ok ? r.json() : r.text().then(console.warn))
 
   const submitId = (
-    await fetch(`/entity/open.act?type=file&id=${fileId}`).then(r => r.text())
-  ).match(/<input type="hidden" name="id" value="([0-9a-z]+)"\/>/)[1]
+    await fetch(forward).then(r => r.text())
+  ).match(/<input type="hidden" name="id" id="id" value="([0-9a-z]+)"\/>/)[1]
 
   formData = new FormData()
   formData.set('type', 'file')
