@@ -1,13 +1,13 @@
 # Curricular Analytics exploration
 
+<p>
 <img src="docs/educationalinnovation.ucsd.edu__files_prereq-tree.html.png" alt="Tree of Blocked Courses" width="400" />
 <img src="docs/educationalinnovation.ucsd.edu__files_plan-editor.html_year=2024&department=CSE&major_name=Computer+Engineering&major=CS25&cip=14.0901&college=RE&degree_type=BS&courses=.png" alt="Plan editor" width="400" />
-<img src="docs/educationalinnovation.ucsd.edu__files_prereq-diffs.html.png" alt="Prerequisites over time by course" width="200" />
-
-<img src="docs/educationalinnovation.ucsd.edu__files_prereq-timeline.html.png" alt="Prerequisite changes by term
-" width="200" />
 <img src="docs/educationalinnovation.ucsd.edu__files_academic-plan-diffs.html.png" alt="Changes to Academic Plans over Time" width="400" />
 <img src="docs/educationalinnovation.ucsd.edu__files_college-ge-units.html.png" alt="Additional Units from College-Specific General Education Requirements" width="400" />
+<img src="docs/educationalinnovation.ucsd.edu__files_prereq-diffs.html.png" alt="Prerequisites over time by course" width="200" /><img src="docs/educationalinnovation.ucsd.edu__files_prereq-timeline.html.png" alt="Prerequisite changes by term
+" width="200" />
+</p>
 
 This is a long README for a large repo. Here's a list of quick links:
 
