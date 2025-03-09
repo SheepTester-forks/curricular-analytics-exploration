@@ -24,7 +24,7 @@ export function Diff ({ name, diff, link }: DiffProps) {
         </em>
       </p>
       {diff.changes.map(change => (
-        <YearDiff {...change} />
+        <YearDiff {...change} key={change.year} />
       ))}
     </div>
   )

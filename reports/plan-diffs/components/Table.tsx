@@ -51,84 +51,89 @@ export function Table ({
       }
     }
   }
+
+  const rows = Object.entries(diffs)
+    .sort(byKeyLocale)
+    .flatMap(([school, departments]) =>
+      Object.entries(departments)
+        .sort(byKeyLocale)
+        .flatMap(([department, majors], j) =>
+          Object.entries(majors)
+            .sort(byKeyLocale)
+            .flatMap(([major, colleges], k) => {
+              // https://stackoverflow.com/a/36665251
+              const [code, ...name] = major.split(' ')
+              return (
+                <tr key={[school, department, major].join('\n')}>
+                  {j === 0 && k === 0 && (
+                    <th
+                      scope='col'
+                      rowSpan={Object.values(departments)
+                        .map(majors => Object.keys(majors).length)
+                        .reduce((a, b) => a + b, 0)}
+                    >
+                      {school}
+                    </th>
+                  )}
+                  {k === 0 && (
+                    <th scope='col' rowSpan={Object.keys(majors).length}>
+                      {department}
+                    </th>
+                  )}
+                  <td>
+                    <abbr title={name.join(' ') || undefined}>{code}</abbr>
+                  </td>
+                  {collegeNames.map(college => (
+                    <td
+                      style={{
+                        backgroundColor:
+                          college in colleges
+                            ? `rgba(0, 0, 255, ${
+                              getMetric[metric](colleges[college]) / max
+                            })`
+                            : ''
+                      }}
+                      key={college}
+                    >
+                      {college in colleges && (
+                        <button
+                          disabled={selected === `${major} / ${college}`}
+                          onClick={() =>
+                            onSelect({
+                              name: `${major} / ${college}`,
+                              diff: colleges[college],
+                              link:
+                                '?' + new URLSearchParams({ major, college })
+                            })
+                          }
+                        >
+                          View
+                        </button>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              )
+            })
+        )
+    )
+
   return (
     <>
       <table>
-        <tr>
-          <th scope='row'>School</th>
-          <th scope='row'>Department</th>
-          <th scope='row'>Major</th>
-          {collegeNames.map(name => (
-            <th scope='row'>{name}</th>
-          ))}
-        </tr>
-        {Object.entries(diffs)
-          .sort(byKeyLocale)
-          .flatMap(([school, departments]) =>
-            Object.entries(departments)
-              .sort(byKeyLocale)
-              .flatMap(([department, majors], j) =>
-                Object.entries(majors)
-                  .sort(byKeyLocale)
-                  .flatMap(([major, colleges], k) => {
-                    // https://stackoverflow.com/a/36665251
-                    const [code, ...name] = major.split(' ')
-                    return (
-                      <tr>
-                        {j === 0 && k === 0 && (
-                          <th
-                            scope='col'
-                            rowSpan={Object.values(departments)
-                              .map(majors => Object.keys(majors).length)
-                              .reduce((a, b) => a + b, 0)}
-                          >
-                            {school}
-                          </th>
-                        )}
-                        {k === 0 && (
-                          <th scope='col' rowSpan={Object.keys(majors).length}>
-                            {department}
-                          </th>
-                        )}
-                        <td>
-                          <abbr title={name.join(' ') || undefined}>
-                            {code}
-                          </abbr>
-                        </td>
-                        {collegeNames.map(college => (
-                          <td
-                            style={{
-                              backgroundColor:
-                                college in colleges
-                                  ? `rgba(0, 0, 255, ${
-                                    getMetric[metric](colleges[college]) / max
-                                  })`
-                                  : ''
-                            }}
-                          >
-                            {college in colleges && (
-                              <button
-                                disabled={selected === `${major} / ${college}`}
-                                onClick={() =>
-                                  onSelect({
-                                    name: `${major} / ${college}`,
-                                    diff: colleges[college],
-                                    link:
-                                      '?' +
-                                      new URLSearchParams({ major, college })
-                                  })
-                                }
-                              >
-                                View
-                              </button>
-                            )}
-                          </td>
-                        ))}
-                      </tr>
-                    )
-                  })
-              )
-          )}
+        <thead>
+          <tr>
+            <th scope='row'>School</th>
+            <th scope='row'>Department</th>
+            <th scope='row'>Major</th>
+            {collegeNames.map(name => (
+              <th scope='row' key={name}>
+                {name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
       </table>
       <p className='select-metric'>
         Color by{' '}

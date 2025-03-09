@@ -44,8 +44,8 @@ export function YearDiff ({ year, url, units, complexity, changes }: YearDiff) {
       )}
       {majorChanges.length > 0 && (
         <ul className='changes'>
-          {majorChanges.map(change => (
-            <ChangeItem change={change} />
+          {majorChanges.map((change, i) => (
+            <ChangeItem change={change} key={i} />
           ))}
         </ul>
       )}
@@ -53,8 +53,8 @@ export function YearDiff ({ year, url, units, complexity, changes }: YearDiff) {
         <details>
           <summary>View smaller changes</summary>
           <ul className='changes'>
-            {minorChanges.map(change => (
-              <ChangeItem change={change} />
+            {minorChanges.map((change, i) => (
+              <ChangeItem change={change} key={i} />
             ))}
           </ul>
         </details>

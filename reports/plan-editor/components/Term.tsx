@@ -1,4 +1,12 @@
-import { Fragment, PointerEvent, useContext, useMemo, useRef } from 'react'
+import {
+  Fragment,
+  PointerEvent,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { CourseCode, Prereqs } from '../../util/Prereqs'
 import { DragContext } from '../drag-drop'
 import { Course, TermPlan } from '../types'
@@ -37,7 +45,8 @@ export function Term ({
 }: TermProps) {
   const dragState = useContext(DragContext)
   const element = useRef<HTMLElement>(null)
-  const placeholderIndex = useMemo(() => {
+  const [placeholderIndex, setPlaceholderIndex] = useState<number | null>(null)
+  useEffect(() => {
     let index: number | null = null
     if (element.current && dragState) {
       const rect = element.current.getBoundingClientRect()
@@ -57,7 +66,7 @@ export function Term ({
       }
     }
     onDropLocation?.(index)
-    return index
+    setPlaceholderIndex(index)
   }, [element.current, dragState?.pointerX, dragState?.pointerY])
   const newCourseId = useMemo(() => Math.random(), [plan.length])
 

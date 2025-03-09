@@ -69,7 +69,7 @@ export function CourseAdder ({
             autoFocus
             value={query}
             ref={inputRef}
-            onInput={e => {
+            onChange={e => {
               setQuery(e.currentTarget.value)
             }}
             onKeyDown={e => {
