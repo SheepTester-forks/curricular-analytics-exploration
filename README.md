@@ -10,7 +10,7 @@ This is a long README for a large repo. Here's a list of quick links:
 ## Setup
 
 > [!NOTE]
-> All TypeScript code in this repo should be run with Deno 1.x.
+> I recommend Windows users use WSL. While I am a Windows user myself, I haven't tested anything outside of WSL.
 
 1. Make sure the following are installed:
 
@@ -30,23 +30,9 @@ This is a long README for a large repo. Here's a list of quick links:
      $ pip install -r requirements.txt
      ```
 
-   - Deno 1.x.
+   - Node 22 or newer.
 
-     Many web-based parts of this codebase rely on `deno bundle,` which got deprecated and removed in Deno 2. Oh well. It might be worth migrating away from Deno to Node and [esbuild](https://esbuild.github.io/).
-
-     To install Deno 1, you could probably install Deno 2 then switch to Deno v1.46.3. Or, you can set the `deno_version` environment variable to `v1.46.3`.
-
-     ```shell
-     $ export deno_version=v1.46.3
-     $ sudo apt-get install unzip -y
-     $ curl -fsSL https://deno.land/install.sh | sh
-
-     # After restarting the shell
-     $ deno --version
-     deno 1.46.3 (stable, release, x86_64-unknown-linux-gnu)
-     v8 12.9.202.5-rusty
-     typescript 5.5.2
-     ```
+     I recommend using [nvm](https://github.com/nvm-sh/nvm) to install Node.
 
 2. Download the required CSV files to files/. The links are probably private, so you will have to request access or ask for updated data. Their format is [detailed below](#required-files).
 
@@ -316,6 +302,9 @@ $ make reports/output/academic-plan-diffs.js
 $ make reports/output/prereqs.js
 ```
 
+> [!CAUTION]
+> Outdated; Deno isn't used anymore
+
 Watch for changes. Open the template file in the browser:
 
 - reports/plan-diffs-template.html
@@ -499,7 +488,7 @@ units_per_course.py | (output: units_per_course.txt, units_per_course.json) iden
 
 ## Web apps
 
-The following projects involved interactive web pages written in TypeScript using Preact bundled by Deno that used the existing data sources we had (prerequisites and academic plans) to deliver new insights about UCSD's courses and majors. These web reports and apps were uploaded to the [UCSD Educational Innovation website](https://educationalinnovation.ucsd.edu/ca-views/).
+The following projects involved interactive web pages written in [TypeScript](https://www.typescriptlang.org/) using [React](http://react.dev/) bundled by [esbuild](https://esbuild.github.io/) that used the existing data sources we had (prerequisites and academic plans) to deliver new insights about UCSD's courses and majors. These web reports and apps were uploaded to the [UCSD Educational Innovation website](https://educationalinnovation.ucsd.edu/ca-views/).
 
 For all web reports:
 
@@ -508,8 +497,6 @@ For all web reports:
 | ---- | ----------- |
 Makefile | is shared by all web reports and contains the commands to build all web reports just by running `make`.
 cms-replace-file.js | is a browser script (copypaste and run in console) that adds a file input to every entry on UCSD's CMS that allows me to upload a large HTML file to overwrite an existing file. <br> UCSD's CMS ([Cascade](https://www.hannonhill.com/products/cascade-cms/index.html)) shows a code editor for HTML files, which hangs the page when trying to load the large HTML files that these projects produce, so I can't upload a new version of an HTML file normally.
-deno.json | defines tasks for `deno task` to automatically rebuild when a file is edited.
-import_map.json | lets me use `import { render } from 'preact'` rather than listing out the entire URL. This also lets me keep dependencies up to date.
 reports/util/Prereqs.ts | defines types for `CourseCode` and `Prereqs` that are used across the web apps.
 reports/util/Vector2.ts | exports a two-component vector class.
 reports/util/csv.ts | exports a helper function for outputting a CSV.
@@ -596,7 +583,7 @@ I looked into another graphical representation of the tree since the current net
   - reports/prereq-tree/components/CourseAdder.tsx: the search bar that lets you add and remove courses.
   - reports/prereq-tree/components/Options.tsx: a small menu on the top right corner that lets you switch between showing blocked courses (forward) and prerequisites (reverse).
   - reports/prereq-tree/components/Tree.tsx: a wrapper around a d3.js-controlled SVG for drawing the network graph.
-- reports/prereq-tree/d3-hack.ts: a hack to make d3.js work in TypeScript.
+  <!-- - reports/prereq-tree/d3-hack.ts: a hack to make d3.js work in TypeScript. -->
 - reports/prereq-tree/graphs/ForceDirectedGraph.ts: renders a force-directed graph (network) using d3.js.
 - reports/prereq-tree/graphs/TidyTree.ts: renders a more linear, level-by-level tree also using d3.js.
 - reports/prereq-tree/graphs/GraphCommon.ts: contains code common between the force-directed graph and tidy tree.

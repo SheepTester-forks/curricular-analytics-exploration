@@ -1,7 +1,3 @@
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
 export let storage: Storage
 try {
   storage = window.localStorage

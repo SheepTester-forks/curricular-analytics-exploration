@@ -1,10 +1,5 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import { Change, Term } from '../types.ts'
-import { Change as ChangeComponent } from './Change.tsx'
+import { Change, Term } from '../types'
+import { Change as ChangeComponent } from './Change'
 
 function displayTerm ([year, quarter]: Term) {
   return `Y${year} ${quarter}`
@@ -15,7 +10,7 @@ export type ChangeItemProps = {
 }
 export function ChangeItem ({ change }: ChangeItemProps) {
   return (
-    <li class={`change-item ${change.type}`}>
+    <li className={`change-item ${change.type}`}>
       {change.type === 'changed' && change.changes.title ? (
         <ChangeComponent change={change.changes.title} />
       ) : (
@@ -24,7 +19,7 @@ export function ChangeItem ({ change }: ChangeItemProps) {
       {change.type !== 'changed' && (
         <>
           {' '}
-          <span class='info'>
+          <span className='info'>
             ({displayTerm(change.term)} · {change.units} units)
           </span>
         </>
@@ -56,7 +51,7 @@ export function ChangeItem ({ change }: ChangeItemProps) {
         <>
           {' '}
           ·{' '}
-          <span class='change'>
+          <span className='change'>
             {change.changes.overlap[1] ? 'now' : 'no longer'}
           </span>{' '}
           overlaps GE

@@ -1,5 +1,5 @@
-import { colleges } from './components/Metadata.tsx'
-import { AcademicPlan } from './types.ts'
+import { colleges } from './components/Metadata'
+import { AcademicPlan } from './types'
 
 export type UrlCourseJson = [
   title: string,

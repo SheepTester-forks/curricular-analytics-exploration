@@ -1,10 +1,5 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import { useContext, useMemo, useRef } from 'preact/hooks'
-import { DragContext } from '../drag-drop.ts'
+import { useContext, useRef, useMemo } from 'react'
+import { DragContext } from '../drag-drop'
 
 export type RemoveZoneProps = {
   onDropLocation?: (inside: boolean) => void
@@ -38,7 +33,10 @@ export function RemoveZone ({ onDropLocation }: RemoveZoneProps) {
   }, [element.current, dragState?.pointerX, dragState?.pointerY])
 
   return (
-    <div class={`remove-zone ${inside ? 'remove-hover' : ''}`} ref={element}>
+    <div
+      className={`remove-zone ${inside ? 'remove-hover' : ''}`}
+      ref={element}
+    >
       <span>Remove course</span>
     </div>
   )

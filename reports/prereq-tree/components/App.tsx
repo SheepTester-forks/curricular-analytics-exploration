@@ -1,13 +1,8 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import { useState } from 'preact/hooks'
-import { Prereqs } from '../../util/Prereqs.ts'
-import { CourseAdder } from './CourseAdder.tsx'
-import { Options } from './Options.tsx'
-import { Tree } from './Tree.tsx'
+import { useState } from 'react'
+import { Prereqs } from '../../util/Prereqs'
+import { CourseAdder } from './CourseAdder'
+import { Options } from './Options'
+import { Tree } from './Tree'
 
 export type AppProps = {
   prereqs: Prereqs

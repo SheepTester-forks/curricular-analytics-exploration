@@ -1,10 +1,6 @@
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
 import * as d3 from 'd3'
-import { CourseCode } from '../../util/Prereqs.ts'
-import { GraphCommon } from './GraphCommon.ts'
+import { CourseCode } from '../../util/Prereqs'
+import { GraphCommon } from './GraphCommon'
 
 export type Prereq = {
   /** The prerequisite course. */

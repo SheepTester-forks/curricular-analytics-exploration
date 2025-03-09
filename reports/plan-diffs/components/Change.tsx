@@ -1,9 +1,4 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import { BeforeAfter } from '../types.ts'
+import { BeforeAfter } from '../types'
 
 export type ChangeProps<T> = {
   change: BeforeAfter<T>
@@ -14,8 +9,8 @@ export function Change<T> ({
   map = String
 }: ChangeProps<T>) {
   return (
-    <span class='change'>
-      {map(before)} <span class='arrow'>→</span> {map(after)}
+    <span className='change'>
+      {map(before)} <span className='arrow'>→</span> {map(after)}
     </span>
   )
 }

@@ -1,10 +1,5 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import { useRef, useState } from 'preact/hooks'
-import { CourseCode } from '../../util/Prereqs.ts'
+import { useState, useRef } from 'react'
+import { CourseCode } from '../../util/Prereqs'
 
 export type CourseAdderProps = {
   courseCodes: CourseCode[]
@@ -25,12 +20,12 @@ export function CourseAdder ({
     courseCodes.includes(courseCode) && !selected.includes(courseCode)
 
   return (
-    <ul class='course-adder'>
+    <ul className='course-adder'>
       {selected.map((courseCode, i) => (
-        <li key={courseCode} class='added-course'>
+        <li key={courseCode} className='added-course'>
           {courseCode}
           <button
-            class='remove-course'
+            className='remove-course'
             ref={i === selected.length - 1 ? lastCourseRef : null}
             onClick={() => {
               onSelected(selected.filter(code => code !== courseCode))
@@ -53,7 +48,7 @@ export function CourseAdder ({
       ))}
       <li>
         <form
-          class='course-adder-form'
+          className='course-adder-form'
           onSubmit={e => {
             const courseCode = query.toUpperCase().trim().replace(/\s+/, ' ')
             if (courseCodes.includes(courseCode)) {
@@ -66,12 +61,12 @@ export function CourseAdder ({
           }}
         >
           <input
-            class='add-course'
+            className='add-course'
             type='search'
             name='course-code'
             list='courses'
             placeholder='Search for a course'
-            autofocus
+            autoFocus
             value={query}
             ref={inputRef}
             onInput={e => {
@@ -84,7 +79,7 @@ export function CourseAdder ({
             }}
           />
           <input
-            class='add-btn'
+            className='add-btn'
             type='submit'
             value='Add'
             disabled={!queryValid}

@@ -124,15 +124,17 @@ def get_history(course_code: CourseCode) -> History:
     prereq_history = [
         (
             term_code,
-            remove_duplicates(
-                [
-                    remove_duplicates(req)
-                    for req in prereqs(term_code)[course_code]
-                    if req
-                ]
-            )
-            if course_code in prereqs(term_code)
-            else None,
+            (
+                remove_duplicates(
+                    [
+                        remove_duplicates(req)
+                        for req in prereqs(term_code)[course_code]
+                        if req
+                    ]
+                )
+                if course_code in prereqs(term_code)
+                else None
+            ),
         )
         for term_code in term_codes
     ]
@@ -170,10 +172,10 @@ def print_prereq_diff(course_id: str, diff: Diff) -> None:
                 f'<p id="{course_id}-{diff.term.lower()}">Originally with no prerequisites.</p>'
             )
         if diff.prereqs:
-            print('<ul class="changes">')
+            print('<ul className="changes">')
             for req in diff.prereqs:
                 print(
-                    f'<li class="change-item">{" or ".join(str(alt.course_code) for alt in req)}</li>'
+                    f'<li className="change-item">{" or ".join(str(alt.course_code) for alt in req)}</li>'
                 )
             print("</ul>")
         return
@@ -182,31 +184,31 @@ def print_prereq_diff(course_id: str, diff: Diff) -> None:
     if isinstance(diff, RemovedCourse):
         print(f"<p>Course removed.</p>")
         return
-    print('<ul class="changes">')
+    print('<ul className="changes">')
     for req in diff.removed:
         print(
-            f'<li class="change-item removed">{" or ".join(str(alt.course_code) for alt in req)}</li>'
+            f'<li className="change-item removed">{" or ".join(str(alt.course_code) for alt in req)}</li>'
         )
     for unchanged, flipped_concurrent, removed, added in diff.changes:
         items = " or ".join(
             [str(course) for course, _ in unchanged]
             + [
-                f'{course} (<span class="change">{"now" if allow_concurrent else "no longer"}</span> allows concurrent)'
+                f'{course} (<span className="change">{"now" if allow_concurrent else "no longer"}</span> allows concurrent)'
                 for course, allow_concurrent in flipped_concurrent
             ]
         )
         if added:
             if items:
                 items += " or "
-            items += f'<span class="added">{" or ".join(str(course) for course, _ in added)}</span>'
+            items += f'<span className="added">{" or ".join(str(course) for course, _ in added)}</span>'
         if removed:
             if items:
                 items += " · removed: "
-            items += f'<span class="removed">{", ".join(str(course) for course, _ in removed)}</span>'
-        print(f'<li class="change-item changed">{items}</li>')
+            items += f'<span className="removed">{", ".join(str(course) for course, _ in removed)}</span>'
+        print(f'<li className="change-item changed">{items}</li>')
     for req in diff.added:
         print(
-            f'<li class="change-item added">{" or ".join(str(alt.course_code) for alt in req)}</li>'
+            f'<li className="change-item added">{" or ".join(str(alt.course_code) for alt in req)}</li>'
         )
     print("</ul>")
 
@@ -215,7 +217,7 @@ def print_diff() -> None:
     changed_courses = get_changed_courses()
 
     print("<body>")
-    print('<nav class="sidebar">')
+    print('<nav className="sidebar">')
     prev_subj = ""
     for course_code, has_changed, *_, still_exists in changed_courses:
         if course_code.subject != prev_subj:
@@ -230,10 +232,10 @@ def print_diff() -> None:
         else:
             print(f'<li title="Prerequisites have not changed.">{course_code}</li>')
     print("</ul></details>")
-    print('<a href="#" class="top-link">↑ Back to top</a>')
+    print('<a href="#" className="top-link">↑ Back to top</a>')
     print("</nav>")
 
-    print('<main class="main">')
+    print('<main className="main">')
     print("<h1>Changes made to course prerequisites over time by course</h1>")
     print("<p>Only courses whose prerequisites have changed are shown.</p>")
     for course_code, has_changed, _, diffs, still_exists in changed_courses:
@@ -255,16 +257,20 @@ def print_changed_course(
     term_code: TermCode, course_code: CourseCode, diff: Changed
 ) -> None:
     added_badge = (
-        f' <span class="added">+{len(diff.added)}</span>' if diff.added else ""
+        f' <span className="added">+{len(diff.added)}</span>' if diff.added else ""
     )
     removed_badge = (
-        f' <span class="removed">−{len(diff.removed)}</span>' if diff.removed else ""
+        f' <span className="removed">−{len(diff.removed)}</span>'
+        if diff.removed
+        else ""
     )
     changed_badge = (
-        f' <span class="changed">±{len(diff.changes)}</span>' if diff.changes else ""
+        f' <span className="changed">±{len(diff.changes)}</span>'
+        if diff.changes
+        else ""
     )
     print(
-        f'<li class="course"><a href="./prereq-diffs.html#{"".join(course_code).lower()}-{term_code.lower()}">{course_code}</a>:{added_badge}{removed_badge}{changed_badge}</li>'
+        f'<li className="course"><a href="./prereq-diffs.html#{"".join(course_code).lower()}-{term_code.lower()}">{course_code}</a>:{added_badge}{removed_badge}{changed_badge}</li>'
     )
 
 
@@ -318,7 +324,7 @@ def print_timeline() -> None:
                 for course in new_courses
             )
             print(
-                f'<p>New courses (<span class="added">+{len(new_courses)}</span>): {courses}</p>'
+                f'<p>New courses (<span className="added">+{len(new_courses)}</span>): {courses}</p>'
             )
         removed_courses = [
             course for course, diff in changed if isinstance(diff, RemovedCourse)
@@ -329,7 +335,7 @@ def print_timeline() -> None:
                 for course in removed_courses
             )
             print(
-                f'<p>Removed courses (<span class="removed">-{len(removed_courses)}</span>): {courses}</p>'
+                f'<p>Removed courses (<span className="removed">-{len(removed_courses)}</span>): {courses}</p>'
             )
 
 

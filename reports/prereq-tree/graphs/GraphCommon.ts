@@ -1,9 +1,5 @@
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
 import * as d3 from 'd3'
-import { CourseCode } from '../../util/Prereqs.ts'
+import { CourseCode } from '../../util/Prereqs'
 
 export abstract class GraphCommon {
   nodeColor: d3.ScaleOrdinal<string, string>

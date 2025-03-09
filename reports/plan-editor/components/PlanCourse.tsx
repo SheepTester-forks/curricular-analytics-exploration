@@ -1,13 +1,7 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import { useEffect, useRef, useState } from 'preact/hooks'
-import type { JSX } from 'preact/jsx-runtime'
-import { cleanCourseCode, CourseCode, Prereqs } from '../../util/Prereqs.ts'
-import { Course } from '../types.ts'
-import { CourseOptions } from './CourseOptions.tsx'
+import { useRef, useState, useEffect, PointerEvent } from 'react'
+import { cleanCourseCode, CourseCode, Prereqs } from '../../util/Prereqs'
+import { Course } from '../types'
+import { CourseOptions } from './CourseOptions'
 
 export type PlanCourseProps = {
   prereqs?: Prereqs
@@ -20,7 +14,7 @@ export type PlanCourseProps = {
     x: number
     y: number
   }
-  onDrag?: (event: JSX.TargetedPointerEvent<HTMLElement>) => void
+  onDrag?: (event: PointerEvent<HTMLElement>) => void
   pastCourses?: CourseCode[]
   concurrentCourses?: CourseCode[]
 }
@@ -62,8 +56,8 @@ export function PlanCourse ({
   const missingPrereqs =
     validCode && pastCourses
       ? prereqs[course.title].filter(
-          req => req.length > 0 && !req.some(alt => pastCourses.includes(alt))
-        )
+        req => req.length > 0 && !req.some(alt => pastCourses.includes(alt))
+      )
       : []
 
   const hasError = (duplicateCourse && validCode) || missingPrereqs.length > 0
@@ -71,22 +65,22 @@ export function PlanCourse ({
 
   return (
     <li
-      class={`course-editor ${isNew ? 'add-course' : ''} ${
+      className={`course-editor ${isNew ? 'add-course' : ''} ${
         dragged ? 'dragged' : ''
       }`}
       style={
         dragged
           ? {
-              left: `${dragged.x}px`,
-              top: `${dragged.y}px`,
-              width: `${dragged.width}px`
-            }
+            left: `${dragged.x}px`,
+            top: `${dragged.y}px`,
+            width: `${dragged.width}px`
+          }
           : {}
       }
       ref={ref}
     >
       <input
-        class='course-field course-title'
+        className='course-field course-title'
         type='text'
         list='courses'
         value={course.title}
@@ -117,16 +111,16 @@ export function PlanCourse ({
       />
       {!isNew && (
         <>
-          <div class='settings-btn-wrapper'>
+          <div className='settings-btn-wrapper'>
             <button
-              class={`settings-btn ${
+              className={`settings-btn ${
                 course.requirement.major
                   ? course.requirement.college
                     ? 'overlap'
                     : 'major-req'
                   : course.requirement.college
-                  ? 'college-req'
-                  : ''
+                    ? 'college-req'
+                    : ''
               }`}
               title={[
                 'Course options',
@@ -135,8 +129,8 @@ export function PlanCourse ({
                     ? ': overlaps GE and major requirements'
                     : ': major requirement'
                   : course.requirement.college
-                  ? ': GE requirement'
-                  : '',
+                    ? ': GE requirement'
+                    : '',
                 prereqs?.[course.title] ? ', valid course code' : '',
                 course.forCredit ? '' : ', no credit received'
               ].join('')}
@@ -147,16 +141,20 @@ export function PlanCourse ({
                   ? '⇄'
                   : 'M'
                 : course.requirement.college
-                ? 'C'
-                : '⚙'}
-              {validCode && <span class='valid-course-icon'>✓</span>}
-              {!course.forCredit && <span class='failed-course-icon'>F</span>}
+                  ? 'C'
+                  : '⚙'}
+              {validCode && <span className='valid-course-icon'>✓</span>}
+              {!course.forCredit && (
+                <span className='failed-course-icon'>F</span>
+              )}
               {(hasError || hasWarning) && (
-                <span class='issue-icon'>{hasError ? '❌' : '⚠️'}</span>
+                <span className='issue-icon'>{hasError ? '❌' : '⚠️'}</span>
               )}
             </button>
             {showOptions && (
-              <div class={`options-wrapper-arrow ${validCode ? 'info' : ''}`} />
+              <div
+                className={`options-wrapper-arrow ${validCode ? 'info' : ''}`}
+              />
             )}
           </div>
           {showOptions && onCourse && onRemove && (
@@ -171,7 +169,7 @@ export function PlanCourse ({
             />
           )}
           <input
-            class='course-field course-units term-units'
+            className='course-field course-units term-units'
             type='text'
             inputMode='numeric'
             pattern='[0-9]*'
@@ -192,7 +190,7 @@ export function PlanCourse ({
             disabled={!onCourse}
           />
           <span
-            class='term-icon-btn drag-btn'
+            className='term-icon-btn drag-btn'
             title='Move course'
             onPointerDown={onDrag}
           >

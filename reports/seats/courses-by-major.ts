@@ -1,4 +1,4 @@
-import { CourseCode } from '../util/Prereqs.ts'
+import { CourseCode } from '../util/Prereqs'
 
 // TODO: Remove
 

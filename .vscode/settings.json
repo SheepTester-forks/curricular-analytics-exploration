@@ -1,9 +1,7 @@
 {
   "python.analysis.typeCheckingMode": "strict",
-  "deno.enable": true,
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
-  "python.formatting.provider": "none",
   "prettier.prettierPath": "./node_modules/prettierx"
 }

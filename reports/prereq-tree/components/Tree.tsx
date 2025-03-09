@@ -1,18 +1,13 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import { useEffect, useRef } from 'preact/hooks'
-import { CourseCode, Prereqs } from '../../util/Prereqs.ts'
+import { useRef, useEffect } from 'react'
+import { CourseCode, Prereqs } from '../../util/Prereqs'
 import {
   CourseCodeLink,
   CourseCodeNode,
   ForceDirectedGraph,
   NodeUpdater
-} from '../graphs/ForceDirectedGraph.ts'
-import { TidyTree } from '../graphs/TidyTree.ts'
-import { Options } from './Options.tsx'
+} from '../graphs/ForceDirectedGraph'
+import { TidyTree } from '../graphs/TidyTree'
+import { Options } from './Options'
 
 type Graph = {
   nodes: CourseCodeNode[]
@@ -82,9 +77,9 @@ function getCoursePrereqs ({ prereqs, courses, options }: TreeProps): Graph {
       note: options.allAlts
         ? { type: 'reqs', count: reqs.length ?? 0 }
         : {
-            type: 'omitted-alts',
-            count: (reqs.flat().length ?? 0) - (reqs.length ?? 0)
-          }
+          type: 'omitted-alts',
+          count: (reqs.flat().length ?? 0) - (reqs.length ?? 0)
+        }
     }
   })
   const links: CourseCodeLink[] = []
@@ -110,9 +105,9 @@ function getCoursePrereqs ({ prereqs, courses, options }: TreeProps): Graph {
               note: options.allAlts
                 ? { type: 'reqs', count: reqs.length ?? 0 }
                 : {
-                    type: 'omitted-alts',
-                    count: (reqs.flat().length ?? 0) - (reqs.length ?? 0)
-                  }
+                  type: 'omitted-alts',
+                  count: (reqs.flat().length ?? 0) - (reqs.length ?? 0)
+                }
             })
           }
           links.push({
@@ -135,7 +130,7 @@ export type TreeProps = {
 export function Tree (props: TreeProps) {
   const { prereqs, courses, options } = props
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const updateRef = useRef<NodeUpdater>()
+  const updateRef = useRef<NodeUpdater>(null)
 
   useEffect(() => {
     if (!wrapperRef.current) {
@@ -182,7 +177,7 @@ export function Tree (props: TreeProps) {
 
   return (
     <>
-      <div class='canvas-wrapper' ref={wrapperRef}></div>
+      <div className='canvas-wrapper' ref={wrapperRef}></div>
     </>
   )
 }

@@ -1,11 +1,6 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import { useState } from 'preact/hooks'
-import { Diffs, PlanDiffs } from '../types.ts'
-import { DiffProps } from './Diff.tsx'
+import { useState } from 'react'
+import { Diffs, PlanDiffs } from '../types'
+import { DiffProps } from './Diff'
 
 const byKeyLocale = <T,>([a]: [string, T], [b]: [string, T]) =>
   a.localeCompare(b)
@@ -106,9 +101,9 @@ export function Table ({
                               backgroundColor:
                                 college in colleges
                                   ? `rgba(0, 0, 255, ${
-                                      getMetric[metric](colleges[college]) / max
-                                    })`
-                                  : null
+                                    getMetric[metric](colleges[college]) / max
+                                  })`
+                                  : ''
                             }}
                           >
                             {college in colleges && (
@@ -135,7 +130,7 @@ export function Table ({
               )
           )}
       </table>
-      <p class='select-metric'>
+      <p className='select-metric'>
         Color by{' '}
         <select
           value={metric}

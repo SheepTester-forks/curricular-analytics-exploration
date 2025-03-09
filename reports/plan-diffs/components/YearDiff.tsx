@@ -1,11 +1,6 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import type { Change, YearDiff } from '../types.ts'
-import { Change as ChangeComponent } from './Change.tsx'
-import { ChangeItem } from './ChangeItem.tsx'
+import type { Change, YearDiff } from '../types'
+import { Change as ChangeComponent } from './Change'
+import { ChangeItem } from './ChangeItem'
 
 const isMajorChange = (change: Change) =>
   change.type !== 'changed' || change.changes.units !== undefined
@@ -20,7 +15,7 @@ export function YearDiff ({ year, url, units, complexity, changes }: YearDiff) {
         {(units || complexity) && (
           <>
             {' '}
-            <span class={`units ${units ? '' : 'complexity'}`}>
+            <span className={`units ${units ? '' : 'complexity'}`}>
               (
               {units && (
                 <>
@@ -31,7 +26,7 @@ export function YearDiff ({ year, url, units, complexity, changes }: YearDiff) {
               )}
               {units && complexity && '; '}
               {complexity && (
-                <span class='complexity'>
+                <span className='complexity'>
                   {<ChangeComponent change={complexity} />},{' '}
                   {complexity[1] > complexity[0] && '+'}
                   {complexity[1] - complexity[0]} complexity
@@ -43,12 +38,12 @@ export function YearDiff ({ year, url, units, complexity, changes }: YearDiff) {
         )}
       </h2>
       {changes.length === 0 && (
-        <p class='changes'>
+        <p className='changes'>
           <em>No changes.</em>
         </p>
       )}
       {majorChanges.length > 0 && (
-        <ul class='changes'>
+        <ul className='changes'>
           {majorChanges.map(change => (
             <ChangeItem change={change} />
           ))}
@@ -57,7 +52,7 @@ export function YearDiff ({ year, url, units, complexity, changes }: YearDiff) {
       {minorChanges.length > 0 && (
         <details>
           <summary>View smaller changes</summary>
-          <ul class='changes'>
+          <ul className='changes'>
             {minorChanges.map(change => (
               <ChangeItem change={change} />
             ))}

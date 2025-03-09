@@ -1,13 +1,8 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
 import {
   CoursesByGroup,
   isMajorCode,
   StudentsByGroup
-} from '../courses-by-major.ts'
+} from '../courses-by-major'
 
 export type SeatsNeededProps = {
   courses: CoursesByGroup
@@ -32,11 +27,11 @@ export function SeatsNeeded ({ courses, students }: SeatsNeededProps) {
             .map(([code]) =>
               isMajorCode(code)
                 ? Object.entries(students.majors?.[code] ?? {})
-                    .map(([collegeCode, students]) =>
-                      // Don't double count major/GE overlap
-                      enrollers[collegeCode] === true ? 0 : students
-                    )
-                    .reduce((cum, curr) => cum + curr, 0)
+                  .map(([collegeCode, students]) =>
+                    // Don't double count major/GE overlap
+                    enrollers[collegeCode] === true ? 0 : students
+                  )
+                  .reduce((cum, curr) => cum + curr, 0)
                 : students.colleges[code]
             )
             .reduce((cum, curr) => cum + curr, 0)

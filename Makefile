@@ -65,7 +65,7 @@ reports/output/academic-plan-diffs.js: reports/output/academic-plan-diffs.json
 	cat reports/output/academic-plan-diffs.json >> reports/output/academic-plan-diffs.js
 
 reports/output/plan-diffs.js: reports/plan-diffs.tsx
-	deno bundle reports/plan-diffs.tsx -- reports/output/plan-diffs.js
+	esbuild --bundle reports/plan-diffs.tsx --outfile=reports/output/plan-diffs.js
 
 reports/output/academic-plan-diffs.html: reports/plan-diffs/template.html reports/output/academic-plan-diffs.json reports/output/plan-diffs.js
 	head -n -4 < reports/plan-diffs/template.html > reports/output/academic-plan-diffs.html
@@ -116,7 +116,7 @@ reports/output/prereqs.js: reports/output/prereqs.json
 	cat reports/output/prereqs.json >> reports/output/prereqs.js
 
 reports/output/prereq-tree.js: reports/prereq-tree/index.tsx
-	deno bundle reports/prereq-tree/index.tsx -- reports/output/prereq-tree.js
+	esbuild --bundle reports/prereq-tree/index.tsx --outfile=reports/output/prereq-tree.js
 
 reports/output/prereq-tree.html: reports/prereq-tree/template.html reports/output/prereq-tree.js reports/output/prereqs.json
 	head -n -4 < reports/prereq-tree/template.html > reports/output/prereq-tree.html
@@ -130,7 +130,7 @@ reports/output/prereq-tree.html: reports/prereq-tree/template.html reports/outpu
 # Plan editor
 
 reports/output/plan-editor.js: reports/plan-editor/index.tsx
-	deno bundle reports/plan-editor/index.tsx -- reports/output/plan-editor.js
+	esbuild --bundle reports/plan-editor/index.tsx --outfile=reports/output/plan-editor.js
 
 reports/output/plan-editor.html: reports/plan-editor/template.html reports/output/plan-editor.js reports/output/prereqs.json
 	head -n -4 < reports/plan-editor/template.html > reports/output/plan-editor.html
@@ -172,7 +172,7 @@ reports/output/courses_by_major.js: courses_req_by_majors.json
 	cat courses_req_by_majors.json >> reports/output/courses_by_major.js
 
 reports/output/seats.js: reports/plan-editor/index.tsx
-	deno bundle reports/seats/index.tsx -- reports/output/seats.js
+	esbuild --bundle reports/seats/index.tsx --outfile=reports/output/seats.js
 
 reports/output/seats.html: reports/seats/template.html courses_req_by_majors.json reports/output/seats.js
 	head -n -4 < reports/seats/template.html > reports/output/seats.html
@@ -194,7 +194,7 @@ files/flagged_issues.html: flag_issues.py units_per_course.json
 # Protected data
 
 files/protected/summarize_dfw_by_major.json: summarize_metrics.ts files/CA_MetricsforMap_FINAL(Metrics).csv
-	deno run -A summarize_metrics.ts './files/CA_MetricsforMap_FINAL(Metrics).csv'
+	node --experimental-strip-types summarize_metrics.mts './files/CA_MetricsforMap_FINAL(Metrics).csv'
 
 files/protected/summarize_frequency.json: summarize_frequency.py files/21-22\ Enrollment_DFW\ CJ.xlsx.csv files/Waitlist\ by\ Course\ for\ CJ.xlsx.csv
 	python3 summarize_frequency.py './files/21-22 Enrollment_DFW CJ.xlsx.csv' './files/Waitlist by Course for CJ.xlsx.csv' > files/protected/summarize_frequency.json

@@ -1,10 +1,5 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import { PlanDiffs } from '../types.ts'
-import { YearDiff } from './YearDiff.tsx'
+import { PlanDiffs } from '../types'
+import { YearDiff } from './YearDiff'
 
 export type DiffProps = {
   name: string

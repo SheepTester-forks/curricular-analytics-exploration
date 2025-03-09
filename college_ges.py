@@ -23,14 +23,16 @@ if len(sys.argv) > 2 and sys.argv[2] == "debug":
     _, _, _, major_code, college = sys.argv
     courses = partition(
         (
-            "MAJOR"
-            if course.for_major
-            else "ELECTIVE"
-            if course.course_title.upper() == "ELECTIVE"
-            else "GE",
-            course.course_title
-            if course.units == 4
-            else f"{course.course_title} ({course.units})",
+            (
+                "MAJOR"
+                if course.for_major
+                else "ELECTIVE" if course.course_title.upper() == "ELECTIVE" else "GE"
+            ),
+            (
+                course.course_title
+                if course.units == 4
+                else f"{course.course_title} ({course.units})"
+            ),
         )
         for course in major_plans(int(year))[major_code].plan(college)
     )
@@ -76,9 +78,11 @@ class ColorScale:
         # yellow: rgb(255,214,102)
         # red: rgb(230,124,115)
         channels = ",".join(
-            cls._interpolate(t * 2, cls._GREEN[i], cls._YELLOW[i])
-            if t < 0.5
-            else cls._interpolate(t * 2 - 1, cls._YELLOW[i], cls._RED[i])
+            (
+                cls._interpolate(t * 2, cls._GREEN[i], cls._YELLOW[i])
+                if t < 0.5
+                else cls._interpolate(t * 2 - 1, cls._YELLOW[i], cls._RED[i])
+            )
             for i in range(3)
         )
         return f"rgb({channels}, var(--fill-opacity))"
@@ -86,11 +90,11 @@ class ColorScale:
 
 if html:
     college_headers = "".join(
-        f'<th class="college-header">{university.college_names[college]}</th>'
+        f'<th className="college-header">{university.college_names[college]}</th>'
         for college in university.college_codes
     )
     print(
-        f'<table><tr class="header"><th class="major">Major</th>{college_headers}</tr>'
+        f'<table><tr className="header"><th className="major">Major</th>{college_headers}</tr>'
     )
 else:
     print(
@@ -108,9 +112,11 @@ for major_code in major_plans(year).keys():
         continue
     major_count += 1
     if html:
-        print(f'<tr class="row" id="{major_code}"><th scope="col" class="major">')
         print(
-            f'<span class="major-code">{major_code}</span><span class="major-name">: {major_codes()[major_code].name}</span></th>'
+            f'<tr className="row" id="{major_code}"><th scope="col" className="major">'
+        )
+        print(
+            f'<span className="major-code">{major_code}</span><span className="major-name">: {major_codes()[major_code].name}</span></th>'
         )
     else:
         print(major_code, end="")
@@ -138,7 +144,7 @@ for major_code in major_plans(year).keys():
         print()
 
 if html:
-    print('<tr class="average"><th scope="col" class="major">Average</th>')
+    print('<tr className="average"><th scope="col" className="major">Average</th>')
     for college in university.college_codes:
         average = sums[college] / major_count
         color = ColorScale.color_scale((average - min_ge) / (max_ge - min_ge))

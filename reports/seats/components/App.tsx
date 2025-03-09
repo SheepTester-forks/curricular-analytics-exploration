@@ -1,15 +1,10 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import { useState } from 'preact/hooks'
+import { useState } from 'react'
 import {
   CoursesByGroupJson,
   isMajorCode,
   StudentsByGroup
-} from '../courses-by-major.ts'
-import { SeatsNeeded } from './SeatsNeeded.tsx'
+} from '../courses-by-major'
+import { SeatsNeeded } from './SeatsNeeded'
 
 export type AppProps = {
   courses: CoursesByGroupJson

@@ -1,16 +1,10 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import { useRef, useState } from 'preact/hooks'
-import type { JSX } from 'preact/jsx-runtime'
-import { CourseCode, Prereqs } from '../../util/Prereqs.ts'
-import { DragState, DragContext } from '../drag-drop.ts'
-import { AcademicPlan } from '../types.ts'
-import { PlanCourse } from './PlanCourse.tsx'
-import { RemoveZone } from './RemoveZone.tsx'
-import { Year } from './Year.tsx'
+import { PointerEvent, useRef, useState } from 'react'
+import { CourseCode, Prereqs } from '../../util/Prereqs'
+import { DragState, DragContext } from '../drag-drop'
+import { AcademicPlan } from '../types'
+import { PlanCourse } from './PlanCourse'
+import { RemoveZone } from './RemoveZone'
+import { Year } from './Year'
 
 export type EditorProps = {
   prereqs: Prereqs
@@ -35,7 +29,7 @@ export function Editor ({
   // State needed to rerender
   const [dragStateVal, setDragStateVal] = useState<DragState | null>(null)
 
-  const onPointerEnd = (e: JSX.TargetedPointerEvent<HTMLElement>) => {
+  const onPointerEnd = (e: PointerEvent<HTMLElement>) => {
     const dragState = dragStateRef.current
     if (e.pointerId === dragState?.pointerId) {
       const dropLoc = dragState.dropLocation
@@ -43,21 +37,21 @@ export function Editor ({
         onPlan(
           dropLoc
             ? {
-                ...plan,
-                years: plan.years.map((year, i) =>
-                  i === dropLoc.yearIndex
-                    ? year.map((term, j) =>
-                        j === dropLoc.termIndex
-                          ? [
-                              ...term.slice(0, dropLoc.courseIndex),
-                              dragState.course,
-                              ...term.slice(dropLoc.courseIndex)
-                            ]
-                          : term
-                      )
-                    : year
-                )
-              }
+              ...plan,
+              years: plan.years.map((year, i) =>
+                i === dropLoc.yearIndex
+                  ? year.map((term, j) =>
+                    j === dropLoc.termIndex
+                      ? [
+                        ...term.slice(0, dropLoc.courseIndex),
+                        dragState.course,
+                        ...term.slice(dropLoc.courseIndex)
+                      ]
+                      : term
+                  )
+                  : year
+              )
+            }
             : dragState.originalPlan
         )
       }
@@ -68,7 +62,7 @@ export function Editor ({
 
   return (
     <div
-      class='plan-editor'
+      className='plan-editor'
       onPointerMove={e => {
         if (e.pointerId === dragStateRef.current?.pointerId) {
           dragStateRef.current = {
@@ -126,10 +120,10 @@ export function Editor ({
                   years: plan.years.map((year, i) =>
                     i === yearIndex
                       ? year.map((term, j) =>
-                          j === termIndex
-                            ? term.filter((_, k) => k !== courseIndex)
-                            : term
-                        )
+                        j === termIndex
+                          ? term.filter((_, k) => k !== courseIndex)
+                          : term
+                      )
                       : year
                   )
                 })
@@ -191,7 +185,7 @@ export function Editor ({
           />
         ))}
         <button
-          class='add-year'
+          className='add-year'
           onClick={() =>
             onPlan({ ...plan, years: [...plan.years, [[], [], []]] })
           }

@@ -1,5 +1,5 @@
-import { createContext } from 'preact'
-import { Course, AcademicPlan } from './types.ts'
+import { createContext } from 'react'
+import { Course, AcademicPlan } from './types'
 
 export type DropLocation = {
   yearIndex: number

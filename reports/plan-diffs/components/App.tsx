@@ -1,12 +1,7 @@
-/** @jsxImportSource preact */
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
-import { useState } from 'preact/hooks'
-import { Diffs } from '../types.ts'
-import { DiffProps, Diff } from './Diff.tsx'
-import { Table } from './Table.tsx'
+import { useState } from 'react'
+import { Diffs } from '../types'
+import { DiffProps, Diff } from './Diff'
+import { Table } from './Table'
 
 export type AppProps = {
   diffs: Diffs
@@ -18,7 +13,7 @@ export function App ({ diffs, collegeNames, showDiff }: AppProps) {
   return (
     <>
       {!showDiff && (
-        <div class='side'>
+        <div className='side'>
           <Table
             diffs={diffs}
             collegeNames={collegeNames}
@@ -27,7 +22,7 @@ export function App ({ diffs, collegeNames, showDiff }: AppProps) {
           />
         </div>
       )}
-      <div class='side diff'>
+      <div className='side diff'>
         {showDiff ? (
           <Diff {...showDiff} />
         ) : diff ? (

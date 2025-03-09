@@ -14,7 +14,7 @@ def get_prereqs(term: TermCode, course: CourseCode) -> List[List[Prerequisite]]:
         )
     ) as response:
         for match in re.finditer(
-            rb'(\.)</td>|<span class="bold_text">([A-Z]+)(\d+[A-Z]*)|<span class="ertext">\*\*\*</span>\s',
+            rb'(\.)</td>|<span className="bold_text">([A-Z]+)(\d+[A-Z]*)|<span className="ertext">\*\*\*</span>\s',
             response.read(),
         ):
             subject = match.group(2)

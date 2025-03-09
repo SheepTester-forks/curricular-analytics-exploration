@@ -1,13 +1,8 @@
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
-
 import * as d3 from 'd3'
-import { CourseCode } from '../../util/Prereqs.ts'
-import { Vector2 } from '../../util/Vector2.ts'
-import '../d3-hack.ts'
-import { GraphCommon } from './GraphCommon.ts'
-import { chunks } from '../../util/arrays.ts'
+import { CourseCode } from '../../util/Prereqs'
+import { Vector2 } from '../../util/Vector2'
+import { GraphCommon } from './GraphCommon'
+import { chunks } from '../../util/arrays'
 
 export type CourseCodeNode = {
   course: CourseCode
@@ -191,26 +186,26 @@ export class ForceDirectedGraph extends GraphCommon {
                 node.note?.type === 'taken'
                   ? 'Added by you'
                   : node.note?.type === 'satisfied'
-                  ? `${node.note.satisfied}/${node.note.total} prerequisite${
+                    ? `${node.note.satisfied}/${node.note.total} prerequisite${
                       node.note.total === 1 ? '' : 's'
                     } shown`
-                  : node.note?.type === 'reqs'
-                  ? `Requires ${node.note.count} course${
-                      node.note.count === 1 ? '' : 's'
-                    }`
-                  : node.note?.type === 'omitted-alts'
-                  ? `${node.note.count} alternative${
-                      node.note.count === 1 ? '' : 's'
-                    } not shown`
-                  : ''
+                    : node.note?.type === 'reqs'
+                      ? `Requires ${node.note.count} course${
+                        node.note.count === 1 ? '' : 's'
+                      }`
+                      : node.note?.type === 'omitted-alts'
+                        ? `${node.note.count} alternative${
+                          node.note.count === 1 ? '' : 's'
+                        } not shown`
+                        : ''
               )
               this.#tooltipLine2.text(
                 `Blocks ${node.dependents.length} course${
                   node.dependents.length === 0
                     ? 's'
                     : node.dependents.length === 1
-                    ? ': '
-                    : 's: '
+                      ? ': '
+                      : 's: '
                 }${chunks(node.dependents, 5)
                   .map(line => line.join(', '))
                   .join(',\n')}`
