@@ -3,10 +3,9 @@ import { createRoot } from 'react-dom/client'
 import { App } from './components/App'
 import { DiffProps } from './components/Diff'
 import { Data } from './types'
+import rawData from '../output/academic-plan-diffs.json'
 
-const data: Data =
-  JSON.parse(document.getElementById('diffs')?.textContent ?? 'null') ??
-  (window as any)['DIFFS']
+const data: Data = rawData as any
 const root = document.getElementById('root')!
 
 const params = new URL(window.location.href).searchParams

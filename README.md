@@ -1,3 +1,8 @@
+> [!NOTE]
+> Because this fork has diverged significantly from the [original repo](https://github.com/ArturoAmaya/ExploratoryCurricularAnalytics), I've made a hard fork at
+> [SheepTester-forks/ExploratoryCurricularAnalytics](https://github.com/SheepTester-forks/ExploratoryCurricularAnalytics).
+> Development continues there.
+
 # Curricular Analytics exploration
 
 This is a long README for a large repo. Here's a list of quick links:
@@ -22,7 +27,7 @@ This is a long README for a large repo. Here's a list of quick links:
 
    - Python 3.12 or newer.
 
-     I recommend setting up a virtual environment using VS Code. For some reason WSL comes with Python 3.12 preinstalled, but not `pip`. Using VS Code to create a virtual environment from `/bin/python3.12` fixes this.
+     I recommend setting up a virtual environment using VS Code. For some reason WSL comes with Python 3.12 preinstalled, but not `pip`. Using [VS Code's Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) to create a virtual environment from `/bin/python3.12` (ctrl+shift+P then "Python: Create Environment...") fixes this.
 
      Then, install the Python dependencies ([`curricularanalytics`](https://pypi.org/project/curricularanalytics/), [`python-dotenv`](https://pypi.org/project/python-dotenv/)):
 
@@ -33,6 +38,12 @@ This is a long README for a large repo. Here's a list of quick links:
    - Node 22 or newer.
 
      I recommend using [nvm](https://github.com/nvm-sh/nvm) to install Node.
+
+     Then install the Node dependencies.
+
+     ```shell
+     $ npm install
+     ```
 
 2. Download the required CSV files to files/. The links are probably private, so you will have to request access or ask for updated data. Their format is [detailed below](#required-files).
 
@@ -60,15 +71,7 @@ This is a long README for a large repo. Here's a list of quick links:
 
 4. Enjoy the output. `Makefile` has the files that are produced listed under `# Reports`.
 
-5. These need to be done every year once a data dump of the new year's plans and prereqs is available:
-
-   - To update the views on the [EI website](https://educationalinnovation.ucsd.edu/ca-views/), navigate to the [`/_files/` folder for the Educational-Innovation site on Cascade CMS](https://cms.ucsd.edu/entity/open.act?id=bbd5a01eac1a010c51a0f38fa018ce21&type=folder). Copy and paste the contents of [cms-replace-file.js](./cms-replace-file.js) into the DevTools console; this adds a file upload button to each file. Then replace the individual HTML files as needed from [reports/output/](./reports/output/).
-
-     The JS file is because with Cascade CMS only lets you use their HTML text editor to edit the file,
-
-   - To upload the views on Tableau, if I recall correctly I believe it's quite a pain. **TODO**
-
-   - To share automatically flagged issues in the degree plans, open [files/flagged_issues.html](./files/flagged_issues.html) in the browser, then copy and paste it into a Google Doc. Remove false positives as needed.
+5. Every year, once a data dump of the new year's plans and prereqs is available, you'll need to update all the reports. See [§ How to use a data refresh](#how-to-use-a-data-refresh) for instructions on how to do this.
 
 ### What's in other repos
 
@@ -295,26 +298,16 @@ To automatically upload CSV files to Curricular Analytics using [`upload.py`](up
 
 ## Development (plan diff, prereq tree, and plan editor)
 
-Run this first.
-
-```sh
-$ make reports/output/academic-plan-diffs.js
-$ make reports/output/prereqs.js
-```
-
-> [!CAUTION]
-> Outdated; Deno isn't used anymore
-
 Watch for changes. Open the template file in the browser:
 
-- reports/plan-diffs-template.html
-- reports/prereq-tree-template.html
-- reports/plan-editor-template.html
+- http://localhost:8000/reports/plan-diffs/template.html
+- http://localhost:8000/reports/prereq-tree/template.html
+- http://localhost:8000/reports/plan-editor/template.html
 
 ```sh
-$ deno task watch:plan-diff
-$ deno task watch:prereq-tree
-$ deno task watch:plan-editor
+$ npm run watch plan-diffs
+$ npm run watch prereq-tree
+$ npm run watch plan-editor
 ```
 
 Build a single file. Upload the output file to the CMS.
@@ -487,6 +480,9 @@ units_per_course.py | (output: units_per_course.txt, units_per_course.json) iden
 <!-- prettier-ignore-end -->
 
 ## Web apps
+
+> [!WARNING]
+> These were originally written with [Deno](https://deno.com/) and [Preact](https://preactjs.com/) (very similar to React). However, because [`deno bundle` was deprecated](https://github.com/denoland/deno/issues/11073) then removed in Deno 2, and to lower the barrier to entry of others maintaining this project, I've since switched to [React](https://react.dev/), which more people are familiar with, and [esbuild](https://esbuild.github.io/) for bundling. Some old files may still contain references to Deno and Preact.
 
 The following projects involved interactive web pages written in [TypeScript](https://www.typescriptlang.org/) using [React](http://react.dev/) bundled by [esbuild](https://esbuild.github.io/) that used the existing data sources we had (prerequisites and academic plans) to deliver new insights about UCSD's courses and majors. These web reports and apps were uploaded to the [UCSD Educational Innovation website](https://educationalinnovation.ucsd.edu/ca-views/).
 
@@ -691,21 +687,42 @@ course_capacities.py | (inputs: files/ClassCapCalculatorNewStudents.csv, files/C
 
 ## How to use a data refresh
 
-1. `Makefile`: Update these variables:
+1.  `Makefile`: Update these variables:
 
-   - `year` - the final year available.
-   - `prereq-term` - the term from which prereqs will be used for the prereq tree.
-   - `prereqs`, `plans`, `majors` - if the paths to the new files changed.
+    - `year` - the final year available.
+    - `prereq-term` - the term from which prereqs will be used for the prereq tree.
+    - `prereqs`, `plans`, `majors` - if the paths to the new files changed.
 
-2. `university.py`: Update these variables:
+1.  `university.py`: Update these variables:
 
-   - `prereqs_file`, `plans_file`, `majors_file` - if the paths to the new files changed.
-   - `curriculum_priority`, `college_codes`, `college_names` - if there's a new college. It doesn't particularly matter where the college goes in `curriculum_priority`.
+    - `prereqs_file`, `plans_file`, `majors_file` - if the paths to the new files changed.
+    - `curriculum_priority`, `college_codes`, `college_names` - if there's a new college. It doesn't particularly matter where the college goes in `curriculum_priority`.
 
-3. You may need to update `isis_major_code_list.csv` for any new majors.
+1.  You may need to get a new version of `isis_major_code_list.csv` for any new majors.
 
-4. Run `make`. This will update the web report files in `reports/output/` as well as CSV files used in the Tableau views.
+1.  Run `make`. This will update the web report files in `reports/output/` as well as CSV files used in the Tableau views.
 
-5. **Web reports**: Replace the web report files to the [CMS](https://cms.ucsd.edu/) in `_files/` with the new files. Update the last updated dates in the corresponding instruction pages in `ca-views/`.
+1.  Update [ucsd-degree-plans](https://github.com/SheepTester-forks/ucsd-degree-plans) using the commands in [§ What's in other repos](#whats-in-other-repos).
 
-6. **Uploading to Curricular Analytics**: Run `python3 parse.py <year>` to get a list of major codes to upload. Paste them into `files/upload.sh` and run `bash files/upload.sh`.
+1.  Clone [curricular-analytics-graph](https://github.com/SheepTester-forks/curricular-analytics-graph) and build it.
+    <!-- See [curricular-analytics-graph § Getting protected data (UCSD only)](https://github.com/SheepTester-forks/curricular-analytics-graph?tab=readme-ov-file#getting-protected-data-ucsd-only). -->
+
+1.  **Web reports**: Update the views on the [EI website](https://educationalinnovation.ucsd.edu/ca-views/).
+
+    1.  Navigate to the [`/_files/` folder for the Educational-Innovation site on Cascade CMS](https://cms.ucsd.edu/entity/open.act?id=bbd5a01eac1a010c51a0f38fa018ce21&type=folder).
+
+    1.  Copy and paste the contents of [cms-replace-file.js](./cms-replace-file.js) into the DevTools console; this adds a file upload button to each file.
+
+        cms-replace-file.js exists because Cascade CMS only lets you use their HTML text editor to edit the file, and it can get laggy with large HTML files.
+
+    1.  Then replace the individual HTML files as needed from [reports/output/](./reports/output/) (their file names are the same).
+
+    1.  Replace plan-graph.html and plan-graph-\*\*\*\*\*\*.html with curricular-analytics-graph/dist/plan-graph.html.
+
+    1.  Edit the "Last updated" dates on all the pages under [/curricular-analytics/views/](https://educationalinnovation.ucsd.edu/curricular-analytics/views/).
+
+<!-- 1.  ~~**Uploading to Curricular Analytics**: Run `python3 parse.py <year>` to get a list of major codes to upload. Paste them into `files/upload.sh` and run `bash files/upload.sh`.~~ We no longer upload to Curricular Analytics because we have our own [graph renderer now](https://github.com/SheepTester-forks/curricular-analytics-graph), which was handled in the previous step. -->
+
+1.  **Tableau**: I don't really remember how to update the views on Tableau anymore (I think Arturo handles that), but I just remember it's quite a pain.
+
+1.  **Systematically flagged issues**: To share automatically flagged issues in the degree plans, open [files/flagged_issues.html](./files/flagged_issues.html) in the browser, then copy and paste it into a Google Doc. Remove false positives as needed.

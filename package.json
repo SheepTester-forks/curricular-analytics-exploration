@@ -7,8 +7,10 @@
     "doc": "docs"
   },
   "scripts": {
+    "build": "node --experimental-strip-types reports/build.mts build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "watch": "node --experimental-strip-types reports/build.mts watch"
   },
   "keywords": [],
   "author": "",
