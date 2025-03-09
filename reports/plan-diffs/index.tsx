@@ -4,9 +4,9 @@
 /// <reference lib="deno.ns" />
 
 import { render } from 'preact'
-import { App } from './plan-diffs/components/App.tsx'
-import { DiffProps } from './plan-diffs/components/Diff.tsx'
-import { Data } from './plan-diffs/types.ts'
+import { App } from './components/App.tsx'
+import { DiffProps } from './components/Diff.tsx'
+import { Data } from './types.ts'
 
 {
   const data: Data =

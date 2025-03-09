@@ -4,16 +4,14 @@
 /// <reference lib="deno.ns" />
 
 import { render } from 'preact'
-import { App } from './seats/components/App.tsx'
+import { App } from './components/App.tsx'
 
 render(
   <App
-    courses={
-      JSON.parse(
-        document.getElementById('courses_by_major')?.textContent ?? 'null'
-      ) ||
+    prereqs={
+      JSON.parse(document.getElementById('prereqs')?.textContent ?? 'null') ||
       // deno-lint-ignore no-explicit-any
-      (window as any)['COURSES_BY_MAJOR']
+      (window as any)['PREREQS']
     }
   />,
   document.getElementById('root')!

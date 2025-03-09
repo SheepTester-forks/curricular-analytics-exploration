@@ -67,8 +67,8 @@ reports/output/academic-plan-diffs.js: reports/output/academic-plan-diffs.json
 reports/output/plan-diffs.js: reports/plan-diffs.tsx
 	deno bundle reports/plan-diffs.tsx -- reports/output/plan-diffs.js
 
-reports/output/academic-plan-diffs.html: reports/plan-diffs-template.html reports/output/academic-plan-diffs.json reports/output/plan-diffs.js
-	head -n -4 < reports/plan-diffs-template.html > reports/output/academic-plan-diffs.html
+reports/output/academic-plan-diffs.html: reports/plan-diffs/template.html reports/output/academic-plan-diffs.json reports/output/plan-diffs.js
+	head -n -4 < reports/plan-diffs/template.html > reports/output/academic-plan-diffs.html
 	echo '<script id="diffs" type="application/json">' >> reports/output/academic-plan-diffs.html
 	cat reports/output/academic-plan-diffs.json >> reports/output/academic-plan-diffs.html
 	echo '</script>' >> reports/output/academic-plan-diffs.html
@@ -115,11 +115,11 @@ reports/output/prereqs.js: reports/output/prereqs.json
 	echo 'window.PREREQS =' > reports/output/prereqs.js
 	cat reports/output/prereqs.json >> reports/output/prereqs.js
 
-reports/output/prereq-tree.js: reports/prereq-tree.tsx
-	deno bundle reports/prereq-tree.tsx -- reports/output/prereq-tree.js
+reports/output/prereq-tree.js: reports/prereq-tree/index.tsx
+	deno bundle reports/prereq-tree/index.tsx -- reports/output/prereq-tree.js
 
-reports/output/prereq-tree.html: reports/prereq-tree-template.html reports/output/prereq-tree.js reports/output/prereqs.json
-	head -n -4 < reports/prereq-tree-template.html > reports/output/prereq-tree.html
+reports/output/prereq-tree.html: reports/prereq-tree/template.html reports/output/prereq-tree.js reports/output/prereqs.json
+	head -n -4 < reports/prereq-tree/template.html > reports/output/prereq-tree.html
 	echo '<script id="prereqs" type="application/json">' >> reports/output/prereq-tree.html
 	cat reports/output/prereqs.json >> reports/output/prereq-tree.html
 	echo '</script>' >> reports/output/prereq-tree.html
@@ -129,11 +129,11 @@ reports/output/prereq-tree.html: reports/prereq-tree-template.html reports/outpu
 
 # Plan editor
 
-reports/output/plan-editor.js: reports/plan-editor.tsx
-	deno bundle reports/plan-editor.tsx -- reports/output/plan-editor.js
+reports/output/plan-editor.js: reports/plan-editor/index.tsx
+	deno bundle reports/plan-editor/index.tsx -- reports/output/plan-editor.js
 
-reports/output/plan-editor.html: reports/plan-editor-template.html reports/output/plan-editor.js reports/output/prereqs.json
-	head -n -4 < reports/plan-editor-template.html > reports/output/plan-editor.html
+reports/output/plan-editor.html: reports/plan-editor/template.html reports/output/plan-editor.js reports/output/prereqs.json
+	head -n -4 < reports/plan-editor/template.html > reports/output/plan-editor.html
 	echo '<script id="prereqs" type="application/json">' >> reports/output/plan-editor.html
 	cat reports/output/prereqs.json >> reports/output/plan-editor.html
 	echo '</script>' >> reports/output/plan-editor.html
@@ -171,11 +171,11 @@ reports/output/courses_by_major.js: courses_req_by_majors.json
 	echo 'window.COURSES_BY_MAJOR =' > reports/output/courses_by_major.js
 	cat courses_req_by_majors.json >> reports/output/courses_by_major.js
 
-reports/output/seats.js: reports/plan-editor.tsx
-	deno bundle reports/seats.tsx -- reports/output/seats.js
+reports/output/seats.js: reports/plan-editor/index.tsx
+	deno bundle reports/seats/index.tsx -- reports/output/seats.js
 
-reports/output/seats.html: reports/seats-template.html courses_req_by_majors.json reports/output/seats.js
-	head -n -4 < reports/seats-template.html > reports/output/seats.html
+reports/output/seats.html: reports/seats/template.html courses_req_by_majors.json reports/output/seats.js
+	head -n -4 < reports/seats/template.html > reports/output/seats.html
 	echo '<script id="courses_by_major" type="application/json">' >> reports/output/seats.html
 	cat courses_req_by_majors.json >> reports/output/seats.html
 	echo '</script>' >> reports/output/seats.html

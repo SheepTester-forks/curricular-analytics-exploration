@@ -3,7 +3,7 @@ browser and uploaded anywhere.
 
 ## Curriculum diffs
 
-Requires `files/prereqs_fa12.csv` and `files/academic_plans_fa12.csv`. Uses Julia, Python, Deno. Produces `reports/output/academic-plan-diffs.html`.
+Requires `files/prereqs_fa12.csv` and `files/academic_plans_fa12.csv`. Uses Python and Deno. Produces `reports/output/academic-plan-diffs.html`.
 
 ```sh
 $ make academic-plan-diffs
