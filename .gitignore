@@ -5,3 +5,4 @@ __pycache__
 *.tmp
 *:Zone.Identifier
 plan_csvs/
+node_modules/
