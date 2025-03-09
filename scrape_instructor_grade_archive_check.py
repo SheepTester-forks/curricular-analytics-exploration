@@ -1,11 +1,12 @@
 """
-One-off script checking
+One-off script checking A.S.'s DFW data
 
 python3 scrape_instructor_grade_archive_check.py
 """
 
 from collections import defaultdict
 import csv
+import re
 
 
 def parse(number: str) -> float:
@@ -40,6 +41,7 @@ def main():
             if term:
                 courses[course_code, term] = parse(dfw_count) / parse(total)
                 # the assertion passes, meaning that P/NP is not included
+                # actually it seems that it does include P/NP
                 assert parse(total) == parse(abc_count) + parse(dfw_count)
 
     # "as" refers to associated students since that's where this data is from
@@ -56,7 +58,7 @@ def main():
             year,
             quarter,
             _title,
-            _instructor,
+            instructor,
             _gpa,
             a,
             b,
@@ -73,13 +75,24 @@ def main():
             if as_courses_count[course_code, term] == 1:
                 abc_percent = as_parse(a) + as_parse(b) + as_parse(c) + as_parse(p)
                 dfw_percent = as_parse(d) + as_parse(f) + as_parse(w) + as_parse(np)
+                assert abc_percent + dfw_percent <= 100
                 if abc_percent + dfw_percent == 0:
-                    as_courses[course_code, term] = 0
+                    as_courses_count[course_code, term] -= 1
                     continue
+                if abc_percent + dfw_percent < 95:
+                    if abc_percent + dfw_percent < 80:
+                        print(
+                            f"{term} {course_code} {abc_percent + dfw_percent:.1f} doesnt add to 100% ({instructor})"
+                        )
+                    as_courses_count[course_code, term] -= 1
+                    continue
+                # abc_percent -= as_parse(np)
+                # dfw_percent -= as_parse(np)
                 as_courses[course_code, term] = dfw_percent / (
                     abc_percent + dfw_percent
                 )
             elif as_courses_count[course_code, term] == 2:
+                # filter out courses with multiple profs
                 del as_courses[course_code, term]
 
     intersection = set(courses.keys()) & set(as_courses.keys())
@@ -95,6 +108,27 @@ def main():
             f"difference for {course_code},{term}. OURS: {our_dfw:.1%}, THEIRS: {as_dfw:.1%}. diff: {diff:.4%}"
         )
     print(f"{len(results) / len(intersection):.0%} difference")
+
+    common_terms = {term for _course, term in courses.keys()} & {
+        term for _course, term in as_courses_count.keys()
+    }
+    carlos_keys = set(
+        (course, term)
+        for course, term in courses.keys()
+        # remove grad courses and x97..99 courses
+        if term in common_terms
+        and int(re.sub(r"[A-Z]", "", course)) < 200
+        and not (97 <= int(re.sub(r"[A-Z]", "", course)) % 100 <= 99)
+    )
+    as_keys = set(
+        (course, term)
+        for course, term in as_courses_count.keys()
+        if term in common_terms
+    )
+    carlos_has = carlos_keys - as_keys
+    print("our data has", len(carlos_has), list(carlos_has)[:5], "and AS doesn't")
+    as_has = as_keys - carlos_keys
+    print("AS has", as_has, "and we don't")
 
 
 if __name__ == "__main__":

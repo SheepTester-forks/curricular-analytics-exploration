@@ -61,9 +61,9 @@ We continue to refer to projects based on these forks as part of our Curricular 
      $ npm install
      ```
 
-2. Download the required CSV files to files/. The links are probably private, so you will have to request access or ask for updated data. Their format is [detailed below](#required-files).
+2. Download the required CSV files to files/. The links are probably private, so you will have to request access or ask for updated data. Their format is detailed in [§ Required files](#required-files).
 
-   - **`academic_plans_thruFA24.csv`** and **`prereqs_thruFA25.csv`** from the [Archive of Data Dumps](https://ucsdcloud.sharepoint.com/:f:/r/sites/EI/Shared%20Documents/Projects/Curricular%20Analytics/Archive%20of%20Data%20Dumps)
+   - **`academic_plans_thruFA24.csv`** and **`prereqs_thruFA25.csv`** from the [Archive of Data Dumps](https://ucsdcloud.sharepoint.com/:f:/r/sites/EI/Shared%20Documents/Projects/Curricular%20Analytics/Archive%20of%20Data%20Dumps).
    - [**`isis_major_code_list.csv`**](https://blink.ucsd.edu/_files/instructors-tab/major-codes/isis_major_code_list.xlsx)
      - Export the Major Codes sheet ("isis_major_code_list") as a CSV.
 
