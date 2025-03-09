@@ -1,9 +1,13 @@
-> [!NOTE]
-> Because this fork has diverged significantly from the [original repo](https://github.com/ArturoAmaya/ExploratoryCurricularAnalytics), I've made a hard fork at
-> [SheepTester-forks/ExploratoryCurricularAnalytics](https://github.com/SheepTester-forks/ExploratoryCurricularAnalytics).
-> Development continues there.
-
 # Curricular Analytics exploration
+
+<img src="docs/educationalinnovation.ucsd.edu__files_prereq-tree.html.png" alt="Tree of Blocked Courses" width="400" />
+<img src="docs/educationalinnovation.ucsd.edu__files_plan-editor.html_year=2024&department=CSE&major_name=Computer+Engineering&major=CS25&cip=14.0901&college=RE&degree_type=BS&courses=.png" alt="Plan editor" width="400" />
+<img src="docs/educationalinnovation.ucsd.edu__files_prereq-diffs.html.png" alt="Prerequisites over time by course" width="200" />
+
+<img src="docs/educationalinnovation.ucsd.edu__files_prereq-timeline.html.png" alt="Prerequisite changes by term
+" width="200" />
+<img src="docs/educationalinnovation.ucsd.edu__files_academic-plan-diffs.html.png" alt="Changes to Academic Plans over Time" width="400" />
+<img src="docs/educationalinnovation.ucsd.edu__files_college-ge-units.html.png" alt="Additional Units from College-Specific General Education Requirements" width="400" />
 
 This is a long README for a large repo. Here's a list of quick links:
 
@@ -11,6 +15,18 @@ This is a long README for a large repo. Here's a list of quick links:
 - [Other related repos](#whats-in-other-repos)
 - [Required data files](#required-files)
 - [What to change for a new school year](#how-to-use-a-data-refresh)
+
+## Curricular Analytics
+
+What is Curricular Analytics?
+
+Ambiguously, it can refer to Damour Systems' [Curricular Analytics website](https://curricularanalytics.org/home), or their [Julia toolkit](https://github.com/CurricularAnalytics/CurricularAnalytics.jl). Originally, we used both these tools, but since then, we've branched off of their work to better fit the needs of UC San Diego:
+
+- The website's graph visualization was too limiting, so [we made our own curriculum graph view](https://educationalinnovation.ucsd.edu/curricular-analytics/views/graph.html).
+
+- Julia takes a long time to start up because it JIT compiles their entire toolkit, but this isn't feasible for our relatively small scripts. So, [we rewrote their toolkit in Python](https://github.com/SheepTester-forks/CurricularAnalytics.py), a language familiar to more people than Julia is.
+
+We continue to refer to projects based on these forks as part of our Curricular Analytics initiative, as well as any analysis of UCSD's curricula in general.
 
 ## Setup
 
