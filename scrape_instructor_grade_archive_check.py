@@ -1,7 +1,14 @@
 """
 One-off script checking A.S.'s DFW data
 
-python3 scrape_instructor_grade_archive_check.py
+> python3 scrape_instructor_grade_archive_check.py
+
+notes:
+- CJ dataset includes P and NP in ABC and DFW, respectively
+- sometimes AS percentages dont add up to 100%. why?
+- CJ dataset sums across all sections
+- AS seems to omit sections with a capacity <= 20
+    - good example of this is FILM 87, FA21
 """
 
 from collections import defaultdict
