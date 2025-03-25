@@ -312,25 +312,24 @@ To automatically upload CSV files to Curricular Analytics using [`upload.py`](up
 
   ![`_curricularanalytics_session` cookie](./docs/ca_session.png)
 
-## Development (plan diff, prereq tree, and plan editor)
+## Development (plan diff, prereq tree)
 
 Watch for changes. Open the template file in the browser:
 
 - http://localhost:8000/reports/plan-diffs/template.html
 - http://localhost:8000/reports/prereq-tree/template.html
-- http://localhost:8000/reports/plan-editor/template.html
+<!-- - http://localhost:8000/reports/plan-editor/template.html -->
 
 ```sh
 $ npm run watch plan-diffs
 $ npm run watch prereq-tree
-$ npm run watch plan-editor
 ```
 
 Build a single file. Upload the output file to the CMS.
 
 - reports/output/academic-plan-diffs.html
 - reports/output/prereq-tree.html
-- reports/output/plan-editor.html
+<!-- - reports/output/plan-editor.html -->
 
 ```
 $ make
@@ -723,6 +722,8 @@ course_capacities.py | (inputs: files/ClassCapCalculatorNewStudents.csv, files/C
 1.  Clone [curricular-analytics-graph](https://github.com/SheepTester-forks/curricular-analytics-graph) and build it.
     <!-- See [curricular-analytics-graph § Getting protected data (UCSD only)](https://github.com/SheepTester-forks/curricular-analytics-graph?tab=readme-ov-file#getting-protected-data-ucsd-only). -->
 
+1.  Clone [ucsd-plan-editor](https://github.com/SheepTester-forks/ucsd-plan-editor) and build it.
+
 1.  **Web reports**: Update the views on the [EI website](https://educationalinnovation.ucsd.edu/ca-views/).
 
     1.  Navigate to the [`/_files/` folder for the Educational-Innovation site on Cascade CMS](https://cms.ucsd.edu/entity/open.act?id=bbd5a01eac1a010c51a0f38fa018ce21&type=folder).
@@ -734,6 +735,8 @@ course_capacities.py | (inputs: files/ClassCapCalculatorNewStudents.csv, files/C
     1.  Then replace the individual HTML files as needed from [reports/output/](./reports/output/) (their file names are the same).
 
     1.  Replace plan-graph.html and plan-graph-\*\*\*\*\*\*.html with curricular-analytics-graph/dist/plan-graph.html.
+
+    1.  Replace plan-editor.html with ucsd-plan-editor/dist/plan-editor.html.
 
     1.  Edit the "Last updated" dates on all the pages under [/curricular-analytics/views/](https://educationalinnovation.ucsd.edu/curricular-analytics/views/).
 

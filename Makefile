@@ -1,4 +1,4 @@
-all: tableau academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree plan-editor plan-editor-index flagged-issues
+all: tableau academic-plan-diffs prereq-diffs prereq-timeline college-ge-units prereq-tree plan-editor-index flagged-issues
 protected: files/protected/summarize_dfw_by_major.json files/protected/summarize_frequency.json
 
 year-start = 2015
