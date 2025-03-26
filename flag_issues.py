@@ -147,7 +147,8 @@ def check_plan(
                 f"[{name}] {course.course_code} (from “{course.raw.course_title}”) should be {course.units} units but is {course.raw.units} units"
             )
         elif (
-            course.course_code in consensus_units
+            course.course_code is not None
+            and course.course_code in consensus_units
             and consensus_units[course.course_code] != course.units
         ):
             issues.wrong_units.append(

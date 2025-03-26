@@ -306,6 +306,12 @@ We continue to refer to projects based on these forks as part of our Curricular 
 
 ### Uploading
 
+> [!WARNING]
+>
+> The Curricular Analytics website has been overhauled since the original script was written, so any code that interacts with curricularanalytics.org is unlikely to work anymore.
+>
+> Also, we are no longer using the Curricular Analytics website because we've switched to our own custom visualization.
+
 To automatically upload CSV files to Curricular Analytics using [`upload.py`](upload.py), you need to create a copy of [`.env.example`](.env.example) and name it `.env`, then fill in `AUTHENTICITY_TOKEN` and `CA_SESSION`.
 
 - To get `CA_SESSION`, open inspect element and head to Application > Cookies > https://curricularanalytics.org. Copy the cookie value for `_curricularanalytics_session`.

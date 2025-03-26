@@ -105,10 +105,10 @@ const rows = table.map(
   ({
     'Course ID': courseCode,
     'Dept Cd': departmentCode,
-    'Major Disproportionate Impact': impactMajor,
-    'URM Disproportionate Impact': impactUrm,
-    'First Gen Disproportionate Impact': impactFirstGen,
-    'Gender Disproportionate Impact': impactGender,
+    'Major Disproportionate Impact': impactMajor = '',
+    'URM Disproportionate Impact': impactUrm = '',
+    'First Gen Disproportionate Impact': impactFirstGen = '',
+    'Gender Disproportionate Impact': impactGender = '',
     N: studentCount,
     'N Qtrs w/Enrollment': quarterCount,
     'Count of DFW Grades': dfwCount,
@@ -127,25 +127,33 @@ const rows = table.map(
           ? true
           : impactMajor === ''
             ? false
-            : expect('expected impactMajor to be either Y or empty'),
+            : expect(
+              `expected impactMajor to be either Y or empty, received '${impactMajor}'`
+            ),
       urm:
         impactUrm === 'Y'
           ? true
           : impactUrm === ''
             ? false
-            : expect('expected impactUrm to be either Y or empty'),
+            : expect(
+              `expected impactUrm to be either Y or empty, received '${impactUrm}'`
+            ),
       firstGen:
         impactFirstGen === 'Y'
           ? true
           : impactFirstGen === ''
             ? false
-            : expect('expected impactFirstGen to be either Y or empty'),
+            : expect(
+              `expected impactFirstGen to be either Y or empty, received '${impactFirstGen}'`
+            ),
       gender:
         impactGender === 'Y'
           ? true
           : impactGender === ''
             ? false
-            : expect('expected impactGender to be either Y or empty')
+            : expect(
+              `expected impactGender to be either Y or empty, received '${impactGender}'`
+            )
     },
     studentCount: +studentCount,
     quarterCount: +quarterCount,

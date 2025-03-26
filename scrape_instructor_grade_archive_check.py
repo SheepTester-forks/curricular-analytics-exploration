@@ -26,6 +26,7 @@ def as_parse(number: str) -> float:
 
 def main():
     courses: dict[tuple[str, str], float] = {}
+    courses_total: dict[tuple[str, str], int] = {}
 
     with open("./files/21-22 Enrollment_DFW CJ.xlsx.csv") as file:
         reader = csv.reader(file)
@@ -47,6 +48,7 @@ def main():
             course_code = course or course_code
             if term:
                 courses[course_code, term] = parse(dfw_count) / parse(total)
+                courses_total[course_code, term] = int(parse(total))
                 # the assertion passes, meaning that P/NP is not included
                 # actually it seems that it does include P/NP
                 assert parse(total) == parse(abc_count) + parse(dfw_count)
@@ -111,8 +113,9 @@ def main():
             results.append((*key, our_dfw, as_dfw, abs(our_dfw - as_dfw)))
     results.sort(key=lambda t: t[4])
     for course_code, term, our_dfw, as_dfw, diff in results:
+        # if courses_total[course_code, term] > 20:
         print(
-            f"difference for {course_code},{term}. OURS: {our_dfw:.1%}, THEIRS: {as_dfw:.1%}. diff: {diff:.4%}"
+            f"difference for {course_code},{term}. OURS: {our_dfw:.1%}, THEIRS: {as_dfw:.1%}. diff: {diff:.4%}. {courses_total[course_code, term]} students"
         )
     print(f"{len(results) / len(intersection):.0%} difference")
 
@@ -133,7 +136,12 @@ def main():
         if term in common_terms
     )
     carlos_has = carlos_keys - as_keys
-    print("our data has", len(carlos_has), list(carlos_has)[:5], "and AS doesn't")
+    print(
+        "our data has",
+        len(carlos_has),
+        list((key, courses_total[key]) for key in carlos_has)[:5],
+        "and AS doesn't",
+    )
     as_has = as_keys - carlos_keys
     print("AS has", as_has, "and we don't")
 
