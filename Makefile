@@ -63,7 +63,7 @@ reports/output/plan-diffs.js: reports/plan-diffs/index.tsx reports/output/academ
 	npm run build plan-diffs
 
 reports/output/academic-plan-diffs.html: reports/plan-diffs/template.html reports/output/plan-diffs.js
-	head -n -3 < reports/plan-diffs/template.html > reports/output/academic-plan-diffs.html
+	head -n $$(($$(wc -l < reports/plan-diffs/template.html) - 3)) < reports/plan-diffs/template.html > reports/output/academic-plan-diffs.html
 	echo '<script>' >> reports/output/academic-plan-diffs.html
 	cat reports/output/plan-diffs.js >> reports/output/academic-plan-diffs.html
 	echo '</script></body></html>' >> reports/output/academic-plan-diffs.html
@@ -74,7 +74,7 @@ reports/output/prereq-diffs-fragment.html: diff_prereqs.py files/prereqs/.done
 	python3 diff_prereqs.py > reports/output/prereq-diffs-fragment.html
 
 reports/output/prereq-diffs.html: reports/prereq-diffs-template.html reports/output/prereq-diffs-fragment.html
-	head -n -1 < reports/prereq-diffs-template.html > reports/output/prereq-diffs.html
+	head -n $$(($$(wc -l < reports/prereq-diffs-template.html) - 1)) < reports/prereq-diffs-template.html > reports/output/prereq-diffs.html
 	cat reports/output/prereq-diffs-fragment.html >> reports/output/prereq-diffs.html
 	echo '</html>' >> reports/output/prereq-diffs.html
 
@@ -84,7 +84,7 @@ reports/output/prereq-timeline-fragment.html: diff_prereqs.py files/prereqs/.don
 	python3 diff_prereqs.py timeline > reports/output/prereq-timeline-fragment.html
 
 reports/output/prereq-timeline.html: reports/prereq-timeline-template.html reports/output/prereq-timeline-fragment.html
-	head -n -1 < reports/prereq-timeline-template.html > reports/output/prereq-timeline.html
+	head -n $$(($$(wc -l < reports/prereq-timeline-template.html) - 1)) < reports/prereq-timeline-template.html > reports/output/prereq-timeline.html
 	cat reports/output/prereq-timeline-fragment.html >> reports/output/prereq-timeline.html
 	echo '</html>' >> reports/output/prereq-timeline.html
 
@@ -94,7 +94,7 @@ reports/output/college-ge-units-fragment.html: college_ges.py files/plans/.done 
 	python3 college_ges.py $(year) html > reports/output/college-ge-units-fragment.html
 
 reports/output/college-ge-units.html: reports/college-ge-template.html reports/output/college-ge-units-fragment.html
-	head -n -2 < reports/college-ge-template.html > reports/output/college-ge-units.html
+	head -n $$(($$(wc -l < reports/college-ge-template.html) - 2)) < reports/college-ge-template.html > reports/output/college-ge-units.html
 	cat reports/output/college-ge-units-fragment.html >> reports/output/college-ge-units.html
 	echo '</body></html>' >> reports/output/college-ge-units.html
 
@@ -107,7 +107,7 @@ reports/output/prereq-tree.js: reports/prereq-tree/index.tsx reports/output/prer
 	npm run build prereq-tree
 
 reports/output/prereq-tree.html: reports/prereq-tree/template.html reports/output/prereq-tree.js
-	head -n -3 < reports/prereq-tree/template.html > reports/output/prereq-tree.html
+	head -n $$(($$(wc -l < reports/prereq-tree/template.html) - 3)) < reports/prereq-tree/template.html > reports/output/prereq-tree.html
 	echo '<script>' >> reports/output/prereq-tree.html
 	cat reports/output/prereq-tree.js >> reports/output/prereq-tree.html
 	echo '</script></body></html>' >> reports/output/prereq-tree.html
@@ -118,7 +118,7 @@ reports/output/plan-editor.js: reports/plan-editor/index.tsx reports/output/prer
 	npm run build plan-editor
 
 reports/output/plan-editor.html: reports/plan-editor/template.html reports/output/plan-editor.js
-	head -n -3 < reports/plan-editor/template.html > reports/output/plan-editor.html
+	head -n $$(($$(wc -l < reports/plan-editor/template.html) - 3)) < reports/plan-editor/template.html > reports/output/plan-editor.html
 	echo '<script>' >> reports/output/plan-editor.html
 	cat reports/output/plan-editor.js >> reports/output/plan-editor.html
 	echo '</script></body></html>' >> reports/output/plan-editor.html
@@ -129,7 +129,7 @@ reports/output/plan-editor-index-fragment.html: dump_plans.py files/plans/.done
 	python3 dump_plans.py $(year) html > reports/output/plan-editor-index-fragment.html
 
 reports/output/plan-editor-index.html: reports/plan-editor-index-template.html reports/output/plan-editor-index-fragment.html
-	head -n -1 < reports/plan-editor-index-template.html > reports/output/plan-editor-index.html
+	head -n $$(($$(wc -l < reports/plan-editor-index-template.html) - 1)) < reports/plan-editor-index-template.html > reports/output/plan-editor-index.html
 	cat reports/output/plan-editor-index-fragment.html >> reports/output/plan-editor-index.html
 	echo '</html>' >> reports/output/plan-editor-index.html
 
@@ -140,7 +140,7 @@ reports/output/plan-graph-index-fragment.html: dump_graphs.py files/plans/.done
 	python3 dump_graphs.py html > reports/output/plan-graph-index-fragment.html
 
 reports/output/plan-graph-index.html: reports/plan-graph-index-template.html reports/output/plan-graph-index-fragment.html
-	head -n -1 < reports/plan-graph-index-template.html > reports/output/plan-graph-index.html
+	head -n $$(($$(wc -l < reports/plan-graph-index-template.html) - 1)) < reports/plan-graph-index-template.html > reports/output/plan-graph-index.html
 	cat reports/output/plan-graph-index-fragment.html >> reports/output/plan-graph-index.html
 	echo '</html>' >> reports/output/plan-graph-index.html
 
@@ -153,7 +153,7 @@ reports/output/seats.js: reports/plan-editor/index.tsx courses_req_by_majors.jso
 	npm run build seats
 
 reports/output/seats.html: reports/seats/template.html reports/output/seats.js
-	head -n -3 < reports/seats/template.html > reports/output/seats.html
+	head -n $$(($$(wc -l < reports/seats/template.html) - 3)) < reports/seats/template.html > reports/output/seats.html
 	echo '<script>' >> reports/output/seats.html
 	cat reports/output/seats.js >> reports/output/seats.html
 	echo '</script></body></html>' >> reports/output/seats.html
