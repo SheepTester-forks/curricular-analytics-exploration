@@ -132,6 +132,13 @@ def render_plan_urls() -> None:
             for college in university.college_codes
             if college in major_plan.colleges
         }
+        | {
+            f"{major_code}.": f"{major_code} (!YEAR!): {major_codes()[major_code].name}"
+            for year in range(2015, 2050)
+            for all_plans in (major_plans(year),)
+            if all_plans != {}
+            for major_code in all_plans.keys()
+        }
     ).replace("'", "\\'")
     print("<script>")
     print(f"const titles = JSON.parse('{titles}')")
@@ -142,7 +149,7 @@ def render_plan_urls() -> None:
     print("  window.stop()")
     print("  params.append('defaults', 'ucsd')")
     print("  params.delete('plan')")
-    print("  const [year, major, college] = plan.split('.')")
+    print("  const [year, major, college = ''] = plan.split('.')")
     print("  params.append('year', year)")
     print("  params.append('major', major)")
     print(
@@ -151,7 +158,7 @@ def render_plan_urls() -> None:
     print("  url.hostname = 'stage-educationalinnovation.ucsd.edu'")
     print("  url.pathname = '/_files/plan-graph.html'")
     print(
-        "  fetch(`https://raw.githubusercontent.com/SheepTester-forks/ucsd-degree-plans/main/${year}/${major}/${year}_${major}_${college}.csv`)"
+        "  fetch(`https://raw.githubusercontent.com/SheepTester-forks/ucsd-degree-plans/main/${year}/${major}/${year}_${major}${college ? '_' + college : ''}.csv`)"
     )
     print("    .then(r => r.text())")
     print("    .then(csv => {")
