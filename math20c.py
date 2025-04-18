@@ -5,6 +5,10 @@ For every major, this one-off script lists lower-division courses that are not
 prereqs for any identified course in the major. For now, this ignores elective
 courses.
 
+Another goal is to find majors where only one course depends on math. More
+specifically, this script shows when exactly one upper-division course depends
+on a math course.
+
 $ python math20c.py 2024
 """
 
@@ -48,5 +52,6 @@ for major_code, major in major_plans(year).items():
         print(
             f"[{major_code}] Nothing requires {', '.join(str(code) for code in no_dependents)}."
         )
-    # for prereq, dependent in one_dependent:
-    #     print(f"[{major_code}] Only {dependent} requires {prereq}.")
+    for prereq, dependent in one_dependent:
+        if dependent.parts()[1] >= 100 and prereq.subject == "MATH":
+            print(f"[{major_code}] Only {dependent} requires {prereq}.")
