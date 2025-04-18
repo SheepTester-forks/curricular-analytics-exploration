@@ -11,6 +11,7 @@ $ python math20c.py 2024
 import sys
 
 from parse import major_plans, prereqs
+from parse_defs import CourseCode
 
 if len(sys.argv) <= 1:
     raise ValueError("Need year: python math20c.py <year>")
@@ -21,8 +22,8 @@ all_prereqs = prereqs(f"SP{(year + 3) % 100:02d}")
 
 for major_code, major in major_plans(year).items():
     courses = major.curriculum()
-    ld_courses = {
-        course.course_code
+    ld_dependent_count: dict[CourseCode, list[CourseCode]] = {
+        course.course_code: []
         for course in courses
         if course.course_code and course.course_code.parts()[1] < 100
     }
@@ -31,9 +32,21 @@ for major_code, major in major_plans(year).items():
             continue
         for req in all_prereqs.get(course.course_code, []):
             for alt in req:
-                if alt.course_code in ld_courses:
-                    ld_courses.remove(alt.course_code)
-    if ld_courses:
+                if alt.course_code in ld_dependent_count:
+                    ld_dependent_count[alt.course_code].append(course.course_code)
+    no_dependents = sorted(
+        course
+        for course, dependents in ld_dependent_count.items()
+        if len(dependents) == 0
+    )
+    one_dependent = sorted(
+        (course, dependents[0])
+        for course, dependents in ld_dependent_count.items()
+        if len(dependents) == 1
+    )
+    if no_dependents:
         print(
-            f"[{major_code}] Nothing requires {', '.join(str(code) for code in ld_courses)}."
+            f"[{major_code}] Nothing requires {', '.join(str(code) for code in no_dependents)}."
         )
+    # for prereq, dependent in one_dependent:
+    #     print(f"[{major_code}] Only {dependent} requires {prereq}.")

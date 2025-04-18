@@ -1,71 +1,71 @@
-[AN29] Nothing requires BILD 2, ANTH 43, CHEM 6C, MATH 11, ANTH 2.
+[AN29] Nothing requires ANTH 2, ANTH 43, BILD 2, CHEM 6C, MATH 11.
 [AT25] Nothing requires ASTR 20B.
-[AT26] Nothing requires MATH 20E, PHYS 2C, ASTR 20B, PHYS 2D.
-[BE25] Nothing requires CHEM 7L, BENG 1.
-[BE27] Nothing requires CHEM 6C, CHEM 7L, MAE 8, BENG 1.
-[BE28] Nothing requires MATH 20E, BENG 1.
-[BE29] Nothing requires PHYS 2CL, BENG 2, BENG 1.
-[BI30] Nothing requires BILD 4, BILD 2, BILD 5, PHYS 1CL, CHEM 6C, MATH 11, PHYS 1C.
-[BI31] Nothing requires BILD 5, CHEM 6C, PHYS 1C, CHEM 7L, PHYS 1CL, MATH 11.
-[BI32] Nothing requires BILD 5, CHEM 6C, PHYS 1C, CHEM 7L, PHYS 1CL, MATH 11.
-[BI34] Nothing requires BILD 5, MATH 18, PHYS 2C, PHYS 2B.
-[BI35] Nothing requires BILD 5, CHEM 6C, PHYS 1C, CHEM 7L, PHYS 1CL, MATH 11.
-[BI37] Nothing requires BILD 5, CHEM 6C, PHYS 1C, CHEM 7L, PHYS 1CL, MATH 11.
-[BI38] Nothing requires BILD 5, CHEM 6C, PHYS 1C, CHEM 7L, PHYS 1CL.
-[CE25] Nothing requires PHYS 2C, CHEM 7L, PHYS 2CL.
-[CG25] Nothing requires COGS 14B, COGS 13, COGS 17, MATH 18, MATH 10C.
-[CG29] Nothing requires COGS 14B, COGS 13, MATH 18, MATH 10C.
-[CG31] Nothing requires COGS 14B, COGS 13, MATH 18, MATH 10C.
+[AT26] Nothing requires ASTR 20B, MATH 20E, PHYS 2C, PHYS 2D.
+[BE25] Nothing requires BENG 1, CHEM 7L.
+[BE27] Nothing requires BENG 1, CHEM 6C, CHEM 7L, MAE 8.
+[BE28] Nothing requires BENG 1, MATH 20E.
+[BE29] Nothing requires BENG 1, BENG 2, PHYS 2CL.
+[BI30] Nothing requires BILD 2, BILD 4, BILD 5, CHEM 6C, MATH 11, PHYS 1C, PHYS 1CL.
+[BI31] Nothing requires BILD 5, CHEM 6C, CHEM 7L, MATH 11, PHYS 1C, PHYS 1CL.
+[BI32] Nothing requires BILD 5, CHEM 6C, CHEM 7L, MATH 11, PHYS 1C, PHYS 1CL.
+[BI34] Nothing requires BILD 5, MATH 18, PHYS 2B, PHYS 2C.
+[BI35] Nothing requires BILD 5, CHEM 6C, CHEM 7L, MATH 11, PHYS 1C, PHYS 1CL.
+[BI37] Nothing requires BILD 5, CHEM 6C, CHEM 7L, MATH 11, PHYS 1C, PHYS 1CL.
+[BI38] Nothing requires BILD 5, CHEM 6C, CHEM 7L, PHYS 1C, PHYS 1CL.
+[CE25] Nothing requires CHEM 7L, PHYS 2C, PHYS 2CL.
+[CG25] Nothing requires COGS 13, COGS 14B, COGS 17, MATH 10C, MATH 18.
+[CG29] Nothing requires COGS 13, COGS 14B, MATH 10C, MATH 18.
+[CG31] Nothing requires COGS 13, COGS 14B, MATH 10C, MATH 18.
 [CG32] Nothing requires COGS 14B, MATH 10C.
-[CG33] Nothing requires COGS 14B, COGS 13, MATH 18, MATH 10C.
-[CG34] Nothing requires COGS 14B, COGS 13, MATH 18, MATH 10C.
-[CG35] Nothing requires MATH 20E, COGS 14B, COGS 13.
-[CH25] Nothing requires MATH 18, PHYS 2B, CHEM 41C.
-[CH34] Nothing requires CHEM 41B, MATH 18, PHYS 2B, CHEM 43A.
-[CH35] Nothing requires BILD 2, CHEM 41C, PHYS 1CL, MATH 11.
+[CG33] Nothing requires COGS 13, COGS 14B, MATH 10C, MATH 18.
+[CG34] Nothing requires COGS 13, COGS 14B, MATH 10C, MATH 18.
+[CG35] Nothing requires COGS 13, COGS 14B, MATH 20E.
+[CH25] Nothing requires CHEM 41C, MATH 18, PHYS 2B.
+[CH34] Nothing requires CHEM 41B, CHEM 43A, MATH 18, PHYS 2B.
+[CH35] Nothing requires BILD 2, CHEM 41C, MATH 11, PHYS 1CL.
 [CH36] Nothing requires MATH 18, PHYS 2B.
-[CH38] Nothing requires BILD 2, CHEM 41C, PHYS 1CL, MATH 11.
-[CI25] Nothing requires FILM 73, VIS 84, FILM 71, FILM 72.
+[CH38] Nothing requires BILD 2, CHEM 41C, MATH 11, PHYS 1CL.
+[CI25] Nothing requires FILM 71, FILM 72, FILM 73, VIS 84.
 [CL25] Nothing requires LTGK 3.
-[CN25] Nothing requires CHIN 10A, CHIN 20A, CHIN 20B, CHIN 10C, CHIN 20C, CHIN 10B.
-[CS25] Nothing requires PHYS 2C, CSE 12, PHYS 2B.
-[CS26] Nothing requires MATH 18, MATH 20C, CSE 30.
-[CS27] Nothing requires MATH 18, CSE 30, PHYS 2A.
+[CN25] Nothing requires CHIN 10A, CHIN 10B, CHIN 10C, CHIN 20A, CHIN 20B, CHIN 20C.
+[CS25] Nothing requires CSE 12, PHYS 2B, PHYS 2C.
+[CS26] Nothing requires CSE 30, MATH 18, MATH 20C.
+[CS27] Nothing requires CSE 30, MATH 18, PHYS 2A.
 [DS25] Nothing requires COGS 9, DSC 96.
-[EC26] Nothing requires PHYS 2C, CSE 12, PHYS 2B, MATH 20D, MATH 11.
-[EC27] Nothing requires MATH 20E, CHEM 6A, ECE 5, ECE 30.
+[EC26] Nothing requires CSE 12, MATH 11, MATH 20D, PHYS 2B, PHYS 2C.
+[EC27] Nothing requires CHEM 6A, ECE 5, ECE 30, MATH 20E.
 [EC28] Nothing requires CHEM 6A, ECE 30, PHYS 2DL.
-[EC37] Nothing requires MATH 20E, CHEM 6A, ECE 30.
-[EN28] Nothing requires MATH 20D, ECON 3.
-[EN30] Nothing requires MGT 45, POLI 5, MGT 71, MGT 16.
-[ES25] Nothing requires PHYS 2C, PHYS 2B, MATH 20D, ECON 1.
-[ES26] Nothing requires ECON 1, PHYS 1CL, CHEM 6C, MATH 11, PHYS 1C.
-[ES27] Nothing requires CHEM 40B, MATH 20D, CHEM 43A, ECON 1.
-[ES28] Nothing requires PHYS 1CL, CHEM 6C, MATH 11, PHYS 1C.
+[EC37] Nothing requires CHEM 6A, ECE 30, MATH 20E.
+[EN28] Nothing requires ECON 3, MATH 20D.
+[EN30] Nothing requires MGT 16, MGT 45, MGT 71, POLI 5.
+[ES25] Nothing requires ECON 1, MATH 20D, PHYS 2B, PHYS 2C.
+[ES26] Nothing requires CHEM 6C, ECON 1, MATH 11, PHYS 1C, PHYS 1CL.
+[ES27] Nothing requires CHEM 40B, CHEM 43A, ECON 1, MATH 20D.
+[ES28] Nothing requires CHEM 6C, MATH 11, PHYS 1C, PHYS 1CL.
 [ET25] Nothing requires ETHN 1R.
-[GH26] Nothing requires BILD 2, PSYC 60, CHEM 7L, CHEM 6C, MATH 10B, BILD 3.
+[GH26] Nothing requires BILD 2, BILD 3, CHEM 6C, CHEM 7L, MATH 10B, PSYC 60.
 [GL25] Nothing requires GSS 20.
 [GS25] Nothing requires LTGM 2C.
-[IS26] Nothing requires ECON 3, MATH 10C, ECON 2.
+[IS26] Nothing requires ECON 2, ECON 3, MATH 10C.
 [IS34] Nothing requires MATH 10C.
 [IS36] Nothing requires PHIL 10.
-[IT25] Nothing requires LTIT 50, LTIT 2B.
-[JA25] Nothing requires HILD 12, HILD 11, HILD 10.
-[LA25] Nothing requires LATI 10, LTSP 2A, LATI 50.
-[LA26] Nothing requires LATI 10, LTSP 2A, LATI 50.
-[LA27] Nothing requires LATI 10, LTSP 2A, LATI 50.
+[IT25] Nothing requires LTIT 2B, LTIT 50.
+[JA25] Nothing requires HILD 10, HILD 11, HILD 12.
+[LA25] Nothing requires LATI 10, LATI 50, LTSP 2A.
+[LA26] Nothing requires LATI 10, LATI 50, LTSP 2A.
+[LA27] Nothing requires LATI 10, LATI 50, LTSP 2A.
 [LN34] Nothing requires COGS 14B.
 [LT34] Nothing requires LTEN 26, LTWR 8A.
-[LT36] Nothing requires LTEN 22, LTEN 26, LTEN 21, LTEN 25, LTEN 27, LTEN 23.
+[LT36] Nothing requires LTEN 21, LTEN 22, LTEN 23, LTEN 25, LTEN 26, LTEN 27.
 [LT42] Nothing requires LTEN 25.
-[MA27] Nothing requires MATH 20E, MATH 20D, CSE 11.
-[MA29] Nothing requires MATH 20E, MATH 20D.
-[MA30] Nothing requires MATH 20E, MATH 20D, CSE 15L.
-[MA31] Nothing requires MATH 20E, MATH 20D, CSE 11.
-[MA32] Nothing requires MATH 20E, MATH 20D.
-[MA33] Nothing requires MATH 20D, ECON 3.
-[MA35] Nothing requires MATH 20E, CSE 11.
-[MA36] Nothing requires MATH 20E, BILD 2, BILD 4, MATH 11.
+[MA27] Nothing requires CSE 11, MATH 20D, MATH 20E.
+[MA29] Nothing requires MATH 20D, MATH 20E.
+[MA30] Nothing requires CSE 15L, MATH 20D, MATH 20E.
+[MA31] Nothing requires CSE 11, MATH 20D, MATH 20E.
+[MA32] Nothing requires MATH 20D, MATH 20E.
+[MA33] Nothing requires ECON 3, MATH 20D.
+[MA35] Nothing requires CSE 11, MATH 20E.
+[MA36] Nothing requires BILD 2, BILD 4, MATH 11, MATH 20E.
 [MC30] Nothing requires MAE 20.
 [MC31] Nothing requires MAE 20.
 [MC32] Nothing requires MAE 20.
@@ -76,15 +76,15 @@
 [MC37] Nothing requires DOC 3.
 [MU25] Nothing requires MUS 43.
 [MU26] Nothing requires MUS 43.
-[MU27] Nothing requires VIS 41, MATH 20B, MUS 43, CSE 11.
-[NA25] Nothing requires PHYS 2D, CHEM 7L, NANO 20L, MATH 20E, PHYS 2C, BILD 1.
+[MU27] Nothing requires CSE 11, MATH 20B, MUS 43, VIS 41.
+[NA25] Nothing requires BILD 1, CHEM 7L, MATH 20E, NANO 20L, PHYS 2C, PHYS 2D.
 [PB25] Nothing requires BILD 3.
-[PB26] Nothing requires BILD 2, MATH 18, MATH 20C, BILD 3.
-[PB27] Nothing requires BILD 2, CHEM 6C, BILD 3.
+[PB26] Nothing requires BILD 2, BILD 3, MATH 18, MATH 20C.
+[PB27] Nothing requires BILD 2, BILD 3, CHEM 6C.
 [PB28] Nothing requires BILD 3.
 [PB29] Nothing requires BILD 2, BILD 3.
 [PB30] Nothing requires BILD 3.
-[PB31] Nothing requires BILD 2, CHEM 7L, CHEM 6C, MATH 10B, BILD 3.
+[PB31] Nothing requires BILD 2, BILD 3, CHEM 6C, CHEM 7L, MATH 10B.
 [PC25] Nothing requires PSYC 70.
 [PC26] Nothing requires MATH 10B, PSYC 70.
 [PC28] Nothing requires MATH 10B, PSYC 70.
@@ -93,16 +93,16 @@
 [PC31] Nothing requires MATH 10B, PSYC 70.
 [PC32] Nothing requires MATH 10B, PSYC 70.
 [PC33] Nothing requires MATH 10B, PSYC 70.
-[PC34] Nothing requires PSYC 70, MATH 10C.
-[PC35] Nothing requires PSYC 70, MGT 18, MATH 10B, MGT 16.
+[PC34] Nothing requires MATH 10C, PSYC 70.
+[PC35] Nothing requires MATH 10B, MGT 16, MGT 18, PSYC 70.
 [PS25] Nothing requires POLI 30.
 [PS26] Nothing requires POLI 10D, POLI 30D.
 [PS27] Nothing requires POLI 11D, POLI 30D.
-[PS28] Nothing requires DOC 3, POLI 30D, POLI 12D.
+[PS28] Nothing requires DOC 3, POLI 12D, POLI 30D.
 [PS29] Nothing requires POLI 30D.
 [PS30] Nothing requires POLI 10D, POLI 30D.
 [PS31] Nothing requires POLI 10D, POLI 30D.
-[PS32] Nothing requires POLI 30D, POLI 5D.
+[PS32] Nothing requires POLI 5D, POLI 30D.
 [PS34] Nothing requires POLI 10D, POLI 30D.
 [PY26] Nothing requires PHYS 2DL.
 [PY28] Nothing requires PHYS 2DL.
@@ -112,28 +112,28 @@
 [PY32] Nothing requires PHYS 2DL.
 [PY33] Nothing requires PHYS 2DL.
 [PY34] Nothing requires PHYS 2DL.
-[SE27] Nothing requires CHEM 6A, PHYS 2C, PHYS 2CL, PHYS 2BL.
-[SE28] Nothing requires PHSY 2BL, CHEM 6A, PHYS 2C, DOC 3, PHYS 2CL, PHSY 2B.
-[SE29] Nothing requires CHEM 6A, PHYS 2C, DOC 3, PHYS 2CL, PHYS 2BL.
-[SE30] Nothing requires CHEM 6A, PHYS 2C, DOC 3, PHYS 2CL, PHYS 2BL.
-[SE31] Nothing requires CHEM 6A, PHYS 2C, DOC 3, PHYS 2CL, PHYS 2BL.
-[SI29] Nothing requires BILD 2, PHYS 1CL, CHEM 7L, MATH 10C, SIO 90.
-[SI30] Nothing requires MATH 20E, SIO 60, CHEM 7L, PHYS 2CL, PHYS 2BL, MATH 20D.
+[SE27] Nothing requires CHEM 6A, PHYS 2BL, PHYS 2C, PHYS 2CL.
+[SE28] Nothing requires CHEM 6A, DOC 3, PHSY 2B, PHSY 2BL, PHYS 2C, PHYS 2CL.
+[SE29] Nothing requires CHEM 6A, DOC 3, PHYS 2BL, PHYS 2C, PHYS 2CL.
+[SE30] Nothing requires CHEM 6A, DOC 3, PHYS 2BL, PHYS 2C, PHYS 2CL.
+[SE31] Nothing requires CHEM 6A, DOC 3, PHYS 2BL, PHYS 2C, PHYS 2CL.
+[SI29] Nothing requires BILD 2, CHEM 7L, MATH 10C, PHYS 1CL, SIO 90.
+[SI30] Nothing requires CHEM 7L, MATH 20D, MATH 20E, PHYS 2BL, PHYS 2CL, SIO 60.
 [SI31] Nothing requires PHYS 2B, SIO 65, SIO 75.
-[SO25] Nothing requires SOCI 60, SOCI 10, SOCI 1, SOCI 2.
-[SO27] Nothing requires SOCI 60, SOCI 10, SOCI 1, SOCI 2.
-[SO28] Nothing requires SOCI 60, SOCI 10, SOCI 1, SOCI 2.
-[SO29] Nothing requires SOCI 60, SOCI 10, SOCI 1, SOCI 2.
-[SO30] Nothing requires SOCI 60, SOCI 10, SOCI 1, SOCI 2.
-[SO31] Nothing requires SOCI 60, SOCI 10, SOCI 1, SOCI 2.
-[SO32] Nothing requires SOCI 60, SOCI 10, SOCI 1, SOCI 2.
-[SO33] Nothing requires SOCI 60, SOCI 10, SOCI 1, SOCI 2.
-[TH26] Nothing requires TDHT 21, TDPR 6, TDDE 1, TDGE 1, TDHT 23, TDHT 22.
-[TH27] Nothing requires TDTR 15, TDPR 6, TDTR 20, TDMV 20, TDHD 20, TDDM 5, TDHD 21.
-[UNPS] Nothing requires BILD 1, CHEM 6C, PHYS 2A, HUM 2, HUM 1.
-[US26] Nothing requires USP 1, USP 4, USP 3, USP 2.
-[US27] Nothing requires USP 1, MGT 4, MGT 5, MATH 10A, ECON 1.
+[SO25] Nothing requires SOCI 1, SOCI 2, SOCI 10, SOCI 60.
+[SO27] Nothing requires SOCI 1, SOCI 2, SOCI 10, SOCI 60.
+[SO28] Nothing requires SOCI 1, SOCI 2, SOCI 10, SOCI 60.
+[SO29] Nothing requires SOCI 1, SOCI 2, SOCI 10, SOCI 60.
+[SO30] Nothing requires SOCI 1, SOCI 2, SOCI 10, SOCI 60.
+[SO31] Nothing requires SOCI 1, SOCI 2, SOCI 10, SOCI 60.
+[SO32] Nothing requires SOCI 1, SOCI 2, SOCI 10, SOCI 60.
+[SO33] Nothing requires SOCI 1, SOCI 2, SOCI 10, SOCI 60.
+[TH26] Nothing requires TDDE 1, TDGE 1, TDHT 21, TDHT 22, TDHT 23, TDPR 6.
+[TH27] Nothing requires TDDM 5, TDHD 20, TDHD 21, TDMV 20, TDPR 6, TDTR 15, TDTR 20.
+[UNPS] Nothing requires BILD 1, CHEM 6C, HUM 1, HUM 2, PHYS 2A.
+[US26] Nothing requires USP 1, USP 2, USP 3, USP 4.
+[US27] Nothing requires ECON 1, MATH 10A, MGT 4, MGT 5, USP 1.
 [VA26] Nothing requires VIS 22.
-[VA28] Nothing requires VA 28, VIS 80, VIS 22, VIS 11.
-[VA29] Nothing requires VIS 70N, VIS 41, VIS 10, VIS 22.
+[VA28] Nothing requires VA 28, VIS 11, VIS 22, VIS 80.
+[VA29] Nothing requires VIS 10, VIS 22, VIS 41, VIS 70N.
 [VA30] Nothing requires VIS 11.
