@@ -229,7 +229,7 @@ class MajorOutput:
         for. If the college isn't specified, then `_output_plan` will output the
         major's curriculum instead.
 
-        [^1]: https://curricularanalytics.org/files
+        [^1]: https://curricularanalytics.org/help/file-help
         """
         if college is not None and college not in self.plans.colleges:
             raise KeyError(f"No degree plan available for {college}.")

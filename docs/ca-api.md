@@ -19,7 +19,7 @@ POST /curriculums
 POST /degree_plans
 ```
 
-Curricula and degree plans can be uploaded either as JSON (produced by the GUI editor; see [editing curricula/degree plans](#editing-an-existing-curriculum-or-degree-plan) for the format) or a [CSV file](https://curricularanalytics.org/files). Uploading by JSON tends to be slower than uploading a CSV file, it seems.
+Curricula and degree plans can be uploaded either as JSON (produced by the GUI editor; see [editing curricula/degree plans](#editing-an-existing-curriculum-or-degree-plan) for the format) or a [CSV file](https://curricularanalytics.org/help/file-help). Uploading by JSON tends to be slower than uploading a CSV file, it seems.
 
 The request body should be a `Content-Type: multipart/form-data` because it includes a file. The request body has the following fields:
 
