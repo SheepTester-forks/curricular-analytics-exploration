@@ -155,16 +155,12 @@ def render_plan_urls() -> None:
     print(
         "  params.append('title', titles[`${major}.${college}`].replace('!YEAR!', year))"
     )
+    print(
+        "  params.append('from', `${year}/${major}/${year}_${major}${college ? '_' + college : ''}.csv`)"
+    )
     print("  url.hostname = 'stage-educationalinnovation.ucsd.edu'")
     print("  url.pathname = '/_files/plan-graph.html'")
-    print(
-        "  fetch(`https://raw.githubusercontent.com/SheepTester-forks/ucsd-degree-plans/main/${year}/${major}/${year}_${major}${college ? '_' + college : ''}.csv`)"
-    )
-    print("    .then(r => r.text())")
-    print("    .then(csv => {")
-    print("      url.hash = encodeURIComponent(csv)")
-    print("      window.location.replace(url)")
-    print("    })")
+    print("  window.location.replace(url)")
     print("}</script>")
     print("<table><tr><th>School</th><th>Department</th><th>Major</th>")
     for year in years:
@@ -192,6 +188,14 @@ def render_plan_urls() -> None:
                 major_name = major_codes()[major_code].name
                 if major_name:
                     print(f": {escape_html(major_name)}")
+                print("<br>")
+                print(
+                    " · ".join(
+                        f'<a href="?{urlencode({"plan": f"{year}.{major_code}"})}">{year}</a>'
+                        for year in years
+                        if year in history
+                    )
+                )
                 print("</td>")
                 for year in years:
                     if year not in history:

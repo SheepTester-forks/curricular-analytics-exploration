@@ -4,6 +4,7 @@ python3 curricula_index.py 2015 2022 > files/curricula_index.csv
 
 import sys
 from typing import Dict, Tuple
+from urllib.parse import urlencode
 from upload import track_uploaded_curricula
 
 __all__ = ["urls"]
@@ -16,7 +17,15 @@ for year in range(int(start_year), int(end_year) + 1):
     with track_uploaded_curricula(year) as curricula:
         for major_code, curriculum_id in curricula.items():
             urls[year, major_code] = (
-                f"https://curricularanalytics.org/curricula/{curriculum_id}/graph"
+                "https://stage-educationalinnovation.ucsd.edu/_files/plan-graph.html?"
+                + urlencode(
+                    {
+                        "defaults": "ucsd",
+                        "year": year,
+                        "major": major_code,
+                        "from": f"{year}/{major_code}/{year}_${major_code}.csv",
+                    }
+                )
             )
 
 
