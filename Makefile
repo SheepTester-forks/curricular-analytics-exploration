@@ -168,7 +168,7 @@ files/flagged_issues.html: flag_issues.py units_per_course.json
 
 # Protected data
 
-files/protected/summarize_dfw_by_major.json: summarize_metrics.mts files/CA_MetricsforMap_FINAL(Metrics).csv
+files/protected/summarize_dfw_by_major.json: summarize_metrics.mts files/CA_MetricsforMap_FINAL(Metrics).csv 'files/isis_major_code_list.csv'
 	node --experimental-strip-types summarize_metrics.mts './files/CA_MetricsforMap_FINAL(Metrics).csv'
 
 files/protected/summarize_frequency.json: summarize_frequency.py files/21-22\ Enrollment_DFW\ CJ.xlsx.csv files/Waitlist\ by\ Course\ for\ CJ.xlsx.csv

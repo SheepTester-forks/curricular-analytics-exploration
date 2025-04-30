@@ -1,4 +1,4 @@
-// node --experimental-strip-types summarize_metrics.mts './files/CA_MetricsforMap_FINAL(Metrics).csv'
+// node --experimental-strip-types summarize_metrics.mts
 // -> files/protected/summarize_dfw.json
 //    files/protected/summarize_dfw_by_major.json
 //    files/protected/summarize_equity_by_major.json
@@ -6,10 +6,6 @@
 
 import { readFile, writeFile } from 'fs/promises'
 import parse from 'neat-csv'
-
-const [, , ...args] = process.argv
-
-const table = (await parse(await readFile(args[0], 'utf-8'))).slice(1)
 
 const majorByDepartment = Object.groupBy(
   (await parse(await readFile('files/isis_major_code_list.csv', 'utf-8'))).map(
@@ -58,7 +54,9 @@ function check<T> (value: T, check: (value: T) => string | null): T {
   return value
 }
 
-type Row = {
+//#region Metrics
+
+type MetricsRow = {
   // Course ID
   /** No space, e.g. `AIP197DC` */
   courseCode: string
@@ -101,7 +99,13 @@ type Row = {
   // Impact Index
 }
 
-const rows = table.map(
+const metricsTable = (
+  await parse(
+    await readFile('./files/CA_MetricsforMap_FINAL(Metrics).csv', 'utf-8')
+  )
+).slice(1)
+
+const metricsRows = metricsTable.map(
   ({
     'Course ID': courseCode,
     'Dept Cd': departmentCode,
@@ -118,7 +122,7 @@ const rows = table.map(
     // 'N Courses Blocked ': _,
     // 'Max. Complexity': _,
     // 'Impact Index': _,
-  }): Row => ({
+  }): MetricsRow => ({
     courseCode,
     departmentCode,
     disproportionate: {
@@ -164,9 +168,7 @@ const rows = table.map(
   })
 )
 
-// console.log(rows)
-
-const byCourse = Map.groupBy(rows, ({ courseCode }) => courseCode)
+const byCourse = Map.groupBy(metricsRows, ({ courseCode }) => courseCode)
 
 await writeFile(
   'files/protected/summarize_dfw.json',
@@ -223,7 +225,7 @@ function displayDisproportionate ({
   gender,
   major,
   urm
-}: Row['disproportionate']): string {
+}: MetricsRow['disproportionate']): string {
   const strings: string[] = []
   if (firstGen) {
     strings.push('firstGen')
@@ -256,7 +258,7 @@ await writeFile(
             )
           ),
           allMajors: displayDisproportionate(
-            rows.reduce<Row['disproportionate']>(
+            rows.reduce<MetricsRow['disproportionate']>(
               (cum, curr) => ({
                 firstGen: cum.firstGen || curr.disproportionate.firstGen,
                 gender: cum.gender || curr.disproportionate.gender,
@@ -296,7 +298,10 @@ await writeFile(
 )
 console.log('wrote files/protected/summarize_waitlist.json')
 
+// For debugging purposes, not used for anything, safe to remove
 console.log(
   'all departments',
-  Array.from(new Set(rows.map(({ departmentCode }) => departmentCode))).sort()
+  Array.from(
+    new Set(metricsRows.map(({ departmentCode }) => departmentCode))
+  ).sort()
 )

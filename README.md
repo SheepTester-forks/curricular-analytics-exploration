@@ -298,11 +298,15 @@ We continue to refer to projects based on these forks as part of our Curricular 
 
 #### Protected data
 
+These also go in `files/` (not `files/protected/`).
+
 - [**`21-22 Enrollment_DFW CJ.xlsx.csv`**](https://docs.google.com/spreadsheets/d/1Lq1-35oZra3pOS94VdrWOPD3gQZgmfCb/): Export as CSV.
 
 - [**`Waitlist by Course for CJ.xlsx.csv`**](https://docs.google.com/spreadsheets/d/1EC9QdtP9vy2nX46XOQyXWiMO7gnYWc6-/): Export as CSV.
 
-- [**`CA_MetricsforMap_FINAL(Metrics).csv`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/eespaldon_ucsd_edu/_layouts/15/Doc.aspx?sourcedoc=%7BD138C288-C477-4FC1-8F27-A275EAD0DCFD%7D&file=CA_MetricsforMap_FINAL.xlsx): Export as CSV.
+- [**`CA_MetricsforMap_FINAL(Metrics).csv`, `CA_MetricsforMap_FINAL(Applicant Type_Major).csv`, `CA_MetricsforMap_FINAL(Applicant Type).csv`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/eespaldon_ucsd_edu/_layouts/15/Doc.aspx?sourcedoc=%7BD138C288-C477-4FC1-8F27-A275EAD0DCFD%7D&file=CA_MetricsforMap_FINAL.xlsx): Export each tab as CSV.
+
+The links are only shared with Curricular Analytics employees. Ask someone for access.
 
 ### Uploading
 
