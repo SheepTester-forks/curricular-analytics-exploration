@@ -11,20 +11,26 @@ import parse from 'neat-csv'
 
 const majorDepartments = (
   await parse(await readFile('files/isis_major_code_list.csv', 'utf-8'))
-).map(({ 'ISIS Major Code': isisMajorCode, Department: department }) => ({
-  majorCode:
-    typeof isisMajorCode === 'string'
-      ? isisMajorCode
-      : expect('ISIS Major Code should be string'),
-  majorPrefix:
-    typeof isisMajorCode === 'string'
-      ? isisMajorCode.slice(0, 2)
-      : expect('ISIS Major Code should be string'),
-  department:
-    typeof department === 'string'
-      ? department
-      : expect('Department should be string')
-}))
+)
+  .map(({ 'ISIS Major Code': isisMajorCode, Department: department }) => ({
+    majorCode:
+      typeof isisMajorCode === 'string'
+        ? isisMajorCode
+        : expect('ISIS Major Code should be string'),
+    majorPrefix:
+      typeof isisMajorCode === 'string'
+        ? isisMajorCode.slice(0, 2)
+        : expect('ISIS Major Code should be string'),
+    department:
+      typeof department === 'string'
+        ? department
+        : expect('Department should be string')
+  }))
+  .filter(entry => {
+    const majorNumber = +entry.majorCode.slice(2)
+    // Only consider undergrad majors
+    return 25 <= majorNumber && majorNumber < 50
+  })
 
 // Ensure we can cleanly map from major prefix to department
 for (const [prefix, entriesByPrefix] of Map.groupBy(
@@ -34,10 +40,12 @@ for (const [prefix, entriesByPrefix] of Map.groupBy(
   const departments = new Set(entriesByPrefix.map(entry => entry.department))
   if (departments.size > 1) {
     console.warn(
+      '?',
       'major prefix',
       prefix,
       'encompasses multiple departments',
       departments
+      // , entriesByPrefix
     )
   }
 }
@@ -50,7 +58,8 @@ await writeFile(
         Map.groupBy(majorDepartments, pair => pair.majorPrefix),
         ([majorPrefix, entriesByPrefix]) => [
           majorPrefix,
-          entriesByPrefix[0].department
+          entriesByPrefix.find(entry => !entry.department.startsWith('UN'))
+            ?.department ?? entriesByPrefix[0].department
         ]
       )
     ),
@@ -270,18 +279,18 @@ await writeFile(
               departmentCode,
               displayDisproportionate(disproportionate)
             ])
-          ),
-          allMajors: displayDisproportionate(
-            rows.reduce<MetricsRow['disproportionate']>(
-              (cum, curr) => ({
-                firstGen: cum.firstGen || curr.disproportionate.firstGen,
-                gender: cum.gender || curr.disproportionate.gender,
-                major: cum.major || curr.disproportionate.major,
-                urm: cum.urm || curr.disproportionate.urm
-              }),
-              { firstGen: false, gender: false, major: false, urm: false }
-            )
           )
+          // allMajors: displayDisproportionate(
+          //   rows.reduce<MetricsRow['disproportionate']>(
+          //     (cum, curr) => ({
+          //       firstGen: cum.firstGen || curr.disproportionate.firstGen,
+          //       gender: cum.gender || curr.disproportionate.gender,
+          //       major: cum.major || curr.disproportionate.major,
+          //       urm: cum.urm || curr.disproportionate.urm
+          //     }),
+          //     { firstGen: false, gender: false, major: false, urm: false }
+          //   )
+          // )
         }
       ])
     ),
@@ -344,6 +353,7 @@ const coursesWithTransferGap = new Map(
         if (applicantType !== 'Transfer') {
           if (disproportionateImpact === 'Y') {
             console.warn(
+              '?',
               courseCode,
               applicantType,
               'has Disproportionate Impact'
@@ -377,6 +387,7 @@ const coursesWithTransferGapByMajor = Map.groupBy(
         if (applicantType !== 'Transfer') {
           if (disproportionateImpact === 'Y') {
             console.warn(
+              '?',
               courseCode,
               applicantType,
               'has Disproportionate Impact'
