@@ -3,44 +3,62 @@
 //    files/protected/summarize_dfw_by_major.json
 //    files/protected/summarize_equity_by_major.json
 //    files/protected/summarize_waitlist.json
+//    files/protected/summarize_transfer_gap.json
+//    files/protected/summarize_major_to_dept.json
 
 import { readFile, writeFile } from 'fs/promises'
 import parse from 'neat-csv'
 
-const majorByDepartment = Object.groupBy(
-  (await parse(await readFile('files/isis_major_code_list.csv', 'utf-8'))).map(
-    ({ 'ISIS Major Code': isMajorCode, Department: department }) => ({
-      majorCode:
-        typeof isMajorCode === 'string'
-          ? isMajorCode
-          : expect('ISIS Major Code should be string'),
-      department:
-        typeof department === 'string'
-          ? department
-          : expect('Department should be string')
-    })
-  ),
-  ({ department }) => department
-)
+const majorDepartments = (
+  await parse(await readFile('files/isis_major_code_list.csv', 'utf-8'))
+).map(({ 'ISIS Major Code': isisMajorCode, Department: department }) => ({
+  majorCode:
+    typeof isisMajorCode === 'string'
+      ? isisMajorCode
+      : expect('ISIS Major Code should be string'),
+  majorPrefix:
+    typeof isisMajorCode === 'string'
+      ? isisMajorCode.slice(0, 2)
+      : expect('ISIS Major Code should be string'),
+  department:
+    typeof department === 'string'
+      ? department
+      : expect('Department should be string')
+}))
 
-const majorSubjByDeptEntries = Object.entries(majorByDepartment).map(
-  ([dept, majors]): [string, string[]] => [
-    dept,
-    Array.from(new Set(majors?.map(major => major.majorCode.slice(0, 2))))
-  ]
-)
-const majorSubjByDept = Object.fromEntries(majorSubjByDeptEntries)
-for (const [dept, majorCodes] of majorSubjByDeptEntries) {
-  for (const [dept2, majorCodes2] of majorSubjByDeptEntries) {
-    if (dept === dept2) {
-      continue
-    }
-    const dupe = majorCodes.find(code => majorCodes2.includes(code))
-    if (dupe) {
-      console.warn('dept', dept, 'major', dupe, 'also in dept', dept2)
-    }
+// Ensure we can cleanly map from major prefix to department
+for (const [prefix, entriesByPrefix] of Map.groupBy(
+  majorDepartments,
+  entry => entry.majorPrefix
+)) {
+  const departments = new Set(entriesByPrefix.map(entry => entry.department))
+  if (departments.size > 1) {
+    console.warn(
+      'major prefix',
+      prefix,
+      'encompasses multiple departments',
+      departments
+    )
   }
 }
+
+await writeFile(
+  'files/protected/summarize_major_to_dept.json',
+  JSON.stringify(
+    Object.fromEntries(
+      Array.from(
+        Map.groupBy(majorDepartments, pair => pair.majorPrefix),
+        ([majorPrefix, entriesByPrefix]) => [
+          majorPrefix,
+          entriesByPrefix[0].department
+        ]
+      )
+    ),
+    null,
+    2
+  ) + '\n'
+)
+console.log('wrote files/protected/summarize_major_to_dept.json')
 
 function expect (message: string): never {
   throw new TypeError(message)
@@ -194,18 +212,17 @@ await writeFile(
         courseCode,
         {
           ...Object.fromEntries(
-            rows.flatMap(
-              ({ departmentCode, dfwCount, studentCount, dfwPercent }) =>
-                majorSubjByDept[departmentCode]?.map(majorCode => [
-                  majorCode,
-                  check(dfwCount / studentCount, percent =>
-                    Math.round(percent * 100) / 100 === dfwPercent
-                      ? null
-                      : `${courseCode} ${departmentCode}: ${
-                        dfwCount / studentCount
-                      } =/= ${dfwPercent}`
-                  )
-                ]) ?? []
+            rows.map(
+              ({ departmentCode, dfwCount, studentCount, dfwPercent }) => [
+                departmentCode,
+                check(dfwCount / studentCount, percent =>
+                  Math.round(percent * 100) / 100 === dfwPercent
+                    ? null
+                    : `${courseCode} ${departmentCode}: ${
+                      dfwCount / studentCount
+                    } =/= ${dfwPercent}`
+                )
+              ]
             )
           ),
           allMajors:
@@ -249,13 +266,10 @@ await writeFile(
         courseCode,
         {
           ...Object.fromEntries(
-            rows.flatMap(
-              ({ departmentCode, disproportionate }) =>
-                majorSubjByDept[departmentCode]?.map(majorCode => [
-                  majorCode,
-                  displayDisproportionate(disproportionate)
-                ]) ?? []
-            )
+            rows.map(({ departmentCode, disproportionate }) => [
+              departmentCode,
+              displayDisproportionate(disproportionate)
+            ])
           ),
           allMajors: displayDisproportionate(
             rows.reduce<MetricsRow['disproportionate']>(
@@ -299,9 +313,112 @@ await writeFile(
 console.log('wrote files/protected/summarize_waitlist.json')
 
 // For debugging purposes, not used for anything, safe to remove
-console.log(
-  'all departments',
-  Array.from(
-    new Set(metricsRows.map(({ departmentCode }) => departmentCode))
-  ).sort()
+// console.log(
+//   'all departments',
+//   Array.from(
+//     new Set(metricsRows.map(({ departmentCode }) => departmentCode))
+//   ).sort()
+// )
+
+//#region Transfer Equity Gaps (Applicant Type)
+
+// NOTE: MATH20C	SE	First Year	Y this is weird
+
+/** map course to whether it is transfer equity gap */
+const coursesWithTransferGap = new Map(
+  (
+    await parse(
+      await readFile(
+        './files/CA_MetricsforMap_FINAL(Applicant Type).csv',
+        'utf-8'
+      )
+    )
+  )
+    .slice(1)
+    .flatMap(
+      ({
+        'Course ID': courseCode,
+        Breakdown: applicantType,
+        'Disproportionate Impact': disproportionateImpact
+      }) => {
+        if (applicantType !== 'Transfer') {
+          if (disproportionateImpact === 'Y') {
+            console.warn(
+              courseCode,
+              applicantType,
+              'has Disproportionate Impact'
+            )
+          }
+          return []
+        }
+        return [[courseCode, disproportionateImpact === 'Y']]
+      }
+    )
 )
+
+/** maps department code to their major-specific list of transfer equity gaps */
+const coursesWithTransferGapByMajor = Map.groupBy(
+  (
+    await parse(
+      await readFile(
+        './files/CA_MetricsforMap_FINAL(Applicant Type_Major).csv',
+        'utf-8'
+      )
+    )
+  )
+    .slice(1)
+    .flatMap(
+      ({
+        'Course ID': courseCode,
+        'Dept Cd': departmentCode,
+        Breakdown: applicantType,
+        'Disproportionate Impact': disproportionateImpact
+      }) => {
+        if (applicantType !== 'Transfer') {
+          if (disproportionateImpact === 'Y') {
+            console.warn(
+              courseCode,
+              applicantType,
+              'has Disproportionate Impact'
+            )
+          }
+          return []
+        }
+        return [
+          {
+            courseCode,
+            departmentCode,
+            transferGap: disproportionateImpact === 'Y'
+          }
+        ]
+      }
+    ),
+  entry => entry.courseCode
+)
+
+await writeFile(
+  'files/protected/summarize_transfer_gap.json',
+  JSON.stringify(
+    Object.fromEntries(
+      Array.from(
+        new Set(coursesWithTransferGap.keys()).union(
+          new Set(coursesWithTransferGapByMajor.keys())
+        ),
+        courseCode => [
+          courseCode,
+          {
+            ...Object.fromEntries(
+              coursesWithTransferGapByMajor
+                .get(courseCode)
+                ?.map(entry => [entry.departmentCode, entry.transferGap]) ?? []
+            ),
+            allMajors: coursesWithTransferGap.get(courseCode)
+          }
+        ]
+      )
+    ),
+    null,
+    2
+  ) + '\n'
+)
+console.log('wrote files/protected/summarize_transfer_gap.json')
