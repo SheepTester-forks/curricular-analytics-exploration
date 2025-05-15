@@ -74,6 +74,8 @@ type Row = {
     firstGen: boolean
     // Gender Disproportionate Impact
     gender: boolean
+    // Transfer Disproportionate Impact
+    transfer: boolean
   }
   // N
   studentCount: number
@@ -109,6 +111,7 @@ const rows = table.map(
     'URM Disproportionate Impact': impactUrm = '',
     'First Gen Disproportionate Impact': impactFirstGen = '',
     'Gender Disproportionate Impact': impactGender = '',
+    'Transfer Disproportionate Impact': impactTransfer = '',
     N: studentCount,
     'N Qtrs w/Enrollment': quarterCount,
     'Count of DFW Grades': dfwCount,
@@ -153,7 +156,15 @@ const rows = table.map(
             ? false
             : expect(
               `expected impactGender to be either Y or empty, received '${impactGender}'`
-            )
+            ),
+      transfer:
+          impactTransfer === 'Y'
+            ? true 
+            : impactTransfer === ''
+              ? false 
+              : expect(
+                `expected impactTransfer to be either Y or empty, received '${impactTransfer}`
+              )
     },
     studentCount: +studentCount,
     quarterCount: +quarterCount,
@@ -222,7 +233,8 @@ function displayDisproportionate ({
   firstGen,
   gender,
   major,
-  urm
+  urm,
+  transfer
 }: Row['disproportionate']): string {
   const strings: string[] = []
   if (firstGen) {
@@ -236,6 +248,9 @@ function displayDisproportionate ({
   }
   if (urm) {
     strings.push('urm')
+  }
+  if (transfer) {
+    strings.push('transfer')
   }
   return strings.join(' ')
 }
@@ -261,9 +276,10 @@ await writeFile(
                 firstGen: cum.firstGen || curr.disproportionate.firstGen,
                 gender: cum.gender || curr.disproportionate.gender,
                 major: cum.major || curr.disproportionate.major,
-                urm: cum.urm || curr.disproportionate.urm
+                urm: cum.urm || curr.disproportionate.urm,
+                transfer: cum.transfer || curr.disproportionate.transfer
               }),
-              { firstGen: false, gender: false, major: false, urm: false }
+              { firstGen: false, gender: false, major: false, urm: false, transfer: false }
             )
           )
         }
