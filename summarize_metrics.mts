@@ -4,6 +4,10 @@
 //    files/protected/summarize_equity_by_major.json
 //    files/protected/summarize_waitlist.json
 
+// to use transfer data, run
+// node --experimental-strip-types summarize_metrics.mts './transfer_metrics_output.csv'
+// this will build all the protected files to include transfer data
+
 import { readFile, writeFile } from 'fs/promises'
 import parse from 'neat-csv'
 
