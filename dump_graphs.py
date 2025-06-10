@@ -196,7 +196,7 @@ def render_plan_urls() -> None:
                 major_name = major_codes()[major_code].name
                 if major_name:
                     print(f": {escape_html(major_name)}")
-                print("<br>")
+                print("<br><br>Plans without college requirements:<br>")
                 print(
                     " · ".join(
                         f'<a href="?{urlencode({"plan": f"{year}.{major_code}"})}">{year}</a>'
