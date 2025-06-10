@@ -30,8 +30,10 @@ departments["FPMU"] = "Undergraduate Program in Public Health"
 departments["HDP"] = "Human Development Program"
 
 # List of school names: https://evc.ucsd.edu/about/Divisions%20and%20Schools.html
+# https://tritongpt.ucsd.edu/chat/shared/fb3cfc68-b4f2-4f16-a75e-c020dbc2ae23
+# TODO: HDP (Human Development Program)
 _schools: Dict[str, List[str]] = {
-    # https://artsandhumanities.ucsd.edu/academics/departments-programs.html
+    # https://artsandhumanities.ucsd.edu/students/departments-programs.html
     "School of Arts & Humanities": [
         "HIST",
         "LIT",
@@ -57,6 +59,8 @@ _schools: Dict[str, List[str]] = {
         "JUDA",
         # Third World Studies, now Global South Studies (GSS)
         "TWS",
+        "CLX",
+        "CINE",
     ],
     # https://biology.ucsd.edu/education/undergrad/maj-min/majors/fall20-later/index.html
     "School of Biological Sciences": ["BIOL"],
@@ -66,7 +70,7 @@ _schools: Dict[str, List[str]] = {
     # https://jacobsschool.ucsd.edu/prospective-students/undergraduate-majors
     "Jacobs School of Engineering": ["BENG", "CSE", "ECE", "MAE", "NENG", "CENG", "SE"],
     # https://physicalsciences.ucsd.edu/academics/index.html
-    "School of Physical Sciences": ["CHEM", "MATH", "PHYS"],
+    "School of Physical Sciences": ["CHEM", "MATH", "PHYS", "ASTR"],
     # https://rady.ucsd.edu/programs/undergraduate/index.html ?
     "Rady School of Management": [],
     # https://socialsciences.ucsd.edu/programs/index.html
@@ -92,6 +96,11 @@ _schools: Dict[str, List[str]] = {
     # Not listed as a school
     # https://scripps.ucsd.edu/esys
     "Scripps Institution of Oceanography": ["SIO", "ESYS"],
+    # not listed as a school
+    "Herbert Wertheim School of Public Health and Human Longevity Sciences": [
+        "SPH",
+        "FPMU",
+    ],
 }
 dept_schools: Dict[str, str] = {}
 for school, depts in _schools.items():
