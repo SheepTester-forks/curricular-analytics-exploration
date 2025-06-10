@@ -28,6 +28,8 @@ departments["TWS"] = "Third World Studies Program"
 departments["FPMU"] = "Undergraduate Program in Public Health"
 # https://registrar.ucsd.edu/catalog/15-16/curric/HDP.html
 departments["HDP"] = "Human Development Program"
+departments["GMST"] = "German Studies Program"
+departments["ITAL"] = "Italian Studies Program"
 
 # List of school names: https://evc.ucsd.edu/about/Divisions%20and%20Schools.html
 # https://tritongpt.ucsd.edu/chat/shared/fb3cfc68-b4f2-4f16-a75e-c020dbc2ae23

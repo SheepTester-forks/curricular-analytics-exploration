@@ -162,6 +162,14 @@ def render_plan_urls() -> None:
     print("  url.pathname = '/_files/plan-graph.html'")
     print("  window.location.replace(url)")
     print("}</script>")
+    print("<p>Jump to: ")
+    for i, school in enumerate(sorted(qs_by_dept.keys() - {""})):
+        if i > 0:
+            print(" • ")
+        print(
+            f'<a href="#{''.join(filter(str.isalnum,school.lower()))}">{escape_html(school)}</a>'
+        )
+    print("</p>")
     print("<table><tr><th>School</th><th>Department</th><th>Major</th>")
     for year in years:
         print(f"<th>{year}</th>")
@@ -169,7 +177,7 @@ def render_plan_urls() -> None:
     for school, depts in sorted(qs_by_dept.items(), key=lambda entry: entry[0]):
         major_count = sum(len(majors) for majors in depts.values())
         print(
-            f'<tr><th scole="col" rowspan="{major_count}"><span>{escape_html(school)}</span></th>'
+            f'<tr><th scole="col" rowspan="{major_count}" id="{''.join(filter(str.isalnum,school.lower()))}"><span>{escape_html(school)}</span></th>'
         )
         for i, (department, majors) in enumerate(
             sorted(depts.items(), key=lambda entry: entry[0])
