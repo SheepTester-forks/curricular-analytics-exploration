@@ -710,6 +710,8 @@ Narrowed Python version:
 course_capacities.py | (inputs: files/ClassCapCalculatorNewStudents.csv, files/ClassCapCalculatorCourses.csv; output: files/course_capacities_output.csv) takes the number of incoming first years in each major-college and the number of seats left in each course and outputs the number of seats needed for freshmen and seats available for each course. Eighth first-years are ignored. <br> The sample input: course_capacities_input.csv and output: course_capacities_output.csv were for an earlier version that assumed every major was evenly divided across the 7 colleges and 4 years.
 <!-- prettier-ignore-end -->
 
+# Appendix
+
 ## How to use a data refresh
 
 1.  `Makefile`: Update these variables:
@@ -755,3 +757,16 @@ course_capacities.py | (inputs: files/ClassCapCalculatorNewStudents.csv, files/C
 1.  **Tableau**: I don't really remember how to update the views on Tableau anymore (I think Arturo handles that), but I just remember it's quite a pain.
 
 1.  **Systematically flagged issues**: To share automatically flagged issues in the degree plans, open [files/flagged_issues.html](./files/flagged_issues.html) in the browser, then copy and paste it into a Google Doc. Remove false positives as needed.
+
+## uAchieve MATCHCTL values and explanations
+
+| MATCHCTL | From "Data Mining of Encoding"              | From Kathy Newman |
+| -------- | ------------------------------------------- | ----------------- |
+| `\|`     | Or                                          |
+| `/`      | Or                                          |
+| `!`      | Or and hide on degree audit                 |
+| `L`      | Course list (points to another requirement) |
+| `G`      | Group                                       |
+| `:`      | Range                                       |
+| `&`      | And (both/all courses required)             |
+| `S`      | Pseudo course                               |

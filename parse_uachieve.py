@@ -195,11 +195,22 @@ class SimplifiedDegreeProgram(NamedTuple):
             f"{i}. "
             + (f"\n{" " * (len(f"{i}. ") - 3)}OR ").join(
                 f"{subreq_alt.label} (pick {subreq_alt.min_count or f'{subreq_alt.min_units} units'})"
-                + "".join(
-                    f"\n{" " * len(f"{i}. ")}- " + " or ".join(map(str, req))
-                    for req in subreq_alt.courses
-                )
+                + (f": {available}" if available else "")
+                + (", and" if available and eithers else "")
+                + eithers
                 for subreq_alt in subreq_alts
+                for available in [
+                    ", ".join(
+                        str(req[0]) for req in subreq_alt.courses if len(req) == 1
+                    )
+                ]
+                for eithers in [
+                    "".join(
+                        f"\n{" " * len(f"{i}. ")}- Either " + " or ".join(map(str, req))
+                        for req in subreq_alt.courses
+                        if len(req) > 1
+                    )
+                ]
             )
             for i, subreq_alts in enumerate(self.subreqs, start=1)
         )
@@ -216,7 +227,7 @@ def simplify(
                     [course_code]
                     for course_code in course_list
                     if re.fullmatch(subject, course_code.subject)
-                    and course_code.number == req.course_code.number
+                    and course_code.number == req.course_code.number.rstrip("#")
                 ]
             case SelectExactlyOneCourse():
                 course_codes = [
@@ -279,4 +290,45 @@ if __name__ == "__main__":
         reader = csv.reader(f)
         degree_programs = parse_rows(reader)
     # print(degree_programs[0])
-    print(simplify(list(prereqs("FA25").keys()), degree_programs[0]).display())
+    all_prereqs = prereqs("FA25")
+    all_courses = list(all_prereqs.keys())
+    print(simplify(all_courses, degree_programs[0]).display())
+
+    for program in degree_programs:
+        simplified = simplify(all_courses, program)
+        program_courses = {
+            course_code
+            for subreq in simplified.subreqs
+            for subreq_alt in subreq
+            for alt in subreq_alt.courses
+            for course_code in alt
+        }
+
+        # copied from math20c.py
+        ld_dependent_count: dict[CourseCode, list[CourseCode]] = {
+            course_code: []
+            for course_code in program_courses
+            if course_code.parts()[1] < 100
+        }
+        for course_code in program_courses:
+            for req in all_prereqs.get(course_code, []):
+                for alt in req:
+                    if alt.course_code in ld_dependent_count:
+                        ld_dependent_count[alt.course_code].append(course_code)
+        no_dependents = sorted(
+            course
+            for course, dependents in ld_dependent_count.items()
+            if len(dependents) == 0
+        )
+        one_dependent = sorted(
+            (course, dependents[0])
+            for course, dependents in ld_dependent_count.items()
+            if len(dependents) == 1
+        )
+        if no_dependents:
+            print(
+                f"[{program.id}] Nothing requires {', '.join(str(code) for code in no_dependents)}."
+            )
+        for prereq, dependent in one_dependent:
+            if dependent.parts()[1] >= 100 and prereq.subject == "MATH":
+                print(f"[{program.id}] Only {dependent} requires {prereq}.")
