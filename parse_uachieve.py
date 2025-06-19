@@ -1,4 +1,6 @@
 """
+Parses the sample uAchieve data extract.
+
 $ python parse_uachieve.py 'files/BI35_Major_With_Courses(BI35_Major_With_Courses).csv'
 """
 
@@ -17,7 +19,7 @@ class SingleCourse(NamedTuple):
     course_code: CourseCode
 
 
-class SelectOneCourse(NamedTuple):
+class SelectExactlyOneCourse(NamedTuple):
     """
     an OR group
 
@@ -58,7 +60,9 @@ class Note(NamedTuple):
     note: str
 
 
-CourseRequirement = SingleCourse | SelectOneCourse | CourseRange | PseudoCourse | Note
+CourseRequirement = (
+    SingleCourse | SelectExactlyOneCourse | CourseRange | PseudoCourse | Note
+)
 
 
 class Subrequirement(NamedTuple):
@@ -146,10 +150,10 @@ def parse_rows(rows: Iterator[list[str]]) -> list[DegreeProgram]:
         match next_course:
             case "or":
                 if isinstance(subreq.courses[-1], SingleCourse):
-                    subreq.courses[-1] = SelectOneCourse(
+                    subreq.courses[-1] = SelectExactlyOneCourse(
                         [subreq.courses[-1].course_code]
                     )
-                assert isinstance(subreq.courses[-1], SelectOneCourse)
+                assert isinstance(subreq.courses[-1], SelectExactlyOneCourse)
                 subreq.courses[-1].course_codes.append(CourseCode.parse(course))
                 assert matchctl in ["", "/", "!"]
             case "range":
@@ -186,34 +190,52 @@ class SimplifiedDegreeProgram(NamedTuple):
     name: str
     subreqs: list[list[SimplifiedSubrequirement]]
 
+    def display(self) -> str:
+        return f"[{self.name}]\n" + "\n".join(
+            f"{i}. "
+            + (f"\n{" " * (len(f"{i}. ") - 3)}OR ").join(
+                f"{subreq_alt.label} (pick {subreq_alt.min_count or f'{subreq_alt.min_units} units'})"
+                + "".join(
+                    f"\n{" " * len(f"{i}. ")}- " + " or ".join(map(str, req))
+                    for req in subreq_alt.courses
+                )
+                for subreq_alt in subreq_alts
+            )
+            for i, subreq_alts in enumerate(self.subreqs, start=1)
+        )
+
 
 def simplify(
     course_list: list[CourseCode], program: DegreeProgram
 ) -> SimplifiedDegreeProgram:
-    def simplify_requirement(req: CourseRequirement) -> list[CourseCode]:
+    def simplify_requirement(req: CourseRequirement) -> list[list[CourseCode]]:
         match req:
             case SingleCourse():
-                course_code = CourseCode(
-                    req.course_code.subject, req.course_code.number.rstrip("#")
-                )
-                return [course_code] if course_code in course_list else []
-            case SelectOneCourse():
+                subject = req.course_code.subject.replace("*", ".")
+                return [
+                    [course_code]
+                    for course_code in course_list
+                    if re.fullmatch(subject, course_code.subject)
+                    and course_code.number == req.course_code.number
+                ]
+            case SelectExactlyOneCourse():
                 course_codes = [
                     CourseCode(course_code.subject, course_code.number.rstrip("#"))
                     for course_code in req.course_codes
                 ]
                 return [
-                    course_code
-                    for course_code in course_list
-                    if course_code in course_codes
+                    [
+                        course_code
+                        for course_code in course_list
+                        if course_code in course_codes
+                    ]
                 ]
             case CourseRange():
                 subject = req.lower.subject.replace("*", ".")
                 lower = req.lower.parts()[1:]
                 upper = req.upper.parts()[1:]
-                print(subject, lower, upper)
                 return [
-                    course_code
+                    [course_code]
                     for course_code in course_list
                     if re.fullmatch(subject, course_code.subject)
                     and lower <= course_code.parts()[1:] <= upper
@@ -234,7 +256,7 @@ def simplify(
                     [
                         simplified
                         for req in alt.courses
-                        for simplified in [simplify_requirement(req)]
+                        for simplified in simplify_requirement(req)
                         if simplified
                     ],
                 )
@@ -257,4 +279,4 @@ if __name__ == "__main__":
         reader = csv.reader(f)
         degree_programs = parse_rows(reader)
     # print(degree_programs[0])
-    print(simplify(list(prereqs("FA25").keys()), degree_programs[0]))
+    print(simplify(list(prereqs("FA25").keys()), degree_programs[0]).display())
