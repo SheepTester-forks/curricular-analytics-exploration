@@ -760,13 +760,19 @@ course_capacities.py | (inputs: files/ClassCapCalculatorNewStudents.csv, files/C
 
 ## uAchieve MATCHCTL values and explanations
 
-| MATCHCTL | From "Data Mining of Encoding"              | From Kathy Newman |
-| -------- | ------------------------------------------- | ----------------- |
+| MATCHCTL | From "Data Mining of Encoding"              | From Kathy Newman                                       |
+| -------- | ------------------------------------------- | ------------------------------------------------------- |
 | `\|`     | Or                                          |
-| `/`      | Or                                          |
-| `!`      | Or and hide on degree audit                 |
-| `L`      | Course list (points to another requirement) |
-| `G`      | Group                                       |
-| `:`      | Range                                       |
-| `&`      | And (both/all courses required)             |
-| `S`      | Pseudo course                               |
+| `/`      | Or                                          | Or                                                      |
+| `!`      | Or and hide on degree audit                 | Or and hide                                             |
+| `L`      | Course list (points to another requirement) | Course list (need to join to that separate requirement) |
+| `G`      | Group                                       | Group                                                   |
+| `R`      |                                             | Required                                                |
+| `B`      |                                             | Group; first course required                            |
+| `:`      | Range                                       | Range                                                   |
+| `;`      |                                             | Range and group                                         |
+| `&`      | And (both/all courses required)             | And                                                     |
+| `$`      |                                             | Pseudo course                                           |
+| `P`      |                                             | Pseudo course – nohide                                  |
+| `S`      | Pseudo course                               | Pseudo course and hide                                  |
+| `N`      |                                             | In stream note                                          |

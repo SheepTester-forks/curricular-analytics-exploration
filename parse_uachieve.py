@@ -27,6 +27,13 @@ class SelectExactlyOneCourse(NamedTuple):
     """
 
     course_codes: list[CourseCode]
+    course_codes_hidden: list[CourseCode]
+
+    def get_course_codes(self, include_hidden: bool) -> list[CourseCode]:
+        if include_hidden:
+            return [*self.course_codes, *self.course_codes_hidden]
+        else:
+            return self.course_codes
 
 
 class CourseRange(NamedTuple):
@@ -95,6 +102,7 @@ def parse_rows(rows: Iterator[list[str]]) -> list[DegreeProgram]:
     last_subreq_id = 0
     next_subseq_is_or = False
     next_course: Literal["or", "range"] | None = None
+    next_is_hidden = False
     for (
         dprog,
         dprname,
@@ -151,10 +159,15 @@ def parse_rows(rows: Iterator[list[str]]) -> list[DegreeProgram]:
             case "or":
                 if isinstance(subreq.courses[-1], SingleCourse):
                     subreq.courses[-1] = SelectExactlyOneCourse(
-                        [subreq.courses[-1].course_code]
+                        [subreq.courses[-1].course_code], []
                     )
                 assert isinstance(subreq.courses[-1], SelectExactlyOneCourse)
-                subreq.courses[-1].course_codes.append(CourseCode.parse(course))
+                if next_is_hidden:
+                    subreq.courses[-1].course_codes_hidden.append(
+                        CourseCode.parse(course)
+                    )
+                else:
+                    subreq.courses[-1].course_codes.append(CourseCode.parse(course))
                 assert matchctl in ["", "/", "!"]
             case "range":
                 assert isinstance(subreq.courses[-1], SingleCourse)
@@ -170,6 +183,7 @@ def parse_rows(rows: Iterator[list[str]]) -> list[DegreeProgram]:
         match matchctl:
             case "/" | "!":
                 next_course = "or"
+                next_is_hidden = matchctl == "!"
             case ":" | ";":
                 next_course = "range"
             case "":
@@ -184,11 +198,21 @@ class SimplifiedSubrequirement(NamedTuple):
     min_count: int
     min_units: int
     courses: list[list[CourseCode]]
+    """
+    List of courses that can satisfy this subrequirement. Only one course from
+    each inner list can be used to satisfy the requirement, i.e. the inner lists
+    represent an exclusive OR.
+    """
 
 
 class SimplifiedDegreeProgram(NamedTuple):
     name: str
     subreqs: list[list[SimplifiedSubrequirement]]
+    """
+    List of requirements. Each requirement is a list of alternative
+    subrequirements, i.e. only one subrequirements in this inner list needs to
+    be satisfied.
+    """
 
     def display(self) -> str:
         return f"[{self.name}]\n" + "\n".join(
@@ -217,7 +241,7 @@ class SimplifiedDegreeProgram(NamedTuple):
 
 
 def simplify(
-    course_list: list[CourseCode], program: DegreeProgram
+    course_list: list[CourseCode], program: DegreeProgram, include_hidden: bool = True
 ) -> SimplifiedDegreeProgram:
     def simplify_requirement(req: CourseRequirement) -> list[list[CourseCode]]:
         match req:
@@ -232,7 +256,7 @@ def simplify(
             case SelectExactlyOneCourse():
                 course_codes = [
                     CourseCode(course_code.subject, course_code.number.rstrip("#"))
-                    for course_code in req.course_codes
+                    for course_code in req.get_course_codes(include_hidden)
                 ]
                 return [
                     [
@@ -252,6 +276,12 @@ def simplify(
                     and lower <= course_code.parts()[1:] <= upper
                 ]
             case PseudoCourse():
+                # Exclude pseudocourses: Each sub-requirement will have a
+                # pseudo-course, designated with a MATCHCTL value of ‘$’ or ‘S’
+                # or ‘P’. That should definitely be excluded from a data pull,
+                # but also any courses that follow it, as those are hidden from
+                # the audit. They typically represent either withdrawn courses
+                # (no longer offered) or automatic substitutions.
                 return []
             case Note():
                 return []
@@ -292,10 +322,10 @@ if __name__ == "__main__":
     # print(degree_programs[0])
     all_prereqs = prereqs("FA25")
     all_courses = list(all_prereqs.keys())
-    print(simplify(all_courses, degree_programs[0]).display())
+    print(simplify(all_courses, degree_programs[0], include_hidden=False).display())
 
     for program in degree_programs:
-        simplified = simplify(all_courses, program)
+        simplified = simplify(all_courses, program, include_hidden=True)
         program_courses = {
             course_code
             for subreq in simplified.subreqs
