@@ -3,7 +3,9 @@ $ python parse_uachieve.py 'files/BI35_Major_With_Courses(BI35_Major_With_Course
 """
 
 import csv
+import re
 from typing import Iterator, Literal, NamedTuple
+from parse import prereqs
 from parse_defs import CourseCode
 
 
@@ -120,6 +122,7 @@ def parse_rows(rows: Iterator[list[str]]) -> list[DegreeProgram]:
             )
             last_subreq_id = 0
         if last_subreq_id != int(user_seq_no):
+            last_subreq_id = int(user_seq_no)
             new_subreq = Subrequirement(
                 label, int(reqct), int(dars45_sub_req_reqhrs), []
             )
@@ -154,6 +157,9 @@ def parse_rows(rows: Iterator[list[str]]) -> list[DegreeProgram]:
                 subreq.courses[-1] = CourseRange(
                     subreq.courses[-1].course_code, CourseCode.parse(course)
                 )
+                assert (
+                    subreq.courses[-1].lower.subject == subreq.courses[-1].upper.subject
+                )
                 assert matchctl == ""
             case None:
                 subreq.courses.append(SingleCourse(CourseCode.parse(course)))
@@ -162,9 +168,82 @@ def parse_rows(rows: Iterator[list[str]]) -> list[DegreeProgram]:
                 next_course = "or"
             case ":" | ";":
                 next_course = "range"
-            case _:
+            case "":
                 next_course = None
+            case _:
+                raise ValueError(f"Unexpected MATCHCTL value {repr(matchctl)}")
     return degree_plans
+
+
+class SimplifiedSubrequirement(NamedTuple):
+    label: str
+    min_count: int
+    min_units: int
+    courses: list[list[CourseCode]]
+
+
+class SimplifiedDegreeProgram(NamedTuple):
+    name: str
+    subreqs: list[list[SimplifiedSubrequirement]]
+
+
+def simplify(
+    course_list: list[CourseCode], program: DegreeProgram
+) -> SimplifiedDegreeProgram:
+    def simplify_requirement(req: CourseRequirement) -> list[CourseCode]:
+        match req:
+            case SingleCourse():
+                course_code = CourseCode(
+                    req.course_code.subject, req.course_code.number.rstrip("#")
+                )
+                return [course_code] if course_code in course_list else []
+            case SelectOneCourse():
+                course_codes = [
+                    CourseCode(course_code.subject, course_code.number.rstrip("#"))
+                    for course_code in req.course_codes
+                ]
+                return [
+                    course_code
+                    for course_code in course_list
+                    if course_code in course_codes
+                ]
+            case CourseRange():
+                subject = req.lower.subject.replace("*", ".")
+                lower = req.lower.parts()[1:]
+                upper = req.upper.parts()[1:]
+                print(subject, lower, upper)
+                return [
+                    course_code
+                    for course_code in course_list
+                    if re.fullmatch(subject, course_code.subject)
+                    and lower <= course_code.parts()[1:] <= upper
+                ]
+            case PseudoCourse():
+                return []
+            case Note():
+                return []
+
+    return SimplifiedDegreeProgram(
+        program.id,
+        [
+            [
+                SimplifiedSubrequirement(
+                    alt.label,
+                    alt.min_count,
+                    alt.min_units,
+                    [
+                        simplified
+                        for req in alt.courses
+                        for simplified in [simplify_requirement(req)]
+                        if simplified
+                    ],
+                )
+                for alt in subreq
+            ]
+            for req in program.requirements
+            for subreq in req.subrequirements
+        ],
+    )
 
 
 if __name__ == "__main__":
@@ -176,4 +255,6 @@ if __name__ == "__main__":
 
     with open(sys.argv[1]) as f:
         reader = csv.reader(f)
-        print(parse_rows(reader))
+        degree_programs = parse_rows(reader)
+    # print(degree_programs[0])
+    print(simplify(list(prereqs("FA25").keys()), degree_programs[0]))
