@@ -1,4 +1,5 @@
-from typing import Literal, NamedTuple, Optional, Tuple
+import re
+from typing import Literal, NamedTuple, Optional, Self, Tuple
 
 
 class TermCode(str):
@@ -72,6 +73,17 @@ class CourseCode(NamedTuple):
 
     def __ge__(self, other: Tuple[object, ...]) -> bool:
         return not self < other
+
+    @classmethod
+    def parse(cls, name: str) -> Self:
+        name = re.sub(r"\s", "", name)
+        for i, char in enumerate(name):
+            if char.isdigit():
+                index = i
+                break
+        else:
+            raise ValueError(f"Supposed course code {repr(name)} has no digits in it")
+        return cls(name[:index], name[index:])
 
 
 class Prerequisite(NamedTuple):
