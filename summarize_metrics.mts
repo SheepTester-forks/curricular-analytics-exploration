@@ -1,4 +1,4 @@
-// node --experimental-strip-types summarize_metrics.mts
+// node --experimental-strip-types summarize_metrics.mts 2023
 // -> files/protected/summarize_dfw.json
 //    files/protected/summarize_dfw_by_major.json
 //    files/protected/summarize_equity_by_major.json
@@ -8,6 +8,8 @@
 
 import { readFile, writeFile } from 'fs/promises'
 import parse from 'neat-csv'
+
+const PUBLIC_START_YEAR = +process.argv[2]
 
 const majorDepartments = (
   await parse(await readFile('files/isis_major_code_list.csv', 'utf-8'))
@@ -433,3 +435,57 @@ await writeFile(
   ) + '\n'
 )
 console.log('wrote files/protected/summarize_transfer_gap.json')
+
+await writeFile(
+  'files/summarize_dfw_public.json',
+  JSON.stringify(
+    Object.fromEntries(
+      Array.from(
+        Map.groupBy(
+          (
+            await parse(
+              await readFile('./scrape_instructor_grade_archive.csv', 'utf-8')
+            )
+          )
+            .slice(1)
+            // Filter out old professors
+            .filter(row => +row['Year'] >= PUBLIC_START_YEAR % 100)
+            .map(row => {
+              const abc =
+                +row['A'].replace('%', '') +
+                +row['B'].replace('%', '') +
+                +row['C'].replace('%', '') +
+                +row['P'].replace('%', '')
+              const dfw =
+                +row['D'].replace('%', '') +
+                +row['F'].replace('%', '') +
+                +row['W'].replace('%', '') +
+                +row['NP'].replace('%', '')
+              return {
+                course: row['Subject'] + row['Course'],
+                instructor: row['Instructor'],
+                dfw: dfw / (abc + dfw)
+              }
+            }),
+          entry => entry.course
+        ),
+        ([course, entries]) => {
+          const instructors = Array.from(
+            Map.groupBy(entries, entry => entry.instructor).values(),
+            // Assumes the CSV is in chronological order
+            instructorDfws => instructorDfws[instructorDfws.length - 1].dfw
+          )
+          return [
+            course,
+            // Average latest DFW across all professors
+            instructors.reduce((cum, curr) => cum + curr, 0) /
+              instructors.length
+          ]
+        }
+      )
+    ),
+    null,
+    2
+  ) + '\n'
+)
+console.log('wrote files/summarize_dfw_public.json')

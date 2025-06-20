@@ -168,8 +168,12 @@ files/flagged_issues.html: flag_issues.py units_per_course.json
 
 # Protected data
 
-files/protected/summarize_dfw_by_major.json: summarize_metrics.mts files/CA_MetricsforMap_FINAL(Metrics).csv $(majors)
-	node --experimental-strip-types summarize_metrics.mts './files/CA_MetricsforMap_FINAL(Metrics).csv'
+scrape_instructor_grade_archive.csv: scrape_instructor_grade_archive.py
+	python scrape_instructor_grade_archive.py
+
+files/protected/summarize_dfw_by_major.json: summarize_metrics.mts files/CA_MetricsforMap_FINAL(Metrics).csv $(majors) scrape_instructor_grade_archive.csv
+	# Year is cut-off for "old" professors, used for files/summarize_dfw_public.json
+	node --experimental-strip-types summarize_metrics.mts 2023
 
 files/protected/summarize_frequency.json: summarize_frequency.py files/21-22\ Enrollment_DFW\ CJ.xlsx.csv files/Waitlist\ by\ Course\ for\ CJ.xlsx.csv
 	python3 summarize_frequency.py './files/21-22 Enrollment_DFW CJ.xlsx.csv' './files/Waitlist by Course for CJ.xlsx.csv' > files/protected/summarize_frequency.json
