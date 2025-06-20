@@ -1,14 +1,16 @@
-// node --experimental-strip-types summarize_metrics.mts 2023
-// -> files/protected/summarize_dfw.json
+// node --experimental-strip-types summarize_metrics.mts <year>
+// -> files/protected/summarize_dfw.json (not used for anything)
 //    files/protected/summarize_dfw_by_major.json
 //    files/protected/summarize_equity_by_major.json
 //    files/protected/summarize_waitlist.json
 //    files/protected/summarize_transfer_gap.json
 //    files/protected/summarize_major_to_dept.json
+//    files/summarize_dfw_public.json
 
 import { readFile, writeFile } from 'fs/promises'
 import parse from 'neat-csv'
 
+// for files/summarize_dfw_public.json, see below
 const PUBLIC_START_YEAR = +process.argv[2]
 
 const majorDepartments = (
@@ -449,7 +451,20 @@ await writeFile(
           )
             .slice(1)
             // Filter out old professors
-            .filter(row => +row['Year'] >= PUBLIC_START_YEAR % 100)
+            .filter(
+              row =>
+                +row['Year'] >= PUBLIC_START_YEAR % 100 &&
+                ![
+                  row['A'],
+                  row['B'],
+                  row['C'],
+                  row['D'],
+                  row['F'],
+                  row['W'],
+                  row['P'],
+                  row['NP']
+                ].every(percentage => percentage === '0%')
+            )
             .map(row => {
               const abc =
                 +row['A'].replace('%', '') +
@@ -461,10 +476,14 @@ await writeFile(
                 +row['F'].replace('%', '') +
                 +row['W'].replace('%', '') +
                 +row['NP'].replace('%', '')
+              const dfwRate = dfw / (abc + dfw)
+              if (Number.isNaN(dfwRate)) {
+                throw new RangeError(`DFW rate is NaN: ${JSON.stringify(row)}`)
+              }
               return {
                 course: row['Subject'] + row['Course'],
                 instructor: row['Instructor'],
-                dfw: dfw / (abc + dfw)
+                dfwRate
               }
             }),
           entry => entry.course
@@ -473,13 +492,16 @@ await writeFile(
           const instructors = Array.from(
             Map.groupBy(entries, entry => entry.instructor).values(),
             // Assumes the CSV is in chronological order
-            instructorDfws => instructorDfws[instructorDfws.length - 1].dfw
+            instructorDfws => instructorDfws[instructorDfws.length - 1].dfwRate
           )
           return [
             course,
             // Average latest DFW across all professors
-            instructors.reduce((cum, curr) => cum + curr, 0) /
-              instructors.length
+            {
+              allMajors:
+                instructors.reduce((cum, curr) => cum + curr, 0) /
+                instructors.length
+            }
           ]
         }
       )

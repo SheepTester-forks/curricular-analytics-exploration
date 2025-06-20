@@ -1,5 +1,7 @@
 """
 python3 summarize_dfw.py './files/21-22 Enrollment_DFW CJ.xlsx.csv' 4 > files/protected/summarize_dfw.json
+
+! no longer used, superceded by summarize_metrics.mts
 """
 
 import csv
