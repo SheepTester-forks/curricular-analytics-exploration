@@ -5,6 +5,7 @@ uploaded-*.yml
 output/
 prereqs/
 plans/
+*.zip
 
 # Tableau tables
 *.twbr

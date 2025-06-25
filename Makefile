@@ -137,12 +137,26 @@ plan_csvs/metadata.json: dump_graphs.py files/prereqs/.done files/plans/.done
 	python3 dump_graphs.py files
 
 reports/output/plan-graph-index-fragment.html: dump_graphs.py files/plans/.done
-	python3 dump_graphs.py html > reports/output/plan-graph-index-fragment.html
+	python3 dump_graphs.py html for_public > reports/output/plan-graph-index-fragment.html
 
 reports/output/plan-graph-index.html: reports/plan-graph-index-template.html reports/output/plan-graph-index-fragment.html
 	head -n $$(($$(wc -l < reports/plan-graph-index-template.html) - 1)) < reports/plan-graph-index-template.html > reports/output/plan-graph-index.html
 	cat reports/output/plan-graph-index-fragment.html >> reports/output/plan-graph-index.html
 	echo '</html>' >> reports/output/plan-graph-index.html
+
+reports/output/plan-graph-index-distributable-fragment.html: dump_graphs.py files/plans/.done
+	python3 dump_graphs.py html > reports/output/plan-graph-index-distributable-fragment.html
+
+reports/output/index-distributable.html: reports/plan-graph-index-template.html reports/output/plan-graph-index-distributable-fragment.html
+	head -n $$(($$(wc -l < reports/plan-graph-index-template.html) - 1)) < reports/plan-graph-index-template.html > reports/output/index-distributable.html
+	cat reports/output/plan-graph-index-distributable-fragment.html >> reports/output/index-distributable.html
+	echo '</html>' >> reports/output/index-distributable.html
+
+# make a distributable version for carlos so he can show this off when he's not at ucsd
+files/plan-graph-distributable.zip: reports/output/index-distributable.html ../curricular-analytics-graph/dist/plan-graph.html
+	rm -f files/plan-graph-distributable.zip
+	# -j makes it drop the folder parts of the path
+	zip files/plan-graph-distributable.zip reports/output/index-distributable.html ../curricular-analytics-graph/dist/plan-graph.html -j
 
 # Seats (unused)
 

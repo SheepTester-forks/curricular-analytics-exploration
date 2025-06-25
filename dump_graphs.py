@@ -1,6 +1,6 @@
 """
 python3 dump_graphs.py json
-python3 dump_graphs.py html > reports/output/plan-editor-index.html
+python3 dump_graphs.py html (for_public) > reports/output/plan-editor-index.html
 python3 dump_graphs.py files
 """
 
@@ -95,7 +95,7 @@ def escape_html(string: str) -> str:
     )
 
 
-def render_plan_urls() -> None:
+def render_plan_urls(for_public: bool = False) -> None:
     qs_by_dept: Dict[str, Dict[str, Dict[str, Dict[int, List[Tuple[str, str]]]]]] = {}
     years: List[int] = []
     for year in range(2015, 2050):
@@ -158,9 +158,12 @@ def render_plan_urls() -> None:
     print(
         "  params.append('from', `${year}/${major}/${year}_${major}${college ? '_' + college : ''}.csv`)"
     )
-    print("  url.hostname = 'stage-educationalinnovation.ucsd.edu'")
-    print("  url.pathname = '/_files/plan-graph.html'")
-    print("  window.location.replace(url)")
+    if for_public:
+        print("  url.hostname = 'stage-educationalinnovation.ucsd.edu'")
+        print("  url.pathname = '/_files/plan-graph.html'")
+        print("  window.location.replace(url)")
+    else:
+        print("  window.location.replace('plan-graph.html?' + params)")
     print("}</script>")
     print("<p>Jump to: ")
     for i, school in enumerate(sorted(qs_by_dept.keys() - {""})):
@@ -224,5 +227,8 @@ if __name__ == "__main__":
         render_plan_json()
     elif sys.argv[1] == "files":
         render_plan_files()
+    elif sys.argv[1] == "html":
+        render_plan_urls(len(sys.argv) > 2 and sys.argv[2] == "for_public")
     else:
-        render_plan_urls()
+        print("unexpected argument: %s" % sys.argv[1])
+        exit(1)
