@@ -33,41 +33,65 @@ We continue to refer to projects based on these forks as part of our Curricular 
 > [!NOTE]
 > I recommend Windows users use WSL. While I am a Windows user myself, I haven't tested anything outside of WSL.
 
+1. Clone the repo.
+
+   ```shell
+   $ git clone https://github.com/SheepTester-forks/curricular-analytics-exploration.git
+   $ cd curricular-analytics-exploration/
+   ```
+
 1. Make sure the following are installed:
 
-   - `make`
+   - `make`. If you don't have it, you can run `sudo apt install make`.
 
      ```shell
-     $ sudo apt install make
+     $ make
+     make: *** No targets specified and no makefile found.  Stop.
      ```
 
    - Python 3.12 or newer.
 
      I recommend setting up a virtual environment using VS Code. For some reason WSL comes with Python 3.12 preinstalled, but not `pip`. Using [VS Code's Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) to create a virtual environment from `/bin/python3.12` (ctrl+shift+P then "Python: Create Environment...") fixes this.
 
-     Then, install the Python dependencies ([`curricularanalytics`](https://pypi.org/project/curricularanalytics/), [`python-dotenv`](https://pypi.org/project/python-dotenv/)):
-
      ```shell
-     $ pip install -r requirements.txt
+     $ python3 --version
+     Python 3.12.3
      ```
 
    - Node 22 or newer.
 
      I recommend using [nvm](https://github.com/nvm-sh/nvm) to install Node.
 
-     Then install the Node dependencies.
-
      ```shell
-     $ npm install
+     $ node --version
+     v23.1.0
      ```
 
-2. Download the required CSV files to files/. The links are probably private, so you will have to request access or ask for updated data. Their format is detailed in [§ Required files](#required-files).
+1. Install dependencies:
 
-   - **`academic_plans_thruFA24.csv`** and **`prereqs_thruFA25.csv`** from the [Archive of Data Dumps](https://ucsdcloud.sharepoint.com/:f:/r/sites/EI/Shared%20Documents/Projects/Curricular%20Analytics/Archive%20of%20Data%20Dumps).
+   ```shell
+   $ pip install -r requirements.txt
+   $ npm install
+   ```
+
+1. Download the required CSV files to files/. The links are probably private, so you will have to request access or ask for updated data. Their format is detailed in [§ Required files](#required-files).
+
+   - Any **`academic_plans.csv`** and **`prereqs.csv`** from the [Archive of Data Dumps](https://ucsdcloud.sharepoint.com/:f:/r/sites/EI/Shared%20Documents/Projects/Curricular%20Analytics/Archive%20of%20Data%20Dumps).
+
+     > [!IMPORTANT]
+     > Make to update the `Makefile` with the corresponding year and file names. For example, for the 2024--2025 school year, it could look like this:
+     >
+     > ```Makefile
+     > year = 2024
+     > prereq-term = WI25
+     > plans = files/2024_academic_plans_thruFA24.csv
+     > prereqs = files/2024_prereqs_thruFA25.csv
+     > ```
+
    - [**`isis_major_code_list.csv`**](https://blink.ucsd.edu/_files/instructors-tab/major-codes/isis_major_code_list.xlsx)
      - Export the Major Codes sheet ("isis_major_code_list") as a CSV.
 
-3. Run `make`.
+1. Run `make`.
 
    ```shell
    $ make
@@ -85,9 +109,13 @@ We continue to refer to projects based on these forks as part of our Curricular 
    $ make clean
    ```
 
-4. Enjoy the output. `Makefile` has the files that are produced listed under `# Reports`.
+   > [!TIP]
+   > If something goes wrong when running `make`, `make` sometimes thinks the build succeeded.
+   > Use `make clean` to force `make` to rebuild.
 
-5. Every year, once a data dump of the new year's plans and prereqs is available, you'll need to update all the reports. See [§ How to use a data refresh](#how-to-use-a-data-refresh) for instructions on how to do this.
+1. Enjoy the output. To see a list of generated files, refer to the `Makefile` under `# Reports`.
+
+1. Every year, once a data dump of the new year's plans and prereqs is available, you'll need to update all the reports. See [§ How to use a data refresh](#how-to-use-a-data-refresh) for instructions on how to do this.
 
 ### What's in other repos
 
@@ -718,12 +746,12 @@ course_capacities.py | (inputs: files/ClassCapCalculatorNewStudents.csv, files/C
 
     - `year` - the final year available.
     - `prereq-term` - the term from which prereqs will be used for the prereq tree.
-    - `prereqs`, `plans`, `majors` - if the paths to the new files changed.
+    - `prereqs` and `plans` - if the paths to the new files changed.
 
 1.  `university.py`: Update these variables:
 
-    - `prereqs_file`, `plans_file`, `majors_file` - if the paths to the new files changed.
-    - `curriculum_priority`, `college_codes`, `college_names` - if there's a new college. It doesn't particularly matter where the college goes in `curriculum_priority`.
+    - `majors_file` - if the paths to the new files changed.
+    - `curriculum_priority`, `college_codes`, `college_names` - if there's a new college.
 
 1.  You may need to get a new version of `isis_major_code_list.csv` for any new majors.
 

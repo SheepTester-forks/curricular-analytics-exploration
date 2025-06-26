@@ -4,10 +4,8 @@ protected: files/protected/summarize_dfw_by_major.json files/protected/summarize
 year-start = 2015
 year = 2024
 prereq-term = WI25
-# Make sure to update the file paths in university.py as well
-prereqs = files/2024_prereqs_thruFA25.csv
 plans = files/2024_academic_plans_thruFA24.csv
-majors = files/isis_major_code_list.csv
+prereqs = files/2024_prereqs_thruFA25.csv
 
 # Reports
 
@@ -56,7 +54,7 @@ files/curricula_index.csv: curricula_index.py files/uploaded*.yml
 
 # Plan diffs
 
-reports/output/academic-plan-diffs.json: files/metrics_fa12_py.csv diff_plan.py files/plans/.done $(majors)
+reports/output/academic-plan-diffs.json: files/metrics_fa12_py.csv diff_plan.py files/plans/.done files/isis_major_code_list.csv
 	python3 diff_plan.py $(year-start) $(year) > reports/output/academic-plan-diffs.json
 
 reports/output/plan-diffs.js: reports/plan-diffs/index.tsx reports/output/academic-plan-diffs.json
@@ -90,7 +88,7 @@ reports/output/prereq-timeline.html: reports/prereq-timeline-template.html repor
 
 # College GEs
 
-reports/output/college-ge-units-fragment.html: college_ges.py files/plans/.done $(majors)
+reports/output/college-ge-units-fragment.html: college_ges.py files/plans/.done files/isis_major_code_list.csv
 	python3 college_ges.py $(year) html > reports/output/college-ge-units-fragment.html
 
 reports/output/college-ge-units.html: reports/college-ge-template.html reports/output/college-ge-units-fragment.html
@@ -185,7 +183,7 @@ files/flagged_issues.html: flag_issues.py units_per_course.json
 scrape_instructor_grade_archive.csv: scrape_instructor_grade_archive.py
 	python scrape_instructor_grade_archive.py
 
-files/protected/summarize_dfw_by_major.json: summarize_metrics.mts files/CA_MetricsforMap_FINAL(Metrics).csv $(majors) scrape_instructor_grade_archive.csv
+files/protected/summarize_dfw_by_major.json: summarize_metrics.mts files/CA_MetricsforMap_FINAL(Metrics).csv files/isis_major_code_list.csv scrape_instructor_grade_archive.csv
 	# Year is cut-off for "old" professors, used for files/summarize_dfw_public.json
 	node --experimental-strip-types summarize_metrics.mts 2023
 
