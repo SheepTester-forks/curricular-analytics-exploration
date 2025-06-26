@@ -78,15 +78,15 @@ We continue to refer to projects based on these forks as part of our Curricular 
 
    - Any **`academic_plans.csv`** and **`prereqs.csv`** from the [Archive of Data Dumps](https://ucsdcloud.sharepoint.com/:f:/r/sites/EI/Shared%20Documents/Projects/Curricular%20Analytics/Archive%20of%20Data%20Dumps).
 
-     > [!IMPORTANT]
-     > Make to update the Makefile with the corresponding year and file names. For example, for the 2024--2025 school year, it could look like this:
-     >
-     > ```Makefile
-     > year = 2024
-     > prereq-term = WI25
-     > plans = files/2024_academic_plans_thruFA24.csv
-     > prereqs = files/2024_prereqs_thruFA25.csv
-     > ```
+     **Important**:
+     Make sure to update the Makefile with the corresponding year and file names. For example, for the 2024--2025 school year, it could look like this:
+
+     ```Makefile
+     year = 2024
+     prereq-term = WI25
+     plans = files/2024_academic_plans_thruFA24.csv
+     prereqs = files/2024_prereqs_thruFA25.csv
+     ```
 
    - [**`isis_major_code_list.csv`**](https://blink.ucsd.edu/_files/instructors-tab/major-codes/isis_major_code_list.xlsx)
      - Export the Major Codes sheet ("isis_major_code_list") as a CSV.
