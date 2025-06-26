@@ -79,7 +79,7 @@ We continue to refer to projects based on these forks as part of our Curricular 
    - Any **`academic_plans.csv`** and **`prereqs.csv`** from the [Archive of Data Dumps](https://ucsdcloud.sharepoint.com/:f:/r/sites/EI/Shared%20Documents/Projects/Curricular%20Analytics/Archive%20of%20Data%20Dumps).
 
      > [!IMPORTANT]
-     > Make to update the `Makefile` with the corresponding year and file names. For example, for the 2024--2025 school year, it could look like this:
+     > Make to update the Makefile with the corresponding year and file names. For example, for the 2024--2025 school year, it could look like this:
      >
      > ```Makefile
      > year = 2024
@@ -109,13 +109,13 @@ We continue to refer to projects based on these forks as part of our Curricular 
    $ make clean
    ```
 
-   > [!TIP]
-   > If something goes wrong when running `make`, `make` sometimes thinks the build succeeded.
-   > Use `make clean` to force `make` to rebuild.
-
-1. Enjoy the output. To see a list of generated files, refer to the `Makefile` under `# Reports`.
+1. Enjoy the output. To see a list of generated files, refer to the Makefile under `# Reports`.
 
 1. Every year, once a data dump of the new year's plans and prereqs is available, you'll need to update all the reports. See [§ How to use a data refresh](#how-to-use-a-data-refresh) for instructions on how to do this.
+
+> [!TIP]
+> If something goes wrong when running `make`, `make` sometimes thinks the build succeeded.
+> Use `make clean` to force `make` to rebuild.
 
 ### What's in other repos
 
@@ -742,15 +742,14 @@ course_capacities.py | (inputs: files/ClassCapCalculatorNewStudents.csv, files/C
 
 ## How to use a data refresh
 
-1.  `Makefile`: Update these variables:
+1.  Makefile: Update these variables:
 
-    - `year` - the final year available.
-    - `prereq-term` - the term from which prereqs will be used for the prereq tree.
+    - `year` - the starting year of the current academic year.
+    - `prereq-term` - the current term. Used for the prereq tree.
     - `prereqs` and `plans` - if the paths to the new files changed.
 
 1.  `university.py`: Update these variables:
 
-    - `majors_file` - if the paths to the new files changed.
     - `curriculum_priority`, `college_codes`, `college_names` - if there's a new college.
 
 1.  You may need to get a new version of `isis_major_code_list.csv` for any new majors.
