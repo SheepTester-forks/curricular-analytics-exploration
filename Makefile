@@ -2,10 +2,10 @@ all: tableau academic-plan-diffs prereq-diffs prereq-timeline college-ge-units p
 protected: files/protected/summarize_dfw_by_major.json files/protected/summarize_frequency.json
 
 year-start = 2015
-year = 2024
-prereq-term = WI25
-plans = files/2024_academic_plans_thruFA24.csv
-prereqs = files/2024_prereqs_thruFA25.csv
+year = 2025
+prereq-term = WI26
+plans = files/2025_academic_plans_thruFA25.csv
+prereqs = files/2025_prereqs_thruWI26.csv
 
 # Reports
 
