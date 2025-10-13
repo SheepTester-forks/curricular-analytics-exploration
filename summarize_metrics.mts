@@ -103,6 +103,8 @@ type MetricsRow = {
     firstGen: boolean
     // Gender Disproportionate Impact
     gender: boolean
+    // Transfer Disproportionate Impact
+    transfer: boolean
   }
   // N
   studentCount: number
@@ -144,6 +146,7 @@ const metricsRows = metricsTable.map(
     'URM Disproportionate Impact': impactUrm = '',
     'First Gen Disproportionate Impact': impactFirstGen = '',
     'Gender Disproportionate Impact': impactGender = '',
+    'Transfer Disproportionate Impact': impactTransfer = '',
     N: studentCount,
     'N Qtrs w/Enrollment': quarterCount,
     'Count of DFW Grades': dfwCount,
@@ -188,6 +191,14 @@ const metricsRows = metricsTable.map(
             ? false
             : expect(
               `expected impactGender to be either Y or empty, received '${impactGender}'`
+            ),
+      transfer: 
+        impactTransfer === 'Y'
+          ? true
+          : impactTransfer === ''
+            ? false
+            : expect(
+              `expected impactTransfer to be either Y or empty, received '${impactTransfer}'`
             )
     },
     studentCount: +studentCount,
@@ -254,7 +265,8 @@ function displayDisproportionate ({
   firstGen,
   gender,
   major,
-  urm
+  urm,
+  transfer
 }: MetricsRow['disproportionate']): string {
   const strings: string[] = []
   if (firstGen) {
@@ -268,6 +280,9 @@ function displayDisproportionate ({
   }
   if (urm) {
     strings.push('urm')
+  }
+  if (transfer) {
+    strings.push('transfer')
   }
   return strings.join(' ')
 }
