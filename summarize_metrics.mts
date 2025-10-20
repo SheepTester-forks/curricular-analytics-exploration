@@ -135,7 +135,8 @@ type MetricsRow = {
 const metricsTable = (
   await parse(
     // await readFile('./files/CA_MetricsforMap_FINAL(Metrics).csv', 'utf-8')
-    await readFile('../curricular-analytics-scripts/files/CA_MetricsforMap_25_FINAL(Metrics).csv', 'utf-8')
+    await readFile('./files/CA_MetricsforMap_25_FINAL(All by Dept).csv', 'utf-8')
+    // await readFile('./files/CA_MetricsforMap_25_FINAL(All).csv', 'utf-8')
   )
 ).slice(1)
 
@@ -354,37 +355,37 @@ console.log('wrote files/protected/summarize_waitlist.json')
 // NOTE: MATH20C	SE	First Year	Y this is weird
 
 /** map course to whether it is transfer equity gap */
-const coursesWithTransferGap = new Map(
-  (
-    await parse(
-      await readFile(
-        './files/CA_MetricsforMap_FINAL(Applicant Type).csv',
-        'utf-8'
-      )
-    )
-  )
-    .slice(1)
-    .flatMap(
-      ({
-        'Course ID': courseCode,
-        Breakdown: applicantType,
-        'Disproportionate Impact': disproportionateImpact
-      }) => {
-        if (applicantType !== 'Transfer') {
-          if (disproportionateImpact === 'Y') {
-            console.warn(
-              '?',
-              courseCode,
-              applicantType,
-              'has Disproportionate Impact'
-            )
-          }
-          return []
-        }
-        return [[courseCode, disproportionateImpact === 'Y']]
-      }
-    )
-)
+// const coursesWithTransferGap = new Map(
+//   (
+//     await parse(
+//       await readFile(
+//         './files/CA_MetricsforMap_FINAL(Applicant Type).csv',
+//         'utf-8'
+//       )
+//     )
+//   )
+//     .slice(1)
+//     .flatMap(
+//       ({
+//         'Course ID': courseCode,
+//         Breakdown: applicantType,
+//         'Disproportionate Impact': disproportionateImpact
+//       }) => {
+//         if (applicantType !== 'Transfer') {
+//           if (disproportionateImpact === 'Y') {
+//             console.warn(
+//               '?',
+//               courseCode,
+//               applicantType,
+//               'has Disproportionate Impact'
+//             )
+//           }
+//           return []
+//         }
+//         return [[courseCode, disproportionateImpact === 'Y']]
+//       }
+//     )
+// )
 
 /** maps department code to their major-specific list of transfer equity gaps */
 const coursesWithTransferGapByMajor = Map.groupBy(
@@ -432,9 +433,10 @@ await writeFile(
   JSON.stringify(
     Object.fromEntries(
       Array.from(
-        new Set(coursesWithTransferGap.keys()).union(
-          new Set(coursesWithTransferGapByMajor.keys())
-        ),
+        // new Set(coursesWithTransferGap.keys()).union(
+        //   new Set(coursesWithTransferGapByMajor.keys())
+        // ),
+        new Set(coursesWithTransferGapByMajor.keys()), 
         courseCode => [
           courseCode,
           {
@@ -443,7 +445,7 @@ await writeFile(
                 .get(courseCode)
                 ?.map(entry => [entry.departmentCode, entry.transferGap]) ?? []
             ),
-            allMajors: coursesWithTransferGap.get(courseCode)
+            // allMajors: coursesWithTransferGap.get(courseCode)
           }
         ]
       )

@@ -183,7 +183,7 @@ files/flagged_issues.html: flag_issues.py units_per_course.json
 scrape_instructor_grade_archive.csv: scrape_instructor_grade_archive.py
 	python scrape_instructor_grade_archive.py
 
-files/protected/summarize_dfw_by_major.json: summarize_metrics.mts files/CA_MetricsforMap_25_FINAL(Metrics).csv files/isis_major_code_list.csv scrape_instructor_grade_archive.csv
+files/protected/summarize_dfw_by_major.json: summarize_metrics.mts files/CA_MetricsforMap_25_FINAL(All\ by\ Dept).csv files/isis_major_code_list.csv scrape_instructor_grade_archive.csv
 	# Year is cut-off for "old" professors, used for files/summarize_dfw_public.json
 	node --experimental-strip-types summarize_metrics.mts 2023
 
