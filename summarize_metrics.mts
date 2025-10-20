@@ -134,7 +134,8 @@ type MetricsRow = {
 
 const metricsTable = (
   await parse(
-    await readFile('./files/CA_MetricsforMap_FINAL(Metrics).csv', 'utf-8')
+    // await readFile('./files/CA_MetricsforMap_FINAL(Metrics).csv', 'utf-8')
+    await readFile('../curricular-analytics-scripts/files/CA_MetricsforMap_25_FINAL(Metrics).csv', 'utf-8')
   )
 ).slice(1)
 
@@ -201,9 +202,9 @@ const metricsRows = metricsTable.map(
               `expected impactTransfer to be either Y or empty, received '${impactTransfer}'`
             )
     },
-    studentCount: +studentCount,
+    studentCount: +studentCount.replace(',', ''),
     quarterCount: +quarterCount,
-    dfwCount: +dfwCount,
+    dfwCount: +dfwCount.replace(',', ''),
     dfwPercent: +dfwPercent.replace('%', '') / 100,
     averageWaitlist: +averageWaitlist,
     averageStudentsAffected: +averageStudentsAffected
@@ -392,6 +393,7 @@ const coursesWithTransferGapByMajor = Map.groupBy(
       await readFile(
         './files/CA_MetricsforMap_FINAL(Applicant Type_Major).csv',
         'utf-8'
+        // './files/CA_MetricsforMap_25_FINAL(by Major by App Type).csv', 'utf-8'
       )
     )
   )
