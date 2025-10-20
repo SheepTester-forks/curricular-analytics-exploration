@@ -391,9 +391,8 @@ const coursesWithTransferGapByMajor = Map.groupBy(
   (
     await parse(
       await readFile(
-        './files/CA_MetricsforMap_FINAL(Applicant Type_Major).csv',
-        'utf-8'
-        // './files/CA_MetricsforMap_25_FINAL(by Major by App Type).csv', 'utf-8'
+        // './files/CA_MetricsforMap_FINAL(Applicant Type_Major).csv', 'utf-8'
+        './files/CA_MetricsforMap_25_FINAL(by Major by App Type).csv', 'utf-8'
       )
     )
   )
@@ -405,7 +404,7 @@ const coursesWithTransferGapByMajor = Map.groupBy(
         Breakdown: applicantType,
         'Disproportionate Impact': disproportionateImpact
       }) => {
-        if (applicantType !== 'Transfer') {
+        if (applicantType !== 'TRAN') {
           if (disproportionateImpact === 'Y') {
             console.warn(
               '?',
