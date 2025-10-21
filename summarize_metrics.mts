@@ -134,9 +134,7 @@ type MetricsRow = {
 
 const metricsTable = (
   await parse(
-    // await readFile('./files/CA_MetricsforMap_FINAL(Metrics).csv', 'utf-8')
     await readFile('./files/CA_MetricsforMap_25_FINAL(All by Dept).csv', 'utf-8')
-    // await readFile('./files/CA_MetricsforMap_25_FINAL(All).csv', 'utf-8')
   )
 ).slice(1)
 
@@ -392,7 +390,6 @@ const coursesWithTransferGapByMajor = Map.groupBy(
   (
     await parse(
       await readFile(
-        // './files/CA_MetricsforMap_FINAL(Applicant Type_Major).csv', 'utf-8'
         './files/CA_MetricsforMap_25_FINAL(by Major by App Type).csv', 'utf-8'
       )
     )

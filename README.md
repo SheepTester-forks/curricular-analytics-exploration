@@ -138,6 +138,8 @@ We continue to refer to projects based on these forks as part of our Curricular 
   $ git push
   ```
 
+- [curricular-analytics-scripts](https://github.com/sli051357/curricular-analytics-scripts): This contains scripts that were only used once or twice (usually to modify files into a specific format or small exploration files) and not fit to be placed in the main Curricular Analytics repository. 
+
 ### Required files
 
 [`parse.py`](parse.py) expects certain files in the `files/` directory. Download them from our shared Google Drive folder.
@@ -332,7 +334,7 @@ These also go in `files/` (not `files/protected/`).
 
 - [**`Waitlist by Course for CJ.xlsx.csv`**](https://docs.google.com/spreadsheets/d/1EC9QdtP9vy2nX46XOQyXWiMO7gnYWc6-/): Export as CSV.
 
-- [**`CA_MetricsforMap_FINAL(Metrics).csv`, `CA_MetricsforMap_FINAL(Applicant Type_Major).csv`, `CA_MetricsforMap_FINAL(Applicant Type).csv`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/eespaldon_ucsd_edu/_layouts/15/Doc.aspx?sourcedoc=%7BD138C288-C477-4FC1-8F27-A275EAD0DCFD%7D&file=CA_MetricsforMap_FINAL.xlsx): Export each tab as CSV.
+- [**`CA_MetricsforMap_25_FINAL(All by Dept).csv`, `CA_MetricsforMap_25_FINAL(All).csv`, `CA_MetricsforMap_25_FINAL(by Major by App Type).csv`, `CA_MetricsforMap_25_FINAL(by Major)`, `CA_MetricsforMap_25_FINAL(by Term)`**](https://ucsdcloud-my.sharepoint.com/:x:/r/personal/eespaldon_ucsd_edu/Documents/UG/AVC-EI/CA_MetricsforMap_25_FINAL.xlsx?d=w78c10a629bbe472f974f9a6297c531ff&csf=1&web=1&e=zGCU3g): Export each tab as CSV.
 
 The links are only shared with Curricular Analytics employees. Ask someone for access.
 
