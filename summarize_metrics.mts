@@ -103,6 +103,8 @@ type MetricsRow = {
     firstGen: boolean
     // Gender Disproportionate Impact
     gender: boolean
+    // Transfer Disproportionate Impact
+    transfer: boolean
   }
   // N
   studentCount: number
@@ -132,7 +134,7 @@ type MetricsRow = {
 
 const metricsTable = (
   await parse(
-    await readFile('./files/CA_MetricsforMap_FINAL(Metrics).csv', 'utf-8')
+    await readFile('./files/CA_MetricsforMap_25_FINAL(All by Dept).csv', 'utf-8')
   )
 ).slice(1)
 
@@ -144,6 +146,7 @@ const metricsRows = metricsTable.map(
     'URM Disproportionate Impact': impactUrm = '',
     'First Gen Disproportionate Impact': impactFirstGen = '',
     'Gender Disproportionate Impact': impactGender = '',
+    'Transfer Disproportionate Impact': impactTransfer = '',
     N: studentCount,
     'N Qtrs w/Enrollment': quarterCount,
     'Count of DFW Grades': dfwCount,
@@ -188,11 +191,19 @@ const metricsRows = metricsTable.map(
             ? false
             : expect(
               `expected impactGender to be either Y or empty, received '${impactGender}'`
+            ),
+      transfer: 
+        impactTransfer === 'Y'
+          ? true
+          : impactTransfer === ''
+            ? false
+            : expect(
+              `expected impactTransfer to be either Y or empty, received '${impactTransfer}'`
             )
     },
-    studentCount: +studentCount,
+    studentCount: +studentCount.replace(',', ''),
     quarterCount: +quarterCount,
-    dfwCount: +dfwCount,
+    dfwCount: +dfwCount.replace(',', ''),
     dfwPercent: +dfwPercent.replace('%', '') / 100,
     averageWaitlist: +averageWaitlist,
     averageStudentsAffected: +averageStudentsAffected
@@ -254,7 +265,8 @@ function displayDisproportionate ({
   firstGen,
   gender,
   major,
-  urm
+  urm,
+  transfer
 }: MetricsRow['disproportionate']): string {
   const strings: string[] = []
   if (firstGen) {
@@ -268,6 +280,9 @@ function displayDisproportionate ({
   }
   if (urm) {
     strings.push('urm')
+  }
+  if (transfer) {
+    strings.push('transfer')
   }
   return strings.join(' ')
 }
@@ -338,45 +353,44 @@ console.log('wrote files/protected/summarize_waitlist.json')
 // NOTE: MATH20C	SE	First Year	Y this is weird
 
 /** map course to whether it is transfer equity gap */
-const coursesWithTransferGap = new Map(
-  (
-    await parse(
-      await readFile(
-        './files/CA_MetricsforMap_FINAL(Applicant Type).csv',
-        'utf-8'
-      )
-    )
-  )
-    .slice(1)
-    .flatMap(
-      ({
-        'Course ID': courseCode,
-        Breakdown: applicantType,
-        'Disproportionate Impact': disproportionateImpact
-      }) => {
-        if (applicantType !== 'Transfer') {
-          if (disproportionateImpact === 'Y') {
-            console.warn(
-              '?',
-              courseCode,
-              applicantType,
-              'has Disproportionate Impact'
-            )
-          }
-          return []
-        }
-        return [[courseCode, disproportionateImpact === 'Y']]
-      }
-    )
-)
+// const coursesWithTransferGap = new Map(
+//   (
+//     await parse(
+//       await readFile(
+//         './files/CA_MetricsforMap_FINAL(Applicant Type).csv',
+//         'utf-8'
+//       )
+//     )
+//   )
+//     .slice(1)
+//     .flatMap(
+//       ({
+//         'Course ID': courseCode,
+//         Breakdown: applicantType,
+//         'Disproportionate Impact': disproportionateImpact
+//       }) => {
+//         if (applicantType !== 'Transfer') {
+//           if (disproportionateImpact === 'Y') {
+//             console.warn(
+//               '?',
+//               courseCode,
+//               applicantType,
+//               'has Disproportionate Impact'
+//             )
+//           }
+//           return []
+//         }
+//         return [[courseCode, disproportionateImpact === 'Y']]
+//       }
+//     )
+// )
 
 /** maps department code to their major-specific list of transfer equity gaps */
 const coursesWithTransferGapByMajor = Map.groupBy(
   (
     await parse(
       await readFile(
-        './files/CA_MetricsforMap_FINAL(Applicant Type_Major).csv',
-        'utf-8'
+        './files/CA_MetricsforMap_25_FINAL(by Major by App Type).csv', 'utf-8'
       )
     )
   )
@@ -388,7 +402,7 @@ const coursesWithTransferGapByMajor = Map.groupBy(
         Breakdown: applicantType,
         'Disproportionate Impact': disproportionateImpact
       }) => {
-        if (applicantType !== 'Transfer') {
+        if (applicantType !== 'TRAN') {
           if (disproportionateImpact === 'Y') {
             console.warn(
               '?',
@@ -416,9 +430,10 @@ await writeFile(
   JSON.stringify(
     Object.fromEntries(
       Array.from(
-        new Set(coursesWithTransferGap.keys()).union(
-          new Set(coursesWithTransferGapByMajor.keys())
-        ),
+        // new Set(coursesWithTransferGap.keys()).union(
+        //   new Set(coursesWithTransferGapByMajor.keys())
+        // ),
+        new Set(coursesWithTransferGapByMajor.keys()), 
         courseCode => [
           courseCode,
           {
@@ -427,7 +442,7 @@ await writeFile(
                 .get(courseCode)
                 ?.map(entry => [entry.departmentCode, entry.transferGap]) ?? []
             ),
-            allMajors: coursesWithTransferGap.get(courseCode)
+            // allMajors: coursesWithTransferGap.get(courseCode)
           }
         ]
       )
