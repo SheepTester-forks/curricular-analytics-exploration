@@ -10,13 +10,16 @@ from typing import Dict, Set
 
 from parse_defs import TermCode
 
-
+"""
+This frequency file filters for updated frequencies in the 24-25 school year based off a file from Erin Espaldon
+"""
 def main():
     if len(sys.argv) < 2:
         print("python3 summarize_frequency.py <paths...>")
         exit(1)
 
     course_offerings: Dict[str, Set[TermCode]] = {}
+    valid_terms = {'FA24', 'WI25', 'SP25', 'S125', 'S225', 'S325'}
     all_terms: Set[TermCode] = set()
 
     for path in sys.argv[1:]:
@@ -28,6 +31,8 @@ def main():
             course_code = ""
             for course, _, term, *_ in reader:
                 if not term:
+                    continue
+                if term not in valid_terms:
                     continue
                 course_code = course or course_code
                 if not course_code:
