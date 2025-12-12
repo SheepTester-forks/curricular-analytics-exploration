@@ -185,7 +185,7 @@ scrape_instructor_grade_archive.csv: scrape_instructor_grade_archive.py
 
 files/protected/summarize_dfw_by_major.json: summarize_metrics.mts files/CA_MetricsforMap_25_FINAL(All\ by\ Dept).csv files/isis_major_code_list.csv scrape_instructor_grade_archive.csv
 	# Year is cut-off for "old" professors, used for files/summarize_dfw_public.json
-	node --experimental-strip-types summarize_metrics.mts 2023
+	node --experimental-strip-types summarize_metrics.mts 2025
 
-files/protected/summarize_frequency.json: summarize_frequency.py files/21-22\ Enrollment_DFW\ CJ.xlsx.csv files/Waitlist\ by\ Course\ for\ CJ.xlsx.csv
-	python3 summarize_frequency.py './files/21-22 Enrollment_DFW CJ.xlsx.csv' './files/Waitlist by Course for CJ.xlsx.csv' > files/protected/summarize_frequency.json
+files/protected/summarize_frequency.json: summarize_frequency.py files/CA_MetricsforMap_25_FINAL(by\ Term).csv 
+	python3 summarize_frequency.py './files/CA_MetricsforMap_25_FINAL(by Term).csv' > files/protected/summarize_frequency.json

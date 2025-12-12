@@ -1,5 +1,5 @@
 """
-python3 summarize_frequency.py './files/21-22 Enrollment_DFW CJ.xlsx.csv' './files/Waitlist by Course for CJ.xlsx.csv' > files/protected/summarize_frequency.json
+python3 summarize_frequency.py './files/CA_MetricsforMap_25_FINAL(by Term).csv' > files/protected/summarize_frequency.json
 """
 
 
